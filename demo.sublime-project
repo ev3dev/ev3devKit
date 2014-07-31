@@ -1,0 +1,26 @@
+{
+	"folders":
+	[
+		{
+			"follow_symlinks": true,
+			"path": "."
+		}
+	],
+
+	"build_systems":
+	[
+		{
+			"name": "Build desktop demo",
+			"cmd": [ "make", "-C", "$project_path/build-desktop-demo"],
+            "file_regex": "([^:]+):(\\d+)[\\.:](\\d+)(?:-\\d+\\.\\d+)?: (?:error|note): (.*)",
+		}
+	],
+
+	"settings":
+    {
+    	"tab_size": 4,
+    	"translate_tabs_to_spaces": true,
+        "sublimegdb_commandline": "gdb --interpreter=mi ev3dev-tk-demo",
+        "sublimegdb_workingdir": "${folder:${project_path:build-desktop-demo/ev3dev-tk-demo}}",
+    },
+}
