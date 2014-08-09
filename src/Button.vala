@@ -89,7 +89,7 @@ namespace EV3devTk {
         }
 
         protected override bool on_key_pressed (uint key_code) {
-            if (key_code == Key.ENTER) {
+            if (key_code == '\n') {
                 pressed ();
                 Signal.stop_emission_by_name (this, "key-pressed");
                 return true;

@@ -53,7 +53,7 @@ namespace EV3devTk {
             (builder.get_object ("right_button") as Gtk.Button)
                 .clicked.connect (() => screen.queue_key_code (Key.RIGHT));
             (builder.get_object ("enter_button") as Gtk.Button)
-                .clicked.connect (() => screen.queue_key_code (Key.ENTER));
+                .clicked.connect (() => screen.queue_key_code ('\n'));
             (builder.get_object ("back_button") as Gtk.Button)
                 .clicked.connect (() => screen.queue_key_code (Key.BACKSPACE));
         } catch (Error err) {

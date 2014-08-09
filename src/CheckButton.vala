@@ -125,7 +125,7 @@ namespace EV3devTk {
         }
 
         protected override bool on_key_pressed (uint key_code) {
-            if (key_code == Key.ENTER) {
+            if (key_code == '\n') {
                 if (check_button_type == CheckButtonType.CHECKBOX)
                     checked = !checked;
                 else

@@ -50,7 +50,7 @@ namespace EV3devTk {
                 key_code = Key.RIGHT;
                 break;
             case Gdk.Key.Return:
-                key_code = Key.ENTER;
+                key_code = '\n';
                 break;
             case Gdk.Key.BackSpace:
                 key_code = Key.BACKSPACE;
