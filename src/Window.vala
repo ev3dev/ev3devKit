@@ -118,15 +118,14 @@ namespace EV3devTk {
         }
 
         protected override void on_draw (Graphics u8g) {
+            u8g.set_default_background_color ();
             if (window_type == WindowType.DIALOG) {
-                u8g.set_default_background_color ();
                 u8g.draw_rounded_box (border_x, border_y, border_width,
                     border_height, 10);
                 u8g.set_default_foreground_color ();
                 u8g.draw_rounded_frame (border_x, border_y, border_width,
                     border_height, 10);
             } else {
-                u8g.set_default_background_color ();
                 u8g.draw_box (border_x, border_y, border_width, border_height);
             }
             base.on_draw (u8g);

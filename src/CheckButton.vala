@@ -103,11 +103,12 @@ namespace EV3devTk {
                 else
                     widget = widget.parent;
             }
-            u8g.set_default_foreground_color ();
             if (widget.has_focus) {
+                u8g.set_default_mid_color ();
                 u8g.draw_box (border_x, border_y, border_width, border_height);
                 u8g.set_default_background_color ();
-            }
+            } else
+                u8g.set_default_foreground_color ();
             if (check_button_type == CheckButtonType.CHECKBOX)
                 u8g.draw_frame (content_x, content_y, outer_size, outer_size);
             else

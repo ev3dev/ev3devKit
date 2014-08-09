@@ -97,6 +97,9 @@ namespace U8g {
         [CCode (cname = "u8g_t", destroy_function = "", has_type_id = false)]
         struct MallocStruct {}
 
+        [CCode (cname = "&self->arg_pixel")]
+        static Pixel arg_pixel;
+
         [CCode (cname = "g_malloc0")]
         public Graphics(size_t size = sizeof(MallocStruct))
             requires (size == sizeof(MallocStruct));
@@ -115,15 +118,33 @@ namespace U8g {
         [CCode (cname = "u8g_GetDefaultForegroundColor")]
         public uint8 get_default_foreground_color();
         [CCode (cname = "u8g_SetDefaultForegroundColor")]
-        public void set_default_foreground_color();
+        void _set_default_foreground_color();
+        public void set_default_foreground_color() {
+            if (mode == Mode.HICOLOR)
+                arg_pixel.hi_color = 0x0000;
+            else
+                _set_default_foreground_color ();
+        }
         [CCode (cname = "u8g_GetDefaultBackgroundColor")]
         public uint8 get_default_background_color();
         [CCode (cname = "u8g_SetDefaultBackgroundColor")]
-        public void set_default_background_color();
+        void _set_default_background_color();
+        public void set_default_background_color() {
+            if (mode == Mode.HICOLOR)
+                arg_pixel.hi_color = 0xFFFF;
+            else
+                _set_default_background_color ();
+        }
         [CCode (cname = "u8g_GetDefaultMidColor")]
         public uint8 get_default_mid_color();
         [CCode (cname = "u8g_SetDefaultMidColor")]
-        public void set_default_mid_color();
+        void _set_default_mid_color();
+        public void set_default_mid_color() {
+            if (mode == Mode.HICOLOR)
+                arg_pixel.hi_color = 0x001F;
+            else
+                _set_default_mid_color ();
+        }
         public ushort width {
             [CCode (cname = "u8g_GetWidth")]get;
         }
@@ -341,7 +362,13 @@ namespace U8g {
         public uint8 green;
         public uint8 blue;
 
-        public uint16 hi_color { get { return (uint16)_hi_color << 8 + color; } }
+        public uint16 hi_color {
+            get { return (uint16)_hi_color << 8 + color; }
+            set {
+                color = (uint8)value;
+                _hi_color = value >> 8;
+            }
+        }
 
         [CCode (cname = "g_malloc0")]
         public Pixel (size_t size = sizeof(MallocStruct))
