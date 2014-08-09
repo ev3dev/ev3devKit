@@ -25,10 +25,6 @@ using Curses;
 
 namespace EV3devTk {
 
-    errordomain DesktopDemoError {
-        NULL
-    }
-
     public static int main (string[] args) {
         const string main_window_glade_file = "main_window.glade";
 

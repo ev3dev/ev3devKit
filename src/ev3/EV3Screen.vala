@@ -19,20 +19,15 @@
  * MA 02110-1301, USA.
  */
 
-/* main.vala - main function for running demo */
+/* EV3Screen.vala - Screen implementation for the EV3 LCD */
+
+using Curses;
+using U8g;
 
 namespace EV3devTk {
-
-    public static int main (string[] args) {
-
-        ConsoleApp.init ();
-        ConsoleApp.screen = new EV3Screen ();
-        var demo_window = new DemoWindow ();
-        demo_window.quit.connect (ConsoleApp.quit);
-        ConsoleApp.screen.push_window (demo_window);
-
-        ConsoleApp.run ();
-
-        return 0;
+    public class EV3Screen : EV3devTk.Screen {
+        public EV3Screen () {
+            base (Device.linux_framebuffer);
+        }
     }
 }

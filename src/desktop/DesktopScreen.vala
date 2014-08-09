@@ -32,8 +32,6 @@ namespace EV3devTk {
             lcd.key_press_event.connect (on_key_press_event);
         }
 
-        public override bool active { get { return true; } }
-
         bool on_key_press_event (Gdk.EventKey event) {
             uint key_code = 0;
             switch (event.keyval) {

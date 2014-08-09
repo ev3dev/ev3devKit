@@ -32,7 +32,7 @@ namespace EV3devTk {
         Graphics _u8g;
         public unowned Graphics u8g { get { return _u8g; } }
 
-        public abstract bool active { get; }
+        public bool active { get; set; default = true; }
         public bool dirty { get; set; }
         public Window? top_window {
             owned get { return window_stack.peek_tail (); }
