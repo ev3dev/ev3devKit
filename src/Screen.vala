@@ -119,8 +119,32 @@ namespace EV3devTk {
             handle_input ();
             if (dirty) {
                 context.set ();
-                foreach (var window in window_stack)
-                    window.draw (context);
+                Window? top_window = null;
+                Window? top_dialog = null;
+                foreach (var window in window_stack) {
+                    if (window.window_type == WindowType.DIALOG) {
+                        if (top_dialog != null && top_dialog.on_screen)
+                            top_dialog.on_screen = false;
+                        top_dialog = window;
+                    } else {
+                        if (top_window != null && top_window.on_screen)
+                            top_window.on_screen = false;
+                        top_window = window;
+                        if (top_dialog != null) {
+                            if (top_dialog.on_screen)
+                                top_dialog.on_screen = false;
+                            top_dialog = null;
+                        }
+                    }
+                }
+                if (top_window != null) {
+                    top_window.on_screen = true;
+                    top_window.draw (context);
+                }
+                if (top_dialog != null) {
+                    top_dialog.on_screen = true;
+                    top_dialog.draw (context);
+                }
                 dirty = false;
                 refresh ();
             }

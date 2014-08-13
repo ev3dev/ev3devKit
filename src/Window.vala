@@ -39,7 +39,7 @@ namespace EV3devTk {
 
         public override int x {
             get {
-                if (screen != null && window_type == WindowType.DIALOG)
+                if (_screen != null && window_type == WindowType.DIALOG)
                     return screen.width * 10 / 100;
                 return base.x;
             }
@@ -47,7 +47,7 @@ namespace EV3devTk {
 
         public override int y {
             get {
-                if (screen != null && window_type == WindowType.DIALOG)
+                if (_screen != null && window_type == WindowType.DIALOG)
                     return screen.height * 10 / 100;
                 return base.y;
             }
@@ -55,13 +55,13 @@ namespace EV3devTk {
 
         public override int width {
             get {
-                if (screen == null)
+                if (_screen == null)
                     return base.width;
                 switch (window_type) {
                 case WindowType.NORMAL:
-                    return screen.width;
+                    return _screen.width;
                 case WindowType.DIALOG:
-                    return screen.width * 80 / 100;
+                    return _screen.width * 80 / 100;
                 default:
                     return base.width;
                 }
@@ -70,13 +70,13 @@ namespace EV3devTk {
 
         public override int height {
             get {
-                if (screen == null)
+                if (_screen == null)
                     return base.height;
                 switch (window_type) {
                 case WindowType.NORMAL:
-                    return screen.height;
+                    return _screen.height;
                 case WindowType.DIALOG:
-                    return screen.height * 80 / 100;
+                    return _screen.height * 80 / 100;
                 default:
                     return base.height;
                 }
@@ -104,6 +104,8 @@ namespace EV3devTk {
             get { return window_type == WindowType.DIALOG ? 1 : 0; }
         }
 
+        public bool on_screen { get; set; default = false; }
+
         public signal void shown ();
 
         public Window (WindowType type = WindowType.NORMAL) {
@@ -113,18 +115,18 @@ namespace EV3devTk {
         }
 
         public override void redraw () {
-            if (screen != null)
-                screen.dirty = true;
+            if (_screen != null && on_screen)
+                _screen.dirty = true;
         }
 
         protected override void on_draw (Context context) {
             Color color = window.screen.bg_color;
             if (window_type == WindowType.DIALOG) {
-                filled_rounded_box (border_x, border_y, border_x + border_width,
-                    border_y + border_height, 10, color);
+                filled_rounded_box (border_x, border_y, border_x + border_width - 1,
+                    border_y + border_height - 1, 10, color);
                 color = window.screen.fg_color;
-                rounded_box (border_x, border_y, border_x + border_width,
-                    border_y + border_height, 10, color);
+                rounded_box (border_x, border_y, border_x + border_width - 1,
+                    border_y + border_height - 1, 10, color);
             } else {
                 filled_box (border_x, border_y, border_x + border_width - 1,
                     border_y + border_height - 1, color);
