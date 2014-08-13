@@ -22,14 +22,25 @@
 /* DesktopScreen.vala - Screen implementation for desktop (Gtk) */
 
 using Curses;
-using U8g;
+using GRX;
 
 namespace EV3devTk {
     public class DesktopScreen : EV3devTk.Screen {
+        FakeEV3LCDDevice lcd;
+
+        public override int width { get { return FakeEV3LCDDevice.WIDTH; } }
+        public override int height { get { return FakeEV3LCDDevice.HEIGHT; } }
 
         public DesktopScreen (FakeEV3LCDDevice lcd) {
-            base (lcd.u8g_device);
+            base (lcd.pixbuf_data);
+            this.lcd = lcd;
+            bg_color = lcd.bg_color;
+            mid_color = GRX.Color.black;
             lcd.key_press_event.connect (on_key_press_event);
+        }
+
+        public override void refresh () {
+            lcd.refresh ();
         }
 
         bool on_key_press_event (Gdk.EventKey event) {

@@ -102,13 +102,16 @@ namespace EV3devTk {
                 }
                 return false;
             });
-            var vbox = new Box ();
+            var vbox = new Box () {
+                margin_top = 10,
+                margin_left = 10
+            };
             var checkbox1 = new CheckButton () {
-                horizontal_align = WidgetAlign.START,
+                vertical_align = WidgetAlign.START,
                 margin_left = 2
             };
             var checkbox1_label = new Label ("Unchecked") {
-                vertical_align = WidgetAlign.END
+                vertical_align = WidgetAlign.CENTER
             };
             var checkbox1_hbox = new Box (BoxDirection.HORIZONTAL) {
                 spacing = 4
@@ -118,11 +121,11 @@ namespace EV3devTk {
             checkbox1.notify["checked"].connect (() =>
                 checkbox1_label.text = checkbox1.checked ? "Checked" : "Unchecked");
             var checkbox2 = new CheckButton () {
-                horizontal_align = WidgetAlign.START,
+                vertical_align = WidgetAlign.START,
                 can_focus = false
             };
             var checkbox2_label = new Label ("Unchecked") {
-                vertical_align = WidgetAlign.END
+                vertical_align = WidgetAlign.CENTER
             };
             var checkbox2_hbox = new Box (BoxDirection.HORIZONTAL) {
                 spacing = 4
@@ -168,7 +171,7 @@ namespace EV3devTk {
             radiobutton_group1.notify["selected-item"].connect (() => {
                 var selected = radiobutton_group1.selected_item;
                 group1_selected_label.text = selected == null ? "none" 
-                    : "#%d".printf ((int)selected.represented_object_pointer);
+                    : "#%d selected".printf ((int)selected.represented_object_pointer);
             });
             radiobutton1.checked = true;
             vbox.add (checkbox1_hbox);

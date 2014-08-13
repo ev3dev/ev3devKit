@@ -21,14 +21,14 @@
 
 /* Spacer.vala - Widget to take up space */
 
-using U8g;
+using GRX;
 
 namespace EV3devTk {
     public class Spacer : EV3devTk.Widget {
         public Spacer () {
         }
 
-        public override void on_draw (Graphics u8g) {
+        public override void on_draw (Context context) {
         }
     }
 }

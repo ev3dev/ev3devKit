@@ -22,30 +22,49 @@
 /* AbstractScreen.vala - Screen object contains all other widgets */
 
 using Gee;
-using U8g;
+using GRX;
 
 namespace EV3devTk {
     public abstract class Screen : Object {
         LinkedList<Window> window_stack;
         LinkedList<uint?> key_queue;
+        protected Context context;
 
-        Graphics _u8g;
-        public unowned Graphics u8g { get { return _u8g; } }
+        internal Color fg_color;
+        internal Color bg_color;
+        internal Color mid_color;
 
-        public bool active { get; set; default = true; }
+        public abstract int width { get; }
+        public abstract int height { get; }
         public bool dirty { get; set; }
         public Window? top_window {
             owned get { return window_stack.peek_tail (); }
         }
 
-        protected Screen (Device device) {
+        protected Screen (char *context_mem_addr = null) {
             window_stack = new LinkedList<Window> ();
             key_queue = new LinkedList<uint?> ();
-            _u8g = new Graphics ();
-            _u8g.init (device);
+            FrameMode mode = core_frame_mode ();
+            if (mode == FrameMode.UNDEFINED)
+                mode = screen_frame_mode ();
+            if (context_mem_addr == null)
+                context = Context.create_with_mode (mode, screen_x (), screen_y ());
+            else {
+                char* addr[4];
+                addr[0] = context_mem_addr;
+                context = Context.create_with_mode (mode, screen_x (), screen_y (), addr);
+            }
+            fg_color = Color.black;
+            bg_color = Color.white;
+            if (context.driver.bits_per_pixel == 1)
+                mid_color = Color.black;
+            else
+                mid_color = Color.alloc (0, 0, 255);
 
             Timeout.add(50, on_draw_timeout);
         }
+
+        public abstract void refresh ();
 
         void handle_input () {
             var key_code = key_queue.poll_head ();
@@ -96,15 +115,13 @@ namespace EV3devTk {
         }
 
         bool on_draw_timeout () {
-            if (active) {
-                handle_input ();
-                if (dirty) {
-                    u8g.begin_draw ();
-                    foreach (var window in window_stack)
-                        window.draw (_u8g);
-                    u8g.end_draw ();
-                    dirty = false;
-                }
+            handle_input ();
+            if (dirty) {
+                context.set ();
+                foreach (var window in window_stack)
+                    window.draw (context);
+                dirty = false;
+                refresh ();
             }
             return true;
         }

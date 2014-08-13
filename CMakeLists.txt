@@ -52,10 +52,11 @@ pkg_check_modules(DEPS REQUIRED
     gio-unix-2.0
     gee-1.0
     ncurses
+    libpng
     ${EV3DEV_TK_DESKTOP_MODULES}
 )
 add_definitions(${DEPS_CFLAGS})
-link_libraries(${DEPS_LIBRARIES} u8g m2tk)
+link_libraries(${DEPS_LIBRARIES} grx20 jpeg)
 link_directories(${DEPS_LIBRARY_DIRS})
 
 find_package(Vala REQUIRED)

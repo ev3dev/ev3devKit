@@ -26,6 +26,7 @@ namespace EV3devTk {
     public static int main (string[] args) {
 
         ConsoleApp.init ();
+
         ConsoleApp.screen = new EV3Screen ();
         var demo_window = new DemoWindow ();
         demo_window.quit.connect (ConsoleApp.quit);

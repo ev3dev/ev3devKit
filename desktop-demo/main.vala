@@ -29,6 +29,9 @@ namespace EV3devTk {
         const string main_window_glade_file = "main_window.glade";
 
         Gtk.init (ref args);
+        GRX.set_driver ("memory gw %d gh %d nc %s".printf (
+            FakeEV3LCDDevice.WIDTH, FakeEV3LCDDevice.HEIGHT, "16M"));
+        GRX.set_mode (GRX.GraphicsMode.GRAPHICS_DEFAULT);
 
         var lcd = new FakeEV3LCDDevice ();
         var screen = new DesktopScreen (lcd);

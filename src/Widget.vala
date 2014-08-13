@@ -22,7 +22,7 @@
 /* Widget.vala - Base class for all widgets */
 
 using Curses;
-using U8g;
+using GRX;
 
 namespace EV3devTk {
     public delegate Widget? WidgetFunc (Widget widget);
@@ -35,37 +35,30 @@ namespace EV3devTk {
     }
 
     public abstract class Widget : Object {
-        /* dummy u8g graphics object for use outside of the draw loop */
-        protected static Graphics fake_u8g;
-
-        static construct {
-            fake_u8g = new Graphics ();
-        }
-
         /* layout properties */
 
-        public virtual ushort x {
+        public virtual int x {
             get {
                 if (parent == null)
                     return 0;
                 return parent.get_child_x (this);
             }
         }
-        public virtual ushort y {
+        public virtual int y {
             get {
                 if (parent == null)
                     return 0;
                 return parent.get_child_y (this);
             }
         }
-        public virtual ushort width {
+        public virtual int width {
             get {
                 if (parent == null)
                     return preferred_width;
                 return parent.get_child_width (this);
             }
         }
-        public virtual ushort height {
+        public virtual int height {
             get {
                 if (parent == null)
                     return preferred_height;
@@ -73,61 +66,61 @@ namespace EV3devTk {
             }
         }
 
-        public virtual ushort preferred_width {
+        public virtual int preferred_width {
             get {
                 return margin_left + margin_right + border_left
                     + border_right + padding_left + padding_right;
             }
         }
-        public virtual ushort preferred_height {
+        public virtual int preferred_height {
             get {
                 return margin_top + margin_bottom + border_top
                     + border_bottom + padding_top + padding_bottom;
             }
         }
 
-        protected ushort border_x { get { return x + margin_left; } }
-        protected ushort border_y { get { return y + margin_top; } }
-        protected ushort border_width {
+        protected int border_x { get { return x + margin_left; } }
+        protected int border_y { get { return y + margin_top; } }
+        protected int border_width {
             get { return width - margin_left - margin_right; }
         }
-        protected ushort border_height {
+        protected int border_height {
             get { return height - margin_top - margin_bottom; }
         }
 
-        protected ushort content_x {
+        protected int content_x {
             get { return x + margin_left + border_left + padding_left; }
         }
-        protected ushort content_y {
+        protected int content_y {
             get { return y + margin_top + border_top + padding_top; }
         }
-        protected ushort content_width {
+        protected int content_width {
             get {
                 return width - margin_left - margin_right - border_left
                     - border_right - padding_left - padding_right;
             }
         }
-        protected ushort content_height {
+        protected int content_height {
             get {
                 return height - margin_top - margin_bottom - border_top
                     - border_bottom - padding_top - padding_bottom;
             }
         }
 
-        public virtual ushort margin_top { get; set; default = 0; }
-        public virtual ushort margin_bottom { get; set; default = 0; }
-        public virtual ushort margin_left { get; set; default = 0; }
-        public virtual ushort margin_right { get; set; default = 0; }
+        public virtual int margin_top { get; set; default = 0; }
+        public virtual int margin_bottom { get; set; default = 0; }
+        public virtual int margin_left { get; set; default = 0; }
+        public virtual int margin_right { get; set; default = 0; }
 
-        internal virtual ushort border_top { get { return 0; } }
-        internal virtual ushort border_bottom { get { return 0; } }
-        internal virtual ushort border_left { get { return 0; } }
-        internal virtual ushort border_right { get { return 0; } }
+        internal virtual int border_top { get { return 0; } }
+        internal virtual int border_bottom { get { return 0; } }
+        internal virtual int border_left { get { return 0; } }
+        internal virtual int border_right { get { return 0; } }
 
-        public virtual ushort padding_top { get; set; default = 0; }
-        public virtual ushort padding_bottom { get; set; default = 0; }
-        public virtual ushort padding_left { get; set; default = 0; }
-        public virtual ushort padding_right { get; set; default = 0; }
+        public virtual int padding_top { get; set; default = 0; }
+        public virtual int padding_bottom { get; set; default = 0; }
+        public virtual int padding_left { get; set; default = 0; }
+        public virtual int padding_right { get; set; default = 0; }
 
         public WidgetAlign horizontal_align {
             get; set; default = WidgetAlign.FILL;
@@ -250,12 +243,12 @@ namespace EV3devTk {
 
         /* drawing functions */
 
-        public signal void draw (Graphics u8g);
+        public signal void draw (Context context);
         public virtual void redraw () {
             if (parent != null)
                 parent.redraw ();
         }
-        protected abstract void on_draw (Graphics u8g);
+        protected abstract void on_draw (Context context);
 
         /* input handling */
 

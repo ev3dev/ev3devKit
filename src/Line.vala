@@ -21,7 +21,7 @@
 
 /* Line.vala - Widget to display a line */
 
-using U8g;
+using GRX;
 
 namespace EV3devTk {
     public enum LineDirection {
@@ -32,17 +32,17 @@ namespace EV3devTk {
     public class Line : EV3devTk.Widget {
         LineDirection direction;
 
-        public ushort line_width { get; set; default = 1; }
-        public ushort line_length { get; set; default = 10; }
+        public int line_width { get; set; default = 1; }
+        public int line_length { get; set; default = 10; }
 
-        public override ushort preferred_width {
+        public override int preferred_width {
             get {
                 if (direction == LineDirection.HORIZONTAL)
                     return line_length + base.preferred_width;
                 return line_width + base.preferred_width;
             }
         }
-        public override ushort preferred_height {
+        public override int preferred_height {
            get {
                 if (direction == LineDirection.VERTICAL)
                     return line_length + base.preferred_height;
@@ -56,9 +56,9 @@ namespace EV3devTk {
             notify["line_length"].connect (redraw);
         }
 
-        protected override void on_draw (Graphics u8g) {
-            u8g.set_default_foreground_color ();
-            u8g.draw_box (content_x, content_y, content_width, content_height);
+        protected override void on_draw (Context context) {
+            Color color = window.screen.fg_color;
+            line (content_x, content_y, content_x + content_width - 1, content_y + content_height - 1, color);
         }
     }
 }

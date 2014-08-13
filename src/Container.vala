@@ -22,7 +22,7 @@
 /* Container.vala - Base class widgets that contain other widgets*/
 
 using Gee;
-using U8g;
+using GRX;
 
 namespace EV3devTk {
 
@@ -78,7 +78,7 @@ namespace EV3devTk {
             }
         }
 
-        public virtual ushort max_width {
+        public virtual int max_width {
             get {
                 if (parent != null)
                     return parent.max_width - parent.margin_left
@@ -89,7 +89,7 @@ namespace EV3devTk {
             }
         }
 
-        public virtual ushort max_height {
+        public virtual int max_height {
             get {
                 if (parent != null)
                     return parent.max_height - parent.margin_left
@@ -132,12 +132,12 @@ namespace EV3devTk {
             }
         }
 
-        protected override void on_draw (Graphics u8g) {
+        protected override void on_draw (Context context) {
             foreach (var widget in children)
-                widget.draw (u8g);
+                widget.draw (context);
         }
 
-        internal virtual ushort get_child_x (Widget child)
+        internal virtual int get_child_x (Widget child)
             requires (children.contains (child))
         {
             switch (child.horizontal_align) {
@@ -155,7 +155,7 @@ namespace EV3devTk {
             }
         }
 
-        internal virtual ushort get_child_y (Widget child)
+        internal virtual int get_child_y (Widget child)
             requires (children.contains (child))
         {
             switch (child.vertical_align) {
@@ -173,22 +173,22 @@ namespace EV3devTk {
             }
         }
 
-        internal virtual ushort get_child_width (Widget child)
+        internal virtual int get_child_width (Widget child)
             requires (children.contains (child))
         {
             if (child.horizontal_align == WidgetAlign.FILL)
                 return width - margin_left - margin_right - border_left
                     - border_right - padding_left - padding_right;
-            return ushort.min (child.preferred_width, max_width);
+            return int.min (child.preferred_width, max_width);
         }
 
-        internal virtual ushort get_child_height (Widget child)
+        internal virtual int get_child_height (Widget child)
             requires (children.contains (child))
         {
             if (child.vertical_align == WidgetAlign.FILL)
                 return height - margin_top - margin_bottom - border_top
                     - border_bottom - padding_top - padding_bottom;
-            return ushort.min (child.preferred_height, max_height);
+            return int.min (child.preferred_height, max_height);
         }
     }
 }

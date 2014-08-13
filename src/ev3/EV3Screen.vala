@@ -22,12 +22,18 @@
 /* EV3Screen.vala - Screen implementation for the EV3 LCD */
 
 using Curses;
-using U8g;
+using GRX;
 
 namespace EV3devTk {
     public class EV3Screen : EV3devTk.Screen {
         public EV3Screen () {
-            base (Device.linux_framebuffer);
+        }
+
+        public override int width { get { return context.x_max + 1; } }
+        public override int height { get { return context.y_max + 1; } }
+
+        public override void refresh () {
+            bit_blt (Context.screen, 0, 0, context, 0, 0, screen_x () - 1, screen_y () - 1);
         }
     }
 }

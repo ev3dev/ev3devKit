@@ -22,7 +22,7 @@
 /* Box.vala - Container for displaying widgets horizontally or vertically */
 
 using Gee;
-using U8g;
+using GRX;
 
 namespace EV3devTk {
 
@@ -42,7 +42,7 @@ namespace EV3devTk {
 
     public class Box : EV3devTk.Container {
         public BoxDirection direction { get; private set; }
-        public ushort spacing { get; set; default = 2; }
+        public int spacing { get; set; default = 2; }
 
          public Box (BoxDirection direction = BoxDirection.VERTICAL) {
              base (ContainerType.MULTIPLE);
@@ -58,37 +58,37 @@ namespace EV3devTk {
              });
         }
 
-        public override ushort preferred_width {
+        public override int preferred_width {
             get {
-                ushort width = 0;
+                int width = 0;
                 if (direction == BoxDirection.HORIZONTAL) {
                     foreach (var item in children)
                         width += item.preferred_width + spacing;
                     width -= spacing;
                 } else {
                     foreach (var item in children)
-                        width = ushort.max (width, item.preferred_width);
+                        width = int.max (width, item.preferred_width);
                 }
                 return width + base.preferred_width;
             }
         }
 
-        public override ushort preferred_height {
+        public override int preferred_height {
             get {
-                ushort height = 0;
+                int height = 0;
                 if (direction == BoxDirection.VERTICAL) {
                     foreach (var item in children)
                         height += item.preferred_height + spacing;
                     height -= spacing;
                 } else {
                     foreach (var item in children)
-                        height = ushort.max (height, item.preferred_height);
+                        height = int.max (height, item.preferred_height);
                 }
                 return height + base.preferred_height;
             }
         }
 
-        ushort extra_width {
+        int extra_width {
             get {
                 if (direction == BoxDirection.VERTICAL || parent == null)
                     return 0;
@@ -96,7 +96,7 @@ namespace EV3devTk {
             }
         }
 
-        ushort extra_height {
+        int extra_height {
             get {
                 if (direction == BoxDirection.HORIZONTAL || parent == null)
                     return 0;
@@ -106,12 +106,12 @@ namespace EV3devTk {
 
         int spacer_count { get; set; default = 0; }
 
-        internal override ushort get_child_x (Widget child)
+        internal override int get_child_x (Widget child)
             requires (children.contains (child))
         {
             if (direction == BoxDirection.VERTICAL)
                 return base.get_child_x (child);
-            ushort _x = content_x;
+            int _x = content_x;
             foreach (var item in children) {
                 if (item == child)
                     break;
@@ -120,12 +120,12 @@ namespace EV3devTk {
             return _x;
         }
 
-        internal override ushort get_child_y (Widget child)
+        internal override int get_child_y (Widget child)
             requires (children.contains (child))
         {
             if (direction == BoxDirection.HORIZONTAL)
                 return base.get_child_y (child);
-            ushort _y = content_y;
+            int _y = content_y;
             foreach (var item in children) {
                 if (item == child)
                     break;
@@ -134,24 +134,24 @@ namespace EV3devTk {
             return _y;
         }
 
-        internal override ushort get_child_width (Widget child)
+        internal override int get_child_width (Widget child)
             requires (children.contains (child))
         {
             if (direction == BoxDirection.VERTICAL
                 && child.horizontal_align == WidgetAlign.FILL)
                 return width - base.preferred_width;
             return child.preferred_width
-                + (ushort)((child is Spacer) ? extra_width / spacer_count : 0);
+                + (int)((child is Spacer) ? extra_width / spacer_count : 0);
         }
 
-        internal override ushort get_child_height (Widget child)
+        internal override int get_child_height (Widget child)
             requires (children.contains (child))
         {
             if (direction == BoxDirection.HORIZONTAL
                 && child.vertical_align == WidgetAlign.FILL)
                 return height - base.preferred_height;
             return child.preferred_height
-                + (ushort)((child is Spacer) ? extra_height / spacer_count : 0);
+                + (int)((child is Spacer) ? extra_height / spacer_count : 0);
         }
 
         public override bool focus_next (FocusDirection direction) {

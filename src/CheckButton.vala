@@ -23,7 +23,7 @@
 
 using Curses;
 using Gee;
-using U8g;
+using GRX;
 
 namespace EV3devTk {
 
@@ -41,12 +41,12 @@ namespace EV3devTk {
     public class CheckButton : EV3devTk.Widget {
         CheckButtonType check_button_type;
 
-        public override ushort preferred_width {
+        public override int preferred_width {
             get {
                 return outer_size + base.preferred_width;
             }
         }
-        public override ushort preferred_height {
+        public override int preferred_height {
             get {
                 return outer_size + base.preferred_height;
             }
@@ -76,8 +76,8 @@ namespace EV3devTk {
         }
         public CheckButtonGroup? group { get; private set; }
 
-        public ushort outer_size { get; set; default = 9; }
-        public ushort inner_size { get; set; default = 5; }
+        public int outer_size { get; set; default = 9; }
+        public int inner_size { get; set; default = 5; }
 
         public CheckButton (CheckButtonType type = CheckButtonType.CHECKBOX,
             CheckButtonGroup? group = null)
@@ -95,7 +95,7 @@ namespace EV3devTk {
             notify["inner_size"].connect (redraw);
         }
 
-        protected override void on_draw (Graphics u8g) {
+        protected override void on_draw (Context context) {
             weak Widget widget = this;
             while (widget.parent != null) {
                 if (widget.can_focus)
@@ -103,25 +103,26 @@ namespace EV3devTk {
                 else
                     widget = widget.parent;
             }
+            unowned GRX.Color color;
             if (widget.has_focus) {
-                u8g.set_default_mid_color ();
-                u8g.draw_box (border_x, border_y, border_width, border_height);
-                u8g.set_default_background_color ();
+                color = window.screen.mid_color;
+                filled_box (border_x, border_y, border_x + border_width - 1, border_y + border_height - 1, color);
+                color = window.screen.bg_color;
             } else
-                u8g.set_default_foreground_color ();
+                color = window.screen.fg_color;
             if (check_button_type == CheckButtonType.CHECKBOX)
-                u8g.draw_frame (content_x, content_y, outer_size, outer_size);
+                box (content_x, content_y, content_x + outer_size - 1, content_y + outer_size - 1, color);
             else
-                u8g.draw_circle (content_x + outer_size / 2,
-                    content_y + outer_size / 2, outer_size / 2);
+                circle (content_x + outer_size / 2,
+                    content_y + outer_size / 2, outer_size / 2, color);
             if (checked) {
-                if (check_button_type == CheckButtonType.CHECKBOX)
-                    u8g.draw_box (content_x + (outer_size - inner_size) / 2,
-                        content_y + (outer_size - inner_size) / 2,
-                        inner_size, inner_size);
-                else
-                    u8g.draw_disc (content_x + outer_size / 2,
-                        content_y + outer_size / 2, inner_size / 2);
+                if (check_button_type == CheckButtonType.CHECKBOX) {
+                    var _x = content_x + (outer_size - inner_size) / 2;
+                    var _y = content_y + (outer_size - inner_size) / 2;
+                    filled_box (_x, _y, _x + inner_size - 1, _y + inner_size - 1, color);
+                } else
+                    filled_circle (content_x + outer_size / 2,
+                        content_y + outer_size / 2, inner_size / 2, color);
             }
         }
 

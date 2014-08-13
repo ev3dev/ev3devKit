@@ -12,7 +12,7 @@
 		{
 			"name": "Build desktop demo",
 			"cmd": [ "make", "-C", "$project_path/build-desktop-demo"],
-            "file_regex": "([^:]+):(\\d+)[\\.:](\\d+)(?:-\\d+\\.\\d+)?: (?:error|note): (.*)",
+            "file_regex": "([^:]+):(\\d+)[\\.:](?:(\\d+)-\\d+\\.\\d+)?:? (?:(?:error|warning|note): )?(.*)",
 		}
 	],
 

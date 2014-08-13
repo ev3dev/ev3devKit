@@ -67,51 +67,39 @@ namespace EV3devTk {
             stdscr.keypad (true);
             stdscr.nodelay (true);
 
+            ioctl (vtfd, VT_ACTIVATE, vtnum);
+            ioctl (vtfd, VT_WAITACTIVE, vtnum);
+            try {
+                if (!GRX.set_driver ("linuxfb"))
+                    throw new ConsoleError.MODE ("Error setting driver");
+                if (!GRX.set_mode (GRX.GraphicsMode.GRAPHICS_DEFAULT))
+                    throw new ConsoleError.MODE ("Error setting mode");
+                Unix.signal_add (SIGHUP, HandleSIGTERM);
+                Unix.signal_add (SIGTERM, HandleSIGTERM);
+                Unix.signal_add (SIGINT, HandleSIGTERM);
+            } catch (ConsoleError e) {
+                release_console ();
+                error ("%s", e.message);
+            }
+
             main_loop = new MainLoop ();
             Timeout.add (10, on_check_key_timeout);
         }
 
         public void run () {
-            ioctl (vtfd, VT_ACTIVATE, vtnum);
-            ioctl (vtfd, VT_WAITACTIVE, vtnum);
-            var mode = Mode() {
-                mode = (char)VT_PROCESS,
-                relsig = (int16)SIGUSR1,
-                acqsig = (int16)SIGUSR1
-            };
-            string error_msg = null;
-            try {
-                if (ioctl (vtfd, VT_SETMODE, ref mode) < 0)
-                      throw new ConsoleError.MODE (
-                            "Could not set virtual console to VT_PROCESS mode.");
-                if (ioctl (vtfd, KDSETMODE, TerminalMode.GRAPHICS) < 0)
-                      throw new ConsoleError.MODE (
-                            "Could not set virtual console to KD_GRAPHICS mode.");
-                Unix.signal_add (SIGHUP, HandleSIGTERM);
-                Unix.signal_add (SIGTERM, HandleSIGTERM);
-                Unix.signal_add (SIGINT, HandleSIGTERM);
-                Unix.signal_add (SIGUSR1, HandleSIGUSR1);
+            main_loop.run ();
+            release_console ();
+        }
 
-                main_loop.run ();
-            } catch (ConsoleError e) {
-                error_msg = e.message;
-            }
-
-            ioctl (vtfd, KDSETMODE, TerminalMode.TEXT);
-            mode.mode = (char)VT_AUTO;
-            ioctl (vtfd, VT_SETMODE, ref mode);
-
+        void release_console () {
+            GRX.set_driver ("memory"); // releases frame buffer
             if (is_active ()) {
                 set_active (false);
                 ioctl (vtfd, VT_ACTIVATE, vtstat.v_active);
                 ioctl (vtfd, VT_WAITACTIVE, vtstat.v_active);
             }
             ioctl (vtfd, VT_DISALLOCATE, vtnum);
-
             close (vtfd);
-
-            if (error_msg != null)
-                error ("%s", error_msg);
         }
 
         public void quit () {
@@ -131,34 +119,11 @@ namespace EV3devTk {
                     screen.dirty = true;
             } else
                 endwin ();
-            if (screen != null)
-                screen.active = value;
         }
 
         bool HandleSIGTERM () {
             quit ();
-            return true;
-        }
-
-        /**
-         * SIGUSR1 is used for console switching.
-         */
-        bool HandleSIGUSR1 () {
-            if (is_active ()) {
-                // release console
-                if (ioctl (vtfd, VT_RELDISP, 1) == 0)
-                  set_active (false);
-            } else {
-                Linux.VirtualTerminal.Stat vtstat;
-                if (ioctl (vtfd, VT_GETSTATE, out vtstat) == 0) {
-                    if (vtstat.v_active == vtnum) {
-                        // acquire console
-                        ioctl (vtfd, VT_RELDISP, VT_ACKACQ);
-                        set_active (true);
-                    }
-                }
-            }
-            return true;
+            return false;
         }
 
         bool on_check_key_timeout () {

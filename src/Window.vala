@@ -21,7 +21,7 @@
 
 /* Window.vala - Top level widget */
 
-using U8g;
+using GRX;
 
 namespace EV3devTk {
     public enum WindowType {
@@ -37,70 +37,70 @@ namespace EV3devTk {
         }
         public WindowType window_type { get; private set; }
 
-        public override ushort x {
+        public override int x {
             get {
                 if (screen != null && window_type == WindowType.DIALOG)
-                    return screen.u8g.width * 10 / 100;
+                    return screen.width * 10 / 100;
                 return base.x;
             }
         }
 
-        public override ushort y {
+        public override int y {
             get {
                 if (screen != null && window_type == WindowType.DIALOG)
-                    return screen.u8g.height * 10 / 100;
+                    return screen.height * 10 / 100;
                 return base.y;
             }
         }
 
-        public override ushort width {
+        public override int width {
             get {
                 if (screen == null)
                     return base.width;
                 switch (window_type) {
                 case WindowType.NORMAL:
-                    return screen.u8g.width;
+                    return screen.width;
                 case WindowType.DIALOG:
-                    return screen.u8g.width * 80 / 100;
+                    return screen.width * 80 / 100;
                 default:
                     return base.width;
                 }
             }
         }
 
-        public override ushort height {
+        public override int height {
             get {
                 if (screen == null)
                     return base.height;
                 switch (window_type) {
                 case WindowType.NORMAL:
-                    return screen.u8g.height;
+                    return screen.height;
                 case WindowType.DIALOG:
-                    return screen.u8g.height * 80 / 100;
+                    return screen.height * 80 / 100;
                 default:
                     return base.height;
                 }
             }
         }
 
-        public override ushort max_width {
+        public override int max_width {
             get { return width; }
         }
 
-        public override ushort max_height {
+        public override int max_height {
             get { return height; }
         }
 
-        internal override ushort border_top {
+        internal override int border_top {
             get { return window_type == WindowType.DIALOG ? 1 : 0; }
         }
-        internal override ushort border_bottom {
+        internal override int border_bottom {
             get { return window_type == WindowType.DIALOG ? 1 : 0; }
         }
-        internal override ushort border_left {
+        internal override int border_left {
             get { return window_type == WindowType.DIALOG ? 1 : 0; }
         }
-        internal override ushort border_right {
+        internal override int border_right {
             get { return window_type == WindowType.DIALOG ? 1 : 0; }
         }
 
@@ -117,18 +117,19 @@ namespace EV3devTk {
                 screen.dirty = true;
         }
 
-        protected override void on_draw (Graphics u8g) {
-            u8g.set_default_background_color ();
+        protected override void on_draw (Context context) {
+            Color color = window.screen.bg_color;
             if (window_type == WindowType.DIALOG) {
-                u8g.draw_rounded_box (border_x, border_y, border_width,
-                    border_height, 10);
-                u8g.set_default_foreground_color ();
-                u8g.draw_rounded_frame (border_x, border_y, border_width,
-                    border_height, 10);
+                filled_box (border_x, border_y, border_x + border_width,
+                    border_y + border_height, color);
+                color = window.screen.fg_color;
+                box (border_x, border_y, border_x + border_width,
+                    border_y + border_height, color);
             } else {
-                u8g.draw_box (border_x, border_y, border_width, border_height);
+                filled_box (border_x, border_y, border_x + border_width - 1,
+                    border_y + border_height - 1, color);
             }
-            base.on_draw (u8g);
+            base.on_draw (context);
         }
 
         void on_first_shown () {
