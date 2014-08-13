@@ -50,15 +50,26 @@ namespace EV3devTk {
             }
         }
 
-        public Line (LineDirection direction = LineDirection.HORIZONTAL) {
+        Line (LineDirection direction) {
             this.direction = direction;
             notify["line_width"].connect (redraw);
             notify["line_length"].connect (redraw);
         }
 
+        public Line.horizontal () {
+            this (LineDirection.HORIZONTAL);
+        }
+
+        public Line.vertical () {
+            this (LineDirection.VERTICAL);
+        }
+
         protected override void on_draw (Context context) {
             Color color = window.screen.fg_color;
-            line (content_x, content_y, content_x + content_width - 1, content_y + content_height - 1, color);
+            if (direction == LineDirection.HORIZONTAL)
+                horiz_line (content_x, content_x + content_width - 1, content_y, color);
+            else
+                vert_line (content_x, content_y, content_y + content_height - 1, color);
         }
     }
 }

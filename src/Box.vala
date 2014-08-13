@@ -44,7 +44,7 @@ namespace EV3devTk {
         public BoxDirection direction { get; private set; }
         public int spacing { get; set; default = 2; }
 
-         public Box (BoxDirection direction = BoxDirection.VERTICAL) {
+         Box (BoxDirection direction) {
              base (ContainerType.MULTIPLE);
              this.direction = direction;
              notify["spacing"].connect (redraw);
@@ -56,6 +56,14 @@ namespace EV3devTk {
                  if (c is Spacer)
                     spacer_count--;
              });
+        }
+
+        public Box.vertical () {
+            this (BoxDirection.VERTICAL);
+        }
+
+        public Box.horizontal () {
+            this (BoxDirection.HORIZONTAL);
         }
 
         public override int preferred_width {

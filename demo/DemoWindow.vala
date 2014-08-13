@@ -42,7 +42,7 @@ namespace EV3devTk {
             var quit_button = new Button.with_label ("Quit");
             quit_button.border = ButtonBorder.NONE;
             quit_button.pressed.connect (() => quit ());
-            var box1 = new Box (BoxDirection.VERTICAL) {
+            var box1 = new Box.vertical () {
                 padding_top = 10,
                 padding_bottom = 10,
                 padding_left = 10,
@@ -65,7 +65,7 @@ namespace EV3devTk {
                 return false;
             });
             var title_label = new Label ("Dialog");
-            var title_line = new Line () {
+            var title_line = new Line.horizontal () {
                 margin_bottom = 4
             };
             var message_label = new Label (
@@ -79,7 +79,7 @@ namespace EV3devTk {
             };
             ok_button.pressed.connect (() =>
                 screen.pop_window ());
-            var vbox = new Box () {
+            var vbox = new Box.vertical () {
                 padding_top = 2,
                 padding_bottom = 2,
                 spacing = 2
@@ -102,7 +102,7 @@ namespace EV3devTk {
                 }
                 return false;
             });
-            var vbox = new Box () {
+            var vbox = new Box.vertical () {
                 margin_top = 10,
                 margin_left = 10
             };
@@ -113,7 +113,7 @@ namespace EV3devTk {
             var checkbox1_label = new Label ("Unchecked") {
                 vertical_align = WidgetAlign.CENTER
             };
-            var checkbox1_hbox = new Box (BoxDirection.HORIZONTAL) {
+            var checkbox1_hbox = new Box.horizontal () {
                 spacing = 4
             };
             checkbox1_hbox.add (checkbox1);
@@ -127,7 +127,7 @@ namespace EV3devTk {
             var checkbox2_label = new Label ("Unchecked") {
                 vertical_align = WidgetAlign.CENTER
             };
-            var checkbox2_hbox = new Box (BoxDirection.HORIZONTAL) {
+            var checkbox2_hbox = new Box.horizontal () {
                 spacing = 4
             };
             checkbox2_hbox.add (checkbox2);
@@ -142,7 +142,7 @@ namespace EV3devTk {
             var radiobutton_group1 = new CheckButtonGroup ();
             var group1_label = new Label ("Group 1:");
             var group1_selected_label = new Label ();
-            var group1_label_hbox = new Box (BoxDirection.HORIZONTAL) {
+            var group1_label_hbox = new Box.horizontal () {
                 spacing = 4
             };
             group1_label_hbox.add (group1_label);
@@ -151,21 +151,21 @@ namespace EV3devTk {
                 represented_object_pointer = 1.to_pointer ()
             };
             var radiobutton1_label = new Label ("Item 1");
-            var radiobutton1_hbox = new Box (BoxDirection.HORIZONTAL);
+            var radiobutton1_hbox = new Box.horizontal ();
             radiobutton1_hbox.add (radiobutton1);
             radiobutton1_hbox.add (radiobutton1_label);
             var radiobutton2 = new CheckButton (CheckButtonType.RADIO, radiobutton_group1) {
                 represented_object_pointer = 2.to_pointer ()
             };
             var radiobutton2_label = new Label ("Item 2");
-            var radiobutton2_hbox = new Box (BoxDirection.HORIZONTAL);
+            var radiobutton2_hbox = new Box.horizontal ();
             radiobutton2_hbox.add (radiobutton2);
             radiobutton2_hbox.add (radiobutton2_label);
             var radiobutton3 = new CheckButton (CheckButtonType.RADIO, radiobutton_group1) {
                 represented_object_pointer = 3.to_pointer ()
             };
             var radiobutton3_label = new Label ("Item 3");
-            var radiobutton3_hbox = new Box (BoxDirection.HORIZONTAL);
+            var radiobutton3_hbox = new Box.horizontal ();
             radiobutton3_hbox.add (radiobutton3);
             radiobutton3_hbox.add (radiobutton3_label);
             radiobutton_group1.notify["selected-item"].connect (() => {
