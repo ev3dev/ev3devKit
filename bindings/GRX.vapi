@@ -924,13 +924,31 @@ namespace GRX {
     [CCode (cname = "GrHLine")]
     public void horiz_line (int x1, int x2, int y, Color c);
     [CCode (cname = "GrVLine")]
-    public void vert_lint (int x, int y1, int y2, Color c);
+    public void vert_line (int x, int y1, int y2, Color c);
     [CCode (cname = "GrBox")]
     public void box (int x1, int y1, int x2, int y2, Color c);
     [CCode (cname = "GrFilledBox")]
     public void filled_box (int x1, int y1, int x2, int y2, Color c);
     [CCode (cname = "GrFramedBox")]
-    public void framed_box (int x1, int y1, int x2, int y2, int wdt, FramedBoxColors c);
+    public void framed_box (int x1, int y1, int x2, int y2, int width, FramedBoxColors c);
+    public void rounded_box (int x1, int y1, int x2, int y2, int radius, Color c) {
+        circle_arc (x1 + radius, y1 + radius, radius, 900, 1800, ArcStyle.OPEN, c);
+        circle_arc (x2 - radius, y1 + radius, radius, 0, 900, ArcStyle.OPEN, c);
+        circle_arc (x1 + radius, y2 - radius, radius, 1800, 2700, ArcStyle.OPEN, c);
+        circle_arc (x2 - radius, y2 - radius, radius, 2700, 3600, ArcStyle.OPEN, c);
+        horiz_line (x1 + radius, x2 - radius, y1, c);
+        horiz_line (x1 + radius, x2 - radius, y2, c);
+        vert_line (x1, y1 + radius, y2 - radius, c);
+        vert_line (x2, y1 + radius, y2 - radius, c);
+    }
+    public void filled_rounded_box (int x1, int y1, int x2, int y2, int radius, Color c) {
+        filled_circle_arc (x1 + radius, y1 + radius, radius, 900, 1800, ArcStyle.CLOSE2, c);
+        filled_circle_arc (x2 - radius, y1 + radius, radius, 0, 900, ArcStyle.CLOSE2, c);
+        filled_circle_arc (x1 + radius, y2 - radius, radius, 1800, 2700, ArcStyle.CLOSE2, c);
+        filled_circle_arc (x2 - radius, y2 - radius, radius, 2700, 3600, ArcStyle.CLOSE2, c);
+        filled_box (x1 + radius, y1, x2 - radius, y2, c);
+        filled_box (x1, y1 + radius, x2, y2 - radius, c);
+    }
     [CCode (cname = " GrGenerateEllipse")]
     public int generate_ellipse (int xc, int yc, int xa, int ya, [CCode (array_length_cexpr = "MAX_POLYGON_POINTS")]Point[] points);
     [CCode (cname = " GrGenerateEllipseArc")]

@@ -120,11 +120,11 @@ namespace EV3devTk {
         protected override void on_draw (Context context) {
             Color color = window.screen.bg_color;
             if (window_type == WindowType.DIALOG) {
-                filled_box (border_x, border_y, border_x + border_width,
-                    border_y + border_height, color);
+                filled_rounded_box (border_x, border_y, border_x + border_width,
+                    border_y + border_height, 10, color);
                 color = window.screen.fg_color;
-                box (border_x, border_y, border_x + border_width,
-                    border_y + border_height, color);
+                rounded_box (border_x, border_y, border_x + border_width,
+                    border_y + border_height, 10, color);
             } else {
                 filled_box (border_x, border_y, border_x + border_width - 1,
                     border_y + border_height - 1, color);
