@@ -29,12 +29,14 @@ namespace EV3devTk {
         const string main_window_glade_file = "main_window.glade";
 
         Gtk.init (ref args);
-        GRX.set_driver ("memory gw %d gh %d nc %s".printf (
-            FakeEV3LCDDevice.WIDTH, FakeEV3LCDDevice.HEIGHT, "16M"));
+        GRX.set_driver ("memory nc 16M");
         GRX.set_mode (GRX.GraphicsMode.GRAPHICS_DEFAULT);
 
-        var lcd = new FakeEV3LCDDevice ();
-        var screen = new DesktopScreen (lcd);
+        var stock_lcd = new FakeEV3LCDDevice ();
+        var stock_screen = new DesktopScreen (stock_lcd);
+
+        var color_lcd = new FakeEV3LCDDevice (FakeEV3LCDDevice.DeviceType.ADAFRUIT_18);
+        var color_screen = new DesktopScreen (color_lcd);
 
         var builder = new Gtk.Builder ();
         Gtk.Window main_window;
@@ -44,28 +46,81 @@ namespace EV3devTk {
             main_window = builder.get_object ("main_window") as Gtk.Window;
             main_box = builder.get_object ("main_box") as Gtk.Box;
             (builder.get_object ("up_button") as Gtk.Button)
-                .clicked.connect (() => screen.queue_key_code (Key.UP));
+                .clicked.connect (() => {
+                    stock_screen.queue_key_code (Key.UP);
+                    color_screen.queue_key_code (Key.UP);
+                });
             (builder.get_object ("down_button") as Gtk.Button)
-                .clicked.connect (() => screen.queue_key_code (Key.DOWN));
+                .clicked.connect (() => {
+                    stock_screen.queue_key_code (Key.DOWN);
+                    color_screen.queue_key_code (Key.DOWN);
+                });
             (builder.get_object ("left_button") as Gtk.Button)
-                .clicked.connect (() => screen.queue_key_code (Key.LEFT));
+                .clicked.connect (() => {
+                    stock_screen.queue_key_code (Key.LEFT);
+                    color_screen.queue_key_code (Key.LEFT);
+                });
             (builder.get_object ("right_button") as Gtk.Button)
-                .clicked.connect (() => screen.queue_key_code (Key.RIGHT));
+                .clicked.connect (() => {
+                    stock_screen.queue_key_code (Key.RIGHT);
+                    color_screen.queue_key_code (Key.RIGHT);
+                });
             (builder.get_object ("enter_button") as Gtk.Button)
-                .clicked.connect (() => screen.queue_key_code ('\n'));
+                .clicked.connect (() => {
+                    stock_screen.queue_key_code ('\n');
+                    color_screen.queue_key_code ('\n');
+                });
             (builder.get_object ("back_button") as Gtk.Button)
-                .clicked.connect (() => screen.queue_key_code (Key.BACKSPACE));
+                .clicked.connect (() => {
+                    stock_screen.queue_key_code (Key.BACKSPACE);
+                    color_screen.queue_key_code (Key.BACKSPACE);
+                });
         } catch (Error err) {
             error ("%s", err.message);
         }
 
         builder.connect_signals (null);
 
-        var demo_window = new DemoWindow ();
-        demo_window.quit.connect (Gtk.main_quit);
-        screen.push_window (demo_window);
+        stock_lcd.key_press_event.connect ((event) => {
+            uint key_code = 0;
+            switch (event.keyval) {
+            case Gdk.Key.Up:
+                key_code = Key.UP;
+                break;
+            case Gdk.Key.Down:
+                key_code = Key.DOWN;
+                break;
+            case Gdk.Key.Left:
+                key_code = Key.LEFT;
+                break;
+            case Gdk.Key.Right:
+                key_code = Key.RIGHT;
+                break;
+            case Gdk.Key.Return:
+                key_code = '\n';
+                break;
+            case Gdk.Key.BackSpace:
+                key_code = Key.BACKSPACE;
+                break;
+            default:
+                return false;
+            }
+            stock_screen.queue_key_code (key_code);
+            color_screen.queue_key_code (key_code);
+            return true;
+        });
+        color_lcd.key_press_event.connect ((event) => stock_lcd.key_press_event (event));
 
-        main_box.pack_start (lcd);
+        var demo_window_1 = new DemoWindow ();
+        demo_window_1.quit.connect (Gtk.main_quit);
+        stock_screen.push_window (demo_window_1);
+
+        var demo_window_2 = new DemoWindow ();
+        demo_window_2.quit.connect (Gtk.main_quit);
+        color_screen.push_window (demo_window_2);
+
+        main_box.pack_start (color_lcd);
+        main_box.pack_start (stock_lcd);
         main_window.show_all ();
         Gtk.main ();
 

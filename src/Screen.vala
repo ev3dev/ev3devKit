@@ -34,25 +34,25 @@ namespace EV3devTk {
         internal Color bg_color;
         internal Color mid_color;
 
-        public abstract int width { get; }
-        public abstract int height { get; }
-        public bool dirty { get; set; }
+        public int width { get; private set; }
+        public int height { get; private set; }
+        public bool dirty { get; set; default = true; }
         public Window? top_window {
             owned get { return window_stack.peek_tail (); }
         }
 
-        protected Screen (char *context_mem_addr = null) {
+        protected Screen (int width, int height, char *context_mem_addr = null) {
             window_stack = new LinkedList<Window> ();
             key_queue = new LinkedList<uint?> ();
             FrameMode mode = core_frame_mode ();
             if (mode == FrameMode.UNDEFINED)
                 mode = screen_frame_mode ();
             if (context_mem_addr == null)
-                context = Context.create_with_mode (mode, screen_x (), screen_y ());
+                context = Context.create_with_mode (mode, width, height);
             else {
                 char* addr[4];
                 addr[0] = context_mem_addr;
-                context = Context.create_with_mode (mode, screen_x (), screen_y (), addr);
+                context = Context.create_with_mode (mode, width, height, addr);
             }
             fg_color = Color.black;
             bg_color = Color.white;
@@ -60,7 +60,8 @@ namespace EV3devTk {
                 mid_color = Color.black;
             else
                 mid_color = Color.alloc (0, 0, 255);
-
+            this.width = width;
+            this.height = height;
             Timeout.add(50, on_draw_timeout);
         }
 

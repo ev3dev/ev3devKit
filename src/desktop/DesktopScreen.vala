@@ -28,47 +28,18 @@ namespace EV3devTk {
     public class DesktopScreen : EV3devTk.Screen {
         FakeEV3LCDDevice lcd;
 
-        public override int width { get { return FakeEV3LCDDevice.WIDTH; } }
-        public override int height { get { return FakeEV3LCDDevice.HEIGHT; } }
-
         public DesktopScreen (FakeEV3LCDDevice lcd) {
-            base (lcd.pixbuf_data);
+            base (lcd.info.width, lcd.info.height, lcd.pixbuf_data);
             this.lcd = lcd;
-            bg_color = lcd.bg_color;
-            mid_color = GRX.Color.black;
-            lcd.key_press_event.connect (on_key_press_event);
+            if (lcd.info.use_custom_colors) {
+                fg_color = lcd.info.fg_color;
+                bg_color = lcd.info.bg_color;
+                mid_color = lcd.info.mid_color;
+            }
         }
 
         public override void refresh () {
             lcd.refresh ();
-        }
-
-        bool on_key_press_event (Gdk.EventKey event) {
-            uint key_code = 0;
-            switch (event.keyval) {
-            case Gdk.Key.Up:
-                key_code = Key.UP;
-                break;
-            case Gdk.Key.Down:
-                key_code = Key.DOWN;
-                break;
-            case Gdk.Key.Left:
-                key_code = Key.LEFT;
-                break;
-            case Gdk.Key.Right:
-                key_code = Key.RIGHT;
-                break;
-            case Gdk.Key.Return:
-                key_code = '\n';
-                break;
-            case Gdk.Key.BackSpace:
-                key_code = Key.BACKSPACE;
-                break;
-            default:
-                return false;
-            }
-            queue_key_code (key_code);
-            return true;
         }
     }
 }

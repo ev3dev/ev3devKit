@@ -29,29 +29,47 @@ using GRX;
 
 namespace EV3devTk {
     public class FakeEV3LCDDevice : Gtk.EventBox {
-        public const uint16 WIDTH = 178;
-        public const uint16 HEIGHT = 128;
+        public struct Info {
+            public int width;
+            public int height;
+            public bool use_custom_colors;
+            public Color fg_color;
+            public Color bg_color;
+            public Color mid_color;
+        }
+
+        public enum DeviceType {
+            STOCK,
+            ADAFRUIT_18
+        }
+
+        const Info[] devices = {
+            { 178, 128, true, 0, 0x78b5ad, 0 },
+            { 160, 128, false }
+        };
 
         Gdk.Pixbuf pixbuf;
         Gtk.Image image;
-        internal Color bg_color;
         internal char* pixbuf_data { get { return pixbuf.pixels; } }
 
-        public FakeEV3LCDDevice () {
+        public Info info { get; private set; }
+
+        public FakeEV3LCDDevice (DeviceType type = DeviceType.STOCK) {
             can_focus = true;
             button_press_event.connect ((event) => {
                 grab_focus ();
                 return true;
             });
+            info = devices[(int)type];
             image = new Gtk.Image.from_pixbuf(new Gdk.Pixbuf (
-                Gdk.Colorspace.RGB, false, 8, WIDTH * 2, HEIGHT * 2));
+                Gdk.Colorspace.RGB, false, 8, info.width * 2, info.height * 2));
             add (image);
-            pixbuf = new Gdk.Pixbuf (Gdk.Colorspace.RGB, false, 8, WIDTH, HEIGHT);
-            bg_color = Color.alloc (195, 212, 202);
+            pixbuf = new Gdk.Pixbuf (Gdk.Colorspace.RGB, false, 8, info.width, info.height);
         }
 
         public void refresh () {
-            image.set_from_pixbuf (pixbuf.scale_simple (WIDTH * 2, HEIGHT * 2, Gdk.InterpType.TILES));
+            image.set_from_pixbuf (pixbuf.scale_simple (info.width * 2,
+                info.height * 2, Gdk.InterpType.TILES));
         }
     }
 }
