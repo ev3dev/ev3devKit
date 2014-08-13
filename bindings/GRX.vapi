@@ -816,7 +816,9 @@ namespace GRX {
         [CCode (cname = "GrCVALUEMASK")]
         COLOR_VALUE_MASK,
         [CCode (cname = "GrCMODEMASK")]
-        COLOR_MODE_MASK
+        COLOR_MODE_MASK,
+        [CCode (cname = "GR_UNDERLINE_TEXT")]
+        UNDERLINE_TEXT
     }
 
     [CCode (cname = "const struct _GR_colorInfo", has_type_id = false)]
@@ -1070,7 +1072,7 @@ namespace GRX {
         public CharAttr attr (int ch);
     }
 
-    [CCode (cname = "char", has_type_id = false)]
+    [CCode (cname = "char", has_destroy_function = false, has_copy_function = false, has_type_id = false)]
     [SimpleType]
     public struct CharAttr : char {
         [CCode (cname = "GR_BUILD_ATTR")]
@@ -1083,7 +1085,7 @@ namespace GRX {
         public bool underline ();
     }
 
-    [CCode (cname = "int", cprefix = "GR+FONTCVT_")]
+    [CCode (cname = "int", cprefix = "GR_FONTCVT_")]
     [Flags]
     public enum FontConversionFlag {
         NONE,
