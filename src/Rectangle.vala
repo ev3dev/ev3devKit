@@ -19,13 +19,16 @@
  * MA 02110-1301, USA.
  */
 
-/* Align.vala - Enums used for alignment */
+/* Rectangle.vala - Struct for rectangles */
 
 namespace EV3devTk {
-    public enum WidgetAlign {
-        FILL,
-        START,
-        CENTER,
-        END;
+    public struct Rectangle {
+        public int x1;
+        public int y1;
+        public int x2;
+        public int y2;
+
+        public int width { get { return x2 - x1 - (x2 > x1 ? -1 : 1); } }
+        public int height { get { return y2 - y1 - (y2 > y1 ? -1 : 1); } }
     }
 }

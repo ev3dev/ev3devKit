@@ -41,17 +41,6 @@ namespace EV3devTk {
     public class CheckButton : EV3devTk.Widget {
         CheckButtonType check_button_type;
 
-        public override int preferred_width {
-            get {
-                return outer_size + base.preferred_width;
-            }
-        }
-        public override int preferred_height {
-            get {
-                return outer_size + base.preferred_height;
-            }
-        }
-
         bool _checked = false;
         public bool checked {
             get { return _checked; }
@@ -79,8 +68,7 @@ namespace EV3devTk {
         public int outer_size { get; set; default = 9; }
         public int inner_size { get; set; default = 5; }
 
-        public CheckButton (CheckButtonType type = CheckButtonType.CHECKBOX,
-            CheckButtonGroup? group = null)
+        CheckButton (CheckButtonType type, CheckButtonGroup? group = null)
         {
             check_button_type = type;
             this.group = group;
@@ -95,6 +83,22 @@ namespace EV3devTk {
             notify["inner_size"].connect (redraw);
         }
 
+        public CheckButton.checkbox () {
+            this (CheckButtonType.CHECKBOX);
+        }
+
+        public CheckButton.radio (CheckButtonGroup group) {
+            this (CheckButtonType.RADIO, group);
+        }
+
+        public override int get_preferred_width () {
+            return outer_size + get_margin_border_padding_width ();
+        }
+
+        public override int get_preferred_height () {
+            return outer_size + get_margin_border_padding_height ();
+        }
+
         protected override void on_draw (Context context) {
             weak Widget widget = this;
             while (widget.parent != null) {
@@ -106,23 +110,25 @@ namespace EV3devTk {
             unowned GRX.Color color;
             if (widget.has_focus) {
                 color = window.screen.mid_color;
-                filled_box (border_x, border_y, border_x + border_width - 1, border_y + border_height - 1, color);
+                filled_box (border_bounds.x1, border_bounds.y1, border_bounds.x2,
+                    border_bounds.y2, color);
                 color = window.screen.bg_color;
             } else
                 color = window.screen.fg_color;
             if (check_button_type == CheckButtonType.CHECKBOX)
-                box (content_x, content_y, content_x + outer_size - 1, content_y + outer_size - 1, color);
+                box (content_bounds.x1, content_bounds.y1, content_bounds.x2,
+                    content_bounds.y2, color);
             else
-                circle (content_x + outer_size / 2,
-                    content_y + outer_size / 2, outer_size / 2, color);
+                circle (content_bounds.x1 + outer_size / 2,
+                    content_bounds.y1 + outer_size / 2, outer_size / 2, color);
             if (checked) {
                 if (check_button_type == CheckButtonType.CHECKBOX) {
-                    var _x = content_x + (outer_size - inner_size) / 2;
-                    var _y = content_y + (outer_size - inner_size) / 2;
-                    filled_box (_x, _y, _x + inner_size - 1, _y + inner_size - 1, color);
+                    var x = content_bounds.x1 + (outer_size - inner_size) / 2;
+                    var y = content_bounds.y1 + (outer_size - inner_size) / 2;
+                    filled_box (x, y, x + inner_size - 1, y + inner_size - 1, color);
                 } else
-                    filled_circle (content_x + outer_size / 2,
-                        content_y + outer_size / 2, inner_size / 2, color);
+                    filled_circle (content_bounds.x1 + outer_size / 2,
+                        content_bounds.y1 + outer_size / 2, inner_size / 2, color);
             }
         }
 

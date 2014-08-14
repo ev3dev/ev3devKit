@@ -35,39 +35,24 @@ namespace EV3devTk {
     public class Button : EV3devTk.Container {
         public ButtonBorder border { get; set; default = ButtonBorder.BOX; }
 
-        public override int preferred_width {
-            get {
-                return base.preferred_width
-                    + (child == null ? 0 : child.preferred_width);
-            }
-        }
-        public override int preferred_height {
-            get {
-                return base.preferred_height
-                    + (child == null ? 0 : child.preferred_height);
-            }
-        }
-
-        public override int border_top {
-            get { return border == ButtonBorder.BOX ? 1 : 0; }
-        }
-        public override int border_bottom {
-            get { return border == ButtonBorder.BOX ? 1 : 0; }
-        }
-        public override int border_left {
-            get { return border == ButtonBorder.BOX ? 1 : 0; }
-        }
-        public override int border_right {
-            get { return border == ButtonBorder.BOX ? 1 : 0; }
-        }
-
         public signal void pressed ();
 
         public Button (Widget? child = null) {
             base (ContainerType.SINGLE);
             if (child != null)
                 add (child);
-            notify["border"].connect (redraw);
+            notify["border"].connect (() => {
+                var border_width = border == ButtonBorder.NONE ? 0 : 1;
+                border_top = border_width;
+                border_bottom = border_width;
+                border_left = border_width;
+                border_right = border_width;
+                redraw ();
+            });
+            border_top = 1;
+            border_bottom = 1;
+            border_left = 1;
+            border_right = 1;
             padding_top = 2;
             padding_bottom = 2;
             padding_left = 2;
@@ -83,11 +68,13 @@ namespace EV3devTk {
             unowned GRX.Color color;
             if (has_focus) {
                 color = window.screen.mid_color;
-                filled_box (border_x, border_y, border_x + border_width - 1, border_y + border_height - 1, color);
+                filled_box (border_bounds.x1, border_bounds.y1, border_bounds.x2,
+                    border_bounds.y2, color);
             }
             if (border == ButtonBorder.BOX) {
                 color = window.screen.fg_color;
-                box (border_x, border_y, border_x + border_width - 1, border_y + border_height - 1, color);
+                box (border_bounds.x1, border_bounds.y1, border_bounds.x2,
+                    border_bounds.y2, color);
             }
             base.on_draw (context);
         }

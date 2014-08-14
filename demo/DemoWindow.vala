@@ -56,7 +56,7 @@ namespace EV3devTk {
         }
 
         void on_show_dialog_button_pressed () {
-            var dialog = new Window (WindowType.DIALOG);
+            var dialog = new Window.dialog ();
             dialog.key_pressed.connect ((key_code) => {
                 if (key_code == Key.BACKSPACE) {
                     screen.pop_window ();
@@ -64,19 +64,22 @@ namespace EV3devTk {
                 }
                 return false;
             });
+            // make us a nice little title bar
             var title_label = new Label ("Dialog");
-            var title_line = new Line.horizontal () {
-                margin_bottom = 4
-            };
+            var title_line = new Line.horizontal ();
+            var message_spacer = new Spacer ();
             var message_label = new Label (
                 "You pressed the show_dialog_button. "
                 + "This is what a dialog looks like.");
-            var button_spacer = new Spacer ();
+            // a little trick to have twice as much space below the message as above the message.
+            var button_spacer1 = new Spacer ();
+            var button_spacer2 = new Spacer ();
             var ok_button = new Button.with_label ("OK") {
                 border = ButtonBorder.BOX,
                 horizontal_align = WidgetAlign.CENTER,
                 vertical_align = WidgetAlign.END
             };
+            // pressing the button closes the dialog
             ok_button.pressed.connect (() =>
                 screen.pop_window ());
             var vbox = new Box.vertical () {
@@ -86,8 +89,10 @@ namespace EV3devTk {
             };
             vbox.add (title_label);
             vbox.add (title_line);
+            vbox.add (message_spacer);
             vbox.add (message_label);
-            vbox.add (button_spacer);
+            vbox.add (button_spacer1);
+            vbox.add (button_spacer2);
             vbox.add (ok_button);
             dialog.add (vbox);
             screen.push_window (dialog);
@@ -104,11 +109,13 @@ namespace EV3devTk {
             });
             var vbox = new Box.vertical () {
                 margin_top = 10,
-                margin_left = 10
+                margin_left = 10,
+                margin_right = 10
             };
-            var checkbox1 = new CheckButton () {
-                vertical_align = WidgetAlign.START,
-                margin_left = 2
+            // just a plain checkbox
+            var checkbox1 = new CheckButton.checkbox () {
+                vertical_align = WidgetAlign.CENTER,
+                margin_left = 2 //to match button padding
             };
             var checkbox1_label = new Label ("Unchecked") {
                 vertical_align = WidgetAlign.CENTER
@@ -120,8 +127,9 @@ namespace EV3devTk {
             checkbox1_hbox.add (checkbox1_label);
             checkbox1.notify["checked"].connect (() =>
                 checkbox1_label.text = checkbox1.checked ? "Checked" : "Unchecked");
-            var checkbox2 = new CheckButton () {
-                vertical_align = WidgetAlign.START,
+            // or you can put the checkbox in a button so that the text is selected as well
+            var checkbox2 = new CheckButton.checkbox () {
+                vertical_align = WidgetAlign.CENTER,
                 can_focus = false
             };
             var checkbox2_label = new Label ("Unchecked") {
@@ -139,32 +147,41 @@ namespace EV3devTk {
                 checkbox2_label.text = checkbox2.checked ? "Checked" : "Unchecked");
             checkbox2_button.pressed.connect (() =>
                 checkbox2.checked = !checkbox2.checked);
+            // radio buttons require a group
             var radiobutton_group1 = new CheckButtonGroup ();
             var group1_label = new Label ("Group 1:");
             var group1_selected_label = new Label ();
             var group1_label_hbox = new Box.horizontal () {
-                spacing = 4
+                spacing = 4,
+                margin_bottom = 2
             };
             group1_label_hbox.add (group1_label);
             group1_label_hbox.add (group1_selected_label);
-            var radiobutton1 = new CheckButton (CheckButtonType.RADIO, radiobutton_group1) {
+            // represented object is used to pass arbitrary information back to the group.
+            var radiobutton1 = new CheckButton.radio (radiobutton_group1) {
                 represented_object_pointer = 1.to_pointer ()
             };
-            var radiobutton1_label = new Label ("Item 1");
+            var radiobutton1_label = new Label ("Item 1") {
+                vertical_align = WidgetAlign.CENTER
+            };
             var radiobutton1_hbox = new Box.horizontal ();
             radiobutton1_hbox.add (radiobutton1);
             radiobutton1_hbox.add (radiobutton1_label);
-            var radiobutton2 = new CheckButton (CheckButtonType.RADIO, radiobutton_group1) {
+            var radiobutton2 = new CheckButton.radio (radiobutton_group1) {
                 represented_object_pointer = 2.to_pointer ()
             };
-            var radiobutton2_label = new Label ("Item 2");
+            var radiobutton2_label = new Label ("Item 2") {
+                vertical_align = WidgetAlign.CENTER
+            };
             var radiobutton2_hbox = new Box.horizontal ();
             radiobutton2_hbox.add (radiobutton2);
             radiobutton2_hbox.add (radiobutton2_label);
-            var radiobutton3 = new CheckButton (CheckButtonType.RADIO, radiobutton_group1) {
+            var radiobutton3 = new CheckButton.radio (radiobutton_group1) {
                 represented_object_pointer = 3.to_pointer ()
             };
-            var radiobutton3_label = new Label ("Item 3");
+            var radiobutton3_label = new Label ("Item 3") {
+                vertical_align = WidgetAlign.CENTER
+            };
             var radiobutton3_hbox = new Box.horizontal ();
             radiobutton3_hbox.add (radiobutton3);
             radiobutton3_hbox.add (radiobutton3_label);

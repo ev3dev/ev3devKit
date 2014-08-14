@@ -78,28 +78,6 @@ namespace EV3devTk {
             }
         }
 
-        public virtual int max_width {
-            get {
-                if (parent != null)
-                    return parent.max_width - parent.margin_left
-                        -parent.margin_right - parent.border_left
-                        - parent.border_right - parent.padding_left
-                        - parent.padding_right;
-                return 0;
-            }
-        }
-
-        public virtual int max_height {
-            get {
-                if (parent != null)
-                    return parent.max_height - parent.margin_left
-                        -parent.margin_right - parent.border_left
-                        - parent.border_right - parent.padding_left
-                        - parent.padding_right;
-                return 0;
-            }
-        }
-
         public ContainerType container_type { get; private set; }
 
         public signal void child_added (Widget child);
@@ -110,7 +88,31 @@ namespace EV3devTk {
             _children = new LinkedList<Widget> ();
         }
 
-        public void add (Widget widget) {
+        public override int get_preferred_width () {
+            return (child == null ? 0 : child.get_preferred_width ())
+                + get_margin_border_padding_width ();
+        }
+
+        public override int get_preferred_height () {
+            return (child == null ? 0 : child.get_preferred_height ())
+                + get_margin_border_padding_height ();
+        }
+
+        public override int get_preferred_width_for_height (int height) {
+            var result = get_margin_border_padding_width ();
+            if (child != null)
+                result += child.get_preferred_width_for_height (height - result);
+            return result;
+        }
+
+        public override int get_preferred_height_for_width (int width) {
+            var result = get_margin_border_padding_height ();
+            if (child != null)
+                result += child.get_preferred_height_for_width (width - result);
+            return result;
+        }
+
+        public void add (Widget widget) requires (!(widget is Window)) {
             if (widget.parent != null)
                 widget.parent.remove (widget);
             if (container_type == ContainerType.SINGLE) {
@@ -132,63 +134,51 @@ namespace EV3devTk {
             }
         }
 
-        protected override void on_draw (Context context) {
-            foreach (var widget in children)
-                widget.draw (context);
-        }
-
-        internal virtual int get_child_x (Widget child)
-            requires (children.contains (child))
-        {
+        protected void set_child_bounds (Widget child, int x1, int y1, int x2, int y2) {
+            var width = content_bounds.width;
+            var height = content_bounds.height;
+            // TODO add width_for_height
+            if (child.horizontal_align != WidgetAlign.FILL)
+                width = int.min (width, child.get_preferred_width ());
+            if (child.vertical_align != WidgetAlign.FILL)
+                height = int.min (height, child.get_preferred_height_for_width (width));
             switch (child.horizontal_align) {
-                case WidgetAlign.FILL:
-                case WidgetAlign.START:
-                    return x + margin_left + border_left + padding_left;
-                case WidgetAlign.CENTER:
-                    return x + (width - get_child_width (child)) / 2;
-                case WidgetAlign.END:
-                    return x + width - margin_right - border_right
-                        - padding_right - get_child_width (child);
-                default:
-                    critical ("Unhandled case");
-                    return x;
+            case WidgetAlign.START:
+                x2 = x1 + width - 1;
+                break;
+            case WidgetAlign.CENTER:
+                x1 += (content_bounds.width - width + 1) / 2;
+                x2 = x1 + width - 1;
+                break;
+            case WidgetAlign.END:
+                x1 = x2 - width + 1;
+                break;
             }
-        }
-
-        internal virtual int get_child_y (Widget child)
-            requires (children.contains (child))
-        {
             switch (child.vertical_align) {
-                case WidgetAlign.FILL:
-                case WidgetAlign.START:
-                    return y + margin_top + border_top + padding_top;
-                case WidgetAlign.CENTER:
-                    return y + (height - get_child_height (child)) / 2;
-                case WidgetAlign.END:
-                    return y + height - margin_bottom - border_bottom
-                        - padding_bottom - get_child_height (child);
-                default:
-                    critical ("Unhandled case");
-                    return y;
+            case WidgetAlign.START:
+                y2 = y1 + height - 1;
+                break;
+            case WidgetAlign.CENTER:
+                y1 += (content_bounds.height - height + 1) / 2;
+                y2 = y1 + height - 1;
+                break;
+            case WidgetAlign.END:
+                y1 = y2 - height + 1;
+                break;
             }
+            child.set_bounds (x1, y1, x2, y2);
         }
 
-        internal virtual int get_child_width (Widget child)
-            requires (children.contains (child))
-        {
-            if (child.horizontal_align == WidgetAlign.FILL)
-                return width - margin_left - margin_right - border_left
-                    - border_right - padding_left - padding_right;
-            return int.min (child.preferred_width, max_width);
+        protected virtual void do_layout () {
+            foreach (var child in children)
+                set_child_bounds (child, content_bounds.x1, content_bounds.y1,
+                    content_bounds.x2, content_bounds.y2);
         }
 
-        internal virtual int get_child_height (Widget child)
-            requires (children.contains (child))
-        {
-            if (child.vertical_align == WidgetAlign.FILL)
-                return height - margin_top - margin_bottom - border_top
-                    - border_bottom - padding_top - padding_bottom;
-            return int.min (child.preferred_height, max_height);
+        protected override void on_draw (Context context) {
+            do_layout ();
+            foreach (var child in children)
+                child.draw (context);
         }
     }
 }

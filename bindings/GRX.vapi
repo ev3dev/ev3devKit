@@ -91,6 +91,7 @@ namespace GRX {
     /**
      * available video modes (for 'GrSetMode')
      */
+    [CCode (has_type_id = false)]
     public enum GraphicsMode {
         [CCode (cname = "GR_unknown_mode")]
         UNKNOWN_MODE,
@@ -159,7 +160,7 @@ namespace GRX {
     /**
      * Available frame modes (video memory layouts)
      */
-    [CCode (cname = "enum _GR_frameModes")]
+    [CCode (cname = "enum _GR_frameModes", has_type_id = false)]
     public enum FrameMode {
         /* ====== video frame buffer modes ====== */
         [CCode (cname = "GR_frameUndef")]
@@ -283,6 +284,7 @@ namespace GRX {
     /*
      * supported video adapter types
      */
+    [CCode (has_type_id = false)]
     public enum VideoAdapter {
         UNKNOWN,                         /* not known (before driver set) */
         VGA,                             /* VGA adapter */
@@ -805,7 +807,7 @@ namespace GRX {
     [CCode (cname = "GrHighY")]
     public int high_y ();
 
-    [CCode (cprefix = "Gr")]
+    [CCode (cprefix = "Gr", has_type_id = false)]
     [Flags]
     public enum ColorMode {
         WRITE,
@@ -854,7 +856,7 @@ namespace GRX {
     public const int MAX_POLYGON_POINTS;
     public const int MAX_ELLIPSE_POINTS;
 
-    [CCode (cprefix = "GR_ARC_STYLE_")]
+    [CCode (cprefix = "GR_ARC_STYLE_", has_type_id = false)]
     public enum ArcStyle {
         OPEN,
         CLOSE1,
@@ -1025,7 +1027,7 @@ namespace GRX {
     [CCode (cname =  "GrPixelNC")]
     public Color pixel_no_clip (int x, int y);
 
-    [CCode (cname = "int", cprefix = "GR_TEXT_")]
+    [CCode (cname = "int", cprefix = "GR_TEXT_", has_type_id = false)]
     public enum TextDirection {
         RIGHT,
         DOWN,
@@ -1037,7 +1039,7 @@ namespace GRX {
         public bool is_vertical ();
     }
 
-    [CCode (cname = "int", cprefix = "GR_ALIGN_")]
+    [CCode (cname = "int", cprefix = "GR_ALIGN_", has_type_id = false)]
     public enum TextHorizAlign {
         LEFT,
         CENTER,
@@ -1045,7 +1047,7 @@ namespace GRX {
         DEFAULT;
     }
 
-    [CCode (cname = "int", cprefix = "GR_ALIGN_")]
+    [CCode (cname = "int", cprefix = "GR_ALIGN_", has_type_id = false)]
     public enum TextVertAlign {
         TOP,
         [CCode (cname = "GR_ALIGN_CENTER")]
@@ -1055,7 +1057,7 @@ namespace GRX {
         DEFAULT;
     }
 
-    [CCode (cname = "int")]
+    [CCode (cname = "int", has_type_id = false)]
     public enum ChrType {
         [CCode (cname = "GR_BYTE_TEXT")]
         BYTE,
@@ -1085,7 +1087,7 @@ namespace GRX {
         public bool underline ();
     }
 
-    [CCode (cname = "int", cprefix = "GR_FONTCVT_")]
+    [CCode (cname = "int", cprefix = "GR_FONTCVT_", has_type_id = false)]
     [Flags]
     public enum FontConversionFlag {
         NONE,
@@ -1527,6 +1529,7 @@ namespace GRX {
 
 
     /* Flags for GrImageInverse() */
+    [CCode (cname = "int", has_type_id = false)]
     [Flags]
     public enum ImageInverseFlag {
         [CCode (cname = "GR_IMAGE_INVERSE_LR")]
@@ -1741,7 +1744,7 @@ namespace GRX {
         const int DEFAULT_QUEUE_SIZE;
 
         /* mouse event flag bits */
-        [CCode (cprefix = "GR_M_")]
+        [CCode (cprefix = "GR_M_", has_type_id = false)]
         [Flags]
         public enum EventFlag {
             MOTION,
@@ -1766,7 +1769,7 @@ namespace GRX {
             EVENT
         }
 
-        [CCode (cprefix = "GR_M_")]
+        [CCode (cprefix = "GR_M_", has_type_id = false)]
         [Flags]
         public enum Button {
             LEFT,
@@ -1777,7 +1780,7 @@ namespace GRX {
         }
 
 
-        [CCode (cprefix = "GR_KB_")]
+        [CCode (cprefix = "GR_KB_", has_type_id = false)]
         [Flags]
         public enum KeyboardState {
             [CCode (cname = "GR_KB_RIGHTSHIFT")]
@@ -1796,7 +1799,7 @@ namespace GRX {
             SHIFT
         }
 
-        [CCode (cprefix = "GR_M_CUR_")]
+        [CCode (cprefix = "GR_M_CUR_", has_type_id = false)]
         [Flags]
         public enum CursorMode {
             NORMAL,
@@ -1862,7 +1865,7 @@ namespace GRX {
             public int qwrite;                             /* write pointer for the queue */
         }
 
-        [CCode (cname = "int")]
+        [CCode (cname = "int", has_type_id = false)]
         public enum Status {
             [CCode (cname = "-1")]
             MISSING,
@@ -1942,7 +1945,8 @@ namespace GRX {
      *  The PNM formats, grx support load/save of
      *  binaries formats (4, 5, 6) only
      */
-     public enum PNMFormat {
+    [CCode (cname = "int", has_type_id = false)]
+    public enum PNMFormat {
         [CCode (cname = "PLAINPBMFORMAT")]
         PLAIN_PBM,
         [CCode (cname = "PLAINPGMFORMAT")]

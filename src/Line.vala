@@ -35,21 +35,6 @@ namespace EV3devTk {
         public int line_width { get; set; default = 1; }
         public int line_length { get; set; default = 10; }
 
-        public override int preferred_width {
-            get {
-                if (direction == LineDirection.HORIZONTAL)
-                    return line_length + base.preferred_width;
-                return line_width + base.preferred_width;
-            }
-        }
-        public override int preferred_height {
-           get {
-                if (direction == LineDirection.VERTICAL)
-                    return line_length + base.preferred_height;
-                return line_width + base.preferred_height;
-            }
-        }
-
         Line (LineDirection direction) {
             this.direction = direction;
             notify["line_width"].connect (redraw);
@@ -64,12 +49,21 @@ namespace EV3devTk {
             this (LineDirection.VERTICAL);
         }
 
+        public override int get_preferred_width () {
+            if (direction == LineDirection.HORIZONTAL)
+                return line_length + get_margin_border_padding_width ();
+            return line_width + get_margin_border_padding_width ();
+        }
+        public override int get_preferred_height () {
+            if (direction == LineDirection.VERTICAL)
+                return line_length + get_margin_border_padding_height ();
+            return line_width + get_margin_border_padding_height ();
+        }
+
         protected override void on_draw (Context context) {
             Color color = window.screen.fg_color;
-            if (direction == LineDirection.HORIZONTAL)
-                horiz_line (content_x, content_x + content_width - 1, content_y, color);
-            else
-                vert_line (content_x, content_y, content_y + content_height - 1, color);
+            filled_box (content_bounds.x1, content_bounds.y1, content_bounds.x2,
+                content_bounds.y2, color);
         }
     }
 }

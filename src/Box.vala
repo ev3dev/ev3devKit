@@ -48,14 +48,6 @@ namespace EV3devTk {
              base (ContainerType.MULTIPLE);
              this.direction = direction;
              notify["spacing"].connect (redraw);
-             child_added.connect ((c) => {
-                 if (c is Spacer)
-                    spacer_count++;
-             });
-             child_removed.connect ((c) => {
-                 if (c is Spacer)
-                    spacer_count--;
-             });
         }
 
         public Box.vertical () {
@@ -66,100 +58,56 @@ namespace EV3devTk {
             this (BoxDirection.HORIZONTAL);
         }
 
-        public override int preferred_width {
-            get {
-                int width = 0;
-                if (direction == BoxDirection.HORIZONTAL) {
-                    foreach (var item in children)
-                        width += item.preferred_width + spacing;
-                    width -= spacing;
-                } else {
-                    foreach (var item in children)
-                        width = int.max (width, item.preferred_width);
-                }
-                return width + base.preferred_width;
+        public override int get_preferred_width () {
+            int width = 0;
+            if (direction == BoxDirection.HORIZONTAL) {
+                foreach (var item in children)
+                    width += item.get_preferred_width () + spacing;
+                width -= spacing;
+            } else {
+                foreach (var item in children)
+                    width = int.max (width, item.get_preferred_width ());
             }
+            return width + get_margin_border_padding_width ();
         }
 
-        public override int preferred_height {
-            get {
-                int height = 0;
-                if (direction == BoxDirection.VERTICAL) {
-                    foreach (var item in children)
-                        height += item.preferred_height + spacing;
-                    height -= spacing;
-                } else {
-                    foreach (var item in children)
-                        height = int.max (height, item.preferred_height);
-                }
-                return height + base.preferred_height;
+        public override int get_preferred_height () {
+            int height = 0;
+            if (direction == BoxDirection.VERTICAL) {
+                foreach (var item in children)
+                    height += item.get_preferred_height () + spacing;
+                height -= spacing;
+            } else {
+                foreach (var item in children)
+                    height = int.max (height, item.get_preferred_height ());
             }
+            return height + get_margin_border_padding_height ();
         }
 
-        int extra_width {
-            get {
-                if (direction == BoxDirection.VERTICAL || parent == null)
-                    return 0;
-                return parent.content_width - preferred_width;
+        public override int get_preferred_width_for_height (int height) {
+            int width = 0;
+            if (direction == BoxDirection.HORIZONTAL) {
+                foreach (var item in children)
+                    width += item.get_preferred_width_for_height (height) + spacing;
+                width -= spacing;
+            } else {
+                foreach (var item in children)
+                    width = int.max (width, item.get_preferred_width_for_height (height));
             }
+            return width + get_margin_border_padding_width ();
         }
 
-        int extra_height {
-            get {
-                if (direction == BoxDirection.HORIZONTAL || parent == null)
-                    return 0;
-                return parent.content_height - preferred_height;
+        public override int get_preferred_height_for_width (int width) {
+            int height = 0;
+            if (direction == BoxDirection.VERTICAL) {
+                foreach (var item in children)
+                    height += item.get_preferred_height_for_width (width) + spacing;
+                height -= spacing;
+            } else {
+                foreach (var item in children)
+                    height = int.max (height, item.get_preferred_height_for_width (width));
             }
-        }
-
-        int spacer_count { get; set; default = 0; }
-
-        internal override int get_child_x (Widget child)
-            requires (children.contains (child))
-        {
-            if (direction == BoxDirection.VERTICAL)
-                return base.get_child_x (child);
-            int _x = content_x;
-            foreach (var item in children) {
-                if (item == child)
-                    break;
-                _x += get_child_width (item) + spacing;
-            }
-            return _x;
-        }
-
-        internal override int get_child_y (Widget child)
-            requires (children.contains (child))
-        {
-            if (direction == BoxDirection.HORIZONTAL)
-                return base.get_child_y (child);
-            int _y = content_y;
-            foreach (var item in children) {
-                if (item == child)
-                    break;
-                _y += get_child_height (item) + spacing;
-            }
-            return _y;
-        }
-
-        internal override int get_child_width (Widget child)
-            requires (children.contains (child))
-        {
-            if (direction == BoxDirection.VERTICAL
-                && child.horizontal_align == WidgetAlign.FILL)
-                return width - base.preferred_width;
-            return child.preferred_width
-                + (int)((child is Spacer) ? extra_width / spacer_count : 0);
-        }
-
-        internal override int get_child_height (Widget child)
-            requires (children.contains (child))
-        {
-            if (direction == BoxDirection.HORIZONTAL
-                && child.vertical_align == WidgetAlign.FILL)
-                return height - base.preferred_height;
-            return child.preferred_height
-                + (int)((child is Spacer) ? extra_height / spacer_count : 0);
+            return height + get_margin_border_padding_height ();
         }
 
         public override bool focus_next (FocusDirection direction) {
@@ -227,6 +175,62 @@ namespace EV3devTk {
                     return true;
             }
             return false;
+        }
+
+        public override void do_layout () {
+            if (direction == BoxDirection.HORIZONTAL) {
+                int total_width = 0;
+                int spacer_count = 0;
+                HashMap<Widget, int> width_map = new HashMap<Widget,int> ();
+                foreach (var child in children) {
+                    width_map[child] = child.get_preferred_width_for_height (content_bounds.height);
+                    total_width += width_map[child];
+                    total_width += spacing;
+                    if (child is Spacer)
+                        spacer_count++;
+                }
+                total_width -= spacing;
+                // TODO: handle case of total_width > content_bounds.width
+                var x = content_bounds.x1;
+                var extra_space = content_bounds.width - total_width;
+                foreach (var child in children) {
+                    if (child is Spacer) {
+                        var spacer_width = extra_space / spacer_count;
+                        width_map[child] = spacer_width;
+                        extra_space -= spacer_width;
+                        spacer_count--;
+                    }
+                    set_child_bounds (child, x, content_bounds.y1,
+                        x + width_map[child] - 1, content_bounds.y2);
+                    x += width_map[child] + spacing;
+                }
+            } else {
+                int total_height = 0;
+                int spacer_count = 0;
+                HashMap<Widget, int> height_map = new HashMap<Widget, int> ();
+                foreach (var child in children) {
+                    height_map[child] = child.get_preferred_height_for_width (content_bounds.width);
+                    total_height += height_map[child];
+                    total_height += spacing;
+                    if (child is Spacer)
+                        spacer_count++;
+                }
+                total_height -= spacing;
+                // TODO: handle case of total_height > content_bounds.height
+                var y = content_bounds.y1;
+                var extra_space = content_bounds.height - total_height;
+                foreach (var child in children) {
+                    if (child is Spacer) {
+                        var spacer_height = extra_space / spacer_count;
+                        height_map[child] = spacer_height;
+                        extra_space -= spacer_height;
+                        spacer_count--;
+                    }
+                    set_child_bounds (child, content_bounds.x1, y,
+                        content_bounds.x2, y + height_map[child] - 1);
+                    y += height_map[child] + spacing;
+                }
+            }
         }
     }
 }

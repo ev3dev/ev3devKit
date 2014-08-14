@@ -30,6 +30,7 @@ namespace EV3devTk {
     }
 
     public class Window : EV3devTk.Container {
+        const int DIALOG_MARGIN = 12;
 
         internal Screen? _screen;
         public Screen? screen {
@@ -37,81 +38,30 @@ namespace EV3devTk {
         }
         public WindowType window_type { get; private set; }
 
-        public override int x {
-            get {
-                if (_screen != null && window_type == WindowType.DIALOG)
-                    return screen.width * 10 / 100;
-                return base.x;
-            }
-        }
-
-        public override int y {
-            get {
-                if (_screen != null && window_type == WindowType.DIALOG)
-                    return screen.height * 10 / 100;
-                return base.y;
-            }
-        }
-
-        public override int width {
-            get {
-                if (_screen == null)
-                    return base.width;
-                switch (window_type) {
-                case WindowType.NORMAL:
-                    return _screen.width;
-                case WindowType.DIALOG:
-                    return _screen.width * 80 / 100;
-                default:
-                    return base.width;
-                }
-            }
-        }
-
-        public override int height {
-            get {
-                if (_screen == null)
-                    return base.height;
-                switch (window_type) {
-                case WindowType.NORMAL:
-                    return _screen.height;
-                case WindowType.DIALOG:
-                    return _screen.height * 80 / 100;
-                default:
-                    return base.height;
-                }
-            }
-        }
-
-        public override int max_width {
-            get { return width; }
-        }
-
-        public override int max_height {
-            get { return height; }
-        }
-
-        internal override int border_top {
-            get { return window_type == WindowType.DIALOG ? 1 : 0; }
-        }
-        internal override int border_bottom {
-            get { return window_type == WindowType.DIALOG ? 1 : 0; }
-        }
-        internal override int border_left {
-            get { return window_type == WindowType.DIALOG ? 1 : 0; }
-        }
-        internal override int border_right {
-            get { return window_type == WindowType.DIALOG ? 1 : 0; }
-        }
-
         public bool on_screen { get; set; default = false; }
 
         public signal void shown ();
 
-        public Window (WindowType type = WindowType.NORMAL) {
+        Window.with_type (WindowType type) {
             base (ContainerType.SINGLE);
             window_type = type;
             shown.connect (on_first_shown);
+        }
+
+        public Window () {
+            this.with_type (WindowType.NORMAL);
+        }
+
+        public Window.dialog () {
+            this.with_type (WindowType.DIALOG);
+            margin_top = DIALOG_MARGIN;
+            margin_bottom = DIALOG_MARGIN;
+            margin_left = DIALOG_MARGIN;
+            margin_right = DIALOG_MARGIN;
+            border_top = 1;
+            border_bottom = 1;
+            border_left = 1;
+            border_right = 1;
         }
 
         public override void redraw () {
@@ -120,16 +70,17 @@ namespace EV3devTk {
         }
 
         protected override void on_draw (Context context) {
-            Color color = window.screen.bg_color;
+            set_bounds (0, 0, context.x_max, context.y_max);
+            Color color = screen.bg_color;
             if (window_type == WindowType.DIALOG) {
-                filled_rounded_box (border_x, border_y, border_x + border_width - 1,
-                    border_y + border_height - 1, 10, color);
-                color = window.screen.fg_color;
-                rounded_box (border_x, border_y, border_x + border_width - 1,
-                    border_y + border_height - 1, 10, color);
+                filled_rounded_box (border_bounds.x1, border_bounds.y1,
+                    border_bounds.x2, border_bounds.y2, 10, color);
+                color = screen.fg_color;
+                rounded_box (border_bounds.x1, border_bounds.y1, border_bounds.x2,
+                    border_bounds.y2, 10, color);
             } else {
-                filled_box (border_x, border_y, border_x + border_width - 1,
-                    border_y + border_height - 1, color);
+                filled_box (border_bounds.x1, border_bounds.y1, border_bounds.x2,
+                    border_bounds.y2, color);
             }
             base.on_draw (context);
         }

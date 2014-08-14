@@ -26,91 +26,90 @@ using GRX;
 
 namespace EV3devTk {
     public class Label : EV3devTk.Widget {
+        Gee.List<string>? cached_lines;
+        int last_width = 0;
 
         public string? text { get; set; }
-        public HorizontalAlign text_horizontal_align {
-            get; set; default = HorizontalAlign.CENTER;
-        }
-        public VerticalAlign text_vertical_align {
-            get; set; default = VerticalAlign.MIDDLE;
-        }
-        public unowned Font font { get; set; default = Font.pc6x8; }
+
         TextOption text_option;
-
-        Gee.List<string> _lines;
-        Gee.List<string> lines {
-            owned get {
-                if (_lines != null)
-                    return _lines;
-                _lines = new LinkedList<string> ();
-                if (text == null)
-                    return _lines;
-                if (parent == null) {
-                    _lines.add (text);
-                    return lines;
-                }
-                var builder = new StringBuilder ();
-                int i = 0;
-                while (i < text.length) {
-                    while (font.vala_string_width (builder.str) < parent.max_width) {
-                        if (i == text.length)
-                            break;
-                        builder.append_c (text[i++]);
-                    }
-                    if (i < text.length) {
-                        var last_space_index = builder.str.last_index_of (" ");
-                        if (last_space_index >= 0) {
-                            i -= (int)builder.len;
-                            builder.truncate (last_space_index);
-                            i += last_space_index + 1;
-                        } else {
-                            builder.truncate (builder.len - 1);
-                            i--;
-                        }
-                    }
-                    _lines.add (builder.str);
-                    builder.truncate ();
-                }
-                return _lines;
-            }
+        public unowned Font font {
+            get {return text_option.font; }
+            set { text_option.font = value; }
         }
-
-        public override int preferred_width {
-            get {
-                var _width = base.preferred_width;
-                if (text != null)
-                    _width += font.vala_string_width (text);
-                if (parent != null)
-                    return int.min (_width, parent.max_width);
-                return _width;
-            }
+        public TextHorizAlign text_horizontal_align {
+            get { return text_option.x_align; }
+            set { text_option.x_align = value; }
         }
-        public override int preferred_height {
-            get {
-                var _height = font.vala_string_height (text) + base.preferred_height;
-                return _height * (int)lines.size;
-            }
+        public TextVertAlign text_vertical_align {
+            get { return text_option.y_align; }
+            set { text_option.y_align = value; }
         }
 
         public Label (string? text = null) {
-            _text = text;
-            text_option = new TextOption ();
+            this.text = text;
+            text_option = new TextOption () {
+                font = Font.pc6x8,
+                direction = TextDirection.RIGHT,
+                chr_type = ChrType.BYTE,
+                x_align = TextHorizAlign.CENTER,
+                y_align = TextVertAlign.MIDDLE
+            };
             notify["text"].connect (redraw);
+            notify["font"].connect (redraw);
             notify["text_horizontal_align"].connect (redraw);
             notify["text_vertical_align"].connect (redraw);
-            notify["font"].connect (redraw);
+        }
 
-            notify["text"].connect (() => _lines = null);
-            notify["font"].connect (() => _lines = null);
-            notify["margin_top"].connect (() => _lines = null);
-            notify["margin_bottom"].connect (() => _lines = null);
-            notify["margin_left"].connect (() => _lines = null);
-            notify["margin_right"].connect (() => _lines = null);
-            notify["padding_top"].connect (() => _lines = null);
-            notify["padding_bottom"].connect (() => _lines = null);
-            notify["padding_left"].connect (() => _lines = null);
-            notify["padding_right"].connect (() => _lines = null);
-            notify["parent"].connect (() => _lines = null);
+        public override int get_preferred_width () {
+            return font.vala_string_width (text) + get_margin_border_padding_width ();
+        }
+        public override int get_preferred_height () {
+            return font.vala_string_height (text) + get_margin_border_padding_height ();
+        }
+
+        public override int get_preferred_width_for_height (int height) {
+            // TODO: create get_lines_for_height () method
+            return get_preferred_width ();
+        }
+        public override int get_preferred_height_for_width (int width) {
+            var lines = get_lines_for_width (width);
+            return font.vala_string_height (text) * lines.size + get_margin_border_padding_height ();
+        }
+
+        Gee.List<string> get_lines_for_width (int width) {
+            if (cached_lines != null && width == last_width)
+                return cached_lines;
+            cached_lines = new LinkedList<string> ();
+            if (text == null)
+                return cached_lines;
+            var builder = new StringBuilder ();
+            int i = 0;
+            while (i < text.length) {
+                while (font.vala_string_width (builder.str) < width) {
+                    if (i == text.length)
+                        break;
+                    builder.append_c (text[i++]);
+                }
+                if (i < text.length) {
+                    var last_space_index = builder.str.last_index_of (" ");
+                    if (last_space_index >= 0) {
+                        i -= (int)builder.len;
+                        builder.truncate (last_space_index);
+                        i += last_space_index + 1;
+                    } else {
+                        builder.truncate (builder.len - 1);
+                        i--;
+                    }
+                }
+                cached_lines.add (builder.str);
+                builder.truncate ();
+            }
+            return cached_lines;
+        }
+
+        public override void redraw () {
+            cached_lines = null;
+            base.redraw ();
         }
 
         protected override void on_draw (Context context) {
@@ -121,46 +120,39 @@ namespace EV3devTk {
                 else
                     widget = widget.parent;
             }
-            text_option.font = font;
-            text_option.direction = TextDirection.RIGHT;
             if (widget.has_focus)
                 text_option.fg_color = (TextColor)window.screen.bg_color;
             else
                 text_option.fg_color = (TextColor)window.screen.fg_color;
             text_option.bg_color = (TextColor)GRX.Color.no_color;
-            int _x = 0;
+            int x = 0;
             switch (text_horizontal_align) {
-            case HorizontalAlign.LEFT:
-                _x = x + margin_left + padding_left;
-                text_option.x_align = TextHorizAlign.LEFT;
+            case TextHorizAlign.LEFT:
+                x = content_bounds.x1;
                 break;
-            case HorizontalAlign.CENTER:
-                _x = x + width / 2;
-                text_option.x_align = TextHorizAlign.CENTER;
+            case TextHorizAlign.CENTER:
+                x = content_bounds.x1 + content_bounds.width / 2;
                 break;
-            case HorizontalAlign.RIGHT:
-                _x = x + width - margin_right - padding_right;
-                text_option.x_align = TextHorizAlign.RIGHT;
+            case TextHorizAlign.RIGHT:
+                x = content_bounds.x2;
                 break;
             }
-            int _y = 0;
+            int y = 0;
             switch (text_vertical_align) {
-            case VerticalAlign.TOP:
-                _y = content_y;
-                text_option.y_align = TextVertAlign.TOP;
+            case TextVertAlign.TOP:
+                y = content_bounds.y1;
                 break;
-            case VerticalAlign.MIDDLE:
-                _y = y + height / 2;
-                text_option.y_align = TextVertAlign.MIDDLE;
+            case TextVertAlign.MIDDLE:
+                y = content_bounds.y1 + (font.vala_string_height (text) + 1) / 2;
                 break;
-            case VerticalAlign.BOTTOM:
-                _y = y + height - margin_bottom - padding_bottom;
-                text_option.y_align = TextVertAlign.BOTTOM;
+            case TextVertAlign.BOTTOM:
+                y = content_bounds.y2;
                 break;
             }
+            var lines = get_lines_for_width (content_bounds.width);
             foreach (var item in lines) {
-                draw_vala_string (item, _x, _y, text_option);
-                _y += font.vala_string_height (item);
+                draw_vala_string (item, x, y, text_option);
+                y += font.vala_string_height (item);
             }
         }
     }

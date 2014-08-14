@@ -37,85 +37,20 @@ namespace EV3devTk {
     public abstract class Widget : Object {
         /* layout properties */
 
-        public virtual int x {
-            get {
-                if (parent == null)
-                    return 0;
-                return parent.get_child_x (this);
-            }
-        }
-        public virtual int y {
-            get {
-                if (parent == null)
-                    return 0;
-                return parent.get_child_y (this);
-            }
-        }
-        public virtual int width {
-            get {
-                if (parent == null)
-                    return preferred_width;
-                return parent.get_child_width (this);
-            }
-        }
-        public virtual int height {
-            get {
-                if (parent == null)
-                    return preferred_height;
-                return parent.get_child_height (this);
-            }
-        }
-
-        public virtual int preferred_width {
-            get {
-                return margin_left + margin_right + border_left
-                    + border_right + padding_left + padding_right;
-            }
-        }
-        public virtual int preferred_height {
-            get {
-                return margin_top + margin_bottom + border_top
-                    + border_bottom + padding_top + padding_bottom;
-            }
-        }
-
-        protected int border_x { get { return x + margin_left; } }
-        protected int border_y { get { return y + margin_top; } }
-        protected int border_width {
-            get { return width - margin_left - margin_right; }
-        }
-        protected int border_height {
-            get { return height - margin_top - margin_bottom; }
-        }
-
-        protected int content_x {
-            get { return x + margin_left + border_left + padding_left; }
-        }
-        protected int content_y {
-            get { return y + margin_top + border_top + padding_top; }
-        }
-        protected int content_width {
-            get {
-                return width - margin_left - margin_right - border_left
-                    - border_right - padding_left - padding_right;
-            }
-        }
-        protected int content_height {
-            get {
-                return height - margin_top - margin_bottom - border_top
-                    - border_bottom - padding_top - padding_bottom;
-            }
-        }
+        /* bounding rectangles - set by parent container */
+        protected Rectangle bounds;
+        protected Rectangle border_bounds;
+        protected Rectangle content_bounds;
 
         public virtual int margin_top { get; set; default = 0; }
         public virtual int margin_bottom { get; set; default = 0; }
         public virtual int margin_left { get; set; default = 0; }
         public virtual int margin_right { get; set; default = 0; }
 
-        internal virtual int border_top { get { return 0; } }
-        internal virtual int border_bottom { get { return 0; } }
-        internal virtual int border_left { get { return 0; } }
-        internal virtual int border_right { get { return 0; } }
+        internal virtual int border_top { get; protected set; default = 0; }
+        internal virtual int border_bottom { get; protected set; default = 0; }
+        internal virtual int border_left { get; protected set; default = 0; }
+        internal virtual int border_right { get; protected set; default = 0; }
 
         public virtual int padding_top { get; set; default = 0; }
         public virtual int padding_bottom { get; set; default = 0; }
@@ -160,6 +95,71 @@ namespace EV3devTk {
                     represented_object.unref ();
                 represented_object_pointer = value;
             }
+        }
+
+        protected Widget () {
+            draw.connect (on_draw);
+            key_pressed.connect (on_key_pressed);
+            notify["margin_top"].connect (redraw);
+            notify["margin_bottom"].connect (redraw);
+            notify["margin_left"].connect (redraw);
+            notify["margin_right"].connect (redraw);
+            notify["border_top"].connect (redraw);
+            notify["border_bottom"].connect (redraw);
+            notify["border_left"].connect (redraw);
+            notify["border_right"].connect (redraw);
+            notify["padding_top"].connect (redraw);
+            notify["padding_bottom"].connect (redraw);
+            notify["padding_left"].connect (redraw);
+            notify["padding_right"].connect (redraw);
+            notify["horizontal_align"].connect (redraw);
+            notify["vertical_align"].connect (redraw);
+            notify["can_focus"].connect (redraw);
+            notify["has_focus"].connect (redraw);
+
+            notify["can_focus"].connect (() => has_focus = false);
+        }
+
+        /* layout functions */
+
+        public int get_margin_border_padding_width () {
+            return margin_left + margin_right + border_left
+                + border_right + padding_left + padding_right;
+        }
+
+        public int get_margin_border_padding_height () {
+            return margin_top + margin_bottom + border_top
+                + border_bottom + padding_top + padding_bottom;
+        }
+
+        public virtual int get_preferred_width () {
+            return get_margin_border_padding_width ();
+        }
+        public virtual int get_preferred_height () {
+            return get_margin_border_padding_height ();
+        }
+
+        public virtual int get_preferred_width_for_height (int height) {
+            return get_preferred_width ();
+        }
+
+        public virtual int get_preferred_height_for_width (int width) {
+            return get_preferred_height ();
+        }
+
+        public void set_bounds (int x1, int y1, int x2, int y2) {
+            bounds.x1 = x1;
+            bounds.y1 = y1;
+            bounds.x2 = x2;
+            bounds.y2 = y2;
+            border_bounds.x1 = x1 + margin_left;
+            border_bounds.y1 = y1 + margin_top;
+            border_bounds.x2 = x2 - margin_right;
+            border_bounds.y2 = y2 - margin_bottom;
+            content_bounds.x1 = x1 + margin_left + border_left + padding_left;
+            content_bounds.y1 = y1 + margin_top + border_top + padding_top;
+            content_bounds.x2 = x2 - margin_right - border_right - padding_right;
+            content_bounds.y2 = y2 - margin_bottom - border_bottom - padding_bottom;
         }
 
         /* navigation functions */
@@ -281,27 +281,6 @@ namespace EV3devTk {
                 return true;
             }
             return false;
-        }
-
-        /* constructor */
-
-        protected Widget () {
-            draw.connect (on_draw);
-            key_pressed.connect (on_key_pressed);
-            notify["margin_top"].connect (redraw);
-            notify["margin_bottom"].connect (redraw);
-            notify["margin_left"].connect (redraw);
-            notify["margin_right"].connect (redraw);
-            notify["padding_top"].connect (redraw);
-            notify["padding_bottom"].connect (redraw);
-            notify["padding_left"].connect (redraw);
-            notify["padding_right"].connect (redraw);
-            notify["horizontal_align"].connect (redraw);
-            notify["vertical_align"].connect (redraw);
-            notify["can_focus"].connect (redraw);
-            notify["has_focus"].connect (redraw);
-
-            notify["can_focus"].connect (() => has_focus = false);
         }
     }
 }

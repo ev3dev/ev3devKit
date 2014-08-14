@@ -37,6 +37,7 @@ set (EV3DEV_TK_COMMON_SOURCE_FILES
     src/Container.vala
     src/Label.vala
     src/Line.vala
+    src/Rectangle.vala
     src/Screen.vala
     src/Spacer.vala
     src/Widget.vala
