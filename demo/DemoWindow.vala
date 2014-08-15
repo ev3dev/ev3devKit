@@ -76,15 +76,15 @@ namespace EV3devTk {
             add (vscroll);
         }
 
+        public override bool key_pressed (uint key_code) {
+            // ignore back button otherwise we end up with no windows in the stack
+            if (key_code == Key.BACKSPACE)
+                return false;
+            return base.key_pressed (key_code);
+        }
+
         void on_show_dialog_button_pressed () {
             var dialog = new Window.dialog ();
-            dialog.key_pressed.connect ((key_code) => {
-                if (key_code == Key.BACKSPACE) {
-                    screen.pop_window ();
-                    return true;
-                }
-                return false;
-            });
             // make us a nice little title bar
             var title_label = new Label ("Dialog") {
                 padding_bottom = 2,
@@ -121,13 +121,6 @@ namespace EV3devTk {
 
         void on_show_check_button_window_button_pressed () {
             var window = new Window ();
-            window.key_pressed.connect ((key_code) => {
-                if (key_code == Key.BACKSPACE) {
-                    screen.pop_window ();
-                    return true;
-                }
-                return false;
-            });
             var vbox = new Box.vertical () {
                 margin = 10
             };
@@ -222,13 +215,6 @@ namespace EV3devTk {
 
         void on_show_scroll_button_pressed () {
             var window = new Window ();
-            window.key_pressed.connect ((key_code) => {
-                if (key_code == Key.BACKSPACE) {
-                    screen.pop_window ();
-                    return true;
-                }
-                return false;
-            });
             var vbox = new Box.vertical () {
                 margin = 10,
                 spacing = 10

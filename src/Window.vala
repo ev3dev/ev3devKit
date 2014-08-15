@@ -21,6 +21,7 @@
 
 /* Window.vala - Top level widget */
 
+using Curses;
 using GRX;
 
 namespace EV3devTk {
@@ -59,6 +60,15 @@ namespace EV3devTk {
             border_radius = 10;
         }
 
+        public override bool key_pressed (uint key_code) {
+            if (key_code == Key.BACKSPACE) {
+                screen.pop_window ();
+                Signal.stop_emission_by_name (this, "key-pressed");
+                return true;
+            }
+            return base.key_pressed (key_code);
+        }
+
         public override void redraw () {
             if (_screen != null && on_screen)
                 _screen.dirty = true;
@@ -66,7 +76,7 @@ namespace EV3devTk {
 
         protected override void on_draw (Context context) {
             set_bounds (0, 0, context.x_max, context.y_max);
-            Color color = screen.bg_color;
+            var color = screen.bg_color;
             if (window_type == WindowType.DIALOG) {
                 filled_rounded_box (border_bounds.x1, border_bounds.y1,
                     border_bounds.x2, border_bounds.y2, 10, color);
