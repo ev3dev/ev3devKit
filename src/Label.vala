@@ -56,8 +56,8 @@ namespace EV3devTk {
             };
             notify["text"].connect (redraw);
             notify["font"].connect (redraw);
-            notify["text_horizontal_align"].connect (redraw);
-            notify["text_vertical_align"].connect (redraw);
+            notify["text-horizontal-align"].connect (redraw);
+            notify["text-vertical-align"].connect (redraw);
         }
 
         public override int get_preferred_width () {
@@ -120,7 +120,7 @@ namespace EV3devTk {
                 else
                     widget = widget.parent;
             }
-            if (widget.has_focus)
+            if (widget.has_focus && !(widget is Scroll))
                 text_option.fg_color = (TextColor)window.screen.bg_color;
             else
                 text_option.fg_color = (TextColor)window.screen.fg_color;
@@ -148,12 +148,13 @@ namespace EV3devTk {
             case TextVertAlign.BOTTOM:
                 y = content_bounds.y2;
                 break;
-            }
+            }message ("drawing label");
             var lines = get_lines_for_width (content_bounds.width);
             foreach (var item in lines) {
                 draw_vala_string (item, x, y, text_option);
                 y += font.vala_string_height (item);
             }
+            base.on_draw (context);
         }
     }
 }

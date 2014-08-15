@@ -42,20 +42,45 @@ namespace EV3devTk {
         protected Rectangle border_bounds;
         protected Rectangle content_bounds;
 
-        public virtual int margin_top { get; set; default = 0; }
-        public virtual int margin_bottom { get; set; default = 0; }
-        public virtual int margin_left { get; set; default = 0; }
-        public virtual int margin_right { get; set; default = 0; }
+        public int margin_top { get; set; default = 0; }
+        public int margin_bottom { get; set; default = 0; }
+        public int margin_left { get; set; default = 0; }
+        public int margin_right { get; set; default = 0; }
+        public int margin {
+            set {
+                margin_top = value;
+                margin_bottom = value;
+                margin_left = value;
+                margin_right = value;
+            }
+        }
 
-        internal virtual int border_top { get; protected set; default = 0; }
-        internal virtual int border_bottom { get; protected set; default = 0; }
-        internal virtual int border_left { get; protected set; default = 0; }
-        internal virtual int border_right { get; protected set; default = 0; }
+        public int border_top { get; set; default = 0; }
+        public int border_bottom { get; set; default = 0; }
+        public int border_left { get; set; default = 0; }
+        public int border_right { get; set; default = 0; }
+        public int border {
+            set {
+                border_top = value;
+                border_bottom = value;
+                border_left = value;
+                border_right = value;
+            }
+        }
+        public int border_radius { get; set; default = 0; }
 
-        public virtual int padding_top { get; set; default = 0; }
-        public virtual int padding_bottom { get; set; default = 0; }
-        public virtual int padding_left { get; set; default = 0; }
-        public virtual int padding_right { get; set; default = 0; }
+        public int padding_top { get; set; default = 0; }
+        public int padding_bottom { get; set; default = 0; }
+        public int padding_left { get; set; default = 0; }
+        public int padding_right { get; set; default = 0; }
+        public int padding {
+            set {
+                padding_top = value;
+                padding_bottom = value;
+                padding_left = value;
+                padding_right = value;
+            }
+        }
 
         public WidgetAlign horizontal_align {
             get; set; default = WidgetAlign.FILL;
@@ -99,37 +124,35 @@ namespace EV3devTk {
 
         protected Widget () {
             draw.connect (on_draw);
-            key_pressed.connect (on_key_pressed);
-            notify["margin_top"].connect (redraw);
-            notify["margin_bottom"].connect (redraw);
-            notify["margin_left"].connect (redraw);
-            notify["margin_right"].connect (redraw);
-            notify["border_top"].connect (redraw);
-            notify["border_bottom"].connect (redraw);
-            notify["border_left"].connect (redraw);
-            notify["border_right"].connect (redraw);
-            notify["padding_top"].connect (redraw);
-            notify["padding_bottom"].connect (redraw);
-            notify["padding_left"].connect (redraw);
-            notify["padding_right"].connect (redraw);
-            notify["horizontal_align"].connect (redraw);
-            notify["vertical_align"].connect (redraw);
-            notify["can_focus"].connect (redraw);
-            notify["has_focus"].connect (redraw);
-
-            notify["can_focus"].connect (() => has_focus = false);
+            notify["margin-top"].connect (redraw);
+            notify["margin-bottom"].connect (redraw);
+            notify["margin-left"].connect (redraw);
+            notify["margin-right"].connect (redraw);
+            notify["border-top"].connect (redraw);
+            notify["border-bottom"].connect (redraw);
+            notify["border-left"].connect (redraw);
+            notify["border-right"].connect (redraw);
+            notify["border-radius"].connect (redraw);
+            notify["padding-top"].connect (redraw);
+            notify["padding-bottom"].connect (redraw);
+            notify["padding-left"].connect (redraw);
+            notify["padding-right"].connect (redraw);
+            notify["horizontal-align"].connect (redraw);
+            notify["vertical-align"].connect (redraw);
+            notify["can-focus"].connect (redraw);
+            notify["has-focus"].connect (redraw);
         }
 
         /* layout functions */
 
-        public int get_margin_border_padding_width () {
-            return margin_left + margin_right + border_left
-                + border_right + padding_left + padding_right;
+        public inline int get_margin_border_padding_width () {
+            return _margin_left + _margin_right + _border_left
+                + _border_right + _padding_left + _padding_right;
         }
 
-        public int get_margin_border_padding_height () {
-            return margin_top + margin_bottom + border_top
-                + border_bottom + padding_top + padding_bottom;
+        public inline int get_margin_border_padding_height () {
+            return _margin_top + _margin_bottom + _border_top
+                + _border_bottom + _padding_top + _padding_bottom;
         }
 
         public virtual int get_preferred_width () {
@@ -248,12 +271,47 @@ namespace EV3devTk {
             if (parent != null)
                 parent.redraw ();
         }
-        protected abstract void on_draw (Context context);
+        protected virtual void on_draw (Context context) {
+            draw_border ();
+        }
+
+        protected void draw_border () {
+            var color = window.screen.fg_color;
+            if (border_top != 0)
+                filled_box (border_bounds.x1 + border_radius, border_bounds.y1,
+                    border_bounds.x2 - border_radius,
+                    border_bounds.y1 + border_top - 1, color);
+            if (border_bottom != 0)
+                filled_box (border_bounds.x1 + border_radius,
+                    border_bounds.y2 - border_bottom + 1,
+                    border_bounds.x2 - border_radius, border_bounds.y2, color);
+            if (border_left != 0)
+                filled_box (border_bounds.x1, border_bounds.y1 + border_radius,
+                    border_bounds.x1 + border_left- 1,
+                    border_bounds.y2 - border_radius, color);
+            if (border_left != 0)
+                filled_box (border_bounds.x2 - border_left + 1,
+                    border_bounds.y1 + border_radius, border_bounds.x2,
+                    border_bounds.y2 - border_radius, color);
+            if (border_radius != 0) {
+                circle_arc (border_bounds.x2 - border_radius,
+                    border_bounds.y1 + border_radius, border_radius, 0, 900,
+                    ArcStyle.OPEN, color);
+                circle_arc (border_bounds.x1 + border_radius,
+                    border_bounds.y1 + border_radius, border_radius, 900, 1800,
+                    ArcStyle.OPEN, color);
+                circle_arc (border_bounds.x1 + border_radius,
+                    border_bounds.y2 - border_radius, border_radius, 1800, 2700,
+                    ArcStyle.OPEN, color);
+                circle_arc (border_bounds.x2 - border_radius,
+                    border_bounds.y2 - border_radius, border_radius, 2700, 3600,
+                    ArcStyle.OPEN, color);
+            }
+        }
 
         /* input handling */
 
-        public signal bool key_pressed (uint key_code);
-        protected virtual bool on_key_pressed (uint key_code) {
+        public virtual signal bool key_pressed (uint key_code) {
             if (can_focus) {
                 FocusDirection direction;
                 switch (key_code) {

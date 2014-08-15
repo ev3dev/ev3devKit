@@ -54,14 +54,9 @@ namespace EV3devTk {
 
         public Window.dialog () {
             this.with_type (WindowType.DIALOG);
-            margin_top = DIALOG_MARGIN;
-            margin_bottom = DIALOG_MARGIN;
-            margin_left = DIALOG_MARGIN;
-            margin_right = DIALOG_MARGIN;
-            border_top = 1;
-            border_bottom = 1;
-            border_left = 1;
-            border_right = 1;
+            margin = DIALOG_MARGIN;
+            border = 1;
+            border_radius = 10;
         }
 
         public override void redraw () {
@@ -76,8 +71,6 @@ namespace EV3devTk {
                 filled_rounded_box (border_bounds.x1, border_bounds.y1,
                     border_bounds.x2, border_bounds.y2, 10, color);
                 color = screen.fg_color;
-                rounded_box (border_bounds.x1, border_bounds.y1, border_bounds.x2,
-                    border_bounds.y2, 10, color);
             } else {
                 filled_box (border_bounds.x1, border_bounds.y1, border_bounds.x2,
                     border_bounds.y2, color);

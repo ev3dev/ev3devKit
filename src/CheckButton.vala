@@ -72,15 +72,12 @@ namespace EV3devTk {
         {
             check_button_type = type;
             this.group = group;
-            padding_top = 2;
-            padding_bottom = 2;
-            padding_left = 2;
-            padding_right = 2;
+            padding = 2;
             can_focus = true;
 
             notify["checked"].connect (redraw);
-            notify["outer_size"].connect (redraw);
-            notify["inner_size"].connect (redraw);
+            notify["outer-size"].connect (redraw);
+            notify["inner-size"].connect (redraw);
         }
 
         public CheckButton.checkbox () {
@@ -108,7 +105,7 @@ namespace EV3devTk {
                     widget = widget.parent;
             }
             unowned GRX.Color color;
-            if (widget.has_focus) {
+            if (widget.has_focus && !(widget is Scroll)) {
                 color = window.screen.mid_color;
                 filled_box (border_bounds.x1, border_bounds.y1, border_bounds.x2,
                     border_bounds.y2, color);
@@ -130,9 +127,10 @@ namespace EV3devTk {
                     filled_circle (content_bounds.x1 + outer_size / 2,
                         content_bounds.y1 + outer_size / 2, inner_size / 2, color);
             }
+            base.on_draw (context);
         }
 
-        protected override bool on_key_pressed (uint key_code) {
+        protected override bool key_pressed (uint key_code) {
             if (key_code == '\n') {
                 if (check_button_type == CheckButtonType.CHECKBOX)
                     checked = !checked;
@@ -141,7 +139,7 @@ namespace EV3devTk {
                 Signal.stop_emission_by_name (this, "key-pressed");
                 return true;
             }
-            return base.on_key_pressed (key_code);
+            return base.key_pressed (key_code);
         }
     }
 }

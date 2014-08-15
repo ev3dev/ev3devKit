@@ -26,37 +26,15 @@ using Gee;
 using GRX;
 
 namespace EV3devTk {
-
-    public enum ButtonBorder {
-        BOX,
-        NONE;
-    }
-
     public class Button : EV3devTk.Container {
-        public ButtonBorder border { get; set; default = ButtonBorder.BOX; }
-
         public signal void pressed ();
 
         public Button (Widget? child = null) {
             base (ContainerType.SINGLE);
             if (child != null)
                 add (child);
-            notify["border"].connect (() => {
-                var border_width = border == ButtonBorder.NONE ? 0 : 1;
-                border_top = border_width;
-                border_bottom = border_width;
-                border_left = border_width;
-                border_right = border_width;
-                redraw ();
-            });
-            border_top = 1;
-            border_bottom = 1;
-            border_left = 1;
-            border_right = 1;
-            padding_top = 2;
-            padding_bottom = 2;
-            padding_left = 2;
-            padding_right = 2;
+            border = 1;
+            padding = 2;
             can_focus = true;
         }
 
@@ -71,21 +49,16 @@ namespace EV3devTk {
                 filled_box (border_bounds.x1, border_bounds.y1, border_bounds.x2,
                     border_bounds.y2, color);
             }
-            if (border == ButtonBorder.BOX) {
-                color = window.screen.fg_color;
-                box (border_bounds.x1, border_bounds.y1, border_bounds.x2,
-                    border_bounds.y2, color);
-            }
             base.on_draw (context);
         }
 
-        protected override bool on_key_pressed (uint key_code) {
+        protected override bool key_pressed (uint key_code) {
             if (key_code == '\n') {
                 pressed ();
                 Signal.stop_emission_by_name (this, "key-pressed");
                 return true;
             }
-            return base.on_key_pressed (key_code);
+            return base.key_pressed (key_code);
         }
     }
 }

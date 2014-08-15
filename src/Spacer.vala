@@ -27,8 +27,5 @@ namespace EV3devTk {
     public class Spacer : EV3devTk.Widget {
         public Spacer () {
         }
-
-        public override void on_draw (Context context) {
-        }
     }
 }

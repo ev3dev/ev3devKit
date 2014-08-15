@@ -177,6 +177,7 @@ namespace EV3devTk {
 
         protected override void on_draw (Context context) {
             do_layout ();
+            base.on_draw (context);
             foreach (var child in children)
                 child.draw (context);
         }
