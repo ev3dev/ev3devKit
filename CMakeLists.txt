@@ -40,6 +40,7 @@ set (EV3DEV_TK_COMMON_SOURCE_FILES
     src/Screen.vala
     src/Scroll.vala
     src/Spacer.vala
+    src/TextEntry.vala
     src/Widget.vala
     src/Window.vala
 )

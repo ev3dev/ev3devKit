@@ -96,7 +96,7 @@ namespace EV3devTk {
             return outer_size + get_margin_border_padding_height ();
         }
 
-        protected override void on_draw (Context context) {
+        public override void draw (Context context) {
             weak Widget widget = this;
             while (widget.parent != null) {
                 if (widget.can_focus)
@@ -127,7 +127,7 @@ namespace EV3devTk {
                     filled_circle (content_bounds.x1 + outer_size / 2,
                         content_bounds.y1 + outer_size / 2, inner_size / 2, color);
             }
-            base.on_draw (context);
+            base.draw (context);
         }
 
         protected override bool key_pressed (uint key_code) {

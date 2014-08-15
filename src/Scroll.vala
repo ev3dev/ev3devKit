@@ -156,8 +156,7 @@ namespace EV3devTk {
                     draw_scrollbar = true;
                     scroll_indicator_size = content_bounds.height - 2;
                     scroll_indicator_offset = 0;
-                }message ("child_height: %d, draw_scrollbar: %s, scroll_indicator_size: %d, scroll_indicator_offset %d",
-                    child_height, draw_scrollbar ? "yes" : "no", scroll_indicator_size, scroll_indicator_offset);
+                }
             } else {
                 var child_width = 0;
                 draw_scrollbar = false;
@@ -187,7 +186,7 @@ namespace EV3devTk {
             }
         }
 
-        protected override void on_draw (Context context) {
+        public override void draw (Context context) {
             do_layout ();
             var color = has_focus ? window.screen.mid_color : window.screen.fg_color;
             var x = content_bounds.x2;
@@ -216,10 +215,9 @@ namespace EV3devTk {
                         y + 3, content_bounds.x1 + scroll_indicator_offset 
                             + scroll_indicator_size - 2, content_bounds.y2 - 3, window.screen.bg_color);
             }
-            if (child != null) {message ("Clipping %d %d %d %d",content_bounds.x1, content_bounds.y1, x, y );
-                message ("child bounds %d %d %d %d",child.bounds.x1, child.bounds.y1, child.bounds.x2, child.bounds.y2 );
+            if (child != null) {
                 set_clip_box (content_bounds.x1, content_bounds.y1, x, y);
-                child.on_draw (context);
+                child.draw (context);
                 reset_clip_box ();
             }
             draw_border ();

@@ -1100,31 +1100,6 @@ namespace GRX {
         PROPORTION
     }
 
-    [CCode (cname = "struct _GR_fontHeader", free_function = "g_free", has_type_id = false)]
-    [Compact]
-    public class FontHeader {
-        [CCode (cname = "struct _GR_fontHeader", destroy_function = "", has_type_id = false)]
-        struct MallocStruct {}
-
-        public string name;
-        public string family;
-        public char proportional;
-        public char scalable;
-        public char prelaoded;
-        public char modified;
-        public uint width;
-        public uint height;
-        public uint baseline;
-        public uint ulpos;
-        public uint ulheight;
-        public uint minchar;
-        public uint numchars;
-
-        [CCode (cname = "g_malloc0")]
-        public FontHeader (size_t size = sizeof(MallocStruct))
-            requires (size == sizeof(MallocStruct));
-    }
-
     [CCode (cname = "struct _GR_fontChrInfo", free_function = "g_free", has_type_id = false)]
     [Compact]
     public class FontChrInfo {
@@ -1156,8 +1131,33 @@ namespace GRX {
         [CCode (cname = "&GrDefaultFont")]
         public static unowned Font default;
 
-        [CCode (cname = "&self->h")]
-        public static FontHeader header;
+        [CCode (cname = "h.name")]
+        public string name;
+        [CCode (cname = "h.family")]
+        public string family;
+        [CCode (cname = "h.proportional")]
+        public char proportional;
+        [CCode (cname = "h.scalable")]
+        public char scalable;
+        [CCode (cname = "h.prelaoded")]
+        public char prelaoded;
+        [CCode (cname = "h.modified")]
+        public char modified;
+        [CCode (cname = "h.width")]
+        public uint width;
+        [CCode (cname = "h.height")]
+        public uint height;
+        [CCode (cname = "h.baseline")]
+        public uint baseline;
+        [CCode (cname = "h.ulpos")]
+        public uint underline_pos;
+        [CCode (cname = "h.ulheight")]
+        public uint underline_height;
+        [CCode (cname = "h.minchar")]
+        public uint minchar;
+        [CCode (cname = "h.numchars")]
+        public uint num_chars;
+
         public char *bitmap;
         public char *auxmap;
         public uint minwidth;

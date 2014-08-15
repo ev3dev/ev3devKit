@@ -64,7 +64,7 @@ namespace EV3devTk {
             return font.vala_string_width (text) + get_margin_border_padding_width ();
         }
         public override int get_preferred_height () {
-            return font.vala_string_height (text) + get_margin_border_padding_height ();
+            return (int)font.height + get_margin_border_padding_height ();
         }
 
         public override int get_preferred_width_for_height (int height) {
@@ -73,7 +73,7 @@ namespace EV3devTk {
         }
         public override int get_preferred_height_for_width (int width) {
             var lines = get_lines_for_width (width);
-            return font.vala_string_height (text) * lines.size + get_margin_border_padding_height ();
+            return (int)font.height * lines.size + get_margin_border_padding_height ();
         }
 
         Gee.List<string> get_lines_for_width (int width) {
@@ -112,7 +112,7 @@ namespace EV3devTk {
             base.redraw ();
         }
 
-        protected override void on_draw (Context context) {
+        public override void draw (Context context) {
             weak Widget widget = this;
             while (widget.parent != null) {
                 if (widget.can_focus)
@@ -143,18 +143,18 @@ namespace EV3devTk {
                 y = content_bounds.y1;
                 break;
             case TextVertAlign.MIDDLE:
-                y = content_bounds.y1 + (font.vala_string_height (text) + 1) / 2;
+                y = content_bounds.y1 + ((int)font.height + 1) / 2;
                 break;
             case TextVertAlign.BOTTOM:
                 y = content_bounds.y2;
                 break;
-            }message ("drawing label");
+            }
             var lines = get_lines_for_width (content_bounds.width);
             foreach (var item in lines) {
                 draw_vala_string (item, x, y, text_option);
-                y += font.vala_string_height (item);
+                y += (int)font.height;
             }
-            base.on_draw (context);
+            base.draw (context);
         }
     }
 }

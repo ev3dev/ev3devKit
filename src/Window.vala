@@ -74,7 +74,7 @@ namespace EV3devTk {
                 _screen.dirty = true;
         }
 
-        protected override void on_draw (Context context) {
+        public override void draw (Context context) {
             set_bounds (0, 0, context.x_max, context.y_max);
             var color = screen.bg_color;
             if (window_type == WindowType.DIALOG) {
@@ -85,7 +85,7 @@ namespace EV3devTk {
                 filled_box (border_bounds.x1, border_bounds.y1, border_bounds.x2,
                     border_bounds.y2, color);
             }
-            base.on_draw (context);
+            base.draw (context);
         }
 
         void on_first_shown () {

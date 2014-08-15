@@ -123,7 +123,6 @@ namespace EV3devTk {
         }
 
         protected Widget () {
-            draw.connect (on_draw);
             notify["margin-top"].connect (redraw);
             notify["margin-bottom"].connect (redraw);
             notify["margin-left"].connect (redraw);
@@ -266,17 +265,12 @@ namespace EV3devTk {
 
         /* drawing functions */
 
-        public signal void draw (Context context);
         public virtual void redraw () {
             if (parent != null)
                 parent.redraw ();
         }
-        protected virtual void on_draw (Context context) {
-            draw_border ();
-        }
 
-        protected void draw_border () {
-            var color = window.screen.fg_color;
+        protected void draw_border (GRX.Color color = window.screen.fg_color) {
             if (border_top != 0)
                 filled_box (border_bounds.x1 + border_radius, border_bounds.y1,
                     border_bounds.x2 - border_radius,
@@ -307,6 +301,10 @@ namespace EV3devTk {
                     border_bounds.y2 - border_radius, border_radius, 2700, 3600,
                     ArcStyle.OPEN, color);
             }
+        }
+
+        public virtual signal void draw (Context context) {
+            draw_border ();
         }
 
         /* input handling */

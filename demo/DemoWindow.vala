@@ -31,37 +31,41 @@ namespace EV3devTk {
         public signal void quit ();
 
         public DemoWindow () {
+            var vbox = new Box.vertical () {
+                padding_left = 10,
+                padding_right = 10,
+                spacing = 0
+            };
+            var show_text_entry_button = new Button.with_label ("TextEntry") {
+                border = 0
+            };
+            show_text_entry_button.pressed.connect (on_show_text_entry_window_button_pressed);
+            vbox.add (show_text_entry_button);
             var show_dialog_button = new Button.with_label ("Dialog") {
                 border = 0
             };
             show_dialog_button.pressed.connect (on_show_dialog_button_pressed);
+            vbox.add (show_dialog_button);
             var show_check_button_window_button = new Button.with_label ("CheckButton") {
                 border = 0
             };
-            show_check_button_window_button.pressed.connect (
-                on_show_check_button_window_button_pressed);
+            vbox.add (show_check_button_window_button);
+            show_check_button_window_button.pressed.connect (on_show_check_button_window_button_pressed);
             var show_scroll_window_button = new Button.with_label ("Scroll") {
                 border = 0
             };
+            vbox.add (show_scroll_window_button);
             show_scroll_window_button.pressed.connect (on_show_scroll_button_pressed);
             var quit_button = new Button.with_label ("Quit") {
                 border = 0
             };
             quit_button.pressed.connect (() => quit ());
-            var vbox = new Box.vertical () {
-                padding_left = Scroll.SCROLLBAR_SIZE + 2,
-                padding_right = 2,
-                spacing = 0
-            };
-            vbox.add (show_dialog_button);
-            vbox.add (show_check_button_window_button);
-            vbox.add (show_scroll_window_button);
             vbox.add (quit_button);
+
             var vscroll = new Scroll.vertical () {
                 scrollbar_visible = ScrollbarVisibility.ALWAYS_SHOW,
                 can_focus = false,
-                border = 0,
-                padding = 10
+                margin = 10
             };
             foreach (var child in vbox.children) {
                 var button = child as Button;
@@ -223,7 +227,6 @@ namespace EV3devTk {
                 min_height = 70
             };
             vscroll.key_pressed.connect ((key_code) => {
-                message ("event");
                 if (vscroll.has_focus) {
                     if (key_code == Key.LEFT || key_code == Key.RIGHT) {
                         vscroll.do_recursive_parent ((widget) => {
@@ -254,6 +257,26 @@ namespace EV3devTk {
             var hscroll_content = new Label ("You can also scroll stuff horizontally.");
             hscroll.add (hscroll_content);
             vbox.add (hscroll);
+            window.add (vbox);
+            screen.push_window (window);
+        }
+
+        void on_show_text_entry_window_button_pressed () {
+            var window = new Window ();
+            var vbox = new Box.vertical () {
+                margin = 10
+            };
+
+            var text_entry_1 = new TextEntry ("Edit me.");
+            vbox.add (text_entry_1);
+            var text_entry_2 = new TextEntry ("No! Edit me! I have more text than you can see!");
+            vbox.add (text_entry_2);
+            var numeric_entry = new TextEntry ("000") {
+                valid_chars = TextEntry.NUMERIC,
+                horizontal_align = WidgetAlign.START
+            };
+            vbox.add (numeric_entry);
+
             window.add (vbox);
             screen.push_window (window);
         }

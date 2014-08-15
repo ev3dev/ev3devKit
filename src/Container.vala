@@ -175,9 +175,9 @@ namespace EV3devTk {
                     content_bounds.x2, content_bounds.y2);
         }
 
-        protected override void on_draw (Context context) {
+        protected override void draw (Context context) {
             do_layout ();
-            base.on_draw (context);
+            base.draw (context);
             foreach (var child in children)
                 child.draw (context);
         }

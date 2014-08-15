@@ -42,17 +42,17 @@ namespace EV3devTk {
             this (new Label (text));
         }
 
-        protected override void on_draw (Context context) {
+        public override void draw (Context context) {
             unowned GRX.Color color;
             if (has_focus) {
                 color = window.screen.mid_color;
                 filled_box (border_bounds.x1, border_bounds.y1, border_bounds.x2,
                     border_bounds.y2, color);
             }
-            base.on_draw (context);
+            base.draw (context);
         }
 
-        protected override bool key_pressed (uint key_code) {
+        public override bool key_pressed (uint key_code) {
             if (key_code == '\n') {
                 pressed ();
                 Signal.stop_emission_by_name (this, "key-pressed");
