@@ -36,6 +36,11 @@ namespace EV3devTk {
                 padding_right = 10,
                 spacing = 0
             };
+            var show_grid_window_button = new Button.with_label ("Grid") {
+                border = 0
+            };
+            show_grid_window_button.pressed.connect (on_show_grid_window_button_pressed);
+            vbox.add (show_grid_window_button);
             var show_text_entry_button = new Button.with_label ("TextEntry") {
                 border = 0
             };
@@ -278,6 +283,55 @@ namespace EV3devTk {
             vbox.add (numeric_entry);
 
             window.add (vbox);
+            screen.push_window (window);
+        }
+
+        void on_show_grid_window_button_pressed () {
+            var window = new Window ();
+            var grid = new Grid (3, 4) {
+                margin = 5,
+                border = 2
+            };
+
+            var label1 = new Label ("This spans 3 columns.") {
+                horizontal_align = WidgetAlign.CENTER,
+                vertical_align = WidgetAlign.CENTER
+            };
+            grid.add_at (label1, 0, 0, 1, 3);
+            var label2 = new Label ("This spans 3 rows.") {
+                horizontal_align = WidgetAlign.CENTER,
+                vertical_align = WidgetAlign.CENTER
+            };
+            grid.add_at (label2, 0, 3, 3, 1);
+            var sub_grid = new Grid (2, 3);
+            var label3 = new Label ("Sub-"){
+                horizontal_align = WidgetAlign.CENTER,
+                vertical_align = WidgetAlign.CENTER
+            };
+            sub_grid.add (label3);
+            var label4 = new Label ("grid"){
+                horizontal_align = WidgetAlign.CENTER,
+                vertical_align = WidgetAlign.CENTER
+            };
+            sub_grid.add (label4);
+            var label5 = new Label ("has"){
+                horizontal_align = WidgetAlign.CENTER,
+                vertical_align = WidgetAlign.CENTER
+            };
+            sub_grid.add (label5);
+            var label6 = new Label ("no"){
+                horizontal_align = WidgetAlign.CENTER,
+                vertical_align = WidgetAlign.CENTER
+            };
+            sub_grid.add (label6);
+            var label7 = new Label ("border"){
+                horizontal_align = WidgetAlign.CENTER,
+                vertical_align = WidgetAlign.CENTER
+            };
+            sub_grid.add_at (label7, 1, 1, 1, 2);
+            grid.add_at (sub_grid, 1, 0, 2, 3);
+
+            window.add (grid);
             screen.push_window (window);
         }
     }

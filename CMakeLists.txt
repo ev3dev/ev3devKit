@@ -35,6 +35,7 @@ set (EV3DEV_TK_COMMON_SOURCE_FILES
     src/Button.vala
     src/CheckButton.vala
     src/Container.vala
+    src/Grid.vala
     src/Label.vala
     src/Rectangle.vala
     src/Screen.vala

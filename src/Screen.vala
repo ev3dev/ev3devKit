@@ -69,20 +69,21 @@ namespace EV3devTk {
 
         void handle_input () {
             var key_code = key_queue.poll_head ();
-            if (key_code == null)
+            if (key_code == null || top_window == null)
                 return;
+            // get the currently focused widget or top_window if none
             var focus_widget = top_window.do_recursive_children ((widget) => {
                 if (widget.has_focus)
                     return widget;
                 return null;
+            }) ?? top_window;
+            // Trigger the key press event for the focused widget.
+            // If it is not handled, pass it to the parent.
+            focus_widget.do_recursive_parent ((widget) => {
+                if (widget.key_pressed (key_code))
+                    return widget;
+                return null;
             });
-            if (focus_widget != null) {
-                focus_widget.do_recursive_parent ((widget) => {
-                    if (widget.key_pressed (key_code))
-                        return widget;
-                    return null;
-                });
-            }
         }
 
         /**

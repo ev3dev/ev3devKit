@@ -135,8 +135,8 @@ namespace EV3devTk {
         }
 
         protected void set_child_bounds (Widget child, int x1, int y1, int x2, int y2) {
-            var width = content_bounds.width;
-            var height = content_bounds.height;
+            var width = x2 - x1 + 1;
+            var height = y2 - y1 + 1;
             // TODO add width_for_height
             if (child.horizontal_align != WidgetAlign.FILL)
                 width = int.min (width, child.get_preferred_width ());
@@ -147,7 +147,7 @@ namespace EV3devTk {
                 x2 = x1 + width - 1;
                 break;
             case WidgetAlign.CENTER:
-                x1 += (content_bounds.width - width + 1) / 2;
+                x1 += (x2 - x1 - width) / 2;
                 x2 = x1 + width - 1;
                 break;
             case WidgetAlign.END:
@@ -159,7 +159,7 @@ namespace EV3devTk {
                 y2 = y1 + height - 1;
                 break;
             case WidgetAlign.CENTER:
-                y1 += (content_bounds.height - height + 1) / 2;
+                y1 += (y2 - y1 - height) / 2;
                 y2 = y1 + height - 1;
                 break;
             case WidgetAlign.END:

@@ -90,7 +90,7 @@ namespace EV3devTk {
                         break;
                     builder.append_c (text[i++]);
                 }
-                if (i < text.length) {
+                if (i < text.length || font.vala_string_width (builder.str) > width) {
                     var last_space_index = builder.str.last_index_of (" ");
                     if (last_space_index >= 0) {
                         i -= (int)builder.len;
