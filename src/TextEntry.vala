@@ -29,6 +29,7 @@ namespace EV3devTk {
     public class TextEntry : EV3devTk.Widget {
         const string CONTINUE_RIGHT = "\xaf";
         const string CONTINUE_LEFT = "\xae";
+
         public const string NUMERIC = "0123456789";
         public const string DECIMAL = NUMERIC + ".";
         public const string HEXIDECIMAL = NUMERIC + "ABCDEF";
@@ -37,8 +38,7 @@ namespace EV3devTk {
         public const string ALPHA = LOWER_ALPHA + UPPER_ALPHA;
         public const string ALPHA_NUM = ALPHA + DECIMAL + "-_ ";
         public const string SYMBOL = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
-        public const string ALPHA_NUM_SYMBOL = ALPHA + NUMERIC + SYMBOL;
-
+        public const string ALPHA_NUM_SYMBOL = ALPHA + NUMERIC + SYMBOL + " ";
 
         Label label;
         int text_offset; // chars
@@ -46,17 +46,21 @@ namespace EV3devTk {
         int cursor_x; // pixels
         bool should_inc_text_offset_with_cursor;
         string save_text;
+        OnScreenKeyboard on_screen_keyboard;
 
-        public string? text { get; set; }
+        public string text { get; set; }
         public unowned Font font {
             get {return label.font; }
             set { label.font = value; }
         }
         public int min_width { get; set; default = 10; }
-        public bool editing { get; private set; default = false; }
+        public bool can_edit { get; set; default = true; }
+        public bool use_on_screen_keyboard { get; set; default = true; }
+        public bool editing { get; internal set; default = false; }
         public string valid_chars { get; set; default = ALPHA_NUM_SYMBOL; }
+        public bool insert { get; set; default = false; }
 
-        public TextEntry (string? text = null) {
+        public TextEntry (string text = " ") {
             this.text = text;
             label = new Label () {
                 text_horizontal_align = TextHorizAlign.LEFT,
@@ -76,19 +80,33 @@ namespace EV3devTk {
                 return;
             save_text = text;
             editing = true;
+            if (_use_on_screen_keyboard) {
+                on_screen_keyboard = new OnScreenKeyboard ();
+                on_screen_keyboard.text = text;
+                on_screen_keyboard.accepted.connect (commit_editing);
+                on_screen_keyboard.canceled.connect (cancel_editing);
+                window.screen.push_window (on_screen_keyboard);
+            }
         }
 
         public void commit_editing () {
             if (!_editing)
                 return;
             editing = false;
+            if (_use_on_screen_keyboard) {
+                text = on_screen_keyboard.text;
+                message ("ref %u", on_screen_keyboard.ref_count);
+                on_screen_keyboard.dispose ();
+            }
         }
 
         public void cancel_editing () {
             if (!_editing)
                 return;
-            text = save_text;
             editing = false;
+            text = save_text;
+            if (_use_on_screen_keyboard)
+                on_screen_keyboard.dispose ();
         }
 
         public override int get_preferred_width () {
@@ -100,23 +118,64 @@ namespace EV3devTk {
             return label.get_preferred_height () + get_margin_border_padding_height ();
         }
 
-        void inc_char (int index, bool dec = false) {
+        /**
+         * Set the character at the current cursor position
+         * @param c New character.
+         * @param move_next If true, moves the cursor to the next character.
+         */
+        public void set_char (char c, bool move_next = false) {
+            if (!_editing)
+                return;
+            if (!(c.to_string() in valid_chars))
+                return;
             var builder = new StringBuilder (text);
-            var new_char = text.get (index);
+            if (_insert)
+                builder.insert (cursor_offset, c.to_string ());
+            else
+                builder.overwrite (cursor_offset, c.to_string ());
+            text = builder.str;
+            if (move_next)
+                cursor_offset++;
+            redraw ();
+        }
+
+        /**
+         * Removes the character at the current cursor position
+         * @param backspace If true deletes the character before the cursor instead.
+         */
+        public void delete_char (bool backspace = false) {
+            if (!_editing)
+                return;
+            if (text.length == 0 || (backspace && cursor_offset == 0)
+                    || (!backspace && cursor_offset == text.length - 1))
+                return;
+            var offset = cursor_offset - (backspace ? 1 : 0);
+            var builder = new StringBuilder (text);
+            builder.erase (offset, 1);
+            text = builder.str;
+            cursor_offset = offset;
+            redraw ();
+        }
+
+        /**
+         * Increments or decrements the character at the current cursor position.
+         * @param dec If true, decrements instead of increments.
+         */
+        void inc_char (bool dec = false) {
+            var new_char = text.get (cursor_offset);
             var next_index = _valid_chars.index_of_char (new_char) + (dec ? -1 : 1);
             // wraparound
             next_index = (_valid_chars.length + next_index) % _valid_chars.length;
             new_char = _valid_chars.get (next_index);
-            builder.overwrite (index, new_char.to_string ());
-            text = builder.str;
+            set_char (new_char);
         }
 
         public override bool key_pressed (uint key_code) {
             if (_editing) {
                 if (key_code == Key.UP)
-                    inc_char (cursor_offset);
+                    inc_char ();
                 else if (key_code == Key.DOWN)
-                    inc_char (cursor_offset, true);
+                    inc_char (true);
                 else if (key_code == Key.RIGHT) {
                     cursor_offset ++;
                     if (should_inc_text_offset_with_cursor)
@@ -127,6 +186,8 @@ namespace EV3devTk {
                     commit_editing ();
                 else if (key_code == Key.BACKSPACE)
                     cancel_editing ();
+                else if (key_code >= 32 && key_code < 127)
+                    set_char ((char)key_code, true);
                 else
                     return false;
                 redraw ();
@@ -137,7 +198,7 @@ namespace EV3devTk {
                     text_offset ++;
                 else if (key_code == Key.LEFT)
                     text_offset--;
-                else if (key_code == '\n')
+                else if (_can_edit && key_code == '\n')
                     start_editing ();
                 else
                     return base.key_pressed (key_code);
@@ -168,38 +229,45 @@ namespace EV3devTk {
                     && font.vala_string_width (builder.str) < content_bounds.width)
                     builder.append_c (text[max_text_offset--]);
                 max_text_offset += CONTINUE_LEFT.length + 1;
-                message("text.length %d max_text_offset %d", text.length, max_text_offset);
                 text_offset = int.min (text_offset, max_text_offset);
-                message ("text_offset %d", text_offset);
-                builder.erase ();
-                if (text_offset > CONTINUE_LEFT.length)
-                    builder.append (CONTINUE_LEFT);
-                else
-                    builder.append (text[0:CONTINUE_LEFT.length]);
-                continuation_offset = CONTINUE_LEFT.length;
-                var index = text_offset;
-                while (index < text.length
-                        && font.vala_string_width (builder.str) < content_bounds.width)
-                    builder.append_c (text[index++]);
-                if (index < text.length 
-                    || font.vala_string_width (builder.str) > content_bounds.width)
-                {
-                    while (index > 0
-                        && font.vala_string_width (builder.str + CONTINUE_RIGHT)
-                            > content_bounds.width)
+                var cursor_out_of_range = true;
+                while (cursor_out_of_range) {
+                    cursor_out_of_range = false;
+                    builder.erase ();
+                    if (text_offset > CONTINUE_LEFT.length)
+                        builder.append (CONTINUE_LEFT);
+                    else
+                        builder.append (text[0:CONTINUE_LEFT.length]);
+                    continuation_offset = CONTINUE_LEFT.length;
+                    var index = text_offset;
+                    while (index < text.length
+                            && font.vala_string_width (builder.str) < content_bounds.width)
+                        builder.append_c (text[index++]);
+                    if (index < text.length
+                        || font.vala_string_width (builder.str) > content_bounds.width)
                     {
-                        builder.truncate (builder.len - 1);
+                        while (index > 0
+                            && font.vala_string_width (builder.str + CONTINUE_RIGHT)
+                                > content_bounds.width)
+                        {
+                            builder.truncate (builder.len - 1);
+                        }
+                        if (cursor_offset - text_offset > builder.len - 2) {
+                            text_offset++;
+                            cursor_out_of_range = true;
+                            continue;
+                        } else if (cursor_offset - text_offset == builder.len - 2)
+                            should_inc_text_offset_with_cursor = true;
+                        builder.append (CONTINUE_RIGHT);
                     }
-                    if (cursor_offset - text_offset >= builder.len - 2)
-                        should_inc_text_offset_with_cursor = true;
-                    builder.append (CONTINUE_RIGHT);
                 }
                 label.text = builder.str;
             }
             cursor_offset = int.max (0, cursor_offset);
             cursor_offset = int.min (cursor_offset, text.length - 1);
-            cursor_x = content_bounds.x1
-                + font.vala_string_width (label.text[0:continuation_offset + cursor_offset - text_offset]);
+            cursor_x = content_bounds.x1;
+            if (text.length > 0)
+                cursor_x += font.vala_string_width (label.text[0:continuation_offset + cursor_offset - text_offset]);
         }
 
         protected override void redraw () {

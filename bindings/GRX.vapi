@@ -1170,9 +1170,9 @@ namespace GRX {
         public FontChrInfo[] chrinfo;
 
         [CCode (cname = "GrLoadFont")]
-        public static Font load (string name);
+        public static Font? load (string name);
         [CCode (cname = "GrLoadConvertedFont")]
-        public static Font load_converted (string name, FontConversionFlag flags, int w = 0, int h = 0, int minch = 0, int maxch = 0);
+        public static Font? load_converted (string name, FontConversionFlag flags, int w = 0, int h = 0, int minch = 0, int maxch = 0);
         [CCode (cname = "GrBuildConvertedFont")]
         public Font build_converted (FontConversionFlag flags, int w = 0, int h = 0, int minch = 0, int maxch = 0);
 

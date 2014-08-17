@@ -84,7 +84,7 @@ namespace EV3devTk {
             return height + get_margin_border_padding_height ();
         }
 
-        public override int get_preferred_width_for_height (int height) {
+        public override int get_preferred_width_for_height (int height) requires (height > 0) {
             int width = 0;
             if (direction == BoxDirection.HORIZONTAL) {
                 foreach (var item in children)
@@ -97,7 +97,7 @@ namespace EV3devTk {
             return width + get_margin_border_padding_width ();
         }
 
-        public override int get_preferred_height_for_width (int width) {
+        public override int get_preferred_height_for_width (int width) requires (width > 0) {
             int height = 0;
             if (direction == BoxDirection.VERTICAL) {
                 foreach (var item in children)

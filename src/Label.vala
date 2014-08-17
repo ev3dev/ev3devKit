@@ -67,21 +67,27 @@ namespace EV3devTk {
             return (int)font.height + get_margin_border_padding_height ();
         }
 
-        public override int get_preferred_width_for_height (int height) {
+        public override int get_preferred_width_for_height (int height) requires (height > 0) {
             // TODO: create get_lines_for_height () method
             return get_preferred_width ();
         }
-        public override int get_preferred_height_for_width (int width) {
+        public override int get_preferred_height_for_width (int width) requires (width > 0) {
             var lines = get_lines_for_width (width);
             return (int)font.height * lines.size + get_margin_border_padding_height ();
         }
 
-        Gee.List<string> get_lines_for_width (int width) {
+        Gee.List<string> get_lines_for_width (int width) requires (width > 0) {
             if (cached_lines != null && width == last_width)
                 return cached_lines;
             cached_lines = new LinkedList<string> ();
             if (text == null)
                 return cached_lines;
+            // if everything fits on one line...
+            if (font.vala_string_width (text) <= width) {
+                cached_lines.add (text);
+                return cached_lines;
+            }
+            // otherwise we have to spilt it into multiple lines
             var builder = new StringBuilder ();
             int i = 0;
             while (i < text.length) {
@@ -96,7 +102,7 @@ namespace EV3devTk {
                         i -= (int)builder.len;
                         builder.truncate (last_space_index);
                         i += last_space_index + 1;
-                    } else {
+                    } else if (builder.len > 1) {
                         builder.truncate (builder.len - 1);
                         i--;
                     }

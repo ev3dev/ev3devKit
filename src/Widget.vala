@@ -157,15 +157,16 @@ namespace EV3devTk {
         public virtual int get_preferred_width () {
             return get_margin_border_padding_width ();
         }
+
         public virtual int get_preferred_height () {
             return get_margin_border_padding_height ();
         }
 
-        public virtual int get_preferred_width_for_height (int height) {
+        public virtual int get_preferred_width_for_height (int height) requires (height > 0) {
             return get_preferred_width ();
         }
 
-        public virtual int get_preferred_height_for_width (int width) {
+        public virtual int get_preferred_height_for_width (int width) requires (width > 0) {
             return get_preferred_height ();
         }
 
@@ -201,6 +202,8 @@ namespace EV3devTk {
         }
 
         public virtual bool focus_next (FocusDirection direction) {
+            if (parent != null && parent.focus_next (direction))
+                return true;
             return false;
         }
 

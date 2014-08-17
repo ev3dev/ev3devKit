@@ -239,7 +239,7 @@ namespace EV3devTk {
                                 return widget;
                             return null;
                         });
-                        Signal.stop_emission_by_name (this, "key-pressed");
+                        Signal.stop_emission_by_name (vscroll, "key-pressed");
                         return true;
                     }
                 }
@@ -278,7 +278,8 @@ namespace EV3devTk {
             vbox.add (text_entry_2);
             var numeric_entry = new TextEntry ("000") {
                 valid_chars = TextEntry.NUMERIC,
-                horizontal_align = WidgetAlign.START
+                horizontal_align = WidgetAlign.START,
+                use_on_screen_keyboard = false
             };
             vbox.add (numeric_entry);
 

@@ -102,7 +102,14 @@ namespace EV3devTk {
             case Gdk.Key.BackSpace:
                 key_code = Key.BACKSPACE;
                 break;
+            case Gdk.Key.Delete:
+                key_code = Key.DC; // DELETE
+                break;
             default:
+                if (event.keyval >= 32 && event.keyval < 127) {
+                    key_code = event.keyval;
+                    break;
+                }
                 return false;
             }
             stock_screen.queue_key_code (key_code);

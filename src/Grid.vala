@@ -34,6 +34,8 @@ namespace EV3devTk {
 
         Pair size;
         Widget?[,] grid;
+        Rectangle[,] cells;
+        Map<Widget,Pair?> position_map;
         Map<Widget,Pair?> span_map;
 
         public new int border {
@@ -55,6 +57,7 @@ namespace EV3devTk {
             size.row = (int)rows;
             size.col = (int)columns;
             grid = new Widget?[rows,columns];
+            position_map = new Gee.HashMap<Widget,Pair?>();
             span_map = new Gee.HashMap<Widget,Pair?>();
             child_added.connect (on_child_added);
             child_removed.connect (on_child_removed);
@@ -64,53 +67,74 @@ namespace EV3devTk {
 
         public override int get_preferred_width () {
             int result = 0;
-            for (uint col = 0; col < size.col; col++) {
+            for (uint row = 0; row < size.row; row++) {
                 int row_width = 0;
-                for (uint row = 0; row < size.row; row++) {
+                for (uint col = 0; col < size.col; col++) {
                     if (grid[row,col] != null) {
                         row_width += grid[row,col].get_preferred_width ();
-                        row += span_map[grid[row,col]].row - 1;
+                        col += span_map[grid[row,col]].col - 1;
                     }
                 }
                 result = int.max (result, row_width);
             }
-            return result + get_margin_border_padding_width ();
+            return result + _border_column * (size.col - 1) + get_margin_border_padding_width ();
         }
 
         public override int get_preferred_height () {
             int result = 0;
-            for (uint row = 0; row < size.row; row++) {
+            for (uint col = 0; col < size.col; col++) {
                 int col_height = 0;
-                for (uint col = 0; col < size.col; col++) {
+                for (uint row = 0; row < size.row; row++) {
                     if (grid[row,col] != null) {
                         col_height += grid[row,col].get_preferred_height ();
-                        col += span_map[grid[row,col]].col - 1;
+                        row += span_map[grid[row,col]].row - 1;
                     }
                 }
                 result = int.max (result, col_height);
             }
-            return result + get_margin_border_padding_width ();
+            return result + _border_row * (size.row - 1) + get_margin_border_padding_width ();
         }
 
-        public override int get_preferred_width_for_height (int height) {
+        public override int get_preferred_width_for_height (int height) requires (height > 0) {
             return get_preferred_width ();
         }
 
-        public override int get_preferred_height_for_width (int width) {
+        public override int get_preferred_height_for_width (int width) requires (width > 0) {
             return get_preferred_height ();
         }
 
-        public void add_at (Widget child, uint row, uint column, uint rowspan = 1, uint colspan = 1)
-            requires (row + rowspan <= size.row && column + colspan <= size.col
-                    && rowspan > 0 && colspan > 0)
+        public void add_at (Widget child, int row, int column, int rowspan = 1, int colspan = 1)
+            requires (row >= 0 && column >=0 && row + rowspan <= size.row
+                    && column + colspan <= size.col && rowspan > 0 && colspan > 0)
         {
             for (uint c = column; c < column + colspan; c++) {
                 for (uint r = row; r < row + rowspan; r++) {
+                    if (grid[r,c] != null)
+                        remove (grid[r,c]);
                     grid[r,c] = child;
                 }
             }
             add (child);
-            span_map[child] = Pair () { row = (int)rowspan, col = (int)colspan };
+            position_map[child] = Pair () { row = row, col = column };
+            span_map[child] = Pair () { row = rowspan, col = colspan };
+        }
+
+        public Widget? get_child_at (int row, int column)
+            requires (row >= 0 && row < size.row && column >= 0 && column < size.col)
+        {
+            return grid[row,column];
+        }
+
+        public bool get_position_for_child (Widget child, out int row, out int column) {
+            if (!(children.contains (child))) {
+                row = -1;
+                column = -1;
+                return false;
+            }
+            var position = position_map[child];
+            row = position.row;
+            column = position.col;
+            return true;
         }
 
         /**
@@ -118,6 +142,8 @@ namespace EV3devTk {
          * present in grid[,]. Otherwise we add it to the first empty slot.
          */
         void on_child_added (Widget child) {
+            if (position_map.has_key (child))
+                return;
             Pair? first_null = null;
             bool found_child = false;
             for (int row = 0; row < size.row; row++) {
@@ -135,6 +161,7 @@ namespace EV3devTk {
             }
             if (!found_child && first_null != null) {
                 grid[first_null.row,first_null.col] = child;
+                position_map[child] = Pair () { row = first_null.row, col = first_null.col };
                 span_map[child] = Pair () { row = 1, col = 1 };
             }
         }
@@ -144,13 +171,72 @@ namespace EV3devTk {
                 for (uint row = 0; row < size.row; row++) {
                     if (grid[row,col] == child) {
                         grid[row,col] = null;
+                        position_map.unset (child);
                         span_map.unset (child);
                     }
                 }
             }
         }
 
-        Rectangle[,] cells;
+        public override bool focus_next (FocusDirection direction) {
+            var focused_widget = do_recursive_children ((widget) => {
+                if (widget.has_focus)
+                    return widget;
+                return null;
+            });
+            if (focused_widget == null) {
+                if (parent != null && parent.focus_next (direction))
+                    return true;
+                return false;
+            }
+            var focused_position = position_map[focused_widget];
+            var row_inc = 0;
+            var col_inc = 0;
+            switch (direction) {
+            case FocusDirection.UP:
+                row_inc = -1;
+                break;
+            case FocusDirection.DOWN:
+                row_inc = span_map[focused_widget].row;
+                break;
+            case FocusDirection.LEFT:
+                col_inc = -1;
+                break;
+            case FocusDirection.RIGHT:
+                col_inc = span_map[focused_widget].col;
+                break;
+            default:
+                critical ("Bad focus direction");
+                return false;
+            }
+
+            int row = focused_position.row + row_inc;
+            int col = focused_position.col + col_inc;
+            while (row != focused_position.row || col != focused_position.col) {
+                if (row < 0 || row >= size.row || col < 0 || col >= size.col) {
+                    if (parent != null && parent.focus_next (direction))
+                        return true;
+                    // wrap around end of rows and columns
+                    row = (size.row + row) % size.row;
+                    col = (size.col + col) % size.col;
+                }
+                var widget = grid[row,col];
+                if (widget == null) {
+                    row += row_inc;
+                    col += col_inc;
+                    continue;
+                }
+                if (widget.can_focus) {
+                    widget.focus ();
+                    return true;
+                }
+                row += row_inc == -1 ? -1 :  span_map[widget].row;
+                col += col_inc == -1 ? -1 : span_map[widget].col;
+            }
+
+            return false;
+        }
+
         protected override void do_layout () {
             cells = new Rectangle[size.row,size.col];
             int cell_x = content_bounds.x1;

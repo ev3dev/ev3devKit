@@ -98,14 +98,14 @@ namespace EV3devTk {
                 + get_margin_border_padding_height ();
         }
 
-        public override int get_preferred_width_for_height (int height) {
+        public override int get_preferred_width_for_height (int height) requires (height > 0) {
             var result = get_margin_border_padding_width ();
             if (child != null)
                 result += child.get_preferred_width_for_height (height - result);
             return result;
         }
 
-        public override int get_preferred_height_for_width (int width) {
+        public override int get_preferred_height_for_width (int width) requires (width > 0) {
             var result = get_margin_border_padding_height ();
             if (child != null)
                 result += child.get_preferred_height_for_width (width - result);

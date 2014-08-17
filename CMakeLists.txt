@@ -37,6 +37,7 @@ set (EV3DEV_TK_COMMON_SOURCE_FILES
     src/Container.vala
     src/Grid.vala
     src/Label.vala
+    src/OnScreenKeyboard.vala
     src/Rectangle.vala
     src/Screen.vala
     src/Scroll.vala
@@ -85,9 +86,6 @@ CUSTOM_VAPIS
     bindings/*.vapi
 OPTIONS
     --target-glib=2.40
-    #this option isn't in any released version of gcc yet, but will
-    # be nice to have when it does get released.
-    --Xcc=Wno-discarded-qualifiers
 )
 
 add_executable(${EXEC_NAME} ${VALA_C})
