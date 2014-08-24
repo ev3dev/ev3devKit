@@ -22,6 +22,7 @@
 /* OnScreenKeyboard.vala - Window that provides an on-screen keyboard for user intput. */
 
 using Curses;
+using Gee;
 using GRX;
 
 namespace EV3devTk {
@@ -42,6 +43,7 @@ namespace EV3devTk {
         Grid numeric_grid;
         Grid symbol_grid;
         Box vbox;
+        Map<ulong, weak Object> signal_id_map;
 
         public string text {
             owned get { return text_entry.text[0:text_entry.text.length-1]; }
@@ -54,6 +56,7 @@ namespace EV3devTk {
         public signal void canceled ();
 
         public OnScreenKeyboard (Keyboard inital_keyboard = Keyboard.UPPER_ALPHA) {
+            signal_id_map = new HashMap<ulong, weak Object> ();
             vbox = new Box.vertical () {
                 spacing = 3
             };
@@ -99,6 +102,22 @@ namespace EV3devTk {
             set_keyboard (inital_keyboard);
             add (vbox);
             shown.connect_after (() => text_entry.focus_next (FocusDirection.UP));
+            weak_ref (before_finalize);
+        }
+
+        static void before_finalize (Object obj) {
+            weak OnScreenKeyboard instance = obj as OnScreenKeyboard;
+            // We are affected by https://bugzilla.gnome.org/show_bug.cgi?id=624624
+            // We workaround this by unrefefernecing "this" each time we create
+            // a lambda that references "this", then we have to put those references
+            // back before the signals are disconnected to prevent problems.
+            // We also have to manually disconnect the signals here or the
+            // finalization will be canceled because ref_count is no longer 0.
+            foreach (var id in instance.signal_id_map.keys) {
+                instance.ref ();
+                SignalHandler.disconnect (instance.signal_id_map[id], id);
+            }
+            instance.dispose ();
         }
 
         void set_keyboard (Keyboard keyboard) {
@@ -227,7 +246,12 @@ namespace EV3devTk {
             var button = new Button.with_label (c.to_string ()) {
                 border = 0
             };
-            button.pressed.connect (() => set_char (c));
+            var id = button.pressed.connect (() => {
+                set_char (c);
+            });
+            // break reference cycle cause by lambda (see before_finalize method)
+            unref ();
+            signal_id_map[id] = button;
             return button;
         }
 
@@ -237,7 +261,12 @@ namespace EV3devTk {
                 padding_left = 0,
                 padding_right = 0
             };
-            button.pressed.connect (() => set_keyboard (keyboard));
+            var id = button.pressed.connect (() => {
+                set_keyboard (keyboard);
+            });
+            // break reference cycle cause by lambda (see before_finalize method)
+            unref ();
+            signal_id_map[id] = button;
             return button;
         }
 
@@ -245,10 +274,13 @@ namespace EV3devTk {
             var button = new Button.with_label ("INS") {
                 border = 0
             };
-            button.pressed.connect (() => {
+            var id = button.pressed.connect (() => {
                 text_entry.insert = !text_entry.insert;
                 (button.child as Label).text = text_entry.insert ? "INS" : "OVR";
             });
+            // break reference cycle cause by lambda (see before_finalize method)
+            unref ();
+            signal_id_map[id] = button;
             return button;
         }
 

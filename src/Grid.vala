@@ -35,8 +35,8 @@ namespace EV3devTk {
         Pair size;
         Widget?[,] grid;
         Rectangle[,] cells;
-        Map<Widget,Pair?> position_map;
-        Map<Widget,Pair?> span_map;
+        Map<weak Widget,Pair?> position_map;
+        Map<weak Widget,Pair?> span_map;
 
         public new int border {
             set {
@@ -63,6 +63,14 @@ namespace EV3devTk {
             child_removed.connect (on_child_removed);
             notify["border-row"].connect (redraw);
             notify["border-column"].connect (redraw);
+        }
+
+        ~Grid () {
+            for (int col = 0; col < size.col; col++) {
+                for (int row = 0; row < size.row; row++) {
+                    grid[row,col] = null;
+                }
+            }
         }
 
         public override int get_preferred_width () {
@@ -103,6 +111,24 @@ namespace EV3devTk {
             return get_preferred_height ();
         }
 
+        public bool get_position_for_child (Widget child, out int row, out int column) {
+            if (!(children.contains (child))) {
+                row = -1;
+                column = -1;
+                return false;
+            }
+            var position = position_map[child];
+            row = position.row;
+            column = position.col;
+            return true;
+        }
+
+        public Widget? get_child_at (int row, int column)
+            requires (row >= 0 && row < size.row && column >= 0 && column < size.col)
+        {
+            return grid[row,column];
+        }
+
         public void add_at (Widget child, int row, int column, int rowspan = 1, int colspan = 1)
             requires (row >= 0 && column >=0 && row + rowspan <= size.row
                     && column + colspan <= size.col && rowspan > 0 && colspan > 0)
@@ -119,31 +145,11 @@ namespace EV3devTk {
             span_map[child] = Pair () { row = rowspan, col = colspan };
         }
 
-        public Widget? get_child_at (int row, int column)
-            requires (row >= 0 && row < size.row && column >= 0 && column < size.col)
-        {
-            return grid[row,column];
-        }
-
-        public bool get_position_for_child (Widget child, out int row, out int column) {
-            if (!(children.contains (child))) {
-                row = -1;
-                column = -1;
-                return false;
-            }
-            var position = position_map[child];
-            row = position.row;
-            column = position.col;
-            return true;
-        }
-
         /**
          * If a child was added with Grid.add_at (), then it will already be
          * present in grid[,]. Otherwise we add it to the first empty slot.
          */
         void on_child_added (Widget child) {
-            if (position_map.has_key (child))
-                return;
             Pair? first_null = null;
             bool found_child = false;
             for (int row = 0; row < size.row; row++) {

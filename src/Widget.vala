@@ -100,7 +100,7 @@ namespace EV3devTk {
          */
         public bool has_focus { get; protected set; default = false; }
 
-        public Container? parent { get; protected set; }
+        public weak Container? parent { get; protected set; }
 
         public Window? window {
             owned get {

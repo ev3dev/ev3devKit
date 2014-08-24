@@ -95,8 +95,7 @@ namespace EV3devTk {
             editing = false;
             if (_use_on_screen_keyboard) {
                 text = on_screen_keyboard.text;
-                message ("ref %u", on_screen_keyboard.ref_count);
-                on_screen_keyboard.dispose ();
+                on_screen_keyboard = null;
             }
         }
 
@@ -106,7 +105,7 @@ namespace EV3devTk {
             editing = false;
             text = save_text;
             if (_use_on_screen_keyboard)
-                on_screen_keyboard.dispose ();
+                on_screen_keyboard = null;
         }
 
         public override int get_preferred_width () {

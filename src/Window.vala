@@ -33,7 +33,7 @@ namespace EV3devTk {
     public class Window : EV3devTk.Container {
         const int DIALOG_MARGIN = 12;
 
-        internal Screen? _screen;
+        internal weak Screen? _screen;
         public Screen? screen {
             get { return _screen; }
         }
@@ -62,8 +62,10 @@ namespace EV3devTk {
 
         public override bool key_pressed (uint key_code) {
             if (key_code == Key.BACKSPACE) {
-                screen.pop_window ();
                 Signal.stop_emission_by_name (this, "key-pressed");
+                // screen.pop_window () releases the reference to window, so don't
+                // do anything that references this after it.
+                screen.pop_window ();
                 return true;
             }
             return base.key_pressed (key_code);

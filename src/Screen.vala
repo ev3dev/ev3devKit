@@ -80,8 +80,11 @@ namespace EV3devTk {
             // Trigger the key press event for the focused widget.
             // If it is not handled, pass it to the parent.
             focus_widget.do_recursive_parent ((widget) => {
+                // key press event may release all references to widget, so this
+                // gets a reference before calling key_pressed ()
+                var result = widget;
                 if (widget.key_pressed (key_code))
-                    return widget;
+                    return result;
                 return null;
             });
         }
