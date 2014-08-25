@@ -160,99 +160,61 @@ namespace GRX {
     /**
      * Available frame modes (video memory layouts)
      */
-    [CCode (cname = "enum _GR_frameModes", has_type_id = false)]
+    [CCode (cname = "enum _GR_frameModes", cprefix = "GR_frame", has_type_id = false)]
     public enum FrameMode {
         /* ====== video frame buffer modes ====== */
         [CCode (cname = "GR_frameUndef")]
         UNDEFINED,                      /* undefined */
         [CCode (cname = "GR_frameText")]
         TEXT,                       /* text modes */
-        [CCode (cname = "GR_frameHERC1")]
         HERC1,                      /* Hercules mono */
-        [CCode (cname = "GR_frameEGAVGA1")]
         EGAVGA1,                    /* EGA VGA mono */
-        [CCode (cname = "GR_frameEGA4")]
         EGA4,                       /* EGA 16 color */
-        [CCode (cname = "GR_frameSVGA4")]
         SVGA4,                      /* (Super) VGA 16 color */
-        [CCode (cname = "GR_frameSVGA8")]
         SVGA8,                      /* (Super) VGA 256 color */
-        [CCode (cname = "GR_frameVGA8X")]
         SVGA8X,                      /* VGA 256 color mode X */
-        [CCode (cname = "GR_frameSVGA16")]
         SVGA16,                     /* Super VGA 32768/65536 color */
-        [CCode (cname = "GR_frameSVGA24")]
         SVGA24,                     /* Super VGA 16M color */
-        [CCode (cname = "GR_frameSVGA32L")]
         SVGA32L,                    /* Super VGA 16M color padded #1 */
-        [CCode (cname = "GR_frameSVGA32H")]
         SVGA32H,                    /* Super VGA 16M color padded #2 */
         /* ==== modes provided by the X11 driver ===== */
-        [CCode (cname = "GR_frameXWIN1")]
         XWIN1,
-        [CCode (cname = "GR_frameXWIN4")]
         XWIN4,
-        [CCode (cname = "GR_frameXWIN8")]
         XWIN8,
-        [CCode (cname = "GR_frameXWIN16")]
         XWIN16,
-        [CCode (cname = "GR_frameXWIN24")]
         XWIN24,
-        [CCode (cname = "GR_frameXWIN32L")]
         XWIN32L,
-        [CCode (cname = "GR_frameXWIN32H")]
         XWIN23H,
         /* ==== modes provided by the WIN32 driver ===== */
-        [CCode (cname = "GR_frameWIN32_1")]
         WIN32_1,
-        [CCode (cname = "GR_frameWIN32_4")]
         WIN32_4,
-        [CCode (cname = "GR_frameWIN32_8")]
         WIN32_8,
-        [CCode (cname = "GR_frameWIN32_16")]
         WIN32_16,
-        [CCode (cname = "GR_frameWIN32_24")]
         WIN32_24,
-        [CCode (cname = "GR_frameWIN32_32L")]
         WIN32_32L,
-        [CCode (cname = "GR_frameWIN32_32H")]
         WIN32_32H,
         /* ==== modes provided by the SDL driver ===== */
-        [CCode (cname = "GR_frameSDL8")]
         SDL8,
-        [CCode (cname = "GR_frameSDL16")]
         SDL16,
-        [CCode (cname = "GR_frameSDL24")]
         SDL24,
-        [CCode (cname = "GR_frameSDL32L")]
         SDL32L,
-        [CCode (cname = "GR_frameSDL32H")]
         SDL32H,
         /* ==== linear frame buffer modes  ====== */
-        [CCode (cname = "GR_frameSVGA8_LFB")]
+        MONO01_LFB,                 /* mono */
+        MONO10_LFB,                 /* mono */
         SVGA8_LFB,                  /* (Super) VGA 256 color */
-        [CCode (cname = "GR_frameSVGA16_LFB")]
         SVGA16_LFB,                 /* Super VGA 32768/65536 color */
-        [CCode (cname = "GR_frameSVGA24_LFB")]
         SVGA24_LFB,                 /* Super VGA 16M color */
-        [CCode (cname = "GR_frameSVGA32L_LFB")]
         SVGA32L_LFB,                /* Super VGA 16M color padded #1 */
-        [CCode (cname = "GR_frameSVGA32H_LFB")]
         SVGA32H_LFB,                /* Super VGA 16M color padded #2 */
         /* ====== system RAM frame buffer modes ====== */
-        [CCode (cname = "GR_frameRAM1")]
+        RAM1_INV,                   /* mono */
         RAM1,                       /* mono */
-        [CCode (cname = "GR_frameRAM4")]
         RAM4,                       /* 16 color planar */
-        [CCode (cname = "GR_frameRAM8")]
         RAM8,                       /* 256 color */
-        [CCode (cname = "GR_frameRAM16")]
         RAM16,                      /* 32768/65536 color */
-        [CCode (cname = "GR_frameRAM24")]
         RAM24,                      /* 16M color */
-        [CCode (cname = "GR_frameRAM32L")]
         RAM32L,                     /* 16M color padded #1 */
-        [CCode (cname = "GR_frameRAM32H")]
         RAM32H,                     /* 16M color padded #2 */
         /* not compiled */
         //[CCode (cname = "GR_frameRAM3x8")]
