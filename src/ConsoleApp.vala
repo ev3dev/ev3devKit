@@ -65,7 +65,6 @@ namespace EV3devTk {
             cbreak ();
             noecho ();
             stdscr.keypad (true);
-            stdscr.nodelay (true);
 
             ioctl (vtfd, VT_ACTIVATE, vtnum);
             ioctl (vtfd, VT_WAITACTIVE, vtnum);
@@ -83,10 +82,10 @@ namespace EV3devTk {
             }
 
             main_loop = new MainLoop ();
-            Timeout.add (10, on_check_key_timeout);
         }
 
         public void run () {
+            new Thread<int> ("input", read_input);
             main_loop.run ();
             release_console ();
         }
@@ -126,11 +125,16 @@ namespace EV3devTk {
             return false;
         }
 
-        bool on_check_key_timeout () {
-            var ch = getch ();
-            if (ch != -1 && screen != null)
-                screen.queue_key_code (ch);
-            return true;
+        int read_input () {
+            while (true) {
+                var ch = getch ();
+                if (ch != -1 && screen != null) {
+                    Idle.add (() => {
+                        screen.queue_key_code (ch);
+                        return false;
+                    });
+                }
+            }
         }
     }
 }

@@ -86,6 +86,7 @@ CUSTOM_VAPIS
     bindings/*.vapi
 OPTIONS
     --target-glib=2.40
+    --thread
 )
 
 add_executable(${EXEC_NAME} ${VALA_C})
