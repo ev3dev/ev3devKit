@@ -119,14 +119,7 @@ namespace EV3devKit {
         }
 
         protected override void draw_content () {
-            weak Widget widget = this;
-            while (widget.parent != null) {
-                if (widget.can_focus)
-                    break;
-                else
-                    widget = widget.parent;
-            }
-            if (widget.has_focus && !(widget is Scroll))
+            if (has_focus || parent.draw_children_as_focused)
                 text_option.fg_color = (TextColor)window.screen.bg_color;
             else
                 text_option.fg_color = (TextColor)window.screen.fg_color;

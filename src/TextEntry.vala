@@ -274,12 +274,15 @@ namespace EV3devKit {
             base.redraw ();
         }
 
-        protected override void draw_content () {
-            var color = has_focus ? window.screen.mid_color : window.screen.fg_color;
+        protected override void do_layout () {
             label.set_bounds (content_bounds.x1, content_bounds.y1,
                 content_bounds.x2, content_bounds.y2);
             if (text != null && label.text == null)
                 set_label_text ();
+        }
+
+        protected override void draw_content () {
+            var color = has_focus ? window.screen.mid_color : window.screen.fg_color;
             label.draw ();
             if (editing) {
                 horiz_line (cursor_x,

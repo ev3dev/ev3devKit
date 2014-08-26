@@ -97,15 +97,8 @@ namespace EV3devKit {
         }
 
         protected override void draw_content () {
-            weak Widget widget = this;
-            while (widget.parent != null) {
-                if (widget.can_focus)
-                    break;
-                else
-                    widget = widget.parent;
-            }
             unowned GRX.Color color;
-            if (widget.has_focus && !(widget is Scroll)) {
+            if (has_focus || parent.draw_children_as_focused) {
                 color = window.screen.mid_color;
                 filled_box (border_bounds.x1, border_bounds.y1, border_bounds.x2,
                     border_bounds.y2, color);

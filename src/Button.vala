@@ -42,8 +42,16 @@ namespace EV3devKit {
             this (new Label (text));
         }
 
+        public override bool draw_children_as_focused {
+            get {
+                if (has_focus)
+                    return true;
+                return base.draw_children_as_focused;
+            }
+        }
+
         protected override void draw_background () {
-            if (has_focus) {
+            if (draw_children_as_focused) {
                 var color = window.screen.mid_color;
                 filled_box (border_bounds.x1, border_bounds.y1, border_bounds.x2,
                     border_bounds.y2, color);

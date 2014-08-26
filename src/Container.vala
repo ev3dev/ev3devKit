@@ -78,6 +78,14 @@ namespace EV3devKit {
             }
         }
 
+        public virtual bool draw_children_as_focused {
+            get {
+                if (parent != null)
+                    return parent.draw_children_as_focused;
+                return false;
+            }
+        }
+
         public ContainerType container_type { get; private set; }
 
         public signal void child_added (Widget child);
