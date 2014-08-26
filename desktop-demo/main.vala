@@ -25,13 +25,9 @@ namespace EV3devKit {
     public static int main (string[] args) {
         DesktopTestApp.init (args);
 
-        var demo_window_1 = new DemoWindow ();
-        demo_window_1.quit.connect (DesktopTestApp.quit);
-        DesktopTestApp.stock_screen.push_window (demo_window_1);
-
-        var demo_window_2 = new DemoWindow ();
-        demo_window_2.quit.connect (DesktopTestApp.quit);
-        DesktopTestApp.color_screen.push_window (demo_window_2);
+        var demo_window = new DemoWindow ();
+        demo_window.quit.connect (DesktopTestApp.quit);
+        DesktopTestApp.screen.push_window (demo_window);
 
         DesktopTestApp.run ();
 

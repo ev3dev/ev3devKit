@@ -26,7 +26,7 @@ using GRX;
 
 namespace EV3devKit {
     public abstract class Screen : Object {
-        LinkedList<Window> window_stack;
+        protected LinkedList<Window> window_stack;
         LinkedList<uint?> key_queue;
         protected Context context;
 
@@ -125,7 +125,7 @@ namespace EV3devKit {
             key_queue.offer_tail (key_code);
         }
 
-        bool on_draw_timeout () {
+        protected bool on_draw_timeout () {
             handle_input ();
             if (dirty) {
                 context.set ();

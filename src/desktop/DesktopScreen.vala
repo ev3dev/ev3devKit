@@ -21,14 +21,16 @@
 
 /* DesktopScreen.vala - Screen implementation for desktop (Gtk) */
 
-using Curses;
+using Gee;
 using GRX;
 
 namespace EV3devKit {
     public class DesktopScreen : EV3devKit.Screen {
         FakeEV3LCDDevice lcd;
+        weak DesktopScreen? master;
+        Gee.List<weak DesktopScreen> slaves;
 
-        public DesktopScreen (FakeEV3LCDDevice lcd) {
+        public DesktopScreen (FakeEV3LCDDevice lcd, DesktopScreen? master = null) {
             base.custom (lcd.info.width, lcd.info.height, lcd.pixbuf_data);
             this.lcd = lcd;
             if (lcd.info.use_custom_colors) {
@@ -36,10 +38,37 @@ namespace EV3devKit {
                 bg_color = lcd.info.bg_color;
                 mid_color = lcd.info.mid_color;
             }
+            this.master = master;
+            slaves = new ArrayList<DesktopScreen> ();
+            if (master != null) {
+                master.slaves.add (this);
+            }
+        }
+
+        ~DesktopScreen () {
+            master.slaves.remove (this);
+            foreach (var slave in slaves) {
+                slave.master = null;
+            }
         }
 
         public override void refresh () {
             lcd.refresh ();
+            foreach (var slave in slaves) {
+                set_screen_for_each_window (slave);
+                var save_slave_window_stack = slave.window_stack;
+                slave.window_stack = window_stack;
+                slave.dirty = true;
+                slave.on_draw_timeout ();
+                slave.window_stack = save_slave_window_stack;
+            }
+            set_screen_for_each_window (this);
+        }
+
+        void set_screen_for_each_window (Screen screen) {
+            foreach (var window in window_stack) {
+                window._screen = screen;
+            }
         }
     }
 }
