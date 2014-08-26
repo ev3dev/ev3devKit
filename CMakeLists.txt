@@ -19,6 +19,7 @@ if(EV3DEV_TK_DESKTOP)
         desktop-demo/main.vala
         src/desktop/FakeEV3LCDDevice.vala
         src/desktop/DesktopScreen.vala
+        src/desktop/DesktopTestApp.vala
     )
 else(EV3DEV_TK_DESKTOP)
     set (EV3DEV_TK_SOURCE_FILES
@@ -93,7 +94,7 @@ add_executable(${EXEC_NAME} ${VALA_C})
 
 if (EV3DEV_TK_DESKTOP)
 configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/desktop-demo/view/main_window.glade
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/desktop/main_window.glade
     ${CMAKE_CURRENT_BINARY_DIR}/main_window.glade COPYONLY )
 endif (EV3DEV_TK_DESKTOP)
 

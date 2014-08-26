@@ -29,7 +29,7 @@ namespace EV3devKit {
         FakeEV3LCDDevice lcd;
 
         public DesktopScreen (FakeEV3LCDDevice lcd) {
-            base (lcd.info.width, lcd.info.height, lcd.pixbuf_data);
+            base.custom (lcd.info.width, lcd.info.height, lcd.pixbuf_data);
             this.lcd = lcd;
             if (lcd.info.use_custom_colors) {
                 fg_color = lcd.info.fg_color;

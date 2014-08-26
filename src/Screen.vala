@@ -41,7 +41,11 @@ namespace EV3devKit {
             owned get { return window_stack.peek_tail (); }
         }
 
-        protected Screen (int width, int height, char *context_mem_addr = null) {
+        public Screen () {
+            this.custom (screen_x () - 1, screen_y () - 1);
+        }
+
+        public Screen.custom (int width, int height, char *context_mem_addr = null) {
             window_stack = new LinkedList<Window> ();
             key_queue = new LinkedList<uint?> ();
             FrameMode mode = core_frame_mode ();
@@ -62,10 +66,12 @@ namespace EV3devKit {
                 mid_color = Color.alloc (0, 0, 255);
             this.width = width;
             this.height = height;
-            Timeout.add(50, on_draw_timeout);
+            Timeout.add (50, on_draw_timeout);
         }
 
-        public abstract void refresh ();
+        public virtual void refresh () {
+            bit_blt (Context.screen, 0, 0, context, 0, 0, screen_x () - 1, screen_y () - 1);
+        }
 
         void handle_input () {
             var key_code = key_queue.poll_head ();
