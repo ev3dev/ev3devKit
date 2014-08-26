@@ -1,5 +1,5 @@
 /*
- * ev3dev-tk - graphical toolkit for LEGO MINDSTORMS EV3
+ * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 David Lechner <david@lechnology.com>
  *
@@ -21,7 +21,7 @@
 
 /* main.vala - main function for running demo */
 
-namespace EV3devTk {
+namespace EV3devKit {
 
     public static int main (string[] args) {
 

@@ -1,5 +1,5 @@
 /*
- * ev3dev-tk - graphical toolkit for LEGO MINDSTORMS EV3
+ * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 David Lechner <david@lechnology.com>
  *
@@ -24,8 +24,8 @@
 using Gee;
 using GRX;
 
-namespace EV3devTk {
-    public class Label : EV3devTk.Widget {
+namespace EV3devKit {
+    public class Label : EV3devKit.Widget {
         Gee.List<string>? cached_lines;
         int last_width = 0;
 

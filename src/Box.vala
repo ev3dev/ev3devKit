@@ -1,5 +1,5 @@
 /*
- * ev3dev-tk - graphical toolkit for LEGO MINDSTORMS EV3
+ * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 David Lechner <david@lechnology.com>
  *
@@ -24,7 +24,7 @@
 using Gee;
 using GRX;
 
-namespace EV3devTk {
+namespace EV3devKit {
 
     /**
      * Specifies the number of children a container can have.
@@ -40,7 +40,7 @@ namespace EV3devTk {
         VERTICAL;
     }
 
-    public class Box : EV3devTk.Container {
+    public class Box : EV3devKit.Container {
         public BoxDirection direction { get; private set; }
         public int spacing { get; set; default = 2; }
 

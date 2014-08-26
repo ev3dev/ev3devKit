@@ -1,5 +1,5 @@
 /*
- * ev3dev-tk - graphical toolkit for LEGO MINDSTORMS EV3
+ * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright (C) 2014 David Lechner <david@lechnology.com>
  *
@@ -27,7 +27,7 @@ using Gee;
 using Gtk;
 using GRX;
 
-namespace EV3devTk {
+namespace EV3devKit {
     public class FakeEV3LCDDevice : Gtk.EventBox {
         public struct Info {
             public int width;

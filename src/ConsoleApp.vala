@@ -1,5 +1,5 @@
 /*
- * ev3dev-tk - graphical toolkit for LEGO MINDSTORMS EV3
+ * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 David Lechner <david@lechnology.com>
  *
@@ -26,7 +26,7 @@ using Linux.Console;
 using Linux.VirtualTerminal;
 using Posix;
 
-namespace EV3devTk {
+namespace EV3devKit {
     namespace ConsoleApp {
         errordomain ConsoleError {
             MODE
@@ -40,7 +40,7 @@ namespace EV3devTk {
         Curses.Screen term;
         MainLoop main_loop;
 
-        public EV3devTk.Screen screen;
+        public EV3devKit.Screen screen;
 
         public void init () {
             vtfd = open ("/dev/tty0", O_RDWR, 0);

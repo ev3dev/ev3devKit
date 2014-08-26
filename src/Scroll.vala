@@ -1,5 +1,5 @@
 /*
- * ev3dev-tk - graphical toolkit for LEGO MINDSTORMS EV3
+ * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 David Lechner <david@lechnology.com>
  *
@@ -25,7 +25,7 @@ using Curses;
 using Gee;
 using GRX;
 
-namespace EV3devTk {
+namespace EV3devKit {
     public enum ScrollDirection {
         HORIZONTAL,
         VERTICAL
@@ -37,7 +37,7 @@ namespace EV3devTk {
         ALWAYS_SHOW
     }
 
-    public class Scroll : EV3devTk.Container {
+    public class Scroll : EV3devKit.Container {
         public const int SCROLLBAR_SIZE = 7;
 
         ScrollDirection direction;

@@ -1,5 +1,5 @@
 /*
- * ev3dev-tk - graphical toolkit for LEGO MINDSTORMS EV3
+ * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 David Lechner <david@lechnology.com>
  *
@@ -24,8 +24,8 @@
 using Curses;
 using GRX;
 
-namespace EV3devTk {
-    public class EV3Screen : EV3devTk.Screen {
+namespace EV3devKit {
+    public class EV3Screen : EV3devKit.Screen {
         public EV3Screen () {
             base (screen_x () - 1,  screen_y () - 1);
         }

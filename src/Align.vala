@@ -1,5 +1,5 @@
 /*
- * ev3dev-tk - graphical toolkit for LEGO MINDSTORMS EV3
+ * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 David Lechner <david@lechnology.com>
  *
@@ -21,7 +21,7 @@
 
 /* Align.vala - Enums used for alignment */
 
-namespace EV3devTk {
+namespace EV3devKit {
     public enum WidgetAlign {
         FILL,
         START,

@@ -1,5 +1,5 @@
 /*
- * ev3dev-tk - graphical toolkit for LEGO MINDSTORMS EV3
+ * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 David Lechner <david@lechnology.com>
  *
@@ -25,8 +25,8 @@ using Curses;
 using Gee;
 using GRX;
 
-namespace EV3devTk {
-    public class Button : EV3devTk.Container {
+namespace EV3devKit {
+    public class Button : EV3devKit.Container {
         public signal void pressed ();
 
         public Button (Widget? child = null) {

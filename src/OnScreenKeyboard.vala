@@ -1,5 +1,5 @@
 /*
- * ev3dev-tk - graphical toolkit for LEGO MINDSTORMS EV3
+ * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 David Lechner <david@lechnology.com>
  *
@@ -25,7 +25,7 @@ using Curses;
 using Gee;
 using GRX;
 
-namespace EV3devTk {
+namespace EV3devKit {
     public enum Keyboard {
         UPPER_ALPHA,
         LOWER_ALPHA,
@@ -33,7 +33,7 @@ namespace EV3devTk {
         SYMBOL
     }
 
-    public class OnScreenKeyboard : EV3devTk.Window {
+    public class OnScreenKeyboard : EV3devKit.Window {
         const int KEYBOARD_ROWS = 4;
         const int KEYBOARD_COLS = 10;
 

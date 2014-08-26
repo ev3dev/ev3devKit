@@ -34,7 +34,7 @@
   </object>
   <object class="GtkWindow" id="main_window">
     <property name="can_focus">False</property>
-    <property name="title" translatable="yes">ev3dev-tk demo</property>
+    <property name="title" translatable="yes">ev3devKit demo</property>
     <property name="window_position">center</property>
     <property name="gravity">center</property>
     <signal name="destroy" handler="gtk_main_quit" swapped="no"/>

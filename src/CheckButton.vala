@@ -1,5 +1,5 @@
 /*
- * ev3dev-tk - graphical toolkit for LEGO MINDSTORMS EV3
+ * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 David Lechner <david@lechnology.com>
  *
@@ -25,7 +25,7 @@ using Curses;
 using Gee;
 using GRX;
 
-namespace EV3devTk {
+namespace EV3devKit {
 
     public enum CheckButtonType {
         CHECKBOX,
@@ -38,7 +38,7 @@ namespace EV3devTk {
         }
     }
 
-    public class CheckButton : EV3devTk.Widget {
+    public class CheckButton : EV3devKit.Widget {
         CheckButtonType check_button_type;
 
         bool _checked = false;

@@ -6,9 +6,9 @@ list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 set (DATADIR "${CMAKE_INSTALL_PREFIX}/share")
 
-set (PKGDATADIR "${DATADIR}/ev3dev-tk")
-set (EXEC_NAME "ev3dev-tk-demo")
-set (RELEASE_NAME "ev3dev graphical toolkit")
+set (PKGDATADIR "${DATADIR}/ev3devKit")
+set (EXEC_NAME "ev3devKit-demo")
+set (RELEASE_NAME "ev3dev toolkit")
 set (VERSION "0.1")
 set (VERSION_INFO "alpha")
 

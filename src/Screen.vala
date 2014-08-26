@@ -1,5 +1,5 @@
 /*
- * ev3dev-tk - graphical toolkit for LEGO MINDSTORMS EV3
+ * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 David Lechner <david@lechnology.com>
  *
@@ -24,7 +24,7 @@
 using Gee;
 using GRX;
 
-namespace EV3devTk {
+namespace EV3devKit {
     public abstract class Screen : Object {
         LinkedList<Window> window_stack;
         LinkedList<uint?> key_queue;

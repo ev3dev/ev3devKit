@@ -1,5 +1,5 @@
 /*
- * ev3dev-tk - graphical toolkit for LEGO MINDSTORMS EV3
+ * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 David Lechner <david@lechnology.com>
  *
@@ -24,13 +24,13 @@
 using Curses;
 using GRX;
 
-namespace EV3devTk {
+namespace EV3devKit {
     public enum WindowType {
         NORMAL,
         DIALOG
     }
 
-    public class Window : EV3devTk.Container {
+    public class Window : EV3devKit.Container {
         const int DIALOG_MARGIN = 12;
 
         internal weak Screen? _screen;
