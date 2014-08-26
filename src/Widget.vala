@@ -110,17 +110,7 @@ namespace EV3devKit {
             }
         }
 
-        public void *represented_object_pointer { get; set; }
-        public Object? represented_object {
-            get { return (Object)represented_object_pointer; }
-            set {
-                if (value != null)
-                    value.ref ();
-                if (represented_object != null)
-                    represented_object.unref ();
-                represented_object_pointer = value;
-            }
-        }
+        public void *represented_object { get; set; }
 
         protected Widget () {
             notify["margin-top"].connect (redraw);
