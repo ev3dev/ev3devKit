@@ -273,7 +273,16 @@ namespace EV3devKit {
                 parent.redraw ();
         }
 
-        protected void draw_border (GRX.Color color = window.screen.fg_color) {
+        protected virtual void do_layout () {
+        }
+
+        protected virtual void draw_background () {
+        }
+
+        protected virtual void draw_content () {
+        }
+
+        protected virtual void draw_border (GRX.Color color = window.screen.fg_color) {
             if (border_top != 0)
                 filled_box (border_bounds.x1 + border_radius, border_bounds.y1,
                     border_bounds.x2 - border_radius,
@@ -306,7 +315,10 @@ namespace EV3devKit {
             }
         }
 
-        public virtual signal void draw (Context context) {
+        public void draw () {
+            do_layout ();
+            draw_background ();
+            draw_content ();
             draw_border ();
         }
 

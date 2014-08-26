@@ -19,44 +19,24 @@
  * MA 02110-1301, USA.
  */
 
-/* Button.vala - Widget that represents a selectable button */
+/* Dialog.vala - Top level widget */
 
 using Curses;
-using Gee;
 using GRX;
 
 namespace EV3devKit {
-    public class Button : EV3devKit.Container {
-        public signal void pressed ();
-
-        public Button (Widget? child = null) {
-            base (ContainerType.SINGLE);
-            if (child != null)
-                add (child);
+    public class Dialog : EV3devKit.Window {
+        
+        public Dialog () {
+            margin = 12;
             border = 1;
-            padding = 2;
-            can_focus = true;
-        }
-
-        public Button.with_label (string? text = null) {
-            this (new Label (text));
+            border_radius = 10;
         }
 
         protected override void draw_background () {
-            if (has_focus) {
-                var color = window.screen.mid_color;
-                filled_box (border_bounds.x1, border_bounds.y1, border_bounds.x2,
-                    border_bounds.y2, color);
-            }
-        }
-
-        public override bool key_pressed (uint key_code) {
-            if (key_code == '\n') {
-                pressed ();
-                Signal.stop_emission_by_name (this, "key-pressed");
-                return true;
-            }
-            return base.key_pressed (key_code);
+            var color = screen.bg_color;
+            filled_rounded_box (border_bounds.x1, border_bounds.y1,
+                border_bounds.x2, border_bounds.y2, 10, color);
         }
     }
 }

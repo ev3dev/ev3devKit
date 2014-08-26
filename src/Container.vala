@@ -169,17 +169,15 @@ namespace EV3devKit {
             child.set_bounds (x1, y1, x2, y2);
         }
 
-        protected virtual void do_layout () {
+        protected override void do_layout () {
             foreach (var child in children)
                 set_child_bounds (child, content_bounds.x1, content_bounds.y1,
                     content_bounds.x2, content_bounds.y2);
         }
 
-        protected override void draw (Context context) {
-            do_layout ();
-            base.draw (context);
+        protected override void draw_content () {
             foreach (var child in children)
-                child.draw (context);
+                child.draw ();
         }
     }
 }

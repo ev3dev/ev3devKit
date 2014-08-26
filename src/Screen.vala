@@ -132,7 +132,7 @@ namespace EV3devKit {
                 Window? top_window = null;
                 Window? top_dialog = null;
                 foreach (var window in window_stack) {
-                    if (window.window_type == WindowType.DIALOG) {
+                    if (window is Dialog) {
                         if (top_dialog != null && top_dialog.on_screen)
                             top_dialog.on_screen = false;
                         top_dialog = window;
@@ -149,11 +149,11 @@ namespace EV3devKit {
                 }
                 if (top_window != null) {
                     top_window.on_screen = true;
-                    top_window.draw (context);
+                    top_window.draw ();
                 }
                 if (top_dialog != null) {
                     top_dialog.on_screen = true;
-                    top_dialog.draw (context);
+                    top_dialog.draw ();
                 }
                 dirty = false;
                 refresh ();

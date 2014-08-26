@@ -186,7 +186,7 @@ namespace EV3devKit {
             }
         }
 
-        public override void draw (Context context) {
+        protected override void draw_content () {
             do_layout ();
             var color = has_focus ? window.screen.mid_color : window.screen.fg_color;
             var x = content_bounds.x2;
@@ -217,10 +217,9 @@ namespace EV3devKit {
             }
             if (child != null) {
                 set_clip_box (content_bounds.x1, content_bounds.y1, x, y);
-                child.draw (context);
+                child.draw ();
                 reset_clip_box ();
             }
-            draw_border ();
         }
     }
 }

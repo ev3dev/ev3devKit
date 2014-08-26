@@ -269,24 +269,23 @@ namespace EV3devKit {
                 cursor_x += font.vala_string_width (label.text[0:continuation_offset + cursor_offset - text_offset]);
         }
 
-        protected override void redraw () {
+        public override void redraw () {
             label.text = null;
             base.redraw ();
         }
 
-        public override void draw (Context context) {
+        protected override void draw_content () {
             var color = has_focus ? window.screen.mid_color : window.screen.fg_color;
             label.set_bounds (content_bounds.x1, content_bounds.y1,
                 content_bounds.x2, content_bounds.y2);
             if (text != null && label.text == null)
                 set_label_text ();
-            label.draw (context);
+            label.draw ();
             if (editing) {
                 horiz_line (cursor_x,
                     cursor_x + font.char_width (label.text[cursor_offset]),
                     content_bounds.y2 + 1, color);
             }
-            draw_border (color);
             if (has_focus && !editing) {
                 box (border_bounds.x1 + 1, border_bounds.y1 + 1,
                     border_bounds.x2 - 1, border_bounds.y2 -1, color);

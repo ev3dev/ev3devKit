@@ -93,7 +93,7 @@ namespace EV3devKit {
         }
 
         void on_show_dialog_button_pressed () {
-            var dialog = new Window.dialog ();
+            var dialog = new Dialog ();
             // make us a nice little title bar
             var title_label = new Label ("Dialog") {
                 padding_bottom = 2,

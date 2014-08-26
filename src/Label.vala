@@ -118,7 +118,7 @@ namespace EV3devKit {
             base.redraw ();
         }
 
-        public override void draw (Context context) {
+        protected override void draw_content () {
             weak Widget widget = this;
             while (widget.parent != null) {
                 if (widget.can_focus)
@@ -160,7 +160,6 @@ namespace EV3devKit {
                 draw_vala_string (item, x, y, text_option);
                 y += (int)font.height;
             }
-            base.draw (context);
         }
     }
 }

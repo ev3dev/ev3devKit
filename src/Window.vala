@@ -25,39 +25,19 @@ using Curses;
 using GRX;
 
 namespace EV3devKit {
-    public enum WindowType {
-        NORMAL,
-        DIALOG
-    }
-
     public class Window : EV3devKit.Container {
-        const int DIALOG_MARGIN = 12;
-
         internal weak Screen? _screen;
         public Screen? screen {
             get { return _screen; }
         }
-        public WindowType window_type { get; private set; }
 
         public bool on_screen { get; set; default = false; }
 
         public signal void shown ();
 
-        Window.with_type (WindowType type) {
-            base (ContainerType.SINGLE);
-            window_type = type;
-            shown.connect (on_first_shown);
-        }
-
         public Window () {
-            this.with_type (WindowType.NORMAL);
-        }
-
-        public Window.dialog () {
-            this.with_type (WindowType.DIALOG);
-            margin = DIALOG_MARGIN;
-            border = 1;
-            border_radius = 10;
+            base (ContainerType.SINGLE);
+            shown.connect (on_first_shown);
         }
 
         public override bool key_pressed (uint key_code) {
@@ -76,18 +56,19 @@ namespace EV3devKit {
                 _screen.dirty = true;
         }
 
-        public override void draw (Context context) {
-            set_bounds (0, 0, context.x_max, context.y_max);
+        protected override void do_layout () {
+            set_bounds (0, 0, Context.current.x_max, Context.current.y_max);
+            base.do_layout ();
+        }
+
+        protected override void draw_background () {
             var color = screen.bg_color;
-            if (window_type == WindowType.DIALOG) {
-                filled_rounded_box (border_bounds.x1, border_bounds.y1,
-                    border_bounds.x2, border_bounds.y2, 10, color);
-                color = screen.fg_color;
-            } else {
-                filled_box (border_bounds.x1, border_bounds.y1, border_bounds.x2,
-                    border_bounds.y2, color);
-            }
-            base.draw (context);
+            filled_box (border_bounds.x1, border_bounds.y1, border_bounds.x2,
+                border_bounds.y2, color);
+        }
+
+        protected override void draw_content () {
+            base.draw_content ();
         }
 
         void on_first_shown () {

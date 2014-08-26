@@ -289,10 +289,8 @@ namespace EV3devKit {
             }
         }
 
-        public override void draw (Context context) {
-            // draw children and border
-            base.draw (context);
-            var color = window.screen.fg_color;
+        protected override void draw_border (GRX.Color color) {
+            base.draw_border (color);
             // draw the vertical grid lines between each column
             if (border_column > 0) {
                 for (int row = 0; row < size.row; row++) {
