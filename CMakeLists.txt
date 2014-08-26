@@ -12,22 +12,22 @@ set (RELEASE_NAME "ev3dev toolkit")
 set (VERSION "0.1")
 set (VERSION_INFO "alpha")
 
-if(EV3DEV_TK_DESKTOP)
-    set (EV3DEV_TK_DESKTOP_MODULES gtk+-3.0)
-    set (EV3DEV_TK_DESKTOP_PACKAGES gtk+-3.0)
+if(EV3DEVKIT_DESKTOP)
+    set (EV3DEVKIT_DESKTOP_MODULES gtk+-3.0)
+    set (EV3DEVKIT_DESKTOP_PACKAGES gtk+-3.0)
     set (EV3DEV_TK_SOURCE_FILES
         desktop-demo/main.vala
         src/desktop/FakeEV3LCDDevice.vala
         src/desktop/DesktopScreen.vala
         src/desktop/DesktopTestApp.vala
     )
-else(EV3DEV_TK_DESKTOP)
+else(EV3DEVKIT_DESKTOP)
     set (EV3DEV_TK_SOURCE_FILES
         demo/main.vala
         src/ev3/EV3Screen.vala
         src/ConsoleApp.vala
     )
-endif(EV3DEV_TK_DESKTOP)
+endif(EV3DEVKIT_DESKTOP)
 
 set (EV3DEV_TK_COMMON_SOURCE_FILES
     demo/DemoWindow.vala
@@ -58,7 +58,7 @@ pkg_check_modules(DEPS REQUIRED
     gee-1.0
     ncurses
     libpng12
-    ${EV3DEV_TK_DESKTOP_MODULES}
+    ${EV3DEVKIT_DESKTOP_MODULES}
 )
 add_definitions(${DEPS_CFLAGS})
 link_libraries(${DEPS_LIBRARIES} grx20 jpeg png)
@@ -82,7 +82,7 @@ PACKAGES
     curses
     posix
     linux
-    ${EV3DEV_TK_DESKTOP_PACKAGES}
+    ${EV3DEVKIT_DESKTOP_PACKAGES}
 CUSTOM_VAPIS
     bindings/*.vapi
 OPTIONS
@@ -92,11 +92,11 @@ OPTIONS
 
 add_executable(${EXEC_NAME} ${VALA_C})
 
-if (EV3DEV_TK_DESKTOP)
+if (EV3DEVKIT_DESKTOP)
 configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/desktop/main_window.glade
     ${CMAKE_CURRENT_BINARY_DIR}/main_window.glade COPYONLY )
-endif (EV3DEV_TK_DESKTOP)
+endif (EV3DEVKIT_DESKTOP)
 
 install (TARGETS ${EXEC_NAME} RUNTIME DESTINATION bin)
 

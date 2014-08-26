@@ -12,7 +12,7 @@ build_dir=$1
 if [[ ${build_dir} == *desktop* ]]
 then
 	echo "Configuring for desktop"
-	dekstop_flag="-DEV3DEV_TK_DESKTOP=1"
+	dekstop_flag="-DEV3DEVKIT_DESKTOP=1"
 fi
 
 rm -rf ${build_dir}
