@@ -29,19 +29,19 @@ namespace EV3devKit {
 
         public weak Menu menu { get; internal set; }
         public Button button { get; private set; }
-        public Object? represented_object { get; private set; }
+        public Object? represented_object { get; set; }
 
-        public MenuItem (string text, Object? represented_object = null) {
+
+        public MenuItem (string text) {
             this.with_button (new Button.with_label (text) {
                 border = 0
             });
         }
 
-        public MenuItem.with_button (Button button, Object? represented_object = null) {
+        public MenuItem.with_button (Button button) {
             this.button = button;
             // using weak reference to prevent reference cycle.
             button.weak_represented_object = this;
-            this.represented_object = represented_object;
             weak_ref (weak_notify);
             menu_item_count++;
             debug ("Created MenuItem: %p", this);

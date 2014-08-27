@@ -34,6 +34,7 @@ set (EV3DEV_TK_COMMON_SOURCE_FILES
     src/Align.vala
     src/Box.vala
     src/Button.vala
+    src/CheckboxMenuItem.vala
     src/CheckButton.vala
     src/Container.vala
     src/Dialog.vala

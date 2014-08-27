@@ -362,6 +362,8 @@ namespace EV3devKit {
                 weak_menu.add_menu_item (new_item);
             });
             menu.add_menu_item (add_new_menu_item);
+            var checkbox_menu_item = new CheckboxMenuItem ("Checkbox Item");
+            menu.add_menu_item (checkbox_menu_item);
             screen.push_window (window);
         }
     }
