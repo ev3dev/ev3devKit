@@ -239,15 +239,16 @@ namespace EV3devKit {
             var vscroll = new Scroll.vertical () {
                 min_height = 70
             };
+            weak Scroll weak_vscroll = vscroll;
             vscroll.key_pressed.connect ((key_code) => {
-                if (vscroll.has_focus) {
+                if (weak_vscroll.has_focus) {
                     if (key_code == Key.LEFT || key_code == Key.RIGHT) {
-                        vscroll.do_recursive_parent ((widget) => {
+                        weak_vscroll.do_recursive_parent ((widget) => {
                             if (widget.focus_next (FocusDirection.DOWN))
                                 return widget;
                             return null;
                         });
-                        Signal.stop_emission_by_name (vscroll, "key-pressed");
+                        Signal.stop_emission_by_name (weak_vscroll, "key-pressed");
                         return true;
                     }
                 }
