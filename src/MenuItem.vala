@@ -29,17 +29,23 @@ namespace EV3devKit {
 
         public weak Menu menu { get; internal set; }
         public Button button { get; private set; }
+        public Label label { get; private set; }
         public Object? represented_object { get; set; }
 
 
         public MenuItem (string text) {
-            this.with_button (new Button.with_label (text) {
+            this.with_button (new Button () {
                 border = 0
-            });
+            }, new Label (text));
+            button.add (label);
         }
 
-        public MenuItem.with_button (Button button) {
+        /**
+         * this is the main constructor that should be called by superclasses
+         */
+        protected MenuItem.with_button (Button button, Label label) {
             this.button = button;
+            this.label = label;
             // using weak reference to prevent reference cycle.
             button.weak_represented_object = this;
             weak_ref (weak_notify);
