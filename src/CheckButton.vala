@@ -33,7 +33,7 @@ namespace EV3devKit {
     }
 
     public class CheckButtonGroup : Object {
-        public CheckButton selected_item { get; internal set; }
+        public weak CheckButton selected_item { get; internal set; }
         public CheckButtonGroup () {
         }
     }

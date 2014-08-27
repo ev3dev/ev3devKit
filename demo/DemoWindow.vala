@@ -151,8 +151,9 @@ namespace EV3devKit {
             };
             checkbox1_hbox.add (checkbox1);
             checkbox1_hbox.add (checkbox1_label);
+            weak CheckButton weak_checkbox1 = checkbox1;
             checkbox1.notify["checked"].connect (() =>
-                checkbox1_label.text = checkbox1.checked ? "Checked" : "Unchecked");
+                checkbox1_label.text = weak_checkbox1.checked ? "Checked" : "Unchecked");
             // or you can put the checkbox in a button so that the text is selected as well
             var checkbox2 = new CheckButton.checkbox () {
                 vertical_align = WidgetAlign.CENTER,
@@ -169,10 +170,11 @@ namespace EV3devKit {
             var checkbox2_button = new Button (checkbox2_hbox) {
                 border = 0
             };
+            weak CheckButton weak_checkbox2 = checkbox2;
             checkbox2.notify["checked"].connect (() =>
-                checkbox2_label.text = checkbox2.checked ? "Checked" : "Unchecked");
+                checkbox2_label.text = weak_checkbox2.checked ? "Checked" : "Unchecked");
             checkbox2_button.pressed.connect (() =>
-                checkbox2.checked = !checkbox2.checked);
+                weak_checkbox2.checked = !weak_checkbox2.checked);
             // radio buttons require a group
             var radiobutton_group1 = new CheckButtonGroup ();
             var group1_label = new Label ("Group 1:");
@@ -211,8 +213,9 @@ namespace EV3devKit {
             var radiobutton3_hbox = new Box.horizontal ();
             radiobutton3_hbox.add (radiobutton3);
             radiobutton3_hbox.add (radiobutton3_label);
+            weak CheckButtonGroup weak_radiobutton_group1 = radiobutton_group1;
             radiobutton_group1.notify["selected-item"].connect (() => {
-                var selected = radiobutton_group1.selected_item;
+                var selected = weak_radiobutton_group1.selected_item;
                 group1_selected_label.text = selected == null ? "none" 
                     : "#%d selected".printf ((int)selected.represented_object);
             });
