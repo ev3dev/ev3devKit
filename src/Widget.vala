@@ -35,6 +35,8 @@ namespace EV3devKit {
     }
 
     public abstract class Widget : Object {
+        static int widget_count = 0;
+
         /* layout properties */
 
         /* bounding rectangles - set by parent container */
@@ -130,6 +132,13 @@ namespace EV3devKit {
             notify["vertical-align"].connect (redraw);
             notify["can-focus"].connect (redraw);
             notify["has-focus"].connect (redraw);
+            widget_count++;
+            debug ("Created %s widget: %p", get_type ().name (), this);
+        }
+
+        ~Widget () {
+            debug ("Finalized %s widget %p", get_type ().name (), this);
+            debug ("Widget count %d", --widget_count);
         }
 
         /* layout functions */

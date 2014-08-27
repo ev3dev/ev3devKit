@@ -36,6 +36,11 @@ namespace EV3devKit {
                 padding_right = 10,
                 spacing = 0
             };
+            var show_menu_window_button = new Button.with_label ("Menu") {
+                border = 0
+            };
+            show_menu_window_button.pressed.connect (on_show_menu_window_button_pressed);
+            vbox.add (show_menu_window_button);
             var show_grid_window_button = new Button.with_label ("Grid") {
                 border = 0
             };
@@ -332,6 +337,27 @@ namespace EV3devKit {
             grid.add_at (sub_grid, 1, 0, 2, 3);
 
             window.add (grid);
+            screen.push_window (window);
+        }
+
+        void on_show_menu_window_button_pressed () {
+            int count = 1;
+            var window = new Window ();
+            var menu = new Menu () {
+                margin = 10
+            };
+            window.add (menu);
+            var add_new_menu_item = new MenuItem ("Add new item");
+            weak Menu weak_menu = menu;
+            add_new_menu_item.button.pressed.connect (() => {
+                var new_item = new MenuItem ("Remove me %d".printf (count++));
+                weak MenuItem weak_new_item = new_item;
+                new_item.button.pressed.connect (() => {
+                    weak_new_item.menu.remove_menu_item (weak_new_item);
+                });
+                weak_menu.add_menu_item (new_item);
+            });
+            menu.add_menu_item (add_new_menu_item);
             screen.push_window (window);
         }
     }

@@ -61,11 +61,11 @@ namespace EV3devKit {
         public override int get_preferred_width () {
             int width = 0;
             if (direction == BoxDirection.HORIZONTAL) {
-                foreach (var item in children)
+                foreach (var item in _children)
                     width += item.get_preferred_width () + spacing;
                 width -= spacing;
             } else {
-                foreach (var item in children)
+                foreach (var item in _children)
                     width = int.max (width, item.get_preferred_width ());
             }
             return width + get_margin_border_padding_width ();
@@ -74,11 +74,11 @@ namespace EV3devKit {
         public override int get_preferred_height () {
             int height = 0;
             if (direction == BoxDirection.VERTICAL) {
-                foreach (var item in children)
+                foreach (var item in _children)
                     height += item.get_preferred_height () + spacing;
                 height -= spacing;
             } else {
-                foreach (var item in children)
+                foreach (var item in _children)
                     height = int.max (height, item.get_preferred_height ());
             }
             return height + get_margin_border_padding_height ();
@@ -87,11 +87,11 @@ namespace EV3devKit {
         public override int get_preferred_width_for_height (int height) requires (height > 0) {
             int width = 0;
             if (direction == BoxDirection.HORIZONTAL) {
-                foreach (var item in children)
+                foreach (var item in _children)
                     width += item.get_preferred_width_for_height (height) + spacing;
                 width -= spacing;
             } else {
-                foreach (var item in children)
+                foreach (var item in _children)
                     width = int.max (width, item.get_preferred_width_for_height (height));
             }
             return width + get_margin_border_padding_width ();
@@ -100,20 +100,20 @@ namespace EV3devKit {
         public override int get_preferred_height_for_width (int width) requires (width > 0) {
             int height = 0;
             if (direction == BoxDirection.VERTICAL) {
-                foreach (var item in children)
+                foreach (var item in _children)
                     height += item.get_preferred_height_for_width (width) + spacing;
                 height -= spacing;
             } else {
-                foreach (var item in children)
+                foreach (var item in _children)
                     height = int.max (height, item.get_preferred_height_for_width (width));
             }
             return height + get_margin_border_padding_height ();
         }
 
         public override bool focus_next (FocusDirection direction) {
-            var widgets_after_focused_list = new LinkedList<Widget> ();
-            if (children.size > 0) {
-                var iter = children.list_iterator ();
+            var widgets_after_focused_list = new LinkedList<weak Widget> ();
+            if (_children.size > 0) {
+                var iter = _children.list_iterator ();
                 iter.first ();
                 do {
                     if (iter.get ().has_focus)
@@ -122,9 +122,9 @@ namespace EV3devKit {
                     if (container != null && container.descendant_has_focus)
                         break;
                 } while (iter.next ());
-                if (iter.index () < children.size) {
+                if (iter.index () < _children.size) {
                     var current = iter.get ();
-                    var widgets_before_focused_list = new LinkedList<Widget> ();
+                    var widgets_before_focused_list = new LinkedList<weak Widget> ();
                     if ((this.direction == BoxDirection.VERTICAL
                         && direction == FocusDirection.UP)
                         || (this.direction == BoxDirection.HORIZONTAL
@@ -182,7 +182,7 @@ namespace EV3devKit {
                 int total_width = 0;
                 int spacer_count = 0;
                 HashMap<Widget, int> width_map = new HashMap<Widget,int> ();
-                foreach (var child in children) {
+                foreach (var child in _children) {
                     width_map[child] = child.get_preferred_width_for_height (content_bounds.height);
                     total_width += width_map[child];
                     total_width += spacing;
@@ -193,7 +193,7 @@ namespace EV3devKit {
                 // TODO: handle case of total_width > content_bounds.width
                 var x = content_bounds.x1;
                 var extra_space = content_bounds.width - total_width;
-                foreach (var child in children) {
+                foreach (var child in _children) {
                     if (child is Spacer) {
                         var spacer_width = extra_space / spacer_count;
                         width_map[child] = spacer_width;
@@ -208,7 +208,7 @@ namespace EV3devKit {
                 int total_height = 0;
                 int spacer_count = 0;
                 HashMap<Widget, int> height_map = new HashMap<Widget, int> ();
-                foreach (var child in children) {
+                foreach (var child in _children) {
                     height_map[child] = child.get_preferred_height_for_width (content_bounds.width);
                     total_height += height_map[child];
                     total_height += spacing;
@@ -219,7 +219,7 @@ namespace EV3devKit {
                 // TODO: handle case of total_height > content_bounds.height
                 var y = content_bounds.y1;
                 var extra_space = content_bounds.height - total_height;
-                foreach (var child in children) {
+                foreach (var child in _children) {
                     if (child is Spacer) {
                         var spacer_height = extra_space / spacer_count;
                         height_map[child] = spacer_height;

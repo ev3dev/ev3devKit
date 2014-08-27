@@ -148,7 +148,7 @@ namespace EV3devKit {
                 critical ("Bad keyboard type.");
                 return;
             }
-            current_keyboard = (Grid)vbox.children[vbox.children.size - 1];
+            current_keyboard = (Grid)vbox._children.last ();
         }
 
         void init_upper_alpha_grid () {

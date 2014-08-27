@@ -112,7 +112,7 @@ namespace EV3devKit {
         }
 
         public bool get_position_for_child (Widget child, out int row, out int column) {
-            if (!(children.contains (child))) {
+            if (!(_children.contains (child))) {
                 row = -1;
                 column = -1;
                 return false;

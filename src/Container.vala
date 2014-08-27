@@ -65,7 +65,7 @@ namespace EV3devKit {
 
         public bool descendant_has_focus {
             get {
-                foreach (var item in children) {
+                foreach (var item in _children) {
                     var focused = item.do_recursive_children ((widget) => {
                         if (widget.has_focus)
                             return widget;
@@ -94,6 +94,15 @@ namespace EV3devKit {
         protected Container (ContainerType type) {
             container_type = type;
             _children = new LinkedList<Widget> ();
+            weak_ref (weak_notify);
+        }
+
+        static void weak_notify (Object obj) {
+            var container = obj as Container;
+            while (container._children.size > 0) {
+                var child = container._children.last ();
+                container.remove (child);
+            }
         }
 
         public override int get_preferred_width () {
@@ -178,13 +187,13 @@ namespace EV3devKit {
         }
 
         protected override void do_layout () {
-            foreach (var child in children)
+            foreach (var child in _children)
                 set_child_bounds (child, content_bounds.x1, content_bounds.y1,
                     content_bounds.x2, content_bounds.y2);
         }
 
         protected override void draw_content () {
-            foreach (var child in children)
+            foreach (var child in _children)
                 child.draw ();
         }
     }

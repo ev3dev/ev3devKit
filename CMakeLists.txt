@@ -39,6 +39,8 @@ set (EV3DEV_TK_COMMON_SOURCE_FILES
     src/Dialog.vala
     src/Grid.vala
     src/Label.vala
+    src/Menu.vala
+    src/MenuItem.vala
     src/OnScreenKeyboard.vala
     src/Rectangle.vala
     src/Screen.vala
