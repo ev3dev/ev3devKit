@@ -142,7 +142,7 @@ namespace EV3devKit {
                 y = content_bounds.y1;
                 break;
             case TextVertAlign.MIDDLE:
-                y = content_bounds.y1 + ((int)font.height + 1) / 2;
+                y = content_bounds.y1 + (content_bounds.height + 1) / 2;
                 break;
             case TextVertAlign.BOTTOM:
                 y = content_bounds.y2;

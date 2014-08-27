@@ -251,7 +251,6 @@ namespace EV3devKit {
                 + " on the same screen, because it makes navigation weird. For"
                 + " example, pressing right or left moves to the scroll box below.")
             {
-                padding_right = 2,
                 text_horizontal_align = TextHorizAlign.LEFT
             };
             vscroll.add (vscroll_content);
