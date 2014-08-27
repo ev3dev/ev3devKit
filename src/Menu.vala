@@ -36,7 +36,7 @@ namespace EV3devKit {
                     if (child.has_focus)
                         scroll_to_child (child);
                 });
-                var menu_item = child.represented_object as MenuItem;
+                var menu_item = child.weak_represented_object as MenuItem;
                 menu_item.notify_has_focus_signal_id = id;
                 // Break reference cycle
                 unref ();
@@ -44,7 +44,7 @@ namespace EV3devKit {
             menu_vbox.child_removed.connect ((child) => {
                 // restore missing reference from above
                 ref ();
-                var menu_item = child.represented_object as MenuItem;
+                var menu_item = child.weak_represented_object as MenuItem;
                 var id = menu_item.notify_has_focus_signal_id;
                 if (id != 0) {
                     SignalHandler.disconnect (child, id);
@@ -63,13 +63,13 @@ namespace EV3devKit {
                 // is no longer connected, so we have to restore the missing reference
                 // here as well to prevent crashes.
                 menu.ref ();
-                menu.remove_menu_item (child.represented_object as MenuItem);
+                menu.remove_menu_item (child.weak_represented_object as MenuItem);
             }
         }
 
         public MenuItem? get_menu_item (Object represented_object) {
             foreach (var widget in menu_vbox._children) {
-                var obj = widget.represented_object as MenuItem;
+                var obj = widget.weak_represented_object as MenuItem;
                 if (obj != null && obj.represented_object == represented_object) {
                     return obj;
                 }
@@ -79,7 +79,7 @@ namespace EV3devKit {
 
         public bool has_menu_item (MenuItem item) {
             foreach (var widget in menu_vbox._children) {
-                var obj = widget.represented_object as MenuItem;
+                var obj = widget.weak_represented_object as MenuItem;
                 if (obj == item) {
                     return true;
                 }
@@ -88,7 +88,7 @@ namespace EV3devKit {
         }
 
         public void add_menu_item (MenuItem item)
-            requires (item.button.represented_object == item)
+            requires (item.button.weak_represented_object == item)
         {
             if (item.menu != null)
                 item.menu.remove_menu_item (item);
@@ -99,7 +99,7 @@ namespace EV3devKit {
 
         public bool remove_menu_item (MenuItem item) {
             foreach (var child in menu_vbox._children) {
-                var obj = child.represented_object as MenuItem;
+                var obj = child.weak_represented_object as MenuItem;
                 if (obj == item) {
                     if (child.has_focus)
                         child.focus_next (child == menu_vbox._children.last ()

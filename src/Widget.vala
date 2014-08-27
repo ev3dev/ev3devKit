@@ -112,7 +112,8 @@ namespace EV3devKit {
             }
         }
 
-        public void *represented_object { get; set; }
+        public void *weak_represented_object { get; set; }
+        public Object? represented_object { get; set; }
 
         protected Widget () {
             notify["margin-top"].connect (redraw);

@@ -187,7 +187,7 @@ namespace EV3devKit {
             group1_label_hbox.add (group1_selected_label);
             // represented object is used to pass arbitrary information back to the group.
             var radiobutton1 = new CheckButton.radio (radiobutton_group1) {
-                represented_object = 1.to_pointer ()
+                weak_represented_object = 1.to_pointer ()
             };
             var radiobutton1_label = new Label ("Item 1") {
                 vertical_align = WidgetAlign.CENTER
@@ -196,7 +196,7 @@ namespace EV3devKit {
             radiobutton1_hbox.add (radiobutton1);
             radiobutton1_hbox.add (radiobutton1_label);
             var radiobutton2 = new CheckButton.radio (radiobutton_group1) {
-                represented_object = 2.to_pointer ()
+                weak_represented_object = 2.to_pointer ()
             };
             var radiobutton2_label = new Label ("Item 2") {
                 vertical_align = WidgetAlign.CENTER
@@ -205,7 +205,7 @@ namespace EV3devKit {
             radiobutton2_hbox.add (radiobutton2);
             radiobutton2_hbox.add (radiobutton2_label);
             var radiobutton3 = new CheckButton.radio (radiobutton_group1) {
-                represented_object = 3.to_pointer ()
+                weak_represented_object = 3.to_pointer ()
             };
             var radiobutton3_label = new Label ("Item 3") {
                 vertical_align = WidgetAlign.CENTER
@@ -217,7 +217,7 @@ namespace EV3devKit {
             radiobutton_group1.notify["selected-item"].connect (() => {
                 var selected = weak_radiobutton_group1.selected_item;
                 group1_selected_label.text = selected == null ? "none" 
-                    : "#%d selected".printf ((int)selected.represented_object);
+                    : "#%d selected".printf ((int)selected.weak_represented_object);
             });
             radiobutton1.checked = true;
             vbox.add (checkbox1_hbox);

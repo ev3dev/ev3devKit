@@ -39,7 +39,8 @@ namespace EV3devKit {
 
         public MenuItem.with_button (Button button, Object? represented_object = null) {
             this.button = button;
-            button.represented_object = this;
+            // using weak reference to prevent reference cycle.
+            button.weak_represented_object = this;
             this.represented_object = represented_object;
             weak_ref (weak_notify);
             menu_item_count++;
