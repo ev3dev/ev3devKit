@@ -136,19 +136,20 @@ namespace EV3devKit {
                 x = content_bounds.x2;
                 break;
             }
+            var lines = get_lines_for_width (content_bounds.width);
             int y = 0;
             switch (text_vertical_align) {
             case TextVertAlign.TOP:
                 y = content_bounds.y1;
                 break;
             case TextVertAlign.MIDDLE:
-                y = content_bounds.y1 + (content_bounds.height + 1) / 2;
+                y = content_bounds.y1 + (content_bounds.height + 1) / 2
+                    - (int)font.height * (lines.size - 1) / 2;
                 break;
             case TextVertAlign.BOTTOM:
                 y = content_bounds.y2;
                 break;
             }
-            var lines = get_lines_for_width (content_bounds.width);
             foreach (var item in lines) {
                 draw_vala_string (item, x, y, text_option);
                 y += (int)font.height;
