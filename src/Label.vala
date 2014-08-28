@@ -26,6 +26,12 @@ using GRX;
 
 namespace EV3devKit {
     public class Label : EV3devKit.Widget {
+        static Font default_font;
+
+        static construct {
+            default_font = Font.load ("xm6x8");
+        }
+
         Gee.List<string>? cached_lines;
         int last_width = 0;
 
@@ -48,7 +54,7 @@ namespace EV3devKit {
         public Label (string? text = null) {
             this.text = text;
             text_option = new TextOption () {
-                font = Font.pc6x8,
+                font = default_font ?? Font.pc6x8,
                 direction = TextDirection.RIGHT,
                 chr_type = ChrType.BYTE,
                 x_align = TextHorizAlign.CENTER,

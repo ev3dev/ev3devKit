@@ -68,6 +68,10 @@ namespace EV3devKit {
         void set_screen_for_each_window (Screen screen) {
             foreach (var window in window_stack) {
                 window._screen = screen;
+                window.do_recursive_children ((child) => {
+                    child.redraw ();
+                    return null;
+                });
             }
         }
     }

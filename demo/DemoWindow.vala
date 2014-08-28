@@ -31,63 +31,36 @@ namespace EV3devKit {
         public signal void quit ();
 
         public DemoWindow () {
-            var vbox = new Box.vertical () {
+            var menu = new Menu () {
                 padding_left = 10,
                 padding_right = 10,
-                spacing = 0
-            };
-            var show_menu_window_button = new Button.with_label ("Menu") {
                 border = 0
             };
-            show_menu_window_button.pressed.connect (on_show_menu_window_button_pressed);
-            vbox.add (show_menu_window_button);
-            var show_grid_window_button = new Button.with_label ("Grid") {
-                border = 0
-            };
-            show_grid_window_button.pressed.connect (on_show_grid_window_button_pressed);
-            vbox.add (show_grid_window_button);
-            var show_text_entry_button = new Button.with_label ("TextEntry") {
-                border = 0
-            };
-            show_text_entry_button.pressed.connect (on_show_text_entry_window_button_pressed);
-            vbox.add (show_text_entry_button);
-            var show_dialog_button = new Button.with_label ("Dialog") {
-                border = 0
-            };
-            show_dialog_button.pressed.connect (on_show_dialog_button_pressed);
-            vbox.add (show_dialog_button);
-            var show_check_button_window_button = new Button.with_label ("CheckButton") {
-                border = 0
-            };
-            vbox.add (show_check_button_window_button);
-            show_check_button_window_button.pressed.connect (on_show_check_button_window_button_pressed);
-            var show_scroll_window_button = new Button.with_label ("Scroll") {
-                border = 0
-            };
-            vbox.add (show_scroll_window_button);
-            show_scroll_window_button.pressed.connect (on_show_scroll_button_pressed);
-            var quit_button = new Button.with_label ("Quit") {
-                border = 0
-            };
-            quit_button.pressed.connect (() => quit ());
-            vbox.add (quit_button);
-
-            var vscroll = new Scroll.vertical () {
-                scrollbar_visible = ScrollbarVisibility.ALWAYS_SHOW,
-                can_focus = false,
-                margin = 10
-            };
-            foreach (var child in vbox.children) {
-                var button = child as Button;
-                if (button == null)
-                    continue;
-                button.notify["has-focus"].connect (() => {
-                    if (button.has_focus)
-                        vscroll.scroll_to_child (button);
-                });
-            }
-            vscroll.add (vbox);
-            add (vscroll);
+            add (menu);
+            var fonts_menu_item = new MenuItem ("Fonts");
+            fonts_menu_item.button.pressed.connect (on_fonts_menu_item_button_pressed);
+            menu.add_menu_item (fonts_menu_item);
+            var menu_menu_item = new MenuItem ("Menu");
+            menu_menu_item.button.pressed.connect (on_menu_menu_item_button_pressed);
+            menu.add_menu_item (menu_menu_item);
+            var grid_menu_item = new MenuItem ("Grid");
+            grid_menu_item.button.pressed.connect (on_grid_menu_item_button_pressed);
+            menu.add_menu_item (grid_menu_item);
+            var text_entry_menu_item = new MenuItem ("TextEntry");
+            text_entry_menu_item.button.pressed.connect (on_text_entry_menu_item_button_pressed);
+            menu.add_menu_item (text_entry_menu_item);
+            var dialog_menu_item = new MenuItem ("Dialog");
+            dialog_menu_item.button.pressed.connect (on_dialog_menu_item_pressed);
+            menu.add_menu_item (dialog_menu_item);
+            var check_button_menu_item = new MenuItem ("CheckButton");
+            menu.add_menu_item (check_button_menu_item);
+            check_button_menu_item.button.pressed.connect (on_check_button_menu_item_button_pressed);
+            var scroll_menu_item = new MenuItem ("Scroll");
+            menu.add_menu_item (scroll_menu_item);
+            scroll_menu_item.button.pressed.connect (on_show_scroll_button_pressed);
+            var quit_menu_item = new MenuItem ("Quit");
+            quit_menu_item.button.pressed.connect (() => quit ());
+            menu.add_menu_item (quit_menu_item);
         }
 
         public override bool key_pressed (uint key_code) {
@@ -97,7 +70,7 @@ namespace EV3devKit {
             return base.key_pressed (key_code);
         }
 
-        void on_show_dialog_button_pressed () {
+        void on_dialog_menu_item_pressed () {
             var dialog = new Dialog ();
             // make us a nice little title bar
             var title_label = new Label ("Dialog") {
@@ -106,7 +79,7 @@ namespace EV3devKit {
             };
             var message_spacer = new Spacer ();
             var message_label = new Label (
-                "You pressed the show_dialog_button. "
+                "You pressed the dialog_menu_item. "
                 + "This is what a dialog looks like.");
             // a little trick to have twice as much space below the message as above the message.
             var button_spacer1 = new Spacer ();
@@ -133,7 +106,7 @@ namespace EV3devKit {
             screen.push_window (dialog);
         }
 
-        void on_show_check_button_window_button_pressed () {
+        void on_check_button_menu_item_button_pressed () {
             var window = new Window ();
             var vbox = new Box.vertical () {
                 margin = 10
@@ -274,7 +247,7 @@ namespace EV3devKit {
             screen.push_window (window);
         }
 
-        void on_show_text_entry_window_button_pressed () {
+        void on_text_entry_menu_item_button_pressed () {
             var window = new Window ();
             var vbox = new Box.vertical () {
                 margin = 10
@@ -295,7 +268,7 @@ namespace EV3devKit {
             screen.push_window (window);
         }
 
-        void on_show_grid_window_button_pressed () {
+        void on_grid_menu_item_button_pressed () {
             var window = new Window ();
             var grid = new Grid (3, 4) {
                 margin = 5,
@@ -344,7 +317,7 @@ namespace EV3devKit {
             screen.push_window (window);
         }
 
-        void on_show_menu_window_button_pressed () {
+        void on_menu_menu_item_button_pressed () {
             int count = 1;
             var window = new Window ();
             var menu = new Menu () {
@@ -365,6 +338,62 @@ namespace EV3devKit {
             var checkbox_menu_item = new CheckboxMenuItem ("Checkbox Item");
             menu.add_menu_item (checkbox_menu_item);
             screen.push_window (window);
+        }
+
+        Font[] font_storage;
+        void on_fonts_menu_item_button_pressed () {
+            const string font_dir_path = "/usr/share/grx/fonts";
+
+            try {
+                var font_dir = Dir.open (font_dir_path);
+                string? file_name = null;
+                var font_list = new Gee.LinkedList<string> ();
+
+                var window = new Window ();
+                var vscroll = new Scroll.vertical () {
+                    scroll_amount = 64
+                };
+                window.add (vscroll);
+                var vbox = new Box.vertical ();
+                vscroll.add (vbox);
+                while ((file_name = font_dir.read_name ()) != null)
+                    font_list.add (file_name);
+                font_list.sort ();
+                font_storage = new Font[font_list.size];
+                var index = 0;
+                foreach (var font_name in font_list) {
+                    var font = Font.load (font_name);
+                    if (font == null)
+                        continue;
+                    var label = new Label (font.name.replace (".fnt", "")) {
+                        font = font
+                        //font = Font.default
+                    };
+                    vbox.add (label);
+                    font_storage[index++] = (owned)font;
+                }
+                screen.push_window (window);
+            } catch (Error err) {
+                var dialog = new Dialog ();
+                var vbox = new Box.vertical ();
+                dialog.add (vbox);
+                var vscroll = new Scroll.vertical () {
+                    border = 0,
+                    margin = 10,
+                    min_height = 80,
+                    // FIXME: focus does not work here
+                    can_focus = false
+                };
+                vbox.add (vscroll);
+                var label = new Label (err.message);
+                vscroll.add (label);
+                var ok_button = new Button.with_label ("OK") {
+                    horizontal_align = WidgetAlign.CENTER
+                };
+                ok_button.pressed.connect (() => screen.pop_window ());
+                vbox.add (ok_button);
+                screen.push_window (dialog);
+            }
         }
     }
 }

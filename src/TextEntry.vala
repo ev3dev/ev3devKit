@@ -64,7 +64,8 @@ namespace EV3devKit {
             this.text = text;
             label = new Label () {
                 text_horizontal_align = TextHorizAlign.LEFT,
-                text_vertical_align = TextVertAlign.TOP
+                text_vertical_align = TextVertAlign.TOP,
+                font = Font.pc6x8
             };
             can_focus = true;
             border = 1;
@@ -217,6 +218,7 @@ namespace EV3devKit {
                 label.text = text;
                 text_offset = 0;
             } else {
+                // FIXME: draw elipsis (...) or arrows instead of using text for contrinue left/right
                 if (!editing && text_offset > CONTINUE_LEFT.length)
                     cursor_offset = text_offset;
                 if (editing && cursor_offset < text_offset)
@@ -266,7 +268,8 @@ namespace EV3devKit {
             cursor_offset = int.min (cursor_offset, text.length - 1);
             cursor_x = content_bounds.x1;
             if (text.length > 0)
-                cursor_x += font.vala_string_width (label.text[0:continuation_offset + cursor_offset - text_offset]);
+                cursor_x += font.vala_string_width (
+                    label.text[0:continuation_offset + cursor_offset - text_offset]);
         }
 
         public override void redraw () {

@@ -51,6 +51,7 @@ namespace EV3devKit {
         public ScrollbarVisibility scrollbar_visible {
             get; set; default = ScrollbarVisibility.AUTO;
         }
+        public int scroll_amount { get; set; default = 8; }
 
         Scroll (ScrollDirection direction) {
             base (ContainerType.SINGLE);
@@ -117,10 +118,10 @@ namespace EV3devKit {
             if (has_focus) {
                 if ((direction == ScrollDirection.VERTICAL && key_code == Key.UP)
                     || (direction == ScrollDirection.HORIZONTAL && key_code == Key.LEFT))
-                    scroll_offset -= 8;
+                    scroll_offset -= _scroll_amount;
                 else if ((direction == ScrollDirection.VERTICAL && key_code == Key.DOWN)
                     || (direction == ScrollDirection.HORIZONTAL && key_code == Key.RIGHT))
-                    scroll_offset += 8;
+                    scroll_offset += _scroll_amount;
                 else
                     return base.key_pressed (key_code);
                 redraw ();
@@ -141,10 +142,11 @@ namespace EV3devKit {
                         || (scrollbar_visible == ScrollbarVisibility.AUTO
                             && child_height > content_bounds.height))
                     {
-                        child_height = child.get_preferred_height_for_width (content_bounds.width - SCROLLBAR_SIZE);
+                        child_height = child.get_preferred_height_for_width (
+                            content_bounds.width - SCROLLBAR_SIZE - padding_left);
                         draw_scrollbar = true;
                     }
-                    scroll_offset = int.min (scroll_offset, child_height - content_bounds.height);
+                    scroll_offset = int.min (scroll_offset, child_height - content_bounds.height + 1);
                     scroll_offset = int.max (0, scroll_offset);
                     if (child_height == 0) {
                         scroll_indicator_size = content_bounds.height - 2;
@@ -152,7 +154,9 @@ namespace EV3devKit {
                     } else {
                         scroll_indicator_size = int.min (content_bounds.height,
                             content_bounds.height * content_bounds.height / child_height) - 2;
-                        scroll_indicator_offset = content_bounds.height * scroll_offset / child_height;
+                        scroll_indicator_size = int.max (scroll_indicator_size, 8);
+                        scroll_indicator_offset = (content_bounds.height - scroll_indicator_size - 2)
+                            * scroll_offset / (child_height - content_bounds.height);
                     }
                     set_child_bounds (child, content_bounds.x1, content_bounds.y1 - scroll_offset,
                         content_bounds.x2 - (draw_scrollbar ? SCROLLBAR_SIZE + padding_right + 1 : 0),
@@ -172,10 +176,11 @@ namespace EV3devKit {
                         || (scrollbar_visible == ScrollbarVisibility.AUTO
                             && child_width > content_bounds.height))
                     {
-                        child_width = child.get_preferred_width_for_height (content_bounds.height - SCROLLBAR_SIZE);
+                        child_width = child.get_preferred_width_for_height (
+                            content_bounds.height - SCROLLBAR_SIZE - padding_bottom);
                         draw_scrollbar = true;
                     }
-                    scroll_offset = int.min (scroll_offset, child_width - content_bounds.width);
+                    scroll_offset = int.min (scroll_offset, child_width - content_bounds.width + 1);
                     scroll_offset = int.max (0, scroll_offset);
                     if (child_width == 0) {
                         scroll_indicator_size = content_bounds.width - 2;
@@ -183,7 +188,9 @@ namespace EV3devKit {
                     } else {
                         scroll_indicator_size = int.min(content_bounds.width,
                             content_bounds.width * content_bounds.width / child_width) - 2;
-                        scroll_indicator_offset = content_bounds.width * scroll_offset / child_width;
+                        scroll_indicator_size = int.max (scroll_indicator_size, 8);
+                        scroll_indicator_offset = (content_bounds.width - scroll_indicator_size - 2)
+                            * scroll_offset / (child_width - content_bounds.width);
                     }
                     set_child_bounds (child, content_bounds.x1 - scroll_offset, content_bounds.y1,
                         content_bounds.x1 - scroll_offset + child_width -1,

@@ -316,6 +316,13 @@ namespace EV3devKit {
         }
 
         public void draw () {
+            int x1;
+            int y1;
+            int x2;
+            int y2;
+            get_clip_box (out x1, out y1, out x2, out y2);
+            if (bounds.x1 > x2 || bounds.y1 > y2 || bounds.x2 < x1 || bounds.y2 < y1)
+                return;
             do_layout ();
             draw_background ();
             draw_content ();

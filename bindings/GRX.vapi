@@ -1079,9 +1079,6 @@ namespace GRX {
     [CCode (cname = "struct _GR_font", free_function = "GrUnloadFont", has_type_id = false)]
     [Compact]
     public class Font {
-        [CCode (cname = "struct _GR_font", destroy_function = "", has_type_id = false)]
-        struct MallocStruct {}
-
         [CCode (cname = "&GrFont_PC6x8")]
         public static unowned Font pc6x8;
         [CCode (cname = "&GrFont_PC8x8")]
@@ -1098,13 +1095,13 @@ namespace GRX {
         [CCode (cname = "h.family")]
         public string family;
         [CCode (cname = "h.proportional")]
-        public char proportional;
+        public bool proportional;
         [CCode (cname = "h.scalable")]
-        public char scalable;
+        public bool scalable;
         [CCode (cname = "h.prelaoded")]
-        public char prelaoded;
+        public bool prelaoded;
         [CCode (cname = "h.modified")]
-        public char modified;
+        public bool modified;
         [CCode (cname = "h.width")]
         public uint width;
         [CCode (cname = "h.height")]
