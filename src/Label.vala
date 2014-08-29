@@ -67,7 +67,7 @@ namespace EV3devKit {
         }
 
         public override int get_preferred_width () {
-            return font.vala_string_width (text) + get_margin_border_padding_width ();
+            return font.vala_string_width (text ?? "") + get_margin_border_padding_width ();
         }
         public override int get_preferred_height () {
             return (int)font.height + get_margin_border_padding_height ();
@@ -125,6 +125,8 @@ namespace EV3devKit {
         }
 
         protected override void draw_content () {
+            if (_text == null)
+                return;
             if (has_focus || parent.draw_children_as_focused)
                 text_option.fg_color = (TextColor)window.screen.bg_color;
             else

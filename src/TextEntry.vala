@@ -110,7 +110,7 @@ namespace EV3devKit {
         }
 
         public override int get_preferred_width () {
-            return int.max (min_width, font.vala_string_width (text)
+            return int.max (min_width, font.vala_string_width (text ?? "")
                 + get_margin_border_padding_width ());
         }
 
@@ -214,7 +214,7 @@ namespace EV3devKit {
             should_inc_text_offset_with_cursor = false;
 
             // don't need to do fancy calculations if we are not out of bounds.
-            if (font.vala_string_width (text) <= content_bounds.width) {
+            if (font.vala_string_width (text ?? "") <= content_bounds.width) {
                 label.text = text;
                 text_offset = 0;
             } else {
