@@ -80,8 +80,8 @@ namespace EV3devKit {
                 release_console ();
                 error ("%s", e.message);
             }
-
             main_loop = new MainLoop ();
+            screen = new Screen ();
         }
 
         public void run () {

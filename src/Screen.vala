@@ -25,7 +25,7 @@ using Gee;
 using GRX;
 
 namespace EV3devKit {
-    public abstract class Screen : Object {
+    public class Screen : Object {
         protected LinkedList<Window> window_stack;
         LinkedList<uint?> key_queue;
         protected Context context;

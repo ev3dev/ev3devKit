@@ -24,7 +24,6 @@ if(EV3DEVKIT_DESKTOP)
 else(EV3DEVKIT_DESKTOP)
     set (EV3DEV_TK_SOURCE_FILES
         demo/main.vala
-        src/ev3/EV3Screen.vala
         src/ConsoleApp.vala
     )
 endif(EV3DEVKIT_DESKTOP)

@@ -27,7 +27,6 @@ namespace EV3devKit {
 
         ConsoleApp.init ();
 
-        ConsoleApp.screen = new EV3Screen ();
         var demo_window = new DemoWindow ();
         demo_window.quit.connect (ConsoleApp.quit);
         ConsoleApp.screen.push_window (demo_window);
