@@ -201,80 +201,55 @@ namespace EV3devKit {
             return true;
         }
 
-        public virtual void focus_next (FocusDirection direction) {
+        public void focus_next (FocusDirection direction) {
+            if (window == null)
+                return;
             weak Widget best = this;
+            int best_distance = 2 * (window.content_bounds.width + window.content_bounds.height);
             window.do_recursive_children ((widget) => {
                 if (widget == this || !widget.can_focus)
                     return null;
+                int widget_distance_x = 0;
+                if (widget.border_bounds.x1 > border_bounds.x1 || widget.border_bounds.x2 < border_bounds.x2)
+                    widget_distance_x = ((widget.border_bounds.x1 + widget.border_bounds.x2)
+                        - (border_bounds.x1 + border_bounds.x2)).abs ();
+                int widget_distance_y = 0;
+                if (widget.border_bounds.y1 > border_bounds.y1 || widget.border_bounds.y2 < border_bounds.y2)
+                    widget_distance_y = ((widget.border_bounds.y1 + widget.border_bounds.y2)
+                        - (border_bounds.y1 + border_bounds.y2)).abs ();
                 switch (direction) {
                 case FocusDirection.UP:
-                    if (widget.bounds.y2 < bounds.y1 && best.bounds.y2 >= bounds.y1) {
-                        best = widget;
-                        return null;
-                    } else if (widget.bounds.y2 >= bounds.y1 && best.bounds.y2 < bounds.y1) {
-                        return null;
-                    } else if (widget.bounds.y1 > best.bounds.y2) {
-                        best = widget;
-                        return null;
-                    } else if (widget.bounds.y2 >= best.bounds.y2
-                        && ((widget.bounds.x1 + widget.bounds.x2) - (bounds.x1 + bounds.x2)).abs ()
-                            < ((best.bounds.x1 + best.bounds.x2) - (bounds.x1 + bounds.x2)).abs ())
-                    {
-                        best = widget;
-                        return null;
-                    }
+                    widget_distance_y = 2 * (widget.border_bounds.y2 - border_bounds.y1).abs ();
+                    if (widget.border_bounds.y1 >= border_bounds.y1)
+                        widget_distance_y = 2 * window.content_bounds.height - widget_distance_y;
+                    if (widget.border_bounds.x1 > border_bounds.x2 || widget.border_bounds.x2 < border_bounds.x1)
+                        widget_distance_x *= window.content_bounds.width;
                     break;
                 case FocusDirection.DOWN:
-                    if (widget.bounds.y1 > bounds.y2 && best.bounds.y1 <= bounds.y2) {
-                        best = widget;
-                        return null;
-                    } else if (widget.bounds.y1 <= bounds.y2 && best.bounds.y1 > bounds.y2) {
-                        return null;
-                    } else if (widget.bounds.y2 < best.bounds.y1) {
-                        best = widget;
-                        return null;
-                    } else if (widget.bounds.y1 <= best.bounds.y1
-                        && ((widget.bounds.x1 + widget.bounds.x2) - (bounds.x1 + bounds.x2)).abs ()
-                            < ((best.bounds.x1 + best.bounds.x2) - (bounds.x1 + bounds.x2)).abs ())
-                    {
-                        best = widget;
-                        return null;
-                    }
+                    widget_distance_y = 2 * (widget.border_bounds.y1 - border_bounds.y2).abs ();
+                    if (widget.border_bounds.y2 <= border_bounds.y2)
+                        widget_distance_y = 2 * window.content_bounds.height - widget_distance_y;
+                    if (widget.border_bounds.x1 > border_bounds.x2 || widget.border_bounds.x2 < border_bounds.x1)
+                        widget_distance_x *= window.content_bounds.width;
                     break;
                 case FocusDirection.LEFT:
-                    if (widget.bounds.x2 < bounds.x1 && best.bounds.x2 >= bounds.x1) {
-                        best = widget;
-                        return null;
-                    } else if (widget.bounds.x2 >= bounds.x1 && best.bounds.x2 < bounds.x1) {
-                        return null;
-                    } else if (widget.bounds.x1 > best.bounds.x2) {
-                        best = widget;
-                        return null;
-                    } else if (widget.bounds.x2 >= best.bounds.x2
-                        && ((widget.bounds.y1 + widget.bounds.y2) - (bounds.y1 + bounds.y2)).abs ()
-                            < ((best.bounds.y1 + best.bounds.y2) - (bounds.y1 + bounds.y2)).abs ())
-                    {
-                        best = widget;
-                        return null;
-                    }
+                    widget_distance_x = 2 * (widget.border_bounds.x2 - border_bounds.x1).abs ();
+                    if (widget.border_bounds.x1 >= border_bounds.x1)
+                        widget_distance_x = 2 * window.content_bounds.width - widget_distance_x;
+                    if (widget.border_bounds.y1 > border_bounds.y2 || widget.border_bounds.y2 < border_bounds.y1)
+                        widget_distance_y *= window.content_bounds.height;
                     break;
                 case FocusDirection.RIGHT:
-                    if (widget.bounds.x1 > bounds.x2 && best.bounds.x1 <= bounds.x2) {
-                        best = widget;
-                        return null;
-                    } else if (widget.bounds.x1 <= bounds.x2 && best.bounds.x1 > bounds.x2) {
-                        return null;
-                    } else if (widget.bounds.x2 < best.bounds.x1) {
-                        best = widget;
-                        return null;
-                    } else if (widget.bounds.x1 <= best.bounds.x1
-                        && ((widget.bounds.y1 + widget.bounds.y2) - (bounds.y1 + bounds.y2)).abs ()
-                            < ((best.bounds.y1 + best.bounds.y2) - (bounds.y1 + bounds.y2)).abs ())
-                    {
-                        best = widget;
-                        return null;
-                    }
+                    widget_distance_x = 2 * (widget.border_bounds.x1 - border_bounds.x2).abs ();
+                    if (widget.border_bounds.x2 <= border_bounds.x2)
+                        widget_distance_x = 2 * window.content_bounds.width - widget_distance_x;
+                    if (widget.border_bounds.y1 > border_bounds.y2 || widget.border_bounds.y2 < border_bounds.y1)
+                        widget_distance_y *= window.content_bounds.height;
                     break;
+                }
+                if ((widget_distance_x + widget_distance_y) < best_distance) {
+                    best = widget;
+                    best_distance = widget_distance_x + widget_distance_y;
                 }
                 return null;
             });
@@ -291,7 +266,7 @@ namespace EV3devKit {
                     else if (first == null)
                         first = widget;
                     return null;
-                });
+                }, direction == FocusDirection.UP || direction == FocusDirection.LEFT);
                 best = next ?? first;
             }
             if (best != null)
