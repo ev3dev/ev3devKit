@@ -25,6 +25,11 @@ namespace EV3devKit {
     public class Menu : EV3devKit.Scroll {
         Box menu_vbox;
 
+        public int spacing {
+            get { return menu_vbox.spacing; }
+            set { menu_vbox.spacing = value; }
+        }
+
         public Menu () {
             base.vertical ();
             can_focus = false;
