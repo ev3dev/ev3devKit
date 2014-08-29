@@ -201,10 +201,101 @@ namespace EV3devKit {
             return true;
         }
 
-        public virtual bool focus_next (FocusDirection direction) {
-            if (parent != null && parent.focus_next (direction))
-                return true;
-            return false;
+        public virtual void focus_next (FocusDirection direction) {
+            weak Widget best = this;
+            window.do_recursive_children ((widget) => {
+                if (widget == this || !widget.can_focus)
+                    return null;
+                switch (direction) {
+                case FocusDirection.UP:
+                    if (widget.bounds.y2 < bounds.y1 && best.bounds.y2 >= bounds.y1) {
+                        best = widget;
+                        return null;
+                    } else if (widget.bounds.y2 >= bounds.y1 && best.bounds.y2 < bounds.y1) {
+                        return null;
+                    } else if (widget.bounds.y1 > best.bounds.y2) {
+                        best = widget;
+                        return null;
+                    } else if (widget.bounds.y2 >= best.bounds.y2
+                        && ((widget.bounds.x1 + widget.bounds.x2) - (bounds.x1 + bounds.x2)).abs ()
+                            < ((best.bounds.x1 + best.bounds.x2) - (bounds.x1 + bounds.x2)).abs ())
+                    {
+                        best = widget;
+                        return null;
+                    }
+                    break;
+                case FocusDirection.DOWN:
+                    if (widget.bounds.y1 > bounds.y2 && best.bounds.y1 <= bounds.y2) {
+                        best = widget;
+                        return null;
+                    } else if (widget.bounds.y1 <= bounds.y2 && best.bounds.y1 > bounds.y2) {
+                        return null;
+                    } else if (widget.bounds.y2 < best.bounds.y1) {
+                        best = widget;
+                        return null;
+                    } else if (widget.bounds.y1 <= best.bounds.y1
+                        && ((widget.bounds.x1 + widget.bounds.x2) - (bounds.x1 + bounds.x2)).abs ()
+                            < ((best.bounds.x1 + best.bounds.x2) - (bounds.x1 + bounds.x2)).abs ())
+                    {
+                        best = widget;
+                        return null;
+                    }
+                    break;
+                case FocusDirection.LEFT:
+                    if (widget.bounds.x2 < bounds.x1 && best.bounds.x2 >= bounds.x1) {
+                        best = widget;
+                        return null;
+                    } else if (widget.bounds.x2 >= bounds.x1 && best.bounds.x2 < bounds.x1) {
+                        return null;
+                    } else if (widget.bounds.x1 > best.bounds.x2) {
+                        best = widget;
+                        return null;
+                    } else if (widget.bounds.x2 >= best.bounds.x2
+                        && ((widget.bounds.y1 + widget.bounds.y2) - (bounds.y1 + bounds.y2)).abs ()
+                            < ((best.bounds.y1 + best.bounds.y2) - (bounds.y1 + bounds.y2)).abs ())
+                    {
+                        best = widget;
+                        return null;
+                    }
+                    break;
+                case FocusDirection.RIGHT:
+                    if (widget.bounds.x1 > bounds.x2 && best.bounds.x1 <= bounds.x2) {
+                        best = widget;
+                        return null;
+                    } else if (widget.bounds.x1 <= bounds.x2 && best.bounds.x1 > bounds.x2) {
+                        return null;
+                    } else if (widget.bounds.x2 < best.bounds.x1) {
+                        best = widget;
+                        return null;
+                    } else if (widget.bounds.x1 <= best.bounds.x1
+                        && ((widget.bounds.y1 + widget.bounds.y2) - (bounds.y1 + bounds.y2)).abs ()
+                            < ((best.bounds.y1 + best.bounds.y2) - (bounds.y1 + bounds.y2)).abs ())
+                    {
+                        best = widget;
+                        return null;
+                    }
+                    break;
+                }
+                return null;
+            });
+            if (best == this) {
+                var found_this = false;
+                weak Widget first = null;
+                var next = window.do_recursive_children ((widget) => {
+                    if (!widget.can_focus)
+                        return null;
+                    if (found_this)
+                        return widget;
+                    if (widget == this)
+                        found_this = true;
+                    else if (first == null)
+                        first = widget;
+                    return null;
+                });
+                best = next ?? first;
+            }
+            if (best != null)
+                best.focus ();
         }
 
         /* tree traversal functions */
@@ -350,11 +441,7 @@ namespace EV3devKit {
                 default:
                     return false;
                 }
-                do_recursive_parent ((widget) => {
-                    if (widget.focus_next (direction))
-                        return widget;
-                    return null;
-                });
+                focus_next (direction);
                 Signal.stop_emission_by_name (this, "key-pressed");
                 return true;
             }

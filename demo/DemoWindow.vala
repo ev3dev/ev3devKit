@@ -212,21 +212,6 @@ namespace EV3devKit {
             var vscroll = new Scroll.vertical () {
                 min_height = 70
             };
-            weak Scroll weak_vscroll = vscroll;
-            vscroll.key_pressed.connect ((key_code) => {
-                if (weak_vscroll.has_focus) {
-                    if (key_code == Key.LEFT || key_code == Key.RIGHT) {
-                        weak_vscroll.do_recursive_parent ((widget) => {
-                            if (widget.focus_next (FocusDirection.DOWN))
-                                return widget;
-                            return null;
-                        });
-                        Signal.stop_emission_by_name (weak_vscroll, "key-pressed");
-                        return true;
-                    }
-                }
-                return false;
-            });
             var vscroll_content = new Label ("This is a vertical scroll container."
                 + " It can be used when you have too much stuff to fit on the screen"
                 + " at one time. It is best to not have anything else that can_focus"

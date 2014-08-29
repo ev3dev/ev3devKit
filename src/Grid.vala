@@ -184,65 +184,6 @@ namespace EV3devKit {
             }
         }
 
-        public override bool focus_next (FocusDirection direction) {
-            var focused_widget = do_recursive_children ((widget) => {
-                if (widget.has_focus)
-                    return widget;
-                return null;
-            });
-            if (focused_widget == null) {
-                if (parent != null && parent.focus_next (direction))
-                    return true;
-                return false;
-            }
-            var focused_position = position_map[focused_widget];
-            var row_inc = 0;
-            var col_inc = 0;
-            switch (direction) {
-            case FocusDirection.UP:
-                row_inc = -1;
-                break;
-            case FocusDirection.DOWN:
-                row_inc = span_map[focused_widget].row;
-                break;
-            case FocusDirection.LEFT:
-                col_inc = -1;
-                break;
-            case FocusDirection.RIGHT:
-                col_inc = span_map[focused_widget].col;
-                break;
-            default:
-                critical ("Bad focus direction");
-                return false;
-            }
-
-            int row = focused_position.row + row_inc;
-            int col = focused_position.col + col_inc;
-            while (row != focused_position.row || col != focused_position.col) {
-                if (row < 0 || row >= size.row || col < 0 || col >= size.col) {
-                    if (parent != null && parent.focus_next (direction))
-                        return true;
-                    // wrap around end of rows and columns
-                    row = (size.row + row) % size.row;
-                    col = (size.col + col) % size.col;
-                }
-                var widget = grid[row,col];
-                if (widget == null) {
-                    row += row_inc;
-                    col += col_inc;
-                    continue;
-                }
-                if (widget.can_focus) {
-                    widget.focus ();
-                    return true;
-                }
-                row += row_inc == -1 ? -1 :  span_map[widget].row;
-                col += col_inc == -1 ? -1 : span_map[widget].col;
-            }
-
-            return false;
-        }
-
         protected override void do_layout () {
             cells = new Rectangle[size.row,size.col];
             int cell_x = content_bounds.x1;
