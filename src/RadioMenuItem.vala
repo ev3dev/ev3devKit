@@ -19,13 +19,13 @@
  * MA 02110-1301, USA.
  */
 
-/* CheckboxMenuItem.vala - Menu item used by Menu widget that has a checkbox */
+/* RadioMenuItem.vala - Menu items used by Menu widget with radio button */
 
 namespace EV3devKit {
-    public class CheckboxMenuItem : EV3devKit.MenuItem {
-        public CheckButton checkbox { get; private set; }
+    public class RadioMenuItem : EV3devKit.MenuItem {
+        public CheckButton radio { get; private set; }
 
-        public CheckboxMenuItem (string text) {
+        public RadioMenuItem (string text, CheckButtonGroup group) {
             base.with_button (new Button () {
                 border = 0
             }, new Label (text));
@@ -33,12 +33,12 @@ namespace EV3devKit {
             button.add (hbox);
             hbox.add (label);
             hbox.add (new Spacer ());
-            checkbox = new CheckButton.checkbox () {
+            radio = new CheckButton.radio (group) {
                 padding = 0,
                 can_focus = false
             };
-            hbox.add (checkbox);
-            button.pressed.connect (() => checkbox.checked = !checkbox.checked);
+            hbox.add (radio);
+            button.pressed.connect (() => radio.checked = !radio.checked);
         }
     }
 }

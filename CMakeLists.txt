@@ -42,6 +42,7 @@ set (EV3DEV_TK_COMMON_SOURCE_FILES
     src/Menu.vala
     src/MenuItem.vala
     src/OnScreenKeyboard.vala
+    src/RadioMenuItem.vala
     src/Rectangle.vala
     src/Screen.vala
     src/Scroll.vala

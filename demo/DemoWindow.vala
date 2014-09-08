@@ -309,6 +309,14 @@ namespace EV3devKit {
                 margin = 10
             };
             window.add (menu);
+            var checkbox_menu_item = new CheckboxMenuItem ("Checkbox Item");
+            menu.add_menu_item (checkbox_menu_item);
+            var radio_group = new CheckButtonGroup ();
+            var radio1_menu_item = new RadioMenuItem ("Radio1", radio_group);
+            menu.add_menu_item (radio1_menu_item);
+            var radio2_menu_item = new RadioMenuItem ("Radio1", radio_group);
+            menu.add_menu_item (radio2_menu_item);
+            radio1_menu_item.radio.checked = true;
             var add_new_menu_item = new MenuItem ("Add new item");
             weak Menu weak_menu = menu;
             add_new_menu_item.button.pressed.connect (() => {
@@ -320,8 +328,6 @@ namespace EV3devKit {
                 weak_menu.add_menu_item (new_item);
             });
             menu.add_menu_item (add_new_menu_item);
-            var checkbox_menu_item = new CheckboxMenuItem ("Checkbox Item");
-            menu.add_menu_item (checkbox_menu_item);
             screen.push_window (window);
         }
 
