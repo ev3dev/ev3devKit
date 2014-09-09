@@ -117,5 +117,23 @@ namespace EV3devKit {
             }
             return false;
         }
+
+        public MenuItemIterator menu_item_iter () {
+            return new MenuItemIterator (this);
+        }
+
+        public class MenuItemIterator {
+            Menu menu;
+
+            internal MenuItemIterator (Menu menu) {
+                this.menu = menu;
+            }
+
+            public int size { get { return menu.menu_vbox.children.size; } }
+
+            public MenuItem get (int index) {
+                return menu.menu_vbox.children[index].weak_represented_object as MenuItem;
+            }
+        }
     }
 }
