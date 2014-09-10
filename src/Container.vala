@@ -151,6 +151,22 @@ namespace EV3devKit {
             }
         }
 
+        /**
+         * Focuses the first descendant of the container that can focus
+         * @return false if no descendants can focus
+         */
+        public bool focus_first () {
+            var focus_widget = do_recursive_children ((widget) => {
+                if (widget.can_focus) {
+                    if (!widget.focus ())
+                        return null;
+                    return widget;
+                }
+                return null;
+            });
+            return focus_widget != null;
+        }
+
         protected void set_child_bounds (Widget child, int x1, int y1, int x2, int y2) {
             var width = x2 - x1 + 1;
             var height = y2 - y1 + 1;

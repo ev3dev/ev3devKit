@@ -73,13 +73,7 @@ namespace EV3devKit {
 
         void on_first_shown () {
             shown.disconnect (on_first_shown);
-            var focus_widget = do_recursive_children ((widget) => {
-                if (widget.can_focus)
-                    return widget;
-                return null;
-            });
-            if (focus_widget != null)
-                focus_widget.focus ();
+            focus_first ();
         }
     }
 }
