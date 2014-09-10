@@ -207,10 +207,10 @@ namespace EV3devKit {
             var window = new Window ();
             var vbox = new Box.vertical () {
                 margin = 10,
-                spacing = 10
+                spacing = 5
             };
             var vscroll = new Scroll.vertical () {
-                min_height = 70
+                max_preferred_height = 78
             };
             var vscroll_content = new Label ("This is a vertical scroll container."
                 + " It can be used when you have too much stuff to fit on the screen"
@@ -222,9 +222,7 @@ namespace EV3devKit {
             };
             vscroll.add (vscroll_content);
             vbox.add (vscroll);
-            var hscroll = new Scroll.horizontal () {
-                min_height = 23
-            };
+            var hscroll = new Scroll.horizontal ();
             var hscroll_content = new Label ("You can also scroll stuff horizontally.");
             hscroll.add (hscroll_content);
             vbox.add (hscroll);
@@ -371,7 +369,6 @@ namespace EV3devKit {
                 var vscroll = new Scroll.vertical () {
                     border = 0,
                     margin = 10,
-                    min_height = 80,
                     // FIXME: focus does not work here
                     can_focus = false
                 };

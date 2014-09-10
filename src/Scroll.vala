@@ -46,8 +46,8 @@ namespace EV3devKit {
         int scroll_indicator_offset;
         bool draw_scrollbar;
 
-        public int min_height { get; set; default = 100; }
-        public int min_width { get; set; default = 100; }
+        public int max_preferred_height { get; set; default = 100; }
+        public int max_preferred_width { get; set; default = 100; }
         public ScrollbarVisibility scrollbar_visible {
             get; set; default = ScrollbarVisibility.AUTO;
         }
@@ -99,19 +99,47 @@ namespace EV3devKit {
         }
 
         public override int get_preferred_width () {
-            return _min_width;
+            var result =  base.get_preferred_width () + get_margin_border_padding_width ();
+            if (direction == ScrollDirection.VERTICAL && scrollbar_visible != ScrollbarVisibility.ALWAYS_HIDE)
+                result += SCROLLBAR_SIZE;
+            else if (direction == ScrollDirection.HORIZONTAL)
+                result = int.min (result, _max_preferred_width);
+            return result;
         }
 
         public override int get_preferred_height () {
-            return _min_height;
+            var result =  base.get_preferred_height () + get_margin_border_padding_height ();
+            if (direction == ScrollDirection.HORIZONTAL && scrollbar_visible != ScrollbarVisibility.ALWAYS_HIDE)
+                result += SCROLLBAR_SIZE;
+            else if (direction == ScrollDirection.VERTICAL)
+                result = int.min (result, _max_preferred_height);
+            return result;
         }
 
         public override int get_preferred_width_for_height (int height) requires (height > 0) {
-            return _min_width;
+            var result =  get_margin_border_padding_width ();
+            if (direction == ScrollDirection.VERTICAL)
+                result += base.get_preferred_width ();
+            else
+                result += base.get_preferred_width_for_height (height);
+            if (direction == ScrollDirection.VERTICAL && scrollbar_visible == ScrollbarVisibility.ALWAYS_SHOW)
+                result += SCROLLBAR_SIZE;
+            else if (direction == ScrollDirection.HORIZONTAL)
+                result = int.min (result, _max_preferred_width);
+            return result;
         }
 
         public override int get_preferred_height_for_width (int width) requires (width > 0) {
-            return _min_height;
+            var result =  get_margin_border_padding_height ();
+            if (direction == ScrollDirection.HORIZONTAL)
+                result += base.get_preferred_height ();
+            else
+                result += base.get_preferred_height_for_width (width);
+            if (direction == ScrollDirection.HORIZONTAL && scrollbar_visible != ScrollbarVisibility.ALWAYS_HIDE)
+                result += SCROLLBAR_SIZE;
+            else if (direction == ScrollDirection.VERTICAL)
+                result = int.min (result, _max_preferred_height);
+            return result;
         }
 
         protected override bool key_pressed (uint key_code) {
