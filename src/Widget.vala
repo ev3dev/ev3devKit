@@ -134,12 +134,12 @@ namespace EV3devKit {
             notify["can-focus"].connect (redraw);
             notify["has-focus"].connect (redraw);
             widget_count++;
-            debug ("Created %s widget: %p", get_type ().name (), this);
+            //debug ("Created %s widget: %p", get_type ().name (), this);
         }
 
         ~Widget () {
-            debug ("Finalized %s widget %p", get_type ().name (), this);
-            debug ("Widget count %d", --widget_count);
+            //debug ("Finalized %s widget %p", get_type ().name (), this);
+            //debug ("Widget count %d", --widget_count);
         }
 
         /* layout functions */
