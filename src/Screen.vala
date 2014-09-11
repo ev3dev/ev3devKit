@@ -34,12 +34,19 @@ namespace EV3devKit {
         internal Color bg_color;
         internal Color mid_color;
 
-        public int width { get; private set; }
-        public int height { get; private set; }
+        public int width { get; protected set; }
+        public int height { get; protected set; }
+        public int window_height {
+            get { return height - window_y; }
+        }
+        public int window_y {
+            get { return status_bar.visible ? StatusBar.HEIGHT : 0; }
+        }
         public bool dirty { get; set; default = true; }
         public Window? top_window {
             owned get { return window_stack.peek_tail (); }
         }
+        public StatusBar status_bar { get; protected set; }
 
         public Screen () {
             this.custom (screen_x () - 1, screen_y () - 1);
@@ -48,6 +55,8 @@ namespace EV3devKit {
         public Screen.custom (int width, int height, char *context_mem_addr = null) {
             window_stack = new LinkedList<Window> ();
             key_queue = new LinkedList<uint?> ();
+            status_bar = new StatusBar ();
+            status_bar.screen = this;
             FrameMode mode = core_frame_mode ();
             if (mode == FrameMode.UNDEFINED)
                 mode = screen_frame_mode ();
@@ -155,6 +164,8 @@ namespace EV3devKit {
                     top_dialog.on_screen = true;
                     top_dialog.draw ();
                 }
+                if (_status_bar.visible)
+                    _status_bar.draw ();
                 dirty = false;
                 refresh ();
             }

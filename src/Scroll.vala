@@ -174,7 +174,7 @@ namespace EV3devKit {
                             content_bounds.width - SCROLLBAR_SIZE - padding_left);
                         draw_scrollbar = true;
                     }
-                    scroll_offset = int.min (scroll_offset, child_height - content_bounds.height + 1);
+                    scroll_offset = int.min (scroll_offset, child_height - content_bounds.height);
                     scroll_offset = int.max (0, scroll_offset);
                     if (child_height == 0) {
                         scroll_indicator_size = content_bounds.height - 2;
@@ -208,7 +208,7 @@ namespace EV3devKit {
                             content_bounds.height - SCROLLBAR_SIZE - padding_bottom);
                         draw_scrollbar = true;
                     }
-                    scroll_offset = int.min (scroll_offset, child_width - content_bounds.width + 1);
+                    scroll_offset = int.min (scroll_offset, child_width - content_bounds.width);
                     scroll_offset = int.max (0, scroll_offset);
                     if (child_width == 0) {
                         scroll_indicator_size = content_bounds.width - 2;

@@ -37,6 +37,9 @@ namespace EV3devKit {
                 border = 0
             };
             add (menu);
+            var status_bar_menu_item = new MenuItem ("Status Bar");
+            status_bar_menu_item.button.pressed.connect (on_status_bar_menu_item_button_pressed);
+            menu.add_menu_item (status_bar_menu_item);
             var fonts_menu_item = new MenuItem ("Fonts");
             fonts_menu_item.button.pressed.connect (on_fonts_menu_item_button_pressed);
             menu.add_menu_item (fonts_menu_item);
@@ -70,6 +73,28 @@ namespace EV3devKit {
             return base.key_pressed (key_code);
         }
 
+        void on_status_bar_menu_item_button_pressed () {
+            var window = new Window ();
+            var vbox = new Box.vertical () {
+                padding = 6
+            };
+            window.add (vbox);
+            var hbox = new Box.horizontal () {
+                spacing = 6
+            };
+            vbox.add (hbox);
+            var label = new Label ("Status bar visible");
+            hbox.add (label);
+            var visible_checkbox = new CheckButton.checkbox () {
+                checked = screen.status_bar.visible
+            };
+            weak CheckButton weak_visible_checkbox = visible_checkbox;
+            visible_checkbox.notify["checked"].connect (() =>
+                screen.status_bar.visible = weak_visible_checkbox.checked);
+            hbox.add (visible_checkbox);
+            screen.push_window (window);
+        }
+
         void on_dialog_menu_item_pressed () {
             var dialog = new Dialog ();
             // make us a nice little title bar
@@ -80,7 +105,9 @@ namespace EV3devKit {
             var message_spacer = new Spacer ();
             var message_label = new Label (
                 "You pressed the dialog_menu_item. "
-                + "This is what a dialog looks like.");
+                + "This is what a dialog looks like.") {
+                margin = 4
+            };
             // a little trick to have twice as much space below the message as above the message.
             var button_spacer1 = new Spacer ();
             var button_spacer2 = new Spacer ();
@@ -210,7 +237,7 @@ namespace EV3devKit {
                 spacing = 5
             };
             var vscroll = new Scroll.vertical () {
-                max_preferred_height = 78
+                max_preferred_height = 62
             };
             var vscroll_content = new Label ("This is a vertical scroll container."
                 + " It can be used when you have too much stuff to fit on the screen"
@@ -340,7 +367,8 @@ namespace EV3devKit {
 
                 var window = new Window ();
                 var vscroll = new Scroll.vertical () {
-                    scroll_amount = 64
+                    scroll_amount = 64,
+                    border = 0
                 };
                 window.add (vscroll);
                 var vbox = new Box.vertical ();

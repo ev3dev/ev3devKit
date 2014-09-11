@@ -57,7 +57,8 @@ namespace EV3devKit {
         }
 
         protected override void do_layout () {
-            set_bounds (0, 0, Context.current.x_max, Context.current.y_max);
+            set_bounds (0, _screen.window_y, _screen.width - 1,
+                _screen.window_y + _screen.window_height - 1);
             base.do_layout ();
         }
 

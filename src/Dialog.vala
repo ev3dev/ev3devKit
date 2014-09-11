@@ -28,15 +28,22 @@ namespace EV3devKit {
     public class Dialog : EV3devKit.Window {
         
         public Dialog () {
-            margin = 12;
+            margin = 20;
             border = 1;
             border_radius = 10;
+        }
+
+        protected override void do_layout () {
+            set_bounds (0, 0, _screen.width - 1, _screen.height - 1);
+            foreach (var child in _children)
+                set_child_bounds (child, content_bounds.x1, content_bounds.y1,
+                    content_bounds.x2, content_bounds.y2);
         }
 
         protected override void draw_background () {
             var color = screen.bg_color;
             filled_rounded_box (border_bounds.x1, border_bounds.y1,
-                border_bounds.x2, border_bounds.y2, 10, color);
+                border_bounds.x2, border_bounds.y2, border_radius, color);
         }
     }
 }

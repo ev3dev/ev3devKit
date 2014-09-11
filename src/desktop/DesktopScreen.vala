@@ -55,13 +55,19 @@ namespace EV3devKit {
         public override void refresh () {
             lcd.refresh ();
             foreach (var slave in slaves) {
+                status_bar.screen = slave;
+                var save_slave_status_bar = slave.status_bar;
+                slave.status_bar = status_bar;
                 set_screen_for_each_window (slave);
                 var save_slave_window_stack = slave.window_stack;
                 slave.window_stack = window_stack;
                 slave.dirty = true;
                 slave.on_draw_timeout ();
+                slave.status_bar = save_slave_status_bar;
                 slave.window_stack = save_slave_window_stack;
+                slave.dirty = false;
             }
+            status_bar.screen = this;
             set_screen_for_each_window (this);
         }
 
