@@ -104,5 +104,11 @@ configure_file(
     ${CMAKE_CURRENT_BINARY_DIR}/main_window.glade COPYONLY )
 endif (EV3DEVKIT_DESKTOP)
 
+add_custom_target(run
+    COMMAND ${EXEC_NAME}
+    DEPENDS ${EXEC_NAME}
+    WORKING_DIRECTORY ${CMAKE_PROJECT_DIR}
+)
+
 install (TARGETS ${EXEC_NAME} RUNTIME DESTINATION bin)
 

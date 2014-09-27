@@ -13,6 +13,17 @@
             "name": "Build desktop demo",
             "cmd": [ "make", "-C", "$project_path/build-desktop-demo"],
             "file_regex": "([^:]+):(\\d+)[\\.:](?:(\\d+)-\\d+\\.\\d+)?:? (?:(?:error|warning|note): )?(.*)",
+            "variants":
+            [
+                {
+                    "name": "Run",
+                    "cmd": [ "make", "-C", "$project_path/build-desktop-demo", "run" ],
+                },
+                {
+                    "name": "Clean",
+                    "cmd": [ "make", "-C", "$project_path/build-desktop-demo", "clean" ],
+                }
+            ]
         }
     ],
 
