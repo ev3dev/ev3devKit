@@ -61,7 +61,7 @@ pkg_check_modules(DEPS REQUIRED
     gmodule-2.0
     gio-2.0
     gio-unix-2.0
-    gee-1.0
+    gee-0.8
     ncurses
     libpng12
     ${EV3DEVKIT_DESKTOP_MODULES}
@@ -84,7 +84,7 @@ PACKAGES
     gmodule-2.0
     gio-2.0
     gio-unix-2.0
-    gee-1.0
+    gee-0.8
     curses
     posix
     linux

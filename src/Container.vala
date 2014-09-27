@@ -59,7 +59,7 @@ namespace EV3devKit {
         /**
          * Gets a read-only list of children of the Container.
          */
-        public Gee.List<Widget> children {
+        public Gee.BidirList<Widget> children {
             owned get { return _children.read_only_view; }
         }
 

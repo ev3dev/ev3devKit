@@ -22,6 +22,7 @@
 /* Widget.vala - Base class for all widgets */
 
 using Curses;
+using Gee;
 using GRX;
 
 namespace EV3devKit {
@@ -292,7 +293,7 @@ namespace EV3devKit {
                 return result;
             var container = widget as Container;
             if (container != null && container.children.size > 0) {
-                var iter = container.children.list_iterator ();
+                var iter = container.children.bidir_list_iterator ();
                 if (reverse) {
                     iter.last ();
                     do {
