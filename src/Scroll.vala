@@ -176,7 +176,7 @@ namespace EV3devKit {
                     }
                     scroll_offset = int.min (scroll_offset, child_height - content_bounds.height);
                     scroll_offset = int.max (0, scroll_offset);
-                    if (child_height == 0) {
+                    if (child_height == 0 || child_height == content_bounds.height) {
                         scroll_indicator_size = content_bounds.height - 2;
                         scroll_indicator_offset = 0;
                     } else {
@@ -210,7 +210,7 @@ namespace EV3devKit {
                     }
                     scroll_offset = int.min (scroll_offset, child_width - content_bounds.width);
                     scroll_offset = int.max (0, scroll_offset);
-                    if (child_width == 0) {
+                    if (child_width == 0 || child_width == content_bounds.width) {
                         scroll_indicator_size = content_bounds.width - 2;
                         scroll_indicator_offset = 0;
                     } else {
