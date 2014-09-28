@@ -98,8 +98,8 @@ namespace EV3devKit {
             redraw ();
         }
 
-        public override int get_preferred_width () {
-            var result =  base.get_preferred_width () + get_margin_border_padding_width ();
+        public override int get_preferred_width () ensures (result > 0) {
+            result =  base.get_preferred_width () + get_margin_border_padding_width ();
             if (direction == ScrollDirection.VERTICAL && scrollbar_visible != ScrollbarVisibility.ALWAYS_HIDE)
                 result += SCROLLBAR_SIZE;
             else if (direction == ScrollDirection.HORIZONTAL)
@@ -107,8 +107,8 @@ namespace EV3devKit {
             return result;
         }
 
-        public override int get_preferred_height () {
-            var result =  base.get_preferred_height () + get_margin_border_padding_height ();
+        public override int get_preferred_height () ensures (result > 0) {
+            result =  base.get_preferred_height () + get_margin_border_padding_height ();
             if (direction == ScrollDirection.HORIZONTAL && scrollbar_visible != ScrollbarVisibility.ALWAYS_HIDE)
                 result += SCROLLBAR_SIZE;
             else if (direction == ScrollDirection.VERTICAL)
@@ -116,8 +116,10 @@ namespace EV3devKit {
             return result;
         }
 
-        public override int get_preferred_width_for_height (int height) requires (height > 0) {
-            var result =  get_margin_border_padding_width ();
+        public override int get_preferred_width_for_height (int height)
+            requires (height > 0) ensures (result > 0)
+        {
+            result =  get_margin_border_padding_width ();
             if (direction == ScrollDirection.VERTICAL)
                 result += base.get_preferred_width ();
             else
@@ -129,8 +131,10 @@ namespace EV3devKit {
             return result;
         }
 
-        public override int get_preferred_height_for_width (int width) requires (width > 0) {
-            var result =  get_margin_border_padding_height ();
+        public override int get_preferred_height_for_width (int width)
+            requires (width > 0) ensures (result > 0)
+        {
+            result =  get_margin_border_padding_height ();
             if (direction == ScrollDirection.HORIZONTAL)
                 result += base.get_preferred_height ();
             else

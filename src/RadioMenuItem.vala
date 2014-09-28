@@ -31,6 +31,7 @@ namespace EV3devKit {
             }, new Label (text));
             var hbox = new Box.horizontal ();
             button.add (hbox);
+            label.horizontal_align = WidgetAlign.START;
             hbox.add (label);
             hbox.add (new Spacer ());
             radio = new CheckButton.radio (group) {

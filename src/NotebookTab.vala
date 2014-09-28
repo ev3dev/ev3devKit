@@ -19,27 +19,21 @@
  * MA 02110-1301, USA.
  */
 
-/* CheckboxMenuItem.vala - Menu item used by Menu widget that has a checkbox */
+/* NotebookTab.vala - Widget that represents a checkbox or radio button */
+
+using Curses;
+using Gee;
+using GRX;
 
 namespace EV3devKit {
-    public class CheckboxMenuItem : EV3devKit.MenuItem {
-        public CheckButton checkbox { get; private set; }
+    public class NotebookTab : EV3devKit.Container {
+        internal weak Notebook? notebook;
 
-        public CheckboxMenuItem (string text) {
-            base.with_button (new Button () {
-                border = 0
-            }, new Label (text));
-            var hbox = new Box.horizontal ();
-            button.add (hbox);
-            label.horizontal_align = WidgetAlign.START;
-            hbox.add (label);
-            hbox.add (new Spacer ());
-            checkbox = new CheckButton.checkbox () {
-                padding = 0,
-                can_focus = false
-            };
-            hbox.add (checkbox);
-            button.pressed.connect (() => checkbox.checked = !checkbox.checked);
+        public string title { get; internal set; }
+
+        public NotebookTab (string title) {
+            base (ContainerType.SINGLE);
+            this.title = title;
         }
     }
 }

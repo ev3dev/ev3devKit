@@ -105,28 +105,32 @@ namespace EV3devKit {
             }
         }
 
-        public override int get_preferred_width () {
-            return (child == null ? 0 : child.get_preferred_width ())
-                + get_margin_border_padding_width ();
+        public override int get_preferred_width () ensures (result > 0) {
+            return int.max(1, (child == null ? 0 : child.get_preferred_width ())
+                + get_margin_border_padding_width ());
         }
 
-        public override int get_preferred_height () {
-            return (child == null ? 0 : child.get_preferred_height ())
-                + get_margin_border_padding_height ();
+        public override int get_preferred_height () ensures (result > 0) {
+            return int.max(1, (child == null ? 0 : child.get_preferred_height ())
+                + get_margin_border_padding_height ());
         }
 
-        public override int get_preferred_width_for_height (int height) requires (height > 0) {
-            var result = get_margin_border_padding_width ();
+        public override int get_preferred_width_for_height (int height)
+            requires (height > 0) ensures (result > 0)
+        {
+            result = get_margin_border_padding_width ();
             if (child != null)
                 result += child.get_preferred_width_for_height (height - result);
-            return result;
+            return int.max (1, result);
         }
 
-        public override int get_preferred_height_for_width (int width) requires (width > 0) {
-            var result = get_margin_border_padding_height ();
+        public override int get_preferred_height_for_width (int width)
+            requires (width > 0) ensures (result > 0)
+        {
+            result = get_margin_border_padding_height ();
             if (child != null)
                 result += child.get_preferred_height_for_width (width - result);
-            return result;
+            return int.max (1, result);
         }
 
         public void add (Widget widget) requires (!(widget is Window)) {
@@ -167,7 +171,9 @@ namespace EV3devKit {
             return focus_widget != null;
         }
 
-        protected void set_child_bounds (Widget child, int x1, int y1, int x2, int y2) {
+        protected void set_child_bounds (Widget child, int x1, int y1, int x2, int y2)
+            requires (x1 <= x2 && y1 <= y2)
+        {
             var width = x2 - x1 + 1;
             var height = y2 - y1 + 1;
             // TODO add width_for_height

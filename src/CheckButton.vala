@@ -74,6 +74,8 @@ namespace EV3devKit {
             this.group = group;
             padding = 2;
             can_focus = true;
+            horizontal_align = WidgetAlign.CENTER;
+            vertical_align = WidgetAlign.CENTER;
 
             notify["checked"].connect (redraw);
             notify["outer-size"].connect (redraw);
@@ -113,9 +115,11 @@ namespace EV3devKit {
                     content_bounds.y1 + outer_size / 2, outer_size / 2, color);
             if (checked) {
                 if (check_button_type == CheckButtonType.CHECKBOX) {
-                    var x = content_bounds.x1 + (outer_size - inner_size) / 2;
-                    var y = content_bounds.y1 + (outer_size - inner_size) / 2;
-                    filled_box (x, y, x + inner_size - 1, y + inner_size - 1, color);
+                    var x1 = content_bounds.x1 + (outer_size - inner_size) / 2;
+                    var y1 = content_bounds.y1 + (outer_size - inner_size) / 2;
+                    var x2 = content_bounds.x2 - (outer_size - inner_size) / 2;
+                    var y2 = content_bounds.y2 - (outer_size - inner_size) / 2;
+                    filled_box (x1, y1, x2, y2, color);
                 } else
                     filled_circle (content_bounds.x1 + outer_size / 2,
                         content_bounds.y1 + outer_size / 2, inner_size / 2, color);

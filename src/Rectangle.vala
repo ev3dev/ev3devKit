@@ -28,7 +28,7 @@ namespace EV3devKit {
         public int x2;
         public int y2;
 
-        public int width { get { return x2 - x1 - (x2 > x1 ? -1 : 1); } }
-        public int height { get { return y2 - y1 - (y2 > y1 ? -1 : 1); } }
+        public int width { get { return x2 - x1 + 1; } }
+        public int height { get { return y2 - y1 + 1; } }
     }
 }

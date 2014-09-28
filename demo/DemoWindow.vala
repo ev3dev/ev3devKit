@@ -37,6 +37,9 @@ namespace EV3devKit {
                 border = 0
             };
             add (menu);
+            var notebook_menu_item = new MenuItem ("Notebook");
+            notebook_menu_item.button.pressed.connect (on_notebook_menu_item_button_pressed);
+            menu.add_menu_item (notebook_menu_item);
             var status_bar_menu_item = new MenuItem ("Status Bar");
             status_bar_menu_item.button.pressed.connect (on_status_bar_menu_item_button_pressed);
             menu.add_menu_item (status_bar_menu_item);
@@ -71,6 +74,37 @@ namespace EV3devKit {
             if (key_code == Key.BACKSPACE)
                 return false;
             return base.key_pressed (key_code);
+        }
+
+        void on_notebook_menu_item_button_pressed () {
+            var window = new Window ();
+            var notebook = new Notebook ();
+            window.add (notebook);
+            var tab1 = new NotebookTab ("Tab 1");
+            notebook.add_tab (tab1);
+            var tab1_label = new Label ("This is Tab 1.") {
+                margin = 10
+            };
+            tab1.add (tab1_label);
+            var tab2 = new NotebookTab ("Tab 2");
+            notebook.add_tab (tab2);
+            var tab2_label = new Label ("This is Tab 2.") {
+                margin = 10
+            };
+            tab2.add (tab2_label);
+            var tab3 = new NotebookTab ("Tab 3");
+            notebook.add_tab (tab3);
+            var tab3_vbox = new Box.vertical () {
+                margin = 10
+            };
+            tab3.add (tab3_vbox);
+            var tab3_label = new Label ("This is Tab 3.");
+            tab3_vbox.add (tab3_label);
+            var tab3_button = new Button.with_label ("Do Nothing") {
+                border_radius = 3
+            };
+            tab3_vbox.add (tab3_button);
+            screen.push_window (window);
         }
 
         void on_status_bar_menu_item_button_pressed () {
@@ -140,11 +174,10 @@ namespace EV3devKit {
             };
             // just a plain checkbox
             var checkbox1 = new CheckButton.checkbox () {
-                vertical_align = WidgetAlign.CENTER,
                 margin_left = 2 //to match button padding
             };
             var checkbox1_label = new Label ("Unchecked") {
-                vertical_align = WidgetAlign.CENTER
+                horizontal_align = WidgetAlign.START
             };
             var checkbox1_hbox = new Box.horizontal () {
                 spacing = 4
@@ -156,11 +189,10 @@ namespace EV3devKit {
                 checkbox1_label.text = weak_checkbox1.checked ? "Checked" : "Unchecked");
             // or you can put the checkbox in a button so that the text is selected as well
             var checkbox2 = new CheckButton.checkbox () {
-                vertical_align = WidgetAlign.CENTER,
                 can_focus = false
             };
-            var checkbox2_label = new Label ("Unchecked") {
-                vertical_align = WidgetAlign.CENTER
+            var checkbox2_label = new Label ("Unchecked"){
+                horizontal_align = WidgetAlign.START
             };
             var checkbox2_hbox = new Box.horizontal () {
                 spacing = 4
@@ -177,8 +209,12 @@ namespace EV3devKit {
                 weak_checkbox2.checked = !weak_checkbox2.checked);
             // radio buttons require a group
             var radiobutton_group1 = new CheckButtonGroup ();
-            var group1_label = new Label ("Group 1:");
-            var group1_selected_label = new Label ();
+            var group1_label = new Label ("Group 1:") {
+                horizontal_align = WidgetAlign.START
+            };
+            var group1_selected_label = new Label () {
+                horizontal_align = WidgetAlign.START
+            };
             var group1_label_hbox = new Box.horizontal () {
                 spacing = 4,
                 margin_bottom = 2
@@ -190,6 +226,7 @@ namespace EV3devKit {
                 weak_represented_object = 1.to_pointer ()
             };
             var radiobutton1_label = new Label ("Item 1") {
+                horizontal_align = WidgetAlign.START,
                 vertical_align = WidgetAlign.CENTER
             };
             var radiobutton1_hbox = new Box.horizontal ();
@@ -199,6 +236,7 @@ namespace EV3devKit {
                 weak_represented_object = 2.to_pointer ()
             };
             var radiobutton2_label = new Label ("Item 2") {
+                horizontal_align = WidgetAlign.START,
                 vertical_align = WidgetAlign.CENTER
             };
             var radiobutton2_hbox = new Box.horizontal ();
@@ -208,6 +246,7 @@ namespace EV3devKit {
                 weak_represented_object = 3.to_pointer ()
             };
             var radiobutton3_label = new Label ("Item 3") {
+                horizontal_align = WidgetAlign.START,
                 vertical_align = WidgetAlign.CENTER
             };
             var radiobutton3_hbox = new Box.horizontal ();
@@ -273,6 +312,7 @@ namespace EV3devKit {
                 use_on_screen_keyboard = false
             };
             vbox.add (numeric_entry);
+            vbox.add (new Spacer ());
 
             window.add (vbox);
             screen.push_window (window);
@@ -339,7 +379,7 @@ namespace EV3devKit {
             var radio_group = new CheckButtonGroup ();
             var radio1_menu_item = new RadioMenuItem ("Radio1", radio_group);
             menu.add_menu_item (radio1_menu_item);
-            var radio2_menu_item = new RadioMenuItem ("Radio1", radio_group);
+            var radio2_menu_item = new RadioMenuItem ("Radio2", radio_group);
             menu.add_menu_item (radio2_menu_item);
             radio1_menu_item.radio.checked = true;
             var add_new_menu_item = new MenuItem ("Add new item");

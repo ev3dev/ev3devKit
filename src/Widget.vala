@@ -155,23 +155,29 @@ namespace EV3devKit {
                 + _border_bottom + _padding_top + _padding_bottom;
         }
 
-        public virtual int get_preferred_width () {
-            return get_margin_border_padding_width ();
+        public virtual int get_preferred_width () ensures (result > 0) {
+            return int.max (1, get_margin_border_padding_width ());
         }
 
-        public virtual int get_preferred_height () {
-            return get_margin_border_padding_height ();
+        public virtual int get_preferred_height () ensures (result > 0) {
+            return int.max (1, get_margin_border_padding_height ());
         }
 
-        public virtual int get_preferred_width_for_height (int height) requires (height > 0) {
+        public virtual int get_preferred_width_for_height (int height)
+            requires (height > 0) ensures (result > 0)
+        {
             return get_preferred_width ();
         }
 
-        public virtual int get_preferred_height_for_width (int width) requires (width > 0) {
+        public virtual int get_preferred_height_for_width (int width)
+            requires (width > 0) ensures (result > 0)
+        {
             return get_preferred_height ();
         }
 
-        public void set_bounds (int x1, int y1, int x2, int y2) {
+        public void set_bounds (int x1, int y1, int x2, int y2)
+            requires (x1 <= x2 && y1 <= y2)
+        {
             bounds.x1 = x1;
             bounds.y1 = y1;
             bounds.x2 = x2;
@@ -222,30 +228,32 @@ namespace EV3devKit {
                 case FocusDirection.UP:
                     widget_distance_y = 2 * (widget.border_bounds.y2 - border_bounds.y1).abs ();
                     if (widget.border_bounds.y1 >= border_bounds.y1)
-                        widget_distance_y = 2 * window.content_bounds.height - widget_distance_y;
+                        widget_distance_y = 2 * window.content_bounds.height - widget_distance_y
+                            + window.content_bounds.width;
                     if (widget.border_bounds.x1 > border_bounds.x2 || widget.border_bounds.x2 < border_bounds.x1)
-                        widget_distance_x *= window.content_bounds.width;
+                        widget_distance_x += window.content_bounds.width;
                     break;
                 case FocusDirection.DOWN:
                     widget_distance_y = 2 * (widget.border_bounds.y1 - border_bounds.y2).abs ();
                     if (widget.border_bounds.y2 <= border_bounds.y2)
-                        widget_distance_y = 2 * window.content_bounds.height - widget_distance_y;
+                        widget_distance_y = 2 * window.content_bounds.height - widget_distance_y
+                            + window.content_bounds.width;
                     if (widget.border_bounds.x1 > border_bounds.x2 || widget.border_bounds.x2 < border_bounds.x1)
-                        widget_distance_x *= window.content_bounds.width;
+                        widget_distance_x += window.content_bounds.width;
                     break;
                 case FocusDirection.LEFT:
                     widget_distance_x = 2 * (widget.border_bounds.x2 - border_bounds.x1).abs ();
                     if (widget.border_bounds.x1 >= border_bounds.x1)
                         widget_distance_x = 2 * window.content_bounds.width - widget_distance_x;
                     if (widget.border_bounds.y1 > border_bounds.y2 || widget.border_bounds.y2 < border_bounds.y1)
-                        widget_distance_y *= window.content_bounds.height;
+                        widget_distance_y += window.content_bounds.height;
                     break;
                 case FocusDirection.RIGHT:
                     widget_distance_x = 2 * (widget.border_bounds.x1 - border_bounds.x2).abs ();
                     if (widget.border_bounds.x2 <= border_bounds.x2)
                         widget_distance_x = 2 * window.content_bounds.width - widget_distance_x;
                     if (widget.border_bounds.y1 > border_bounds.y2 || widget.border_bounds.y2 < border_bounds.y1)
-                        widget_distance_y *= window.content_bounds.height;
+                        widget_distance_y += window.content_bounds.height;
                     break;
                 }
                 if ((widget_distance_x + widget_distance_y) < best_distance) {
@@ -362,7 +370,7 @@ namespace EV3devKit {
                 filled_box (border_bounds.x1, border_bounds.y1 + border_radius,
                     border_bounds.x1 + border_left- 1,
                     border_bounds.y2 - border_radius, color);
-            if (border_left != 0)
+            if (border_right != 0)
                 filled_box (border_bounds.x2 - border_left + 1,
                     border_bounds.y1 + border_radius, border_bounds.x2,
                     border_bounds.y2 - border_radius, color);

@@ -58,7 +58,7 @@ namespace EV3devKit {
             this (BoxDirection.HORIZONTAL);
         }
 
-        public override int get_preferred_width () {
+        public override int get_preferred_width () ensures (result > 0) {
             int width = 0;
             if (direction == BoxDirection.HORIZONTAL) {
                 foreach (var item in _children)
@@ -71,7 +71,7 @@ namespace EV3devKit {
             return width + get_margin_border_padding_width ();
         }
 
-        public override int get_preferred_height () {
+        public override int get_preferred_height () ensures (result > 0) {
             int height = 0;
             if (direction == BoxDirection.VERTICAL) {
                 foreach (var item in _children)
@@ -84,7 +84,9 @@ namespace EV3devKit {
             return height + get_margin_border_padding_height ();
         }
 
-        public override int get_preferred_width_for_height (int height) requires (height > 0) {
+        public override int get_preferred_width_for_height (int height)
+            requires (height > 0)  ensures (result > 0)
+        {
             int width = 0;
             if (direction == BoxDirection.HORIZONTAL) {
                 foreach (var item in _children)
@@ -97,7 +99,9 @@ namespace EV3devKit {
             return width + get_margin_border_padding_width ();
         }
 
-        public override int get_preferred_height_for_width (int width) requires (width > 0) {
+        public override int get_preferred_height_for_width (int width)
+            requires (width > 0) ensures (result > 0)
+        {
             int height = 0;
             if (direction == BoxDirection.VERTICAL) {
                 foreach (var item in _children)
@@ -114,6 +118,7 @@ namespace EV3devKit {
             if (direction == BoxDirection.HORIZONTAL) {
                 int total_width = 0;
                 int spacer_count = 0;
+                int fill_count = 0;
                 HashMap<Widget, int> width_map = new HashMap<Widget,int> ();
                 foreach (var child in _children) {
                     width_map[child] = child.get_preferred_width_for_height (content_bounds.height);
@@ -121,17 +126,25 @@ namespace EV3devKit {
                     total_width += spacing;
                     if (child is Spacer)
                         spacer_count++;
+                    else if (child.horizontal_align == WidgetAlign.FILL)
+                        fill_count++;
                 }
                 total_width -= spacing;
-                // TODO: handle case of total_width > content_bounds.width
                 var x = content_bounds.x1;
-                var extra_space = content_bounds.width - total_width;
+                var extra_space = int.max (0, content_bounds.width - total_width);
                 foreach (var child in _children) {
-                    if (child is Spacer) {
-                        var spacer_width = extra_space / spacer_count;
-                        width_map[child] = spacer_width;
-                        extra_space -= spacer_width;
-                        spacer_count--;
+                    if (spacer_count > 0) {
+                        if (child is Spacer) {
+                            var spacer_width = extra_space / spacer_count;
+                            width_map[child] = spacer_width;
+                            extra_space -= spacer_width;
+                            spacer_count--;
+                        }
+                    } else if (fill_count > 0 && child.horizontal_align == WidgetAlign.FILL) {
+                        var fill_width = extra_space / fill_count;
+                        width_map[child] = width_map[child] + fill_width; // += does not work!
+                        extra_space -= fill_width;
+                        fill_count--;
                     }
                     set_child_bounds (child, x, content_bounds.y1,
                         x + width_map[child] - 1, content_bounds.y2);
@@ -140,6 +153,7 @@ namespace EV3devKit {
             } else {
                 int total_height = 0;
                 int spacer_count = 0;
+                int fill_count = 0;
                 HashMap<Widget, int> height_map = new HashMap<Widget, int> ();
                 foreach (var child in _children) {
                     height_map[child] = child.get_preferred_height_for_width (content_bounds.width);
@@ -147,17 +161,25 @@ namespace EV3devKit {
                     total_height += spacing;
                     if (child is Spacer)
                         spacer_count++;
+                    else if (child.vertical_align == WidgetAlign.FILL)
+                        fill_count++;
                 }
                 total_height -= spacing;
-                // TODO: handle case of total_height > content_bounds.height
                 var y = content_bounds.y1;
-                var extra_space = content_bounds.height - total_height;
+                var extra_space = int.max (0, content_bounds.height - total_height);
                 foreach (var child in _children) {
-                    if (child is Spacer) {
-                        var spacer_height = extra_space / spacer_count;
-                        height_map[child] = spacer_height;
-                        extra_space -= spacer_height;
-                        spacer_count--;
+                    if (spacer_count > 0) {
+                        if (child is Spacer) {
+                            var spacer_height = extra_space / spacer_count;
+                            height_map[child] = spacer_height;
+                            extra_space -= spacer_height;
+                            spacer_count--;
+                        }
+                    } else if (fill_count > 0 && child.vertical_align == WidgetAlign.FILL) {
+                        var fill_height = extra_space / fill_count;
+                        height_map[child] = height_map[child] + fill_height; // += does not work!
+                        extra_space -= fill_height;
+                        fill_count--;
                     }
                     set_child_bounds (child, content_bounds.x1, y,
                         content_bounds.x2, y + height_map[child] - 1);

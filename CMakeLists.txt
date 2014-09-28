@@ -41,6 +41,8 @@ set (EV3DEV_TK_COMMON_SOURCE_FILES
     src/Label.vala
     src/Menu.vala
     src/MenuItem.vala
+    src/Notebook.vala
+    src/NotebookTab.vala
     src/OnScreenKeyboard.vala
     src/RadioMenuItem.vala
     src/Rectangle.vala
@@ -49,6 +51,7 @@ set (EV3DEV_TK_COMMON_SOURCE_FILES
     src/Spacer.vala
     src/StatusBar.vala
     src/StatusBarItem.vala
+    src/TabButton.vala
     src/TextEntry.vala
     src/Widget.vala
     src/Window.vala

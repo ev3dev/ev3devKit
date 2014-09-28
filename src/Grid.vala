@@ -73,8 +73,8 @@ namespace EV3devKit {
             }
         }
 
-        public override int get_preferred_width () {
-            int result = 0;
+        public override int get_preferred_width () ensures (result > 0) {
+            result = 0;
             for (uint row = 0; row < size.row; row++) {
                 int row_width = 0;
                 for (uint col = 0; col < size.col; col++) {
@@ -88,8 +88,8 @@ namespace EV3devKit {
             return result + _border_column * (size.col - 1) + get_margin_border_padding_width ();
         }
 
-        public override int get_preferred_height () {
-            int result = 0;
+        public override int get_preferred_height () ensures (result > 0) {
+            result = 0;
             for (uint col = 0; col < size.col; col++) {
                 int col_height = 0;
                 for (uint row = 0; row < size.row; row++) {
@@ -103,11 +103,15 @@ namespace EV3devKit {
             return result + _border_row * (size.row - 1) + get_margin_border_padding_width ();
         }
 
-        public override int get_preferred_width_for_height (int height) requires (height > 0) {
+        public override int get_preferred_width_for_height (int height)
+            requires (height > 0) ensures (result > 0)
+        {
             return get_preferred_width ();
         }
 
-        public override int get_preferred_height_for_width (int width) requires (width > 0) {
+        public override int get_preferred_height_for_width (int width)
+        requires (width > 0) ensures (result > 0)
+        {
             return get_preferred_height ();
         }
 

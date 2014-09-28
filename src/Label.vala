@@ -66,20 +66,26 @@ namespace EV3devKit {
             notify["text-vertical-align"].connect (redraw);
         }
 
-        public override int get_preferred_width () {
-            return font.vala_string_width (text ?? "") + get_margin_border_padding_width ();
+        public override int get_preferred_width () ensures (result > 0) {
+            return int.max(1, font.vala_string_width (text ?? ""))
+                + get_margin_border_padding_width ();
         }
-        public override int get_preferred_height () {
-            return (int)font.height + get_margin_border_padding_height ();
+        public override int get_preferred_height () ensures (result > 0) {
+            return int.max(1, (int)font.height) + get_margin_border_padding_height ();
         }
 
-        public override int get_preferred_width_for_height (int height) requires (height > 0) {
+        public override int get_preferred_width_for_height (int height)
+            requires (height > 0) ensures (result > 0)
+        {
             // TODO: create get_lines_for_height () method
             return get_preferred_width ();
         }
-        public override int get_preferred_height_for_width (int width) requires (width > 0) {
+        public override int get_preferred_height_for_width (int width)
+            requires (width > 0) ensures (result > 0)
+        {
             var lines = get_lines_for_width (width);
-            return (int)font.height * lines.size + get_margin_border_padding_height ();
+            return int.max(1, (int)font.height * lines.size)
+                + get_margin_border_padding_height ();
         }
 
         Gee.List<string> get_lines_for_width (int width) requires (width > 0) {

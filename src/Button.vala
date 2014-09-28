@@ -53,8 +53,8 @@ namespace EV3devKit {
         protected override void draw_background () {
             if (draw_children_as_focused) {
                 var color = window.screen.mid_color;
-                filled_box (border_bounds.x1, border_bounds.y1, border_bounds.x2,
-                    border_bounds.y2, color);
+                filled_rounded_box (border_bounds.x1, border_bounds.y1,
+                    border_bounds.x2, border_bounds.y2, border_radius, color);
             }
         }
 
