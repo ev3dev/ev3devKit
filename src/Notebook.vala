@@ -42,7 +42,6 @@ namespace EV3devKit {
                 }
                 button_map[value].active = true;
                 notebook_vbox.add (value);
-                value.focus_first ();
                 _active_tab = value;
             }
         }

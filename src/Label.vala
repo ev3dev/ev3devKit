@@ -26,10 +26,12 @@ using GRX;
 
 namespace EV3devKit {
     public class Label : EV3devKit.Widget {
-        static Font default_font;
+        internal static Font _default_font;
+        internal static weak Font default_font;
 
         static construct {
-            default_font = Font.load ("xm6x8");
+            _default_font = Font.load ("xm6x8");
+            default_font = _default_font ??  Font.pc6x8;
         }
 
         Gee.List<string>? cached_lines;
@@ -54,7 +56,7 @@ namespace EV3devKit {
         public Label (string? text = null) {
             this.text = text;
             text_option = new TextOption () {
-                font = default_font ?? Font.pc6x8,
+                font = default_font,
                 direction = TextDirection.RIGHT,
                 chr_type = ChrType.BYTE,
                 x_align = TextHorizAlign.CENTER,

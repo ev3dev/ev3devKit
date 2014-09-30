@@ -38,8 +38,10 @@ namespace EV3devKit {
             can_focus = true;
         }
 
-        public Button.with_label (string? text = null) {
-            this (new Label (text));
+        public Button.with_label (string? text = null, Font? font = null) {
+            this (new Label (text) {
+                font = font ?? Label.default_font
+            });
         }
 
         public override bool draw_children_as_focused {
