@@ -94,10 +94,15 @@ namespace EV3devKit {
 
         /* navigation properties */
 
+        bool _can_focus_when_visible;
         /**
          * This widget can take the focus
          */
-        public bool can_focus { get; set; }
+        public bool can_focus {
+            get { return _can_focus_when_visible && _visible; }
+            set { _can_focus_when_visible = value; }
+        }
+
         /**
          * This widget has focus
          */
@@ -112,6 +117,10 @@ namespace EV3devKit {
                 }) as Window;
             }
         }
+
+        /* Other properties */
+
+        public bool visible { get; set; default = true; }
 
         public void *weak_represented_object { get; set; }
         public Object? represented_object { get; set; }
@@ -134,6 +143,7 @@ namespace EV3devKit {
             notify["vertical-align"].connect (redraw);
             notify["can-focus"].connect (redraw);
             notify["has-focus"].connect (redraw);
+            notify["visible"].connect (redraw);
             widget_count++;
             //debug ("Created %s widget: %p", get_type ().name (), this);
         }
@@ -391,6 +401,8 @@ namespace EV3devKit {
         }
 
         public void draw () {
+            if (!visible)
+                return;
             int x1;
             int y1;
             int x2;
