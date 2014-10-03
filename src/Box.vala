@@ -68,7 +68,7 @@ namespace EV3devKit {
                 foreach (var item in _children)
                     width = int.max (width, item.get_preferred_width ());
             }
-            return width + get_margin_border_padding_width ();
+            return int.max (1, width + get_margin_border_padding_width ());
         }
 
         public override int get_preferred_height () ensures (result > 0) {
@@ -81,7 +81,7 @@ namespace EV3devKit {
                 foreach (var item in _children)
                     height = int.max (height, item.get_preferred_height ());
             }
-            return height + get_margin_border_padding_height ();
+            return int.max (1, height + get_margin_border_padding_height ());
         }
 
         public override int get_preferred_width_for_height (int height)
@@ -96,7 +96,7 @@ namespace EV3devKit {
                 foreach (var item in _children)
                     width = int.max (width, item.get_preferred_width_for_height (height));
             }
-            return width + get_margin_border_padding_width ();
+            return int.max (1, width + get_margin_border_padding_width ());
         }
 
         public override int get_preferred_height_for_width (int width)
@@ -111,7 +111,7 @@ namespace EV3devKit {
                 foreach (var item in _children)
                     height = int.max (height, item.get_preferred_height_for_width (width));
             }
-            return height + get_margin_border_padding_height ();
+            return int.max (1, height + get_margin_border_padding_height ());
         }
 
         public override void do_layout () {
