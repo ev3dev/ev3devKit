@@ -147,7 +147,33 @@ namespace EV3devKit {
             child_added (widget);
         }
 
-        public void remove (Widget widget) {
+        /**
+         * Insert a widget before an existing widget.
+         * @param new_widget The widget to insert.
+         * @param exisisting_widget The widget to insert the parameter before.
+         */
+        public void insert_before (Widget new_widget, Widget existing_widget)
+            requires (!(new_widget is Window) && container_type != ContainerType.SINGLE)
+        {
+            var new_index = _children.index_of (existing_widget);
+            if (new_index == -1) {
+                critical ("existing_widget is not child of container.");
+                return;
+            }
+            // Check to see if the widget is already a child of this container
+            var old_index = _children.index_of (new_widget);
+            // If it is and it is before the new insertion point, we need to adjust
+            if (old_index >= 0 && old_index < new_index)
+                new_index -= 1;
+            if (new_widget.parent != null)
+                new_widget.parent.remove (new_widget);
+            _children.insert (new_index, new_widget);
+            new_widget.parent = this;
+            redraw ();
+            child_added (new_widget);
+        }
+
+        public void remove (Widget widget) requires (!(widget is Window)) {
             if (_children.remove (widget)) {
                 widget.parent = null;
                 redraw ();
