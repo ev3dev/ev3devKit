@@ -33,11 +33,13 @@ namespace EV3devKit {
 
         public bool on_screen { get; set; default = false; }
 
-        public signal void shown ();
+        public virtual signal void shown () {
+            if (!descendant_has_focus)
+                focus_first ();
+        }
 
         public Window () {
             base (ContainerType.SINGLE);
-            shown.connect (on_first_shown);
         }
 
         public override bool key_pressed (uint key_code) {
@@ -70,11 +72,6 @@ namespace EV3devKit {
 
         protected override void draw_content () {
             base.draw_content ();
-        }
-
-        void on_first_shown () {
-            shown.disconnect (on_first_shown);
-            focus_first ();
         }
     }
 }
