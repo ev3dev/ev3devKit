@@ -97,11 +97,11 @@ namespace EV3devKit {
             weak_ref (weak_notify);
         }
 
-        static void weak_notify (Object obj) {
-            var container = obj as Container;
-            while (container._children.size > 0) {
-                var child = container._children.last ();
-                container.remove (child);
+        void weak_notify (Object obj) {
+            while (_children.size > 0) {
+                var child = _children.last ();
+                remove (child);
+                //debug ("%s child.ref_count: %u", get_type ().name (), child.ref_count);
             }
         }
 

@@ -69,8 +69,15 @@ namespace EV3devKit {
             if (tab.notebook != null)
                 tab.notebook.remove (tab);
             tabs.add (tab);
+            tab.notebook = this;
             var button = new TabButton (tab.title);
-            button.pressed.connect (() => active_tab = tab);
+            var id = button.pressed.connect (() => active_tab = tab);
+            // break reference cycle caused by button.pressed.connect
+            unref ();
+            weak_ref ((obj) => {
+                ref ();
+                SignalHandler.disconnect (button, id);
+            });
             tab_hbox.add (button);
             button_map[tab] = button;
             if (active_tab == null)
