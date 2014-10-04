@@ -27,7 +27,7 @@ namespace EV3devKit {
 
         var demo_window = new DemoWindow ();
         demo_window.quit.connect (DesktopTestApp.quit);
-        DesktopTestApp.screen.push_window (demo_window);
+        DesktopTestApp.screen.show_window (demo_window);
 
         DesktopTestApp.run ();
 

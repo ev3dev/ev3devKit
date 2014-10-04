@@ -51,7 +51,7 @@ namespace EV3devKit {
             button.weak_represented_object = this;
             weak_ref (weak_notify);
             menu_item_count++;
-            //debug ("Created MenuItem: %p", this);
+            debug ("Created MenuItem: %p", this);
         }
 
         static void weak_notify (Object obj) {
@@ -61,8 +61,8 @@ namespace EV3devKit {
         }
 
         ~MenuItem () {
-            //debug ("Finalized MenuItem: %p", this);
-            //debug ("MenuItem count %d", --menu_item_count);
+            debug ("Finalized MenuItem: %p", this);
+            debug ("MenuItem count %d", --menu_item_count);
         }
     }
 }

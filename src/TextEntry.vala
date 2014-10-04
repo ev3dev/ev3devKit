@@ -86,7 +86,7 @@ namespace EV3devKit {
                 on_screen_keyboard.text = text;
                 on_screen_keyboard.accepted.connect (commit_editing);
                 on_screen_keyboard.canceled.connect (cancel_editing);
-                window.screen.push_window (on_screen_keyboard);
+                window.screen.show_window (on_screen_keyboard);
             }
         }
 

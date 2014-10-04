@@ -109,7 +109,7 @@ namespace EV3devKit {
          *
          * @param window The window to add to the stack.
          */
-        public void push_window (Window window) {
+        public void show_window (Window window) {
             window._screen = this;
             window.shown ();
             window_stack.offer_tail (window);
@@ -121,13 +121,16 @@ namespace EV3devKit {
          *
          * @return The window that was popped from the stack.
          */
-        public Window? pop_window () {
-            var window = window_stack.poll_tail ();
-            window._screen = null;
-            if (window_stack.size > 0)
-                window_stack.peek_tail ().shown ();
-            dirty = true;
-            return window;
+        public Window? close_window (Window window) {
+            var was_top_window = window_stack.peek_tail () == window;
+            if (window_stack.remove (window)) {
+                window._screen = null;
+                if (was_top_window && window_stack.size > 0)
+                    window_stack.peek_tail ().shown ();
+                dirty = true;
+                return window;
+            }
+            return null;
         }
 
         public void queue_key_code (uint key_code) {

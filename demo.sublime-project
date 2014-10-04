@@ -18,6 +18,9 @@
                 {
                     "name": "Run",
                     "cmd": [ "make", "-C", "$project_path/build-desktop-demo", "run" ],
+                    "env": {
+                        "G_MESSAGES_DEBUG": "all"
+                    }
                 },
                 {
                     "name": "Clean",

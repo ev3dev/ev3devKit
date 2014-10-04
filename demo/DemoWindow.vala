@@ -84,7 +84,7 @@ namespace EV3devKit {
                 + " It is really long so that we can test out the scroll feature"
                 + " of the MessageDialog. I really don't know what else to say"
                 + " about it.");
-            screen.push_window (dialog);
+            screen.show_window (dialog);
         }
 
         void on_notebook_menu_item_button_pressed () {
@@ -113,7 +113,7 @@ namespace EV3devKit {
             tab3_vbox.add (tab3_label);
             var tab3_button = new Button.with_label ("Do Nothing");
             tab3_vbox.add (tab3_button);
-            screen.push_window (window);
+            screen.show_window (window);
         }
 
         void on_status_bar_menu_item_button_pressed () {
@@ -135,7 +135,7 @@ namespace EV3devKit {
             visible_checkbox.notify["checked"].connect (() =>
                 screen.status_bar.visible = weak_visible_checkbox.checked);
             hbox.add (visible_checkbox);
-            screen.push_window (window);
+            screen.show_window (window);
         }
 
         void on_dialog_menu_item_pressed () {
@@ -160,7 +160,7 @@ namespace EV3devKit {
             };
             // pressing the button closes the dialog
             ok_button.pressed.connect (() =>
-                screen.pop_window ());
+                screen.close_window (dialog));
             var vbox = new Box.vertical () {
                 padding_top = 2,
                 padding_bottom = 2,
@@ -173,7 +173,7 @@ namespace EV3devKit {
             vbox.add (button_spacer2);
             vbox.add (ok_button);
             dialog.add (vbox);
-            screen.push_window (dialog);
+            screen.show_window (dialog);
         }
 
         void on_check_button_menu_item_button_pressed () {
@@ -276,7 +276,7 @@ namespace EV3devKit {
             vbox.add (radiobutton2_hbox);
             vbox.add (radiobutton3_hbox);
             window.add (vbox);
-            screen.push_window (window);
+            screen.show_window (window);
         }
 
         void on_show_scroll_button_pressed () {
@@ -303,7 +303,7 @@ namespace EV3devKit {
             hscroll.add (hscroll_content);
             vbox.add (hscroll);
             window.add (vbox);
-            screen.push_window (window);
+            screen.show_window (window);
         }
 
         void on_text_entry_menu_item_button_pressed () {
@@ -325,7 +325,7 @@ namespace EV3devKit {
             vbox.add (new Spacer ());
 
             window.add (vbox);
-            screen.push_window (window);
+            screen.show_window (window);
         }
 
         void on_grid_menu_item_button_pressed () {
@@ -374,7 +374,7 @@ namespace EV3devKit {
             grid.add_at (sub_grid, 1, 0, 2, 3);
 
             window.add (grid);
-            screen.push_window (window);
+            screen.show_window (window);
         }
 
         void on_menu_menu_item_button_pressed () {
@@ -403,7 +403,7 @@ namespace EV3devKit {
                 weak_menu.add_menu_item (new_item);
             });
             menu.add_menu_item (add_new_menu_item);
-            screen.push_window (window);
+            screen.show_window (window);
         }
 
         Font[] font_storage;
@@ -439,7 +439,7 @@ namespace EV3devKit {
                     vbox.add (label);
                     font_storage[index++] = (owned)font;
                 }
-                screen.push_window (window);
+                screen.show_window (window);
             } catch (Error err) {
                 var dialog = new Dialog ();
                 var vbox = new Box.vertical ();
@@ -456,9 +456,10 @@ namespace EV3devKit {
                 var ok_button = new Button.with_label ("OK") {
                     horizontal_align = WidgetAlign.CENTER
                 };
-                ok_button.pressed.connect (() => screen.pop_window ());
+                weak Dialog weak_dialog = dialog;
+                ok_button.pressed.connect (() => screen.close_window (weak_dialog));
                 vbox.add (ok_button);
-                screen.push_window (dialog);
+                screen.show_window (dialog);
             }
         }
     }
