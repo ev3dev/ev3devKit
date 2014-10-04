@@ -159,8 +159,9 @@ namespace EV3devKit {
                 vertical_align = WidgetAlign.END
             };
             // pressing the button closes the dialog
+            weak Dialog weak_dialog = dialog;
             ok_button.pressed.connect (() =>
-                screen.close_window (dialog));
+                screen.close_window (weak_dialog));
             var vbox = new Box.vertical () {
                 padding_top = 2,
                 padding_bottom = 2,

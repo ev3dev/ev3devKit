@@ -147,12 +147,12 @@ namespace EV3devKit {
             widget_count++;
             debug ("Created %s widget: %p", get_type ().name (), this);
         }
-
+/*
         ~Widget () {
             debug ("Finalized %s widget %p", get_type ().name (), this);
             debug ("Widget count %d", --widget_count);
         }
-
+*/
         /* layout functions */
 
         public inline int get_margin_border_padding_width () {
