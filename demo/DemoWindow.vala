@@ -111,9 +111,7 @@ namespace EV3devKit {
             tab3.add (tab3_vbox);
             var tab3_label = new Label ("This is Tab 3.");
             tab3_vbox.add (tab3_label);
-            var tab3_button = new Button.with_label ("Do Nothing") {
-                border_radius = 3
-            };
+            var tab3_button = new Button.with_label ("Do Nothing");
             tab3_vbox.add (tab3_button);
             screen.push_window (window);
         }
@@ -211,7 +209,8 @@ namespace EV3devKit {
             checkbox2_hbox.add (checkbox2);
             checkbox2_hbox.add (checkbox2_label);
             var checkbox2_button = new Button (checkbox2_hbox) {
-                border = 0
+                border = 0,
+                border_radius = 0
             };
             weak CheckButton weak_checkbox2 = checkbox2;
             checkbox2.notify["checked"].connect (() =>

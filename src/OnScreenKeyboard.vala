@@ -244,7 +244,8 @@ namespace EV3devKit {
 
         Button create_char_button (char c) {
             var button = new Button.with_label (c.to_string ()) {
-                border = 0
+                border = 0,
+                border_radius = 0
             };
             var id = button.pressed.connect (() => {
                 set_char (c);
@@ -258,6 +259,7 @@ namespace EV3devKit {
         Button create_change_keyboard_button (string label, Keyboard keyboard) {
             var button = new Button.with_label (label) {
                 border = 0,
+                border_radius = 0,
                 padding_left = 0,
                 padding_right = 0
             };
@@ -272,7 +274,8 @@ namespace EV3devKit {
 
         Button create_insert_button () {
             var button = new Button.with_label ("INS") {
-                border = 0
+                border = 0,
+                border_radius = 0
             };
             var id = button.pressed.connect (() => {
                 text_entry.insert = !text_entry.insert;
@@ -285,7 +288,9 @@ namespace EV3devKit {
         }
 
         Button create_accept_button () {
-            var button = new Button.with_label ("Accept");
+            var button = new Button.with_label ("Accept") {
+                border_radius = 0
+            };
             button.pressed.connect (() => {
                 // trim trailing space
                 if (text[text.length - 1] == ' ')
@@ -297,7 +302,9 @@ namespace EV3devKit {
         }
 
         Button create_cancel_button () {
-            var button = new Button.with_label ("Cancel");
+            var button = new Button.with_label ("Cancel") {
+                border_radius = 0
+            };
             button.pressed.connect (() => {
                 canceled ();
                 window.screen.pop_window ();

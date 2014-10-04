@@ -34,6 +34,7 @@ namespace EV3devKit {
             if (child != null)
                 add (child);
             border = 1;
+            border_radius = 3;
             padding = 2;
             can_focus = true;
         }

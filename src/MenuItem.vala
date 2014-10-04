@@ -35,7 +35,8 @@ namespace EV3devKit {
 
         public MenuItem (string text) {
             this.with_button (new Button () {
-                border = 0
+                border = 0,
+                border_radius = 0
             }, new Label (text));
             button.add (label);
         }

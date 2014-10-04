@@ -27,7 +27,8 @@ namespace EV3devKit {
 
         public CheckboxMenuItem (string text) {
             base.with_button (new Button () {
-                border = 0
+                border = 0,
+                border_radius = 0
             }, new Label (text));
             var hbox = new Box.horizontal ();
             button.add (hbox);
