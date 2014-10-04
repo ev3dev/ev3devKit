@@ -47,7 +47,10 @@ namespace EV3devKit {
 
         public string text {
             owned get { return text_entry.text[0:text_entry.text.length-1]; }
-            set { text_entry.text = value + " "; }
+            set {
+                text_entry.text = value + " ";
+                text_entry.cursor_offset = value.length;
+            }
         }
 
         Grid? current_keyboard { get; set; }

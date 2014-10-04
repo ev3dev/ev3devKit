@@ -42,7 +42,7 @@ namespace EV3devKit {
 
         Label label;
         int text_offset; // chars
-        int cursor_offset; // chars
+        internal int cursor_offset; // chars
         int cursor_x; // pixels
         bool should_inc_text_offset_with_cursor;
         string save_text;
