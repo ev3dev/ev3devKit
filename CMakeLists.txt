@@ -41,6 +41,7 @@ set (EV3DEV_TK_COMMON_SOURCE_FILES
     src/Label.vala
     src/Menu.vala
     src/MenuItem.vala
+    src/MessageDialog.vala
     src/Notebook.vala
     src/NotebookTab.vala
     src/OnScreenKeyboard.vala

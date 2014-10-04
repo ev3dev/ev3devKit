@@ -37,10 +37,13 @@ namespace EV3devKit {
                 border = 0
             };
             add (menu);
+            var message_dialog_menu_item = new MenuItem ("MessageDialog");
+            message_dialog_menu_item.button.pressed.connect (on_message_dialog_menu_item_button_pressed);
+            menu.add_menu_item (message_dialog_menu_item);
             var notebook_menu_item = new MenuItem ("Notebook");
             notebook_menu_item.button.pressed.connect (on_notebook_menu_item_button_pressed);
             menu.add_menu_item (notebook_menu_item);
-            var status_bar_menu_item = new MenuItem ("Status Bar");
+            var status_bar_menu_item = new MenuItem ("StatusBar");
             status_bar_menu_item.button.pressed.connect (on_status_bar_menu_item_button_pressed);
             menu.add_menu_item (status_bar_menu_item);
             var fonts_menu_item = new MenuItem ("Fonts");
@@ -74,6 +77,14 @@ namespace EV3devKit {
             if (key_code == Key.BACKSPACE)
                 return false;
             return base.key_pressed (key_code);
+        }
+
+        void on_message_dialog_menu_item_button_pressed () {
+            var dialog = new MessageDialog ("Message!", "This is the message text."
+                + " It is really long so that we can test out the scroll feature"
+                + " of the MessageDialog. I really don't know what else to say"
+                + " about it.");
+            screen.push_window (dialog);
         }
 
         void on_notebook_menu_item_button_pressed () {

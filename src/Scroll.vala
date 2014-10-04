@@ -73,6 +73,24 @@ namespace EV3devKit {
         }
 
         /**
+         * Scroll forward (down or right) by the specified amount.
+         * @param amount The amount to scroll in pixels.
+         */
+        public void scroll_forward (int amount = scroll_amount) {
+            scroll_offset += amount;
+            redraw ();
+        }
+
+        /**
+         * Scroll backwards (up or left) by the specified amount.
+         * @param amount The amount to scroll in pixels.
+         */
+        public void scroll_backward (int amount = scroll_amount) {
+            scroll_offset -= amount;
+            redraw ();
+        }
+
+        /**
          * update scroll_offset so that top/right of child widget is visible
          */
         public void scroll_to_child (Widget child) {
