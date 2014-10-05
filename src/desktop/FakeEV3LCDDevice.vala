@@ -71,5 +71,12 @@ namespace EV3devKit {
             image.set_from_pixbuf (pixbuf.scale_simple (info.width * 2,
                 info.height * 2, Gdk.InterpType.TILES));
         }
+
+        public void copy_to_clipboard () {
+            var display = get_display ();
+            var clipboard = Gtk.Clipboard.get_for_display (display, Gdk.SELECTION_CLIPBOARD);
+            clipboard.set_image (pixbuf.scale_simple (info.width * 2,
+                info.height * 2, Gdk.InterpType.TILES));
+        }
     }
 }

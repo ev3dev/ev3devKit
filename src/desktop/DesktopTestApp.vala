@@ -42,11 +42,17 @@ namespace EV3devKit.DesktopTestApp {
         color_screen = new DesktopScreen (color_lcd, screen);
 
         var builder = new Gtk.Builder ();
-        Gtk.Box main_box;
+        Gtk.Box screen1_box;
+        Gtk.Box screen2_box;
         try {
             builder.add_from_file (main_window_glade_file);
             main_window = builder.get_object ("main_window") as Gtk.Window;
-            main_box = builder.get_object ("main_box") as Gtk.Box;
+            screen1_box = builder.get_object ("screen1_box") as Gtk.Box;
+            screen2_box = builder.get_object ("screen2_box") as Gtk.Box;
+            (builder.get_object ("screen1_copy_button") as Gtk.Button)
+                .clicked.connect (() => color_lcd.copy_to_clipboard ());
+            (builder.get_object ("screen2_copy_button") as Gtk.Button)
+                .clicked.connect (() => stock_lcd.copy_to_clipboard ());
             (builder.get_object ("up_button") as Gtk.Button)
                 .clicked.connect (() => screen.queue_key_code (Key.UP));
             (builder.get_object ("down_button") as Gtk.Button)
@@ -101,8 +107,8 @@ namespace EV3devKit.DesktopTestApp {
         });
         color_lcd.key_press_event.connect ((event) => stock_lcd.key_press_event (event));
 
-        main_box.pack_start (color_lcd);
-        main_box.pack_start (stock_lcd);
+        screen1_box.pack_start (color_lcd);
+        screen2_box.pack_start (stock_lcd);
         main_window.show_all ();
     }
 
