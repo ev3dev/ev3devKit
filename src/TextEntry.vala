@@ -60,7 +60,7 @@ namespace EV3devKit {
         public string valid_chars { get; set; default = ALPHA_NUM_SYMBOL; }
         public bool insert { get; set; default = false; }
 
-        public TextEntry (string text = " ") {
+        public TextEntry (string text = "") {
             this.text = text;
             label = new Label () {
                 text_horizontal_align = TextHorizAlign.LEFT,
