@@ -43,14 +43,23 @@ namespace EV3devKit {
         }
 
         public override bool key_pressed (uint key_code) {
-            if (key_code == Key.BACKSPACE) {
-                Signal.stop_emission_by_name (this, "key-pressed");
-                // screen.close_window () releases the reference to window, so don't
-                // do anything that references this after it.
+            switch (key_code) {
+            case Key.UP:
+            case Key.DOWN:
+            case Key.LEFT:
+            case Key.RIGHT:
+                focus_first ();
+                break;
+            case Key.BACKSPACE:
+                // screen.close_window () can release the reference to this,
+                // so don't do anything that references this after here.
                 screen.close_window (this);
-                return true;
+                break;
+            default:
+                return base.key_pressed (key_code);
             }
-            return base.key_pressed (key_code);
+            Signal.stop_emission_by_name (this, "key-pressed");
+            return true;
         }
 
         public override void redraw () {
