@@ -176,6 +176,7 @@ namespace EV3devKit {
         public void remove (Widget widget) requires (!(widget is Window)) {
             if (_children.remove (widget)) {
                 widget.parent = null;
+                widget.has_focus = false;
                 redraw ();
                 child_removed (widget);
             }
