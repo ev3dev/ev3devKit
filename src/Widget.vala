@@ -145,7 +145,7 @@ namespace EV3devKit {
             notify["has-focus"].connect (redraw);
             notify["visible"].connect (redraw);
             widget_count++;
-            debug ("Created %s widget: %p", get_type ().name (), this);
+            //debug ("Created %s widget: %p", get_type ().name (), this);
         }
 /*
         ~Widget () {

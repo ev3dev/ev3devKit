@@ -119,18 +119,18 @@ namespace EV3devKit {
         /**
          * Remove the top window from the window stack.
          *
-         * @return The window that was popped from the stack.
+         * @return True if the window was removed.
          */
-        public Window? close_window (Window window) {
+        public bool close_window (Window window) {
             var was_top_window = window_stack.peek_tail () == window;
             if (window_stack.remove (window)) {
                 window._screen = null;
                 if (was_top_window && window_stack.size > 0)
                     window_stack.peek_tail ().shown ();
                 dirty = true;
-                return window;
+                return true;
             }
-            return null;
+            return false;
         }
 
         public void queue_key_code (uint key_code) {
