@@ -96,21 +96,30 @@ namespace EV3devKit {
             cached_lines = new LinkedList<string> ();
             if (text == null)
                 return cached_lines;
+            var hard_lines = text.split ("\n");
+            foreach (var line in hard_lines)
+                cached_lines.add_all (get_substring_lines_for_width (line, width));
+
+            return cached_lines;
+        }
+
+        Gee.List<string> get_substring_lines_for_width (string substring, int width) {
+            var lines = new LinkedList<string> ();
             // if everything fits on one line...
-            if (font.vala_string_width (text) <= width) {
-                cached_lines.add (text);
-                return cached_lines;
+            if (font.vala_string_width (substring) <= width) {
+                lines.add (substring);
+                return lines;
             }
             // otherwise we have to spilt it into multiple lines
             var builder = new StringBuilder ();
             int i = 0;
-            while (i < text.length) {
+            while (i < substring.length) {
                 while (font.vala_string_width (builder.str) < width) {
-                    if (i == text.length)
+                    if (i == substring.length)
                         break;
-                    builder.append_c (text[i++]);
+                    builder.append_c (substring[i++]);
                 }
-                if (i < text.length || font.vala_string_width (builder.str) > width) {
+                if (i < substring.length || font.vala_string_width (builder.str) > width) {
                     var last_space_index = builder.str.last_index_of (" ");
                     if (last_space_index >= 0) {
                         i -= (int)builder.len;
@@ -121,10 +130,10 @@ namespace EV3devKit {
                         i--;
                     }
                 }
-                cached_lines.add (builder.str);
+                lines.add (builder.str);
                 builder.truncate ();
             }
-            return cached_lines;
+            return lines;
         }
 
         public override void redraw () {
