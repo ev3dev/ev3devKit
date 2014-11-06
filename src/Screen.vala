@@ -117,7 +117,7 @@ namespace EV3devKit {
         }
 
         /**
-         * Remove the top window from the window stack.
+         * Remove the window from the window stack.
          *
          * @return True if the window was removed.
          */
@@ -125,6 +125,7 @@ namespace EV3devKit {
             var was_top_window = window_stack.peek_tail () == window;
             if (window_stack.remove (window)) {
                 window._screen = null;
+                window.closed ();
                 if (was_top_window && window_stack.size > 0)
                     window_stack.peek_tail ().shown ();
                 dirty = true;

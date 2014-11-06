@@ -38,6 +38,9 @@ namespace EV3devKit {
                 focus_first ();
         }
 
+        public virtual signal void closed () {
+        }
+
         public Window () {
             base (ContainerType.SINGLE);
         }
