@@ -146,6 +146,7 @@ namespace EV3devKit {
                         extra_space -= fill_width;
                         fill_count--;
                     }
+                    width_map[child] = int.max (width_map[child], 1);
                     set_child_bounds (child, x, content_bounds.y1,
                         x + width_map[child] - 1, content_bounds.y2);
                     x += width_map[child] + spacing;
@@ -181,6 +182,7 @@ namespace EV3devKit {
                         extra_space -= fill_height;
                         fill_count--;
                     }
+                    height_map[child] = int.max (height_map[child], 1);
                     set_child_bounds (child, content_bounds.x1, y,
                         content_bounds.x2, y + height_map[child] - 1);
                     y += height_map[child] + spacing;
