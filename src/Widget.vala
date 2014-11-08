@@ -108,6 +108,74 @@ namespace EV3devKit {
          */
         public bool has_focus { get; protected set; default = false; }
 
+        weak Widget? _next_focus_widget_up;
+        public Widget? next_focus_widget_up {
+            get { return _next_focus_widget_up; }
+            set {
+                if (_next_focus_widget_up != null)
+                    _next_focus_widget_up.weak_unref (remove_next_focus_widget_up);
+                _next_focus_widget_up = value;
+                if (_next_focus_widget_up != null)
+                    _next_focus_widget_up.weak_ref (remove_next_focus_widget_up);
+            }
+        }
+
+        void remove_next_focus_widget_up (Object obj) {
+            _next_focus_widget_up = null;
+            notify_property ("next-focus-widget-up");
+        }
+
+        weak Widget? _next_focus_widget_down;
+        public Widget? next_focus_widget_down {
+            get { return _next_focus_widget_down; }
+            set {
+                if (_next_focus_widget_down != null)
+                    _next_focus_widget_down.weak_unref (remove_next_focus_widget_down);
+                _next_focus_widget_down = value;
+                if (_next_focus_widget_down != null)
+                    _next_focus_widget_down.weak_ref (remove_next_focus_widget_down);
+            }
+        }
+
+        void remove_next_focus_widget_down (Object obj) {
+            _next_focus_widget_down = null;
+            notify_property ("next-focus-widget-down");
+        }
+
+        weak Widget? _next_focus_widget_left;
+        public Widget? next_focus_widget_left {
+            get { return _next_focus_widget_left; }
+            set {
+                if (_next_focus_widget_left != null)
+                    _next_focus_widget_left.weak_unref (remove_next_focus_widget_left);
+                _next_focus_widget_left = value;
+                if (_next_focus_widget_left != null)
+                    _next_focus_widget_left.weak_ref (remove_next_focus_widget_left);
+            }
+        }
+
+        void remove_next_focus_widget_left (Object obj) {
+            _next_focus_widget_left = null;
+            notify_property ("next-focus-widget-left");
+        }
+
+        weak Widget? _next_focus_widget_right;
+        public Widget? next_focus_widget_right {
+            get { return _next_focus_widget_right; }
+            set {
+                if (_next_focus_widget_right != null)
+                    _next_focus_widget_right.weak_unref (remove_next_focus_widget_right);
+                _next_focus_widget_right = value;
+                if (_next_focus_widget_right != null)
+                    _next_focus_widget_right.weak_ref (remove_next_focus_widget_right);
+            }
+        }
+
+        void remove_next_focus_widget_right (Object obj) {
+            _next_focus_widget_right = null;
+            notify_property ("next-focus-widget-right");
+        }
+
         public weak Container? parent { get; protected set; }
 
         public Window? window {
@@ -222,6 +290,28 @@ namespace EV3devKit {
             if (window == null)
                 return;
             weak Widget best = this;
+            switch (direction) {
+            case FocusDirection.UP:
+                if (_next_focus_widget_up != null)
+                    best = _next_focus_widget_up;
+                break;
+            case FocusDirection.DOWN:
+                if (_next_focus_widget_down != null)
+                    best = _next_focus_widget_down;
+                break;
+            case FocusDirection.LEFT:
+                if (_next_focus_widget_left != null)
+                    best = _next_focus_widget_left;
+                break;
+            case FocusDirection.RIGHT:
+                if (_next_focus_widget_right != null)
+                    best = _next_focus_widget_right;
+                break;
+            }
+            if (best != this) {
+                best.focus ();
+                return;
+            }
             int best_distance = 2 * (window.content_bounds.width + window.content_bounds.height);
             window.do_recursive_children ((widget) => {
                 if (widget == this || !widget.can_focus)
