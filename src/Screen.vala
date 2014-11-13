@@ -124,8 +124,10 @@ namespace EV3devKit {
         public bool close_window (Window window) {
             var was_top_window = window_stack.peek_tail () == window;
             if (window_stack.remove (window)) {
-                window._screen = null;
-                window.closed ();
+                if (window.ref_count > 0) {
+                    window._screen = null;
+                    window.closed ();
+                }
                 if (was_top_window && window_stack.size > 0)
                     window_stack.peek_tail ().shown ();
                 dirty = true;
