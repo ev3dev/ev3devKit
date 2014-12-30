@@ -22,7 +22,7 @@
 
 using GLib;
 
-namespace ev3dev_lang {
+namespace EV3DevLang {
     public errordomain DeviceError {
         NOT_CONNECTED,
         IO_ERROR

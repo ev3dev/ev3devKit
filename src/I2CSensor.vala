@@ -22,7 +22,7 @@
 
 using GLib;
 
-namespace ev3dev_lang {
+namespace EV3DevLang {
     public class I2CSensor : Sensor {
         public I2CSensor (string port, string[]? types, string? i2c_address) {
             base (port, types, i2c_address);

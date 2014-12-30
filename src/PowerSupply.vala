@@ -22,7 +22,7 @@
 
 using GLib;
 
-namespace ev3dev_lang {
+namespace EV3DevLang {
     public class PowerSupply : Device {
         private string power_device_dir = "/sys/class/power_supply/";
         public string device_name = "legoev3-battery";

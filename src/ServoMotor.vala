@@ -22,7 +22,7 @@
 
 using GLib;
 
-namespace ev3dev_lang {
+namespace EV3DevLang {
     public class ServoMotor : MotorBase {
         public ServoMotor (string port = "") {
             this.motor_device_dir = "/sys/class/servo-motor";

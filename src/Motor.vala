@@ -22,7 +22,7 @@
 
 using GLib;
 
-namespace ev3dev_lang {
+namespace EV3DevLang {
     public class Motor : MotorBase {
         public Motor (string port = "", string? type = null) {
             base (port, type);

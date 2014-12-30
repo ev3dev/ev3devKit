@@ -22,7 +22,7 @@
 
 using GLib;
 
-namespace ev3dev_lang {
+namespace EV3DevLang {
     public class MotorBase : Device {
         protected string port;
         protected string motor_device_dir = "/sys/class/tacho-motor";

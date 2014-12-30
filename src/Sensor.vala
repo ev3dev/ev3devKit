@@ -22,7 +22,7 @@
 
 using GLib;
 
-namespace ev3dev_lang {
+namespace EV3DevLang {
     public class Sensor : Device {
         private string port;
         private const string sensor_device_dir = "/sys/class/lego-sensor";

@@ -22,7 +22,7 @@
 
 using GLib;
 
-namespace ev3dev_lang {
+namespace EV3DevLang {
     public class LED : Device {
         private string led_device_dir = "/sys/class/leds/";
         public string device_name = "";
