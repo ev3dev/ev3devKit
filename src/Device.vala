@@ -3,6 +3,7 @@
  * hardware on bricks running ev3dev
  *
  * Copyright 2014 WasabiFan
+ * Copyright 2014 David Lechner <david@lechnology.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +21,7 @@
  * MA 02110-1301, USA.
  */
 
-using GLib;
+using GUdev;
 
 namespace EV3DevLang {
     public errordomain DeviceError {
@@ -28,64 +29,76 @@ namespace EV3DevLang {
         IO_ERROR
     }
 
-    public class Device : GLib.Object {
-        public string device_root { get; protected set; }
-        public bool connected { get; protected set; }
+    public abstract class Device : Object {
+        const string connect_error = "You must connect to a device before you can read from it.";
+        const string read_error = "There was an error reading from the file";
+        const string write_error = "There was an error writing to the file";
 
-        private string connect_error = "You must connect to a device before you can read from it.";
-        private string read_error = "There was an error reading from the file";
-        private string write_error = "There was an error writing to the file";
+        Gee.Map<string, DataInputStream> read_attr_map;
+        Gee.Map<string, DataOutputStream> write_attr_map;
 
-        public Device () {}
+        protected GUdev.Device udev_device;
 
-        public void connect (string device_root_path) {
-            this.device_root = device_root_path;
-            this.connected = true;
+        public bool connected { get; internal set; }
+
+        public Device (GUdev.Device udev_device) {
+            read_attr_map = new Gee.HashMap<string, DataInputStream?> ();
+            write_attr_map = new Gee.HashMap<string, DataOutputStream?> ();
+            this.udev_device = udev_device;
+            connected = true;
         }
 
-        private string construct_property_path (string property) {
-            return GLib.Path.build_filename (this.device_root, property);
+        internal virtual void change (GUdev.Device udev_device) {
+            this.udev_device = udev_device;
         }
 
-        public int read_int (string property) throws DeviceError {
-            string str_value = this.read_string (property);
-
-            int result;
-            result = int.parse (str_value);
-
-            return result;
+        void assert_connected () throws DeviceError {
+            if (!_connected)
+                throw new DeviceError.NOT_CONNECTED (connect_error);
         }
 
-        public string read_string (string property) throws DeviceError {
-            if (!this.connected)
-                throw new DeviceError.NOT_CONNECTED (this.connect_error);
+        string get_property_path (string property) {
+            return Path.build_filename (udev_device.get_sysfs_path (), property);
+        }
+
+        protected int read_int (string property) throws DeviceError {
+            var str_value = read_string (property);
+            return int.parse (str_value);
+        }
+
+        protected string read_string (string property) throws DeviceError {
+            assert_connected ();
 
             string result;
             try {
-                var file = File.new_for_path (this.construct_property_path (property));
-                var input_stream = new DataInputStream (file.read ());
-                result = input_stream.read_line ();
+                DataInputStream stream;
+                if (read_attr_map.has_key (property)) {
+                    stream = read_attr_map[property];
+                    stream.seek (0, SeekType.SET);
+                } else {
+                    var file = File.new_for_path (get_property_path (property));
+                    stream = new DataInputStream (file.read ());
+                    read_attr_map[property] = stream;
+                }
+                result = stream.read_line ();
             }
             catch (Error error) {
-                this.connected = false;
-                throw new DeviceError.IO_ERROR (this.read_error + ": " + error.message);
+                throw new DeviceError.IO_ERROR (read_error + ": " + error.message);
             }
-
             return result;
         }
 
         /* Note: All write methods have a limit of 256 bytes to increase write speed */
 
-        public void write_int (string property, int value) throws DeviceError {
-            this.write_string (property, value.to_string ());
+        protected void write_int (string property, int value) throws DeviceError {
+            write_string (property, value.to_string ());
         }
 
-        public void write_string (string property, string value) throws DeviceError {
-            if (!this.connected)
-                throw new DeviceError.NOT_CONNECTED (this.connect_error);
+        protected void write_string (string property, string value) throws DeviceError {
+            assert_connected ();
 
             try {
-                string property_path = this.construct_property_path (property);
+                string property_path = get_property_path (property);
                 var file = File.new_for_path (property_path);
                 var read_write_stream = file.open_readwrite ();
                 var out_stream = new DataOutputStream (new BufferedOutputStream.sized (read_write_stream.output_stream, 256));
@@ -93,8 +106,7 @@ namespace EV3DevLang {
                 out_stream.flush ();
             }
             catch (Error error) {
-                this.connected = false;
-                throw new DeviceError.IO_ERROR (this.write_error + ": " + error.message);
+                throw new DeviceError.IO_ERROR (write_error + ": " + error.message);
             }
         }
     }
