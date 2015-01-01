@@ -69,3 +69,20 @@ add_custom_target(run
 )
 
 install (TARGETS ${EXEC_NAME} RUNTIME DESTINATION bin)
+
+find_package(Valadoc)
+
+add_custom_target(doc
+    COMMAND ${VALADOC_EXECUTABLE}
+        --force
+        --package-name=${EXEC_NAME}
+        --package-version=${VERSION}
+        --target-glib=2.40
+        -o ${CMAKE_BINARY_DIR}/doc
+        --pkg=gio-2.0
+        --pkg=gee-0.8
+        --pkg=gudev-1.0
+        ${EV3DEV_LANG_VALA_SOURCE_FILES}
+        ${EV3DEV_LANG_VALA_COMMON_SOURCE_FILES}
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
