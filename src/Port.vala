@@ -56,13 +56,28 @@ namespace EV3DevLang {
             }
         }
 
+        public string status {
+            owned get {
+                return udev_device.get_sysfs_attr ("status");
+            }
+        }
+
         internal Port (GUdev.Device udev_device) {
             base (udev_device);
+        }
+
+        public void set_mode (string mode) throws Error {
+            write_string ("mode", mode);
+        }
+
+        public void set_device (string device) throws Error {
+            write_string ("set_device", device);
         }
 
         internal override void change (GUdev.Device udev_device) {
             base.change (udev_device);
             notify_property ("mode");
+            notify_property ("status");
         }
     }
 }

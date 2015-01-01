@@ -25,8 +25,7 @@ using GUdev;
 
 namespace EV3DevLang {
     public errordomain DeviceError {
-        NOT_CONNECTED,
-        IO_ERROR
+        NOT_CONNECTED
     }
 
     public abstract class Device : Object {
@@ -48,6 +47,11 @@ namespace EV3DevLang {
             connected = true;
         }
 
+        /**
+         * This is called when udev receives a "change" event from the kernel.
+         * The udev_device object is replaced so that we get the new cached
+         * property and attribute values from udev.
+         */
         internal virtual void change (GUdev.Device udev_device) {
             this.udev_device = udev_device;
         }
@@ -61,53 +65,38 @@ namespace EV3DevLang {
             return Path.build_filename (udev_device.get_sysfs_path (), property);
         }
 
-        protected int read_int (string property) throws DeviceError {
+        protected int read_int (string property) throws Error {
             var str_value = read_string (property);
             return int.parse (str_value);
         }
 
-        protected string read_string (string property) throws DeviceError {
-            assert_connected ();
-
-            string result;
-            try {
-                DataInputStream stream;
-                if (read_attr_map.has_key (property)) {
-                    stream = read_attr_map[property];
-                    stream.seek (0, SeekType.SET);
-                } else {
-                    var file = File.new_for_path (get_property_path (property));
-                    stream = new DataInputStream (file.read ());
-                    read_attr_map[property] = stream;
-                }
-                result = stream.read_line ();
+        protected string read_string (string property) throws Error {
+            DataInputStream stream;
+            if (read_attr_map.has_key (property)) {
+                stream = read_attr_map[property];
+                stream.seek (0, SeekType.SET);
+            } else {
+                var file = File.new_for_path (get_property_path (property));
+                stream = new DataInputStream (file.read ());
+                read_attr_map[property] = stream;
             }
-            catch (Error error) {
-                throw new DeviceError.IO_ERROR (read_error + ": " + error.message);
-            }
-            return result;
+            return stream.read_line ();
         }
 
         /* Note: All write methods have a limit of 256 bytes to increase write speed */
 
-        protected void write_int (string property, int value) throws DeviceError {
+        protected void write_int (string property, int value) throws Error {
             write_string (property, value.to_string ());
         }
 
-        protected void write_string (string property, string value) throws DeviceError {
-            assert_connected ();
-
-            try {
-                string property_path = get_property_path (property);
-                var file = File.new_for_path (property_path);
-                var read_write_stream = file.open_readwrite ();
-                var out_stream = new DataOutputStream (new BufferedOutputStream.sized (read_write_stream.output_stream, 256));
-                out_stream.put_string (value);
-                out_stream.flush ();
-            }
-            catch (Error error) {
-                throw new DeviceError.IO_ERROR (write_error + ": " + error.message);
-            }
+        protected void write_string (string property, string value) throws Error {
+            string property_path = get_property_path (property);
+            var file = File.new_for_path (property_path);
+            var output_stream = file.replace (null, false, FileCreateFlags.NONE);
+            var bufferd_stream = new BufferedOutputStream.sized (output_stream, 256);
+            var out_stream = new DataOutputStream (bufferd_stream);
+            out_stream.put_string (value);
+            out_stream.flush ();
         }
     }
 }

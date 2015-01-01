@@ -22,45 +22,7 @@
 
 namespace EV3DevLang {
     public class Demo : Application {
-        [Compact]
-        class MenuItem {
-            public string text;
-            public Menu? submenu;
-        }
-
-        [Compact]
-        class Menu {
-            public unowned Menu? parent;
-            public MenuItem[] menu_items;
-        }
-
-        Menu main_menu = new Menu () {
-            menu_items = {
-                new MenuItem () {
-                    text = "Ports",
-                    submenu = new Menu () {
-                        menu_items = { 
-                            new MenuItem () {
-                                text = "Select Port"
-                            }
-                        }
-                    }
-                },
-                new MenuItem () {
-                    text = "Sensors",
-                    submenu = new Menu () {
-                        menu_items = {
-                            new MenuItem () {
-                                text = "Select Sensor"
-                            }
-                        }
-                    }
-                }
-            }
-        };
-
         DeviceManager manager;
-        unowned Menu current_menu;
         Port? selected_port;
         Sensor? selected_sensor;
 
@@ -72,54 +34,91 @@ namespace EV3DevLang {
             manager.get_ports ().foreach (on_port_added);
             manager.sensor_added.connect (on_sensor_added);
             manager.get_sensors ().foreach (on_sensor_added);
-            current_menu = main_menu;
         }
 
-        async void handle_input (ApplicationCommandLine command_line) {
+        void print_menu_items<T> (ApplicationCommandLine command_line) {
+            var enum_class = (EnumClass) typeof (T).class_ref ();
+            command_line.print ("\n");
+            foreach (var enum_value in enum_class.values) {
+                var text = enum_value.value_nick.replace ("-", " ");
+                command_line.print ("%d. %s\n", enum_value.value, text);
+            }
+        }
+
+        async int get_input (ApplicationCommandLine command_line,
+            DataInputStream stdin) throws IOError
+        {
+            command_line.print ("\nSelect an item: ");
+            return int.parse (yield stdin.read_line_async ());
+        }
+
+        enum MainMenu {
+            PORTS = 1,
+            SENSORS,
+            QUIT
+        }
+
+        async void do_main_menu (ApplicationCommandLine command_line) throws IOError {
             var stdin = new DataInputStream (command_line.get_stdin ());
-            while (true) {
-                command_line.print ("\n");
-                int i = 1;
-                foreach (unowned MenuItem item in current_menu.menu_items) {
-                    command_line.print ("%d. %s\n", i, item.text);
-                    i++;
-                }
-                if (current_menu.parent == null)
-                    command_line.print ("%d. Quit\n", i);
-                else
-                    command_line.print ("%d. Back\n", i);
-                command_line.print ("\nSelect an item: ");
-                try {
-                    var input = int.parse (yield stdin.read_line_async ());
-                    if (input <= 0 || input > i) {
-                        command_line.print ("Invalid selection.\n");
-                    } else if (input == i) {
-                        // Quit
-                        if (current_menu.parent == null)
-                            break;
-                        // Back
-                        current_menu = current_menu.parent;
-                    } else {
-                        unowned MenuItem selected_item = current_menu.menu_items[input - 1];
-                        if (selected_item.submenu != null) {
-                            selected_item.submenu.parent = current_menu;
-                            current_menu = selected_item.submenu;
-                        } else if (selected_item.text == "Select Port") {
-                            yield select_port (command_line, stdin);
-                        } else if (selected_item.text == "Select Sensor") {
-                            yield select_sensor (command_line, stdin);
-                        } else {
-                            command_line.print ("Nothing to do.\n");
-                        }
-                    }
-                } catch (IOError err) {
-                    command_line.print (err.message);
+            // Main Menu
+            var done = false;
+            while (!done) {
+                print_menu_items<MainMenu> (command_line);
+                switch (yield get_input (command_line, stdin)) {
+                case MainMenu.PORTS:
+                    yield do_ports_menu (command_line, stdin);
+                    break;
+                case MainMenu.SENSORS:
+                    yield do_sensors_menu (command_line, stdin);
+                    break;
+                case MainMenu.QUIT:
+                    done = true;
+                    break;
+                default:
+                    command_line.print ("Invalid selection.\n");
                     break;
                 }
             }
         }
 
-        async void select_port (ApplicationCommandLine command_line,
+        enum PortsMenu {
+            SELECT_PORT = 1,
+            SHOW_PORT_INFO,
+            SELECT_MODE,
+            SET_DEVICE,
+            MAIN_MENU
+        }
+
+        async void do_ports_menu (ApplicationCommandLine command_line,
+            DataInputStream stdin) throws IOError
+        {
+            var done = false;
+            while (!done) {
+                print_menu_items<PortsMenu> (command_line);
+                switch (yield get_input (command_line, stdin)) {
+                case PortsMenu.SELECT_PORT:
+                    yield do_select_port (command_line, stdin);
+                    break;
+                case PortsMenu.SHOW_PORT_INFO:
+                    do_show_port_info (command_line);
+                    break;
+                case PortsMenu.SELECT_MODE:
+                    yield do_select_port_mode (command_line, stdin);
+                    break;
+                case PortsMenu.SET_DEVICE:
+                    yield do_port_set_device (command_line, stdin);
+                    break;
+                case PortsMenu.MAIN_MENU:
+                    done = true;
+                    break;
+                default:
+                    command_line.print ("Invalid selection.\n");
+                    break;
+                }
+            }
+        }
+
+        async void do_select_port (ApplicationCommandLine command_line,
             DataInputStream stdin) throws IOError
         {
             var ports = manager.get_ports ();
@@ -136,7 +135,95 @@ namespace EV3DevLang {
                 selected_port = ports[input - 1];
         }
 
-        async void select_sensor (ApplicationCommandLine command_line,
+        void do_show_port_info (ApplicationCommandLine command_line) {
+            command_line.print ("\n");
+            if (selected_port == null) {
+                command_line.print ("No port selected.\n");
+                return;
+            }
+            command_line.print ("port name: %s\n", selected_port.name);
+            command_line.print ("\tmodes: %s\n", string.joinv (", ", selected_port.modes));
+            command_line.print ("\tmode: %s\n", selected_port.mode);
+            command_line.print ("\tstatus: %s\n", selected_port.status);
+        }
+
+        async void do_select_port_mode (ApplicationCommandLine command_line,
+            DataInputStream stdin) throws IOError
+        {
+            if (selected_port == null) {
+                command_line.print ("No port selected.\n");
+                return;
+            }
+            int i = 1;
+            foreach (var mode in selected_port.modes) {
+                command_line.print ("%d. %s\n", i, mode);
+                i++;
+            }
+            command_line.print ("\nSelect Mode: ");
+            var cancellable = new Cancellable ();
+            var handler_id = selected_port.notify["connected"].connect (() => {
+                cancellable.cancel ();
+            });
+            var input = int.parse (yield stdin.read_line_async (Priority.DEFAULT, cancellable));
+            SignalHandler.disconnect (selected_port, handler_id);
+            if (input <= 0 || input >= i) {
+                command_line.print ("Invalid Selection.\n");
+            } else {
+                try {
+                    selected_port.set_mode (selected_port.modes[input - 1]);
+                } catch (Error err) {
+                    command_line.print ("Error: %s\n", err.message);
+                }
+            }
+        }
+
+        async void do_port_set_device (ApplicationCommandLine command_line,
+            DataInputStream stdin) throws IOError
+        {
+            if (selected_port == null) {
+                command_line.print ("No port selected.\n");
+                return;
+            }
+            command_line.print ("\nEnter Device Name: ");
+            var cancellable = new Cancellable ();
+            var handler_id = selected_port.notify["connected"].connect (() => {
+                cancellable.cancel ();
+            });
+            var input = yield stdin.read_line_async (Priority.DEFAULT, cancellable);
+            SignalHandler.disconnect (selected_port, handler_id);
+            try {
+                selected_port.set_device (input);
+            } catch (Error err) {
+                command_line.print ("Error: %s\n", err.message);
+            }
+        }
+
+        enum SensorsMenu {
+            SELECT_SENSOR = 1,
+            MAIN_MENU
+        }
+
+        async void do_sensors_menu (ApplicationCommandLine command_line,
+            DataInputStream stdin) throws IOError
+        {
+            var done = false;
+            while (!done) {
+                print_menu_items<SensorsMenu> (command_line);
+                switch (yield get_input (command_line, stdin)) {
+                case SensorsMenu.SELECT_SENSOR:
+                    yield do_select_sensor (command_line, stdin);
+                    break;
+                case SensorsMenu.MAIN_MENU:
+                    done = true;
+                    break;
+                default:
+                    command_line.print ("Invalid selection.\n");
+                    break;
+                }
+            }
+        }
+
+        async void do_select_sensor (ApplicationCommandLine command_line,
             DataInputStream stdin) throws IOError
         {
             var sensors = manager.get_sensors ();
@@ -156,7 +243,12 @@ namespace EV3DevLang {
 
         public override int command_line (ApplicationCommandLine command_line) {
             hold ();
-            handle_input.begin (command_line, (obj, res) => {
+            do_main_menu.begin (command_line, (obj, res) => {
+                try {
+                    do_main_menu.end (res);
+                } catch (IOError err) {
+                    command_line.print (err.message);
+                }
                 release ();
             });
             return 0;
@@ -168,9 +260,7 @@ namespace EV3DevLang {
         }
 
         void on_port_added (Port port) {
-             info ("Port added: %s", port.name);
-             info ("\tmodes: %s", string.joinv (", ", port.modes));
-             info ("\tmode: %s", port.mode);
+             message ("Port added: %s", port.name);
         }
 
         void on_sensor_added (Sensor sensor) {
