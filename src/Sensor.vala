@@ -3,6 +3,7 @@
  * hardware on bricks running ev3dev
  *
  * Copyright 2014 WasabiFan
+ * Copyright 2015 David Lechner <david@lechnology.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,10 +21,26 @@
  * MA 02110-1301, USA.
  */
 
-using GUdev;
-
 namespace EV3DevLang {
     public class Sensor : EV3DevLang.Device {
+
+        public string? address {
+            get {
+                return udev_device.get_sysfs_attr ("address");
+            }
+        }
+
+        public string? fw_version {
+            get {
+                return udev_device.get_sysfs_attr ("fw_version");
+            }
+        }
+
+        public int poll_ms {
+            get {
+                return udev_device.get_sysfs_attr_as_int ("poll_ms");
+            }
+        }
 
         public int decimals {
             get {
@@ -73,18 +90,30 @@ namespace EV3DevLang {
             }
         }
 
-        public int get_value (int index) {
+        internal Sensor (GUdev.Device udev_device) {
+            base (udev_device);
+        }
+
+        public int get_value (int index) throws Error {
             return read_int ("value" + index.to_string ());
         }
 
-        public double get_float_value (int index) {
+        public double get_float_value (int index) throws Error {
             var value = (double)get_value (index);
             double decimal_factor = Math.pow10 ((double)decimals);
             return value / decimal_factor;
         }
 
-        internal Sensor (GUdev.Device udev_device) {
-            base (udev_device);
+        public void set_mode (string mode) throws Error {
+            write_string ("mode", mode);
+        }
+
+        public void send_command (string command) throws Error {
+            write_string ("command", command);
+        }
+
+        public void set_poll_ms (int poll_ms) throws Error {
+            write_int ("poll_ms", poll_ms);
         }
 
         internal override void change (GUdev.Device udev_device) {
@@ -93,6 +122,7 @@ namespace EV3DevLang {
             notify_property ("decimals");
             notify_property ("units");
             notify_property ("num-values");
+            notify_property ("poll-ms");
         }
     }
 }

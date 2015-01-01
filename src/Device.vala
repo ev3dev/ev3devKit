@@ -3,7 +3,7 @@
  * hardware on bricks running ev3dev
  *
  * Copyright 2014 WasabiFan
- * Copyright 2014 David Lechner <david@lechnology.com>
+ * Copyright 2014-2015 David Lechner <david@lechnology.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,16 @@ namespace EV3DevLang {
             this.udev_device = udev_device;
         }
 
-        void assert_connected () throws DeviceError {
+        /**
+         * Test if device is still connected.
+         *
+         * Since vala properties cannot throw exceptions, we make this method
+         * public so that you can confirm that a device is still connected
+         * before reading properties.
+         *
+         * @throws DeviceError.NOT_CONNECTED if device is not connected.
+         */
+        public void assert_connected () throws DeviceError {
             if (!_connected)
                 throw new DeviceError.NOT_CONNECTED (connect_error);
         }
@@ -71,6 +80,7 @@ namespace EV3DevLang {
         }
 
         protected string read_string (string property) throws Error {
+            assert_connected ();
             DataInputStream stream;
             if (read_attr_map.has_key (property)) {
                 stream = read_attr_map[property];
@@ -90,11 +100,12 @@ namespace EV3DevLang {
         }
 
         protected void write_string (string property, string value) throws Error {
+            assert_connected ();
             string property_path = get_property_path (property);
             var file = File.new_for_path (property_path);
             var output_stream = file.replace (null, false, FileCreateFlags.NONE);
-            var bufferd_stream = new BufferedOutputStream.sized (output_stream, 256);
-            var out_stream = new DataOutputStream (bufferd_stream);
+            var buffered_stream = new BufferedOutputStream.sized (output_stream, 256);
+            var out_stream = new DataOutputStream (buffered_stream);
             out_stream.put_string (value);
             out_stream.flush ();
         }
