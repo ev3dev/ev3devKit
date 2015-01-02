@@ -3,6 +3,7 @@
  * hardware on bricks running ev3dev
  *
  * Copyright 2014 WasabiFan
+ * Copyright 2015 David Lechner <david@lechnology.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,234 +21,251 @@
  * MA 02110-1301, USA.
  */
 
-using GLib;
-
 namespace EV3DevLang {
-    public class Motor : MotorBase {
-        public Motor (string port = "", string? type = null) {
-            base (port, type);
-        }
-
-        public void reset () {
-            this.write_int ("reset", 1);
-        }
-
-        //PROPERTIES
-
-        //~autogen vala_generic-get-set classes.motor>currentClass
+    public class TachoMotor : EV3DevLang.Device {
         public int duty_cycle {
             get {
-                return this.read_int ("duty_cycle");
+                return (int)(try_read_int ("duty_cycle") ?? 0);
             }
         }
 
         public int duty_cycle_sp {
             get {
-                return this.read_int ("duty_cycle_sp");
+                return (int)(try_read_int ("duty_cycle_sp") ?? 0);
             }
             set {
-                this.write_int ("duty_cycle_sp", value);
+                try_write_int ("duty_cycle_sp", value);
             }
         }
 
         public string encoder_mode {
             owned get {
-                return this.read_string ("encoder_mode");
+                return try_read_string ("encoder_mode") ?? "";
             }
             set {
-                this.write_string ("encoder_mode", value);
+                try_write_string ("encoder_mode", value);
+            }
+        }
+
+        public string[]? encoder_modes {
+            owned get {
+                return udev_device.get_sysfs_attr_as_strv ("encoder_modes");
             }
         }
 
         public string emergency_stop {
             owned get {
-                return this.read_string ("estop");
+                return try_read_string ("estop") ?? "";
             }
             set {
-                this.write_string ("estop", value);
-            }
-        }
-
-        public string debug_log {
-            owned get {
-                return this.read_string ("log");
+                try_write_string ("estop", value);
             }
         }
 
         public string polarity_mode {
             owned get {
-                return this.read_string ("polarity_mode");
+                return try_read_string ("polarity_mode") ?? "";
             }
             set {
-                this.write_string ("polarity_mode", value);
+                try_write_string ("polarity_mode", value);
             }
         }
 
-        public string port_name {
+        public string[]? polarity_modes {
             owned get {
-                return this.read_string ("port_name");
+                return udev_device.get_sysfs_attr_as_strv ("polarity_modes");
+            }
+        }
+
+        public string? port_name {
+            owned get {
+                return udev_device.get_sysfs_attr ("port_name");
             }
         }
 
         public int position {
             get {
-                return this.read_int ("position");
+                return (int)(try_read_int ("position") ?? 0);
             }
             set {
-                this.write_int ("position", value);
+                try_write_int ("position", value);
             }
         }
 
         public string position_mode {
             owned get {
-                return this.read_string ("position_mode");
+                return try_read_string ("position_mode") ?? "";
             }
             set {
-                this.write_string ("position_mode", value);
+                try_write_string ("position_mode", value);
+            }
+        }
+
+        public string[]? position_modes {
+            owned get {
+                return udev_device.get_sysfs_attr_as_strv ("position_modes");
             }
         }
 
         public int position_sp {
             get {
-                return this.read_int ("position_sp");
+                return (int)(try_read_int ("position_sp") ?? 0);
             }
             set {
-                this.write_int ("position_sp", value);
+                try_write_int ("position_sp", value);
             }
         }
 
         public int pulses_per_second {
             get {
-                return this.read_int ("pulses_per_second");
+                return (int)(try_read_int ("pulses_per_second") ?? 0);
             }
         }
 
         public int pulses_per_second_sp {
             get {
-                return this.read_int ("pulses_per_second_sp");
+                return (int)(try_read_int ("pulses_per_second_sp") ?? 0);
             }
             set {
-                this.write_int ("pulses_per_second_sp", value);
+                try_write_int ("pulses_per_second_sp", value);
             }
         }
 
         public int ramp_down_sp {
             get {
-                return this.read_int ("ramp_down_sp");
+                return (int)(try_read_int ("ramp_down_sp") ?? 0);
             }
             set {
-                this.write_int ("ramp_down_sp", value);
+                try_write_int ("ramp_down_sp", value);
             }
         }
 
         public int ramp_up_sp {
             get {
-                return this.read_int ("ramp_up_sp");
+                return (int)(try_read_int ("ramp_up_sp") ?? 0);
             }
             set {
-                this.write_int ("ramp_up_sp", value);
+                try_write_int ("ramp_up_sp", value);
             }
         }
 
         public string regulation_mode {
             owned get {
-                return this.read_string ("regulation_mode");
+                return try_read_string ("regulation_mode") ?? "";
             }
             set {
-                this.write_string ("regulation_mode", value);
+                try_write_string ("regulation_mode", value);
+            }
+        }
+
+        public string[]? regulation_modes {
+            owned get {
+                return udev_device.get_sysfs_attr_as_strv ("regulation_modes");
             }
         }
 
         public int run {
             get {
-                return this.read_int ("run");
+                return (int)(try_read_int ("run") ?? 0);
             }
             set {
-                this.write_int ("run", value);
+                try_write_int ("run", value);
             }
         }
 
         public string run_mode {
             owned get {
-                return this.read_string ("run_mode");
+                return try_read_string ("run_mode") ?? "";
             }
             set {
-                this.write_string ("run_mode", value);
+                try_write_string ("run_mode", value);
+            }
+        }
+
+        public string[]? run_modes {
+            owned get {
+                return udev_device.get_sysfs_attr_as_strv ("run_modes");
             }
         }
 
         public int speed_regulation_p {
             get {
-                return this.read_int ("speed_regulation_P");
+                return (int)(try_read_int ("speed_regulation_P") ?? 0);
             }
             set {
-                this.write_int ("speed_regulation_P", value);
+                try_write_int ("speed_regulation_P", value);
             }
         }
 
         public int speed_regulation_i {
             get {
-                return this.read_int ("speed_regulation_I");
+                return (int)(try_read_int ("speed_regulation_I") ?? 0);
             }
             set {
-                this.write_int ("speed_regulation_I", value);
+                try_write_int ("speed_regulation_I", value);
             }
         }
 
         public int speed_regulation_d {
             get {
-                return this.read_int ("speed_regulation_D");
+                return (int)(try_read_int ("speed_regulation_D") ?? 0);
             }
             set {
-                this.write_int ("speed_regulation_D", value);
+                try_write_int ("speed_regulation_D", value);
             }
         }
 
         public int speed_regulation_k {
             get {
-                return this.read_int ("speed_regulation_K");
+                return (int)(try_read_int ("speed_regulation_K") ?? 0);
             }
             set {
-                this.write_int ("speed_regulation_K", value);
+                try_write_int ("speed_regulation_K", value);
             }
         }
 
         public string state {
             owned get {
-                return this.read_string ("state");
+                return try_read_string ("state") ?? "";
             }
         }
 
         public string stop_mode {
             owned get {
-                return this.read_string ("stop_mode");
+                return try_read_string ("stop_mode") ?? "";
             }
             set {
-                this.write_string ("stop_mode", value);
+                try_write_string ("stop_mode", value);
+            }
+        }
+
+        public string[]? stop_modes {
+            owned get {
+                return udev_device.get_sysfs_attr_as_strv ("stop_modes");
             }
         }
 
         public int time_sp {
             get {
-                return this.read_int ("time_sp");
+                return (int)(try_read_int ("time_sp") ?? 0);
             }
             set {
-                this.write_int ("time_sp", value);
+                try_write_int ("time_sp", value);
             }
         }
 
-        public string motor_type {
+        public string? motor_type {
             owned get {
-                return this.read_string ("type");
+                return udev_device.get_sysfs_attr ("type");
             }
         }
 
-        //~autogen
+        internal TachoMotor (GUdev.Device udev_device) {
+            base (udev_device);
+        }
 
-        public string[] stop_modes {
-            owned get {
-                return this.read_string ("stop_modes").split (" ");
-            }
+        public void reset () {
+            try_write_int ("reset", 1);
         }
     }
 }

@@ -24,6 +24,7 @@ set (EV3DEV_LANG_VALA_COMMON_SOURCE_FILES
     src/LED.vala
     src/Port.vala
     src/Sensor.vala
+    src/TachoMotor.vala
 )
 
 find_package(PkgConfig REQUIRED)

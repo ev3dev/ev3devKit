@@ -46,6 +46,7 @@ namespace EV3DevLang {
         Port? selected_port;
         Sensor? selected_sensor;
         LED? selected_led;
+        TachoMotor? selected_tacho_motor;
 
         Demo () {
             // Application class does not support chaining to base(), so this
@@ -65,6 +66,8 @@ namespace EV3DevLang {
             manager.get_sensors ().foreach (on_sensor_added);
             manager.led_added.connect (on_led_added);
             manager.get_leds ().foreach (on_led_added);
+            manager.tacho_motor_added.connect (on_tacho_motor_added);
+            manager.get_tacho_motors ().foreach (on_tacho_motor_added);
         }
 
         /**
@@ -115,6 +118,7 @@ namespace EV3DevLang {
             PORTS = 1,
             SENSORS,
             LEDS,
+            TACHO_MOTORS,
             QUIT
         }
 
@@ -137,6 +141,9 @@ namespace EV3DevLang {
                     break;
                 case MainMenu.LEDS:
                     yield do_leds_menu (command_line, stdin);
+                    break;
+                case MainMenu.TACHO_MOTORS:
+                    yield do_tacho_motors_menu (command_line, stdin);
                     break;
                 case MainMenu.QUIT:
                     done = true;
@@ -734,6 +741,111 @@ namespace EV3DevLang {
         }
 
         /**
+         * List of items in the TachoMotors submenu.
+         */
+        enum TachoMotorsMenu {
+            SELECT_MOTOR = 1,
+            SHOW_MOTOR_INFO,
+            MAIN_MENU
+        }
+
+        /**
+         * Print the TachoMotor menu and handle user input.
+         *
+         * Loops until user selects Main Menu
+         */
+        async void do_tacho_motors_menu (ApplicationCommandLine command_line,
+            DataInputStream stdin) throws IOError
+        {
+            var done = false;
+            while (!done) {
+                print_menu_items<TachoMotorsMenu> (command_line);
+                switch (yield get_input (command_line, stdin)) {
+                case TachoMotorsMenu.SELECT_MOTOR:
+                    yield do_select_tacho_motor (command_line, stdin);
+                    break;
+                case TachoMotorsMenu.SHOW_MOTOR_INFO:
+                    do_show_tacho_motor_info (command_line);
+                    break;
+                case PortsMenu.MAIN_MENU:
+                    done = true;
+                    break;
+                default:
+                    command_line.print ("Invalid selection.\n");
+                    break;
+                }
+            }
+        }
+
+        /**
+         * Print a list of all tacho-motor class devices and get user selection.
+         *
+         * DeviceManager.get_tacho_motors () is used to get a list of tacho motors.
+         *
+         * If the user selects a valid tacho motor, selected_tacho_motor is set.
+         */
+        async void do_select_tacho_motor (ApplicationCommandLine command_line,
+            DataInputStream stdin) throws IOError
+        {
+            var motors = manager.get_tacho_motors ();
+            int i = 1;
+            motors.foreach ((motor) => {
+                command_line.print ("%d. %s on %s (%s)\n", i, motor.motor_type,
+                    motor.port_name, motor.device_name);
+                i++;
+            });
+            command_line.print ("\nSelect Tacho Motor: ");
+            var input = int.parse (yield stdin.read_line_async ());
+            if (input <= 0 || input >= i)
+                command_line.print ("Invalid Selection.\n");
+            else
+                selected_tacho_motor = motors[input - 1];
+        }
+
+        /**
+         * Print all of the property values for selected_tacho_motor.
+         */
+        void do_show_tacho_motor_info (ApplicationCommandLine command_line) {
+            command_line.print ("\n");
+            if (selected_tacho_motor == null) {
+                command_line.print ("No Tacho Motor selected.\n");
+                return;
+            }
+            command_line.print ("device_name: %s\n", selected_tacho_motor.device_name);
+            command_line.print ("motor_type: %s\n", selected_tacho_motor.motor_type);
+            command_line.print ("port_name: %s\n", selected_tacho_motor.port_name);
+            command_line.print ("connected: %s\n", selected_tacho_motor.connected ? "true" : "false");
+            command_line.print ("duty_cycle: %d\n", selected_tacho_motor.duty_cycle);
+            command_line.print ("duty_cycle_sp: %d\n", selected_tacho_motor.duty_cycle_sp);
+            command_line.print ("encoder_mode: %s\n", selected_tacho_motor.encoder_mode);
+            command_line.print ("encoder_modes: %s\n", string.joinv (", ", selected_tacho_motor.encoder_modes));
+            command_line.print ("emergency_stop: %s\n", selected_tacho_motor.emergency_stop);
+            command_line.print ("polarity_mode: %s\n", selected_tacho_motor.polarity_mode);
+            command_line.print ("polarity_modes: %s\n", string.joinv (", ", selected_tacho_motor.polarity_modes));
+            command_line.print ("position: %d\n", selected_tacho_motor.position);
+            command_line.print ("position_mode: %s\n", selected_tacho_motor.position_mode);
+            command_line.print ("position_modes: %s\n", string.joinv (", ", selected_tacho_motor.position_modes));
+            command_line.print ("position_sp: %d\n", selected_tacho_motor.position_sp);
+            command_line.print ("pulses_per_second: %d\n", selected_tacho_motor.pulses_per_second);
+            command_line.print ("pulses_per_second_sp: %d\n", selected_tacho_motor.pulses_per_second_sp);
+            command_line.print ("ramp_down_sp: %d\n", selected_tacho_motor.ramp_down_sp);
+            command_line.print ("ramp_up_sp: %d\n", selected_tacho_motor.ramp_up_sp);
+            command_line.print ("regulation_mode: %s\n", selected_tacho_motor.regulation_mode);
+            command_line.print ("regulation_modes: %s\n", string.joinv (", ", selected_tacho_motor.regulation_modes));
+            command_line.print ("run: %d\n", selected_tacho_motor.run);
+            command_line.print ("run_mode: %s\n", selected_tacho_motor.run_mode);
+            command_line.print ("run_modes: %s\n", string.joinv (", ", selected_tacho_motor.run_modes));
+            command_line.print ("speed_regulation_p: %d\n", selected_tacho_motor.speed_regulation_p);
+            command_line.print ("speed_regulation_i: %d\n", selected_tacho_motor.speed_regulation_i);
+            command_line.print ("speed_regulation_d: %d\n", selected_tacho_motor.speed_regulation_d);
+            command_line.print ("speed_regulation_k: %d\n", selected_tacho_motor.speed_regulation_k);
+            command_line.print ("state: %s\n", selected_tacho_motor.state);
+            command_line.print ("stop_mode: %s\n", selected_tacho_motor.stop_mode);
+            command_line.print ("stop_modes: %s\n", string.joinv (", ", selected_tacho_motor.stop_modes));
+            command_line.print ("time_sp: %d\n", selected_tacho_motor.time_sp);
+        }
+
+        /**
          * Entry point for application after calling Application.run () in main ()
          *
          * Starts Main Menu and prints error for anything unhandled in the menus.
@@ -770,7 +882,7 @@ namespace EV3DevLang {
             message ("Port added: %s (%s)", port.port_name, port.device_name);
             ulong handler_id = 0;
             handler_id = port.notify["connected"].connect (() => {
-                message ("Port removed: %s", port.port_name);
+                message ("Port removed: %s (%s)", port.port_name, port.device_name);
                 port.disconnect (handler_id);
             });
         }
@@ -785,7 +897,8 @@ namespace EV3DevLang {
                 sensor.port_name, sensor.device_name);
             ulong handler_id = 0;
             handler_id = sensor.notify["connected"].connect (() => {
-                message ("Sensor removed: %s on %s", sensor.driver_name, sensor.port_name);
+                message ("Sensor removed: %s on %s (%s)", sensor.driver_name,
+                    sensor.port_name, sensor.device_name);
                 sensor.disconnect (handler_id);
             });
         }
@@ -801,6 +914,23 @@ namespace EV3DevLang {
             handler_id = led.notify["connected"].connect (() => {
                 message ("LED removed: %s", led.name);
                 led.disconnect (handler_id);
+            });
+        }
+
+        /**
+         * Display a message whenever a tacho motor is connected.
+         *
+         * Adds handler so message is displayed when the tacho motor is
+         * disconnected.
+         */
+        void on_tacho_motor_added (TachoMotor motor) {
+            message ("TachoMotor added: %s on %s (%s)", motor.motor_type,
+                motor.port_name, motor.device_name);
+            ulong handler_id = 0;
+            handler_id = motor.notify["connected"].connect (() => {
+                message ("TachoMotor removed: %s on %s (%s)", motor.motor_type,
+                    motor.port_name, motor.device_name);
+                motor.disconnect (handler_id);
             });
         }
     }

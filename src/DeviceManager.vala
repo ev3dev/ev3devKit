@@ -48,18 +48,31 @@ namespace EV3DevLang {
 
         /**
          * Emitted when a new Port device is connected.
+         *
+         * @param port The Port that was added.
          */
         public signal void port_added (Port port);
 
         /**
          * Emitted when a new Sensor device is connected.
+         *
+         * @param sensor The Sensor that was added.
          */
         public signal void sensor_added (Sensor sensor);
 
         /**
          * Emitted when a new LED device is connected.
+         *
+         * @param led The LED that was added.
          */
         public signal void led_added (LED led);
+
+        /**
+         * Emitted when a new TachoMotor device is connected.
+         *
+         * @param motor The TachoMotor that was added.
+         */
+        public signal void tacho_motor_added (TachoMotor motor);
 
         /**
          * Create new instance of DeviceManager.
@@ -121,6 +134,21 @@ namespace EV3DevLang {
             return array;
         }
 
+        /**
+         * Get a list of all TachoMotor devices.
+         *
+         * @return A GenericArray containing all connected TachoMotor devices.
+         */
+        public GenericArray<TachoMotor> get_tacho_motors () {
+            var array = new GenericArray<TachoMotor> ();
+            foreach (var device in device_map.values) {
+                var motor = device as TachoMotor;
+                if (motor != null)
+                    array.add (motor);
+            }
+            return array;
+        }
+
         void on_uevent (string action, GUdev.Device udev_device) {
             var sysfs_path = udev_device.get_sysfs_path ();
 
@@ -141,6 +169,11 @@ namespace EV3DevLang {
                     var led = new LED (udev_device);
                     device_map[sysfs_path] = led;
                     led_added (led);
+                    break;
+                case TACHO_MOTOR_CLASS:
+                    var motor = new TachoMotor (udev_device);
+                    device_map[sysfs_path] = motor;
+                    tacho_motor_added (motor);
                     break;
                 }
                 break;
