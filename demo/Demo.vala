@@ -163,10 +163,11 @@ namespace EV3DevLang {
                 command_line.print ("No port selected.\n");
                 return;
             }
+            command_line.print ("connected: %s\n", selected_port.connected ? "true" : "false");
             command_line.print ("port name: %s\n", selected_port.name);
-            command_line.print ("\tmodes: %s\n", string.joinv (", ", selected_port.modes));
-            command_line.print ("\tmode: %s\n", selected_port.mode);
-            command_line.print ("\tstatus: %s\n", selected_port.status);
+            command_line.print ("modes: %s\n",string.joinv (", ", selected_port.modes));
+            command_line.print ("mode: %s\n", selected_port.mode);
+            command_line.print ("status: %s\n", selected_port.status);
         }
 
         async void do_select_port_mode (ApplicationCommandLine command_line,
@@ -295,6 +296,7 @@ namespace EV3DevLang {
                 command_line.print ("Sensor not selected.\n");
                 return;
             }
+            command_line.print ("connected: %s\n", selected_sensor.connected ? "true" : "false");
             command_line.print ("address: %s\n", selected_sensor.address);
             command_line.print ("fw_version: %s\n", selected_sensor.fw_version);
             command_line.print ("poll_ms: %d\n", selected_sensor.poll_ms);
