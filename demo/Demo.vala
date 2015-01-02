@@ -20,15 +20,43 @@
  * MA 02110-1301, USA.
  */
 
+/*
+ * This is a demo application to show how to use the ev3dev-lang-vala library.
+ * It is overly documented to make it easier to understand.
+ */
+
 namespace EV3DevLang {
+    /**
+     * Demo application
+     *
+     * We are using the GLib Application class so we can have an event driven
+     * application. The Application class takes care of stuff like setting up
+     * the main loop. It can also handle command line options if we want to
+     * set some up. Basically, it lets us skip the boilerplate code and get
+     * strait to our application logic.
+     *
+     * The Demo application itself is a simple menu driven program that lets
+     * the user browse all of the devices connected to the EV3.
+     */
     public class Demo : Application {
+        // The DeviceManager is how we get objects for hardware devices
         DeviceManager manager;
+        // There is a variable for each type of supported device to keep a
+        // reference to the currently selected device.
         Port? selected_port;
         Sensor? selected_sensor;
 
         Demo () {
-            Object (application_id: "org.ev3dev.ev3dev-lang-vala-demo",
-                flags: ApplicationFlags.HANDLES_COMMAND_LINE);
+            // Application class does not support chaining to base(), so this
+            // accomplishes the same thing. The flag tell the application to
+            // use the command_line signal instead of the usual activate signal
+            // on startup.
+            Object (flags: ApplicationFlags.HANDLES_COMMAND_LINE);
+
+            // Get a DeviceManager instance. Signal handlers are used to handle
+            // devices that are attached after the program has started and
+            // get_* is used to load all of the devices that are already
+            // connected.
             manager = new DeviceManager ();
             manager.port_added.connect (on_port_added);
             manager.get_ports ().foreach (on_port_added);
@@ -36,6 +64,9 @@ namespace EV3DevLang {
             manager.get_sensors ().foreach (on_sensor_added);
         }
 
+        /**
+         * Prints a numbered list using items from an enum.
+         */
         void print_menu_items<T> (ApplicationCommandLine command_line) {
             var enum_class = (EnumClass) typeof (T).class_ref ();
             command_line.print ("\n");
@@ -45,6 +76,9 @@ namespace EV3DevLang {
             }
         }
 
+        /**
+         * Wait for user to type something and press [Enter].
+         */
         async int get_input (ApplicationCommandLine command_line,
             DataInputStream stdin) throws IOError
         {
@@ -80,9 +114,13 @@ namespace EV3DevLang {
             QUIT
         }
 
+        /**
+         * Print the main menu and handle user input.
+         *
+         * Loops until user selects Quit.
+         */
         async void do_main_menu (ApplicationCommandLine command_line) throws IOError {
             var stdin = new DataInputStream (command_line.get_stdin ());
-            // Main Menu
             var done = false;
             while (!done) {
                 print_menu_items<MainMenu> (command_line);
@@ -103,6 +141,9 @@ namespace EV3DevLang {
             }
         }
 
+        /**
+         * List of items in the Ports submenu.
+         */
         enum PortsMenu {
             SELECT_PORT = 1,
             SHOW_PORT_INFO,
@@ -111,6 +152,11 @@ namespace EV3DevLang {
             MAIN_MENU
         }
 
+        /**
+         * Print the Ports menu and handle user input.
+         *
+         * Loops until user selects Main Menu
+         */
         async void do_ports_menu (ApplicationCommandLine command_line,
             DataInputStream stdin) throws IOError
         {
@@ -140,6 +186,13 @@ namespace EV3DevLang {
             }
         }
 
+        /**
+         * Print a list of all lego-port class devices and get user selection.
+         *
+         * DeviceManager.get_ports () is used to get a list of ports.
+         *
+         * If the user selects a valid port, selected_port is set.
+         */
         async void do_select_port (ApplicationCommandLine command_line,
             DataInputStream stdin) throws IOError
         {
@@ -157,6 +210,9 @@ namespace EV3DevLang {
                 selected_port = ports[input - 1];
         }
 
+        /**
+         * Print all of the property values for selected_port.
+         */
         void do_show_port_info (ApplicationCommandLine command_line) {
             command_line.print ("\n");
             if (selected_port == null) {
@@ -170,6 +226,13 @@ namespace EV3DevLang {
             command_line.print ("status: %s\n", selected_port.status);
         }
 
+        /**
+         * Print a list of the available modes and get user input.
+         *
+         * The mode is set using Port.set_mode (). Prints an error if setting
+         * the mode fails. The operation is canceled if the port is removed
+         * before the user presses [Enter].
+         */
         async void do_select_port_mode (ApplicationCommandLine command_line,
             DataInputStream stdin) throws IOError
         {
@@ -204,6 +267,12 @@ namespace EV3DevLang {
             }
         }
 
+        /**
+         * Gets user input and calls Port.set_device ().
+         *
+         * Prints error if setting the device fails. The operation is canceled
+         * if the port is removed before the user presses [Enter].
+         */
         async void do_port_set_device (ApplicationCommandLine command_line,
             DataInputStream stdin) throws IOError
         {
@@ -228,6 +297,9 @@ namespace EV3DevLang {
             }
         }
 
+        /**
+         * The list of items in the Sensors Menu
+         */
         enum SensorsMenu {
             SELECT_SENSOR = 1,
             SHOW_SENSOR_INFO,
@@ -238,6 +310,11 @@ namespace EV3DevLang {
             MAIN_MENU
         }
 
+        /**
+         * Print the Sensors menu and handle user input.
+         *
+         * Loops until user selects Main Menu
+         */
         async void do_sensors_menu (ApplicationCommandLine command_line,
             DataInputStream stdin) throws IOError
         {
@@ -273,6 +350,13 @@ namespace EV3DevLang {
             }
         }
 
+        /**
+         * Print a list of all lego-sensor class devices and get user selection.
+         *
+         * DeviceManager.get_sensors () is used to get a list of sensors.
+         *
+         * If the user selects a valid sensors, selected_sensor is set.
+         */
         async void do_select_sensor (ApplicationCommandLine command_line,
             DataInputStream stdin) throws IOError
         {
@@ -291,6 +375,9 @@ namespace EV3DevLang {
                 selected_sensor = sensors[input - 1];
         }
 
+        /**
+         * Print all of the property values for selected_sensor.
+         */
         void do_show_sensor_info (ApplicationCommandLine command_line) {
             if (selected_sensor == null) {
                 command_line.print ("Sensor not selected.\n");
@@ -319,6 +406,12 @@ namespace EV3DevLang {
             command_line.print ("value(s): %s\n", string.joinv(", ", values));
         }
 
+        /**
+         * Continuously read and print all value attributes for selected_sensor
+         *
+         * Reading is stopped when the user presses [Enter]. Reading is also
+         * canceled if the sensor is removed before the user presses [Enter].
+         */
         async void do_watch_sensor_values (ApplicationCommandLine command_line,
             DataInputStream stdin) throws IOError
         {
@@ -353,6 +446,13 @@ namespace EV3DevLang {
             }
         }
 
+        /**
+         * Print a list of the available modes and get user input.
+         *
+         * The mode is set using Sensor.set_mode (). Prints an error if setting
+         * the mode fails. The operation is canceled if the sensor is removed
+         * before the user presses [Enter].
+         */
         async void do_select_sensor_mode (ApplicationCommandLine command_line,
             DataInputStream stdin) throws IOError
         {
@@ -387,6 +487,13 @@ namespace EV3DevLang {
             }
         }
 
+        /**
+         * Print a list of the available commands and get user input.
+         *
+         * The mode is set using Sensor.send_command (). Prints an error if
+         * sending the command fails. The operation is canceled if the sensor
+         * is removed before the user presses [Enter].
+         */
         async void do_send_sensor_command (ApplicationCommandLine command_line,
             DataInputStream stdin) throws IOError
         {
@@ -421,6 +528,13 @@ namespace EV3DevLang {
             }
         }
 
+        /**
+         * Get user input and set the poll_ms attribute.
+         *
+         * The polling period is set using Sensor.set_poll_ms (). Prints an
+         * error message if setting the value fails. The operation is canceled
+         * if the sensor is removed before the user presses [Enter].
+         */
         async void do_set_sensor_poll_ms (ApplicationCommandLine command_line,
             DataInputStream stdin) throws IOError
         {
@@ -450,6 +564,11 @@ namespace EV3DevLang {
             }
         }
 
+        /**
+         * Entry point for application after calling Application.run () in main ()
+         *
+         * Starts Main Menu and prints error for anything unhandled in the menus.
+         */
         public override int command_line (ApplicationCommandLine command_line) {
             hold ();
             do_main_menu.begin (command_line, (obj, res) => {
@@ -463,11 +582,21 @@ namespace EV3DevLang {
             return 0;
         }
 
+        /**
+         * Main entry point for application.
+         *
+         * Creates a new instance of the Demo application and runs it.
+         */
         static int main (string[] args) {
             var demo = new Demo ();
             return demo.run (args);
         }
 
+        /**
+         * Display a message whenever a port is connected.
+         *
+         * Adds handler so message is displayed when the port is disconnected.
+         */
         void on_port_added (Port port) {
             message ("Port added: %s", port.name);
             ulong handler_id = 0;
@@ -477,6 +606,11 @@ namespace EV3DevLang {
             });
         }
 
+        /**
+         * Display a message whenever a sensor is connected.
+         *
+         * Adds handler so message is displayed when the sensor is disconnected.
+         */
         void on_sensor_added (Sensor sensor) {
             message ("Sensor added: %s on %s", sensor.device_name, sensor.port_name);
             ulong handler_id = 0;
