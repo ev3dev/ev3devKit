@@ -45,6 +45,12 @@ namespace EV3DevLang {
          */
         public bool connected { get; internal set; }
 
+        public string device_name {
+            get {
+                return udev_device.get_name ();
+            }
+        }
+
         protected Device (GUdev.Device udev_device) {
             read_attr_map = new Gee.HashMap<string, DataInputStream?> ();
             write_attr_map = new Gee.HashMap<string, DataOutputStream?> ();
