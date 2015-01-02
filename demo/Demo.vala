@@ -165,7 +165,7 @@ namespace EV3DevLang {
                 cancellable.cancel ();
             });
             var input = int.parse (yield stdin.read_line_async (Priority.DEFAULT, cancellable));
-            SignalHandler.disconnect (selected_port, handler_id);
+            selected_port.disconnect (handler_id);
             if (input <= 0 || input >= i) {
                 command_line.print ("Invalid Selection.\n");
             } else {
@@ -190,7 +190,7 @@ namespace EV3DevLang {
                 cancellable.cancel ();
             });
             var input = yield stdin.read_line_async (Priority.DEFAULT, cancellable);
-            SignalHandler.disconnect (selected_port, handler_id);
+            selected_port.disconnect (handler_id);
             try {
                 selected_port.set_device (input);
             } catch (Error err) {
@@ -314,7 +314,7 @@ namespace EV3DevLang {
                 return Source.CONTINUE;
             });
             yield stdin.read_line_async (Priority.DEFAULT, cancellable);
-            SignalHandler.disconnect (selected_sensor, handler_id);
+            selected_sensor.disconnect (handler_id);
             Source.remove (source_id);
         }
 
@@ -336,7 +336,7 @@ namespace EV3DevLang {
                 cancellable.cancel ();
             });
             var input = int.parse (yield stdin.read_line_async (Priority.DEFAULT, cancellable));
-            SignalHandler.disconnect (selected_sensor, handler_id);
+            selected_sensor.disconnect (handler_id);
             if (input <= 0 || input >= i) {
                 command_line.print ("Invalid Selection.\n");
             } else {
@@ -370,7 +370,7 @@ namespace EV3DevLang {
                 cancellable.cancel ();
             });
             var input = int.parse (yield stdin.read_line_async (Priority.DEFAULT, cancellable));
-            SignalHandler.disconnect (selected_sensor, handler_id);
+            selected_sensor.disconnect (handler_id);
             if (input <= 0 || input >= i) {
                 command_line.print ("Invalid Selection.\n");
             } else {
@@ -395,7 +395,7 @@ namespace EV3DevLang {
                 cancellable.cancel ();
             });
             var input = int.parse (yield stdin.read_line_async (Priority.DEFAULT, cancellable));
-            SignalHandler.disconnect (selected_sensor, handler_id);
+            selected_sensor.disconnect (handler_id);
             if (input < 0) {
                 command_line.print ("Invalid Selection.\n");
             } else {
@@ -430,7 +430,7 @@ namespace EV3DevLang {
             ulong handler_id = 0;
             handler_id = port.notify["connected"].connect (() => {
                 message ("Port removed: %s", port.name);
-                SignalHandler.disconnect (port, handler_id);
+                port.disconnect (handler_id);
             });
         }
 
@@ -439,7 +439,7 @@ namespace EV3DevLang {
             ulong handler_id = 0;
             handler_id = sensor.notify["connected"].connect (() => {
                 message ("Sensor removed: %s on %s", sensor.device_name, sensor.port_name);
-                SignalHandler.disconnect (sensor, handler_id);
+                sensor.disconnect (handler_id);
             });
         }
     }
