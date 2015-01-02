@@ -206,7 +206,7 @@ namespace EV3DevLang {
             var ports = manager.get_ports ();
             int i = 1;
             ports.foreach ((port) => {
-                command_line.print ("%d. %s\n", i, port.name);
+                command_line.print ("%d. %s\n", i, port.port_name);
                 i++;
             });
             command_line.print ("\nSelect Port: ");
@@ -227,7 +227,7 @@ namespace EV3DevLang {
                 return;
             }
             command_line.print ("connected: %s\n", selected_port.connected ? "true" : "false");
-            command_line.print ("port name: %s\n", selected_port.name);
+            command_line.print ("port name: %s\n", selected_port.port_name);
             command_line.print ("modes: %s\n",string.joinv (", ", selected_port.modes));
             command_line.print ("mode: %s\n", selected_port.mode);
             command_line.print ("status: %s\n", selected_port.status);
@@ -370,7 +370,7 @@ namespace EV3DevLang {
             var sensors = manager.get_sensors ();
             int i = 1;
             sensors.foreach ((sensor) => {
-                command_line.print ("%d. %s on %s\n", i, sensor.device_name,
+                command_line.print ("%d. %s on %s\n", i, sensor.driver_name,
                     sensor.port_name);
                 i++;
             });
@@ -394,7 +394,7 @@ namespace EV3DevLang {
             command_line.print ("address: %s\n", selected_sensor.address);
             command_line.print ("fw_version: %s\n", selected_sensor.fw_version);
             command_line.print ("poll_ms: %d\n", selected_sensor.poll_ms);
-            command_line.print ("device_name: %s\n", selected_sensor.device_name);
+            command_line.print ("driver_name: %s\n", selected_sensor.driver_name);
             command_line.print ("port_name: %s\n", selected_sensor.port_name);
             command_line.print ("modes: %s\n", string.joinv (", ", selected_sensor.modes));
             command_line.print ("mode: %s\n", selected_sensor.mode);
@@ -763,10 +763,10 @@ namespace EV3DevLang {
          * Adds handler so message is displayed when the port is disconnected.
          */
         void on_port_added (Port port) {
-            message ("Port added: %s", port.name);
+            message ("Port added: %s", port.port_name);
             ulong handler_id = 0;
             handler_id = port.notify["connected"].connect (() => {
-                message ("Port removed: %s", port.name);
+                message ("Port removed: %s", port.port_name);
                 port.disconnect (handler_id);
             });
         }
@@ -777,10 +777,10 @@ namespace EV3DevLang {
          * Adds handler so message is displayed when the sensor is disconnected.
          */
         void on_sensor_added (Sensor sensor) {
-            message ("Sensor added: %s on %s", sensor.device_name, sensor.port_name);
+            message ("Sensor added: %s on %s", sensor.driver_name, sensor.port_name);
             ulong handler_id = 0;
             handler_id = sensor.notify["connected"].connect (() => {
-                message ("Sensor removed: %s on %s", sensor.device_name, sensor.port_name);
+                message ("Sensor removed: %s on %s", sensor.driver_name, sensor.port_name);
                 sensor.disconnect (handler_id);
             });
         }

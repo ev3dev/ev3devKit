@@ -140,11 +140,11 @@ namespace EV3DevLang {
         }
 
         /**
-         * Gets the name of the device/driver.
+         * Gets the name of the driver that loaded this Sensor.
          */
-        public string device_name {
+        public string driver_name {
             owned get {
-                return udev_device.get_sysfs_attr ("device_name");
+                return udev_device.get_sysfs_attr ("driver_name");
             }
         }
 

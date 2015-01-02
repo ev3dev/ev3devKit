@@ -66,9 +66,20 @@ namespace EV3DevLang {
         public const string OUTPUT_D = "outD";
 
         /**
-         * Gets a string identifier.
+         * Gets the name of the driver that loaded this Port.
          */
-        public string name {
+        public string driver_name {
+            owned get {
+                return udev_device.get_property ("LEGO_DRIVER_NAME");
+            }
+        }
+
+        /**
+         * Gets the identifier string.
+         *
+         * This can be used to match a port to a sensor or motor.
+         */
+        public string port_name {
             owned get {
                 return udev_device.get_property ("LEGO_PORT_NAME");
             }
