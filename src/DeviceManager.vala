@@ -2,7 +2,7 @@
  * ev3dev-lang-vala - vala library for interacting with LEGO MINDSTORMS EV3
  * hardware on bricks running ev3dev
  *
- * Copyright 2014 David Lechner <david@lechnology.com>
+ * Copyright 2014-2015 David Lechner <david@lechnology.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,9 @@
 using GUdev;
 
 namespace EV3DevLang {
+    /**
+     * Used to get instances of Device objects.
+     */
     public class DeviceManager : Object {
         const string LEGO_PORT_CLASS = "lego-port";
         const string LEGO_SENSOR_CLASS = "lego-sensor";
@@ -43,9 +46,19 @@ namespace EV3DevLang {
         Gee.Map<string, EV3DevLang.Device> device_map;
         Client udev_client;
 
+        /**
+         * Emmitted when a new Port device is connected.
+         */
         public signal void port_added (Port port);
+
+        /**
+         * Emited when a new Sensor device is connected.
+         */
         public signal void sensor_added (Sensor sensor);
 
+        /**
+         * Create new instance of DeviceManager.
+         */
         public DeviceManager () {
             device_map = new Gee.HashMap<string, EV3DevLang.Device> ();
             udev_client = new Client (subsystems);
@@ -58,6 +71,11 @@ namespace EV3DevLang {
             }
         }
 
+        /**
+         * Get a list of all Port devices.
+         *
+         * @return A GenericArray containing all connected port devices.
+         */
         public GenericArray<Port> get_ports () {
             var array = new GenericArray<Port> ();
             foreach (var device in device_map.values) {
@@ -68,6 +86,11 @@ namespace EV3DevLang {
             return array;
         }
 
+        /**
+         * Get a list of all Sensor devices.
+         *
+         * @return A GenericArray containing all connected sensor devices.
+         */
         public GenericArray<Sensor> get_sensors () {
             var array = new GenericArray<Sensor> ();
             foreach (var device in device_map.values) {

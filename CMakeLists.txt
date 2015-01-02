@@ -75,6 +75,7 @@ find_package(Valadoc)
 add_custom_target(doc
     COMMAND ${VALADOC_EXECUTABLE}
         --force
+        --no-protected
         --package-name=${EXEC_NAME}
         --package-version=${VERSION}
         --target-glib=2.40
