@@ -45,6 +45,7 @@ namespace EV3DevLang {
         // reference to the currently selected device.
         Port? selected_port;
         Sensor? selected_sensor;
+        LED? selected_led;
 
         Demo () {
             // Application class does not support chaining to base(), so this
@@ -62,6 +63,8 @@ namespace EV3DevLang {
             manager.get_ports ().foreach (on_port_added);
             manager.sensor_added.connect (on_sensor_added);
             manager.get_sensors ().foreach (on_sensor_added);
+            manager.led_added.connect (on_led_added);
+            manager.get_leds ().foreach (on_led_added);
         }
 
         /**
@@ -111,6 +114,7 @@ namespace EV3DevLang {
         enum MainMenu {
             PORTS = 1,
             SENSORS,
+            LEDS,
             QUIT
         }
 
@@ -130,6 +134,9 @@ namespace EV3DevLang {
                     break;
                 case MainMenu.SENSORS:
                     yield do_sensors_menu (command_line, stdin);
+                    break;
+                case MainMenu.LEDS:
+                    yield do_leds_menu (command_line, stdin);
                     break;
                 case MainMenu.QUIT:
                     done = true;
@@ -565,6 +572,164 @@ namespace EV3DevLang {
         }
 
         /**
+         * List of items in the LEDs submenu.
+         */
+        enum LEDsMenu {
+            SELECT_LED = 1,
+            SHOW_LED_INFO,
+            SET_BRIGHTNESS,
+            SET_TRIGGER,
+            MAIN_MENU
+        }
+
+        /**
+         * Print the LEDs menu and handle user input.
+         *
+         * Loops until user selects Main Menu
+         */
+        async void do_leds_menu (ApplicationCommandLine command_line,
+            DataInputStream stdin) throws IOError
+        {
+            var done = false;
+            while (!done) {
+                print_menu_items<LEDsMenu> (command_line);
+                switch (yield get_input (command_line, stdin)) {
+                case LEDsMenu.SELECT_LED:
+                    yield do_select_led (command_line, stdin);
+                    break;
+                case LEDsMenu.SHOW_LED_INFO:
+                    do_show_led_info (command_line);
+                    break;
+                case LEDsMenu.SET_BRIGHTNESS:
+                    yield do_set_led_brightness (command_line, stdin);
+                    break;
+                case LEDsMenu.SET_TRIGGER:
+                    yield do_set_led_trigger (command_line, stdin);
+                    break;
+                case LEDsMenu.MAIN_MENU:
+                    done = true;
+                    break;
+                default:
+                    command_line.print ("Invalid selection.\n");
+                    break;
+                }
+            }
+        }
+
+        /**
+         * Print a list of all leds class devices and get user selection.
+         *
+         * DeviceManager.get_leds () is used to get a list of LEDs.
+         *
+         * If the user selects a valid LED, selected_led is set.
+         */
+        async void do_select_led (ApplicationCommandLine command_line,
+            DataInputStream stdin) throws IOError
+        {
+            var leds = manager.get_leds ();
+            int i = 1;
+            leds.foreach ((led) => {
+                command_line.print ("%d. %s\n", i, led.name);
+                i++;
+            });
+            command_line.print ("\nSelect LED: ");
+            var input = int.parse (yield stdin.read_line_async ());
+            if (input <= 0 || input >= i)
+                command_line.print ("Invalid Selection.\n");
+            else
+                selected_led = leds[input - 1];
+        }
+
+        /**
+         * Print all of the property values for selected_led.
+         */
+        void do_show_led_info (ApplicationCommandLine command_line) {
+            command_line.print ("\n");
+            if (selected_led == null) {
+                command_line.print ("No LED selected.\n");
+                return;
+            }
+            command_line.print ("connected: %s\n", selected_led.connected ? "true" : "false");
+            command_line.print ("name: %s\n", selected_led.name);
+            command_line.print ("brightness: %d\n", selected_led.brightness);
+            command_line.print ("max_brightness: %d\n", selected_led.max_brightness);
+            command_line.print ("triggers: %s\n",string.joinv (", ", selected_led.triggers));
+            command_line.print ("trigger: %s\n", selected_led.trigger);
+        }
+
+        /**
+         * Print a list of the available triggers and get user input.
+         *
+         * The trigger is set using LED.set_trigger (). Prints an error if
+         * setting the trigger fails. The operation is canceled if the LED is
+         * removed before the user presses [Enter].
+         */
+        async void do_set_led_trigger (ApplicationCommandLine command_line,
+            DataInputStream stdin) throws IOError
+        {
+            if (selected_led == null) {
+                command_line.print ("No LED selected.\n");
+                return;
+            }
+            int i = 1;
+            foreach (var trigger in selected_led.triggers) {
+                command_line.print ("%d. %s\n", i, trigger);
+                i++;
+            }
+            command_line.print ("\nSelect Trigger: ");
+            try {
+                var input = int.parse (yield get_input_cancel_on_remove (
+                    selected_led, stdin));
+                if (input <= 0 || input >= i) {
+                    command_line.print ("Invalid Selection.\n");
+                } else {
+                    try {
+                        selected_led.set_trigger (selected_led.triggers[input - 1]);
+                    } catch (Error err) {
+                        command_line.print ("Error: %s\n", err.message);
+                    }
+                }
+            } catch (IOError err) {
+                if (err is IOError.CANCELLED) {
+                    command_line.print ("LED was disconnected.\n");
+                    return;
+                }
+                throw err;
+            }
+        }
+
+        /**
+         * Gets user input and calls LED.set_brightness ().
+         *
+         * Prints error if setting the brightness fails. The operation is
+         * canceled if the LED is removed before the user presses [Enter].
+         */
+        async void do_set_led_brightness (ApplicationCommandLine command_line,
+            DataInputStream stdin) throws IOError
+        {
+            if (selected_led == null) {
+                command_line.print ("No LED selected.\n");
+                return;
+            }
+            command_line.print ("\nEnter Device Name: ");
+            try {
+                var input = int.parse (yield get_input_cancel_on_remove (
+                    selected_led, stdin));
+                try {
+                    selected_led.set_brightness (input);
+                } catch (Error err) {
+                    command_line.print ("Error: %s\n", err.message);
+                }
+            } catch (IOError err) {
+                if (err is IOError.CANCELLED) {
+                    command_line.print ("LED was disconnected.\n");
+                    return;
+                }
+                throw err;
+            }
+        }
+
+        /**
          * Entry point for application after calling Application.run () in main ()
          *
          * Starts Main Menu and prints error for anything unhandled in the menus.
@@ -617,6 +782,20 @@ namespace EV3DevLang {
             handler_id = sensor.notify["connected"].connect (() => {
                 message ("Sensor removed: %s on %s", sensor.device_name, sensor.port_name);
                 sensor.disconnect (handler_id);
+            });
+        }
+
+        /**
+         * Display a message whenever a LED is connected.
+         *
+         * Adds handler so message is displayed when the LED is disconnected.
+         */
+        void on_led_added (LED led) {
+            message ("LED added: %s", led.name);
+            ulong handler_id = 0;
+            handler_id = led.notify["connected"].connect (() => {
+                message ("LED removed: %s", led.name);
+                led.disconnect (handler_id);
             });
         }
     }

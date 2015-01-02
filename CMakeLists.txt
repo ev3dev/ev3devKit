@@ -21,6 +21,7 @@ endif(EV3DEV_LANG_VALA_DEMO)
 set (EV3DEV_LANG_VALA_COMMON_SOURCE_FILES
     src/Device.vala
     src/DeviceManager.vala
+    src/LED.vala
     src/Port.vala
     src/Sensor.vala
 )

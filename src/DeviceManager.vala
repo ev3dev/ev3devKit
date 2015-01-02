@@ -47,14 +47,19 @@ namespace EV3DevLang {
         Client udev_client;
 
         /**
-         * Emmitted when a new Port device is connected.
+         * Emitted when a new Port device is connected.
          */
         public signal void port_added (Port port);
 
         /**
-         * Emited when a new Sensor device is connected.
+         * Emitted when a new Sensor device is connected.
          */
         public signal void sensor_added (Sensor sensor);
+
+        /**
+         * Emitted when a new LED device is connected.
+         */
+        public signal void led_added (LED led);
 
         /**
          * Create new instance of DeviceManager.
@@ -101,6 +106,21 @@ namespace EV3DevLang {
             return array;
         }
 
+        /**
+         * Get a list of all LED devices.
+         *
+         * @return A GenericArray containing all connected LED devices.
+         */
+        public GenericArray<LED> get_leds () {
+            var array = new GenericArray<LED> ();
+            foreach (var device in device_map.values) {
+                var led = device as LED;
+                if (led != null)
+                    array.add (led);
+            }
+            return array;
+        }
+
         void on_uevent (string action, GUdev.Device udev_device) {
             var sysfs_path = udev_device.get_sysfs_path ();
 
@@ -116,6 +136,11 @@ namespace EV3DevLang {
                     var sensor = new Sensor (udev_device);
                     device_map[sysfs_path] = sensor;
                     sensor_added (sensor);
+                    break;
+                case LEDS_CLASS:
+                    var led = new LED (udev_device);
+                    device_map[sysfs_path] = led;
+                    led_added (led);
                     break;
                 }
                 break;

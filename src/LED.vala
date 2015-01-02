@@ -3,6 +3,7 @@
  * hardware on bricks running ev3dev
  *
  * Copyright 2014 WasabiFan
+ * Copyright 2015 David Lechner <david@lechnology.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,61 +21,98 @@
  * MA 02110-1301, USA.
  */
 
-using GLib;
-
 namespace EV3DevLang {
+    /**
+     * Represents an LED device.
+     */
     public class LED : Device {
-        private string led_device_dir = "/sys/class/leds/";
-        public string device_name = "";
-
-        public LED (string device_name) {
-            //if (device_name != null)
-            this.device_name = device_name;
-
-            try {
-                var directory = File.new_for_path (this.led_device_dir);
-                var enumerator = directory.enumerate_children (FileAttribute.STANDARD_NAME, 0);
-                FileInfo device_file;
-                while ((device_file = enumerator.next_file ()) != null) {
-                    if (device_file.get_file_type () == FileType.DIRECTORY)
-                        continue;
-                    string device_file_name = device_file.get_name ();
-                    if (device_file_name == this.device_name) {
-                        this.connect (Path.build_path ("/", this.led_device_dir, device_file_name));
-                        return;
-                    }
-                }
-            } catch {}
-
-            this.connected = false;
+        /**
+         * Gets the name of the LED.
+         */
+        public string name {
+            get {
+                return udev_device.get_name ();
+            }
         }
 
-        //~autogen vala_generic-get-set classes.led>currentClass
-
+        /**
+         * Gets the maximum allowable brightness value.
+         */
         public int max_brightness {
             get {
-                return this.read_int ("max_brightness");
+                return udev_device.get_sysfs_attr_as_int ("max_brightness");
             }
         }
 
+        /**
+         * Gets the current brightness value.
+         *
+         * There is no "notify" signal when the brightness value is changed.
+         */
         public int brightness {
             get {
-                return this.read_int ("brightness");
-            }
-            set {
-                this.write_int ("brightness", value);
+                try {
+                    return read_int ("brightness");
+                } catch {
+                    return 0;
+                }
             }
         }
 
+        /**
+         * Gets the list of available triggers.
+         */
+        public string[]? triggers {
+            owned get {
+                var triggers = udev_device.get_sysfs_attr ("trigger");
+                if (triggers == null)
+                    return null;
+                triggers = triggers.replace ("[", "").replace ("]", "");
+                return triggers.strip ().split (" ");
+            }
+        }
+
+        /**
+         * Gets the active trigger.
+         */
         public string trigger {
             owned get {
-                return this.read_string ("trigger");
-            }
-            set {
-                this.write_string ("trigger", value);
+                var triggers = udev_device.get_sysfs_attr ("trigger");
+                var start_index = triggers.index_of ("[");
+                var end_index = triggers.index_of ("]");
+                return triggers[start_index + 1:end_index];
             }
         }
 
-    //~autogen
+        internal LED (GUdev.Device udev_device) {
+            base (udev_device);
+        }
+
+        /**
+         * Sets the brightness.
+         *
+         * @param brightness The polling period in milliseconds.
+         * @throws Error if setting the brightness failed or the device was
+         * removed.
+         */
+        public void set_brightness (int brightness) throws Error {
+            write_int ("brightness", brightness);
+        }
+
+        /**
+         * Sets the trigger.
+         *
+         * @param trigger The name of the trigger. Check {@link triggers} for
+         * allowable values.
+         * @throws Error if setting the trigger failed or the device was removed.
+         */
+        public void set_trigger (string trigger) throws Error {
+            write_string ("trigger", trigger);
+        }
+
+        internal override void change (GUdev.Device udev_device) {
+            base.change (udev_device);
+            notify_property ("trigger");
+        }
     }
 }
