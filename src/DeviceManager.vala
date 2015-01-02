@@ -68,6 +68,13 @@ namespace EV3DevLang {
         public signal void led_added (LED led);
 
         /**
+         * Emitted when a new DCMotor device is connected.
+         *
+         * @param motor The DCMotor that was added.
+         */
+        public signal void dc_motor_added (DCMotor motor);
+
+        /**
          * Emitted when a new TachoMotor device is connected.
          *
          * @param motor The TachoMotor that was added.
@@ -135,6 +142,21 @@ namespace EV3DevLang {
         }
 
         /**
+         * Get a list of all DCMotor devices.
+         *
+         * @return A GenericArray containing all connected DCMotor devices.
+         */
+        public GenericArray<DCMotor> get_dc_motors () {
+            var array = new GenericArray<DCMotor> ();
+            foreach (var device in device_map.values) {
+                var motor = device as DCMotor;
+                if (motor != null)
+                    array.add (motor);
+            }
+            return array;
+        }
+
+        /**
          * Get a list of all TachoMotor devices.
          *
          * @return A GenericArray containing all connected TachoMotor devices.
@@ -169,6 +191,11 @@ namespace EV3DevLang {
                     var led = new LED (udev_device);
                     device_map[sysfs_path] = led;
                     led_added (led);
+                    break;
+                case DC_MOTOR_CLASS:
+                    var motor = new DCMotor (udev_device);
+                    device_map[sysfs_path] = motor;
+                    dc_motor_added (motor);
                     break;
                 case TACHO_MOTOR_CLASS:
                     var motor = new TachoMotor (udev_device);

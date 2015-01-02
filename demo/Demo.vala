@@ -47,6 +47,7 @@ namespace EV3DevLang {
         Sensor? selected_sensor;
         LED? selected_led;
         TachoMotor? selected_tacho_motor;
+        DCMotor? selected_dc_motor;
 
         Demo () {
             // Application class does not support chaining to base(), so this
@@ -68,6 +69,8 @@ namespace EV3DevLang {
             manager.get_leds ().foreach (on_led_added);
             manager.tacho_motor_added.connect (on_tacho_motor_added);
             manager.get_tacho_motors ().foreach (on_tacho_motor_added);
+            manager.dc_motor_added.connect (on_dc_motor_added);
+            manager.get_dc_motors ().foreach (on_dc_motor_added);
         }
 
         /**
@@ -119,6 +122,7 @@ namespace EV3DevLang {
             SENSORS,
             LEDS,
             TACHO_MOTORS,
+            DC_MOTORS,
             QUIT
         }
 
@@ -144,6 +148,9 @@ namespace EV3DevLang {
                     break;
                 case MainMenu.TACHO_MOTORS:
                     yield do_tacho_motors_menu (command_line, stdin);
+                    break;
+                case MainMenu.DC_MOTORS:
+                    yield do_dc_motors_menu (command_line, stdin);
                     break;
                 case MainMenu.QUIT:
                     done = true;
@@ -750,7 +757,7 @@ namespace EV3DevLang {
         }
 
         /**
-         * Print the TachoMotor menu and handle user input.
+         * Print the TachoMotors menu and handle user input.
          *
          * Loops until user selects Main Menu
          */
@@ -767,7 +774,7 @@ namespace EV3DevLang {
                 case TachoMotorsMenu.SHOW_MOTOR_INFO:
                     do_show_tacho_motor_info (command_line);
                     break;
-                case PortsMenu.MAIN_MENU:
+                case TachoMotorsMenu.MAIN_MENU:
                     done = true;
                     break;
                 default:
@@ -843,6 +850,89 @@ namespace EV3DevLang {
             command_line.print ("stop_mode: %s\n", selected_tacho_motor.stop_mode);
             command_line.print ("stop_modes: %s\n", string.joinv (", ", selected_tacho_motor.stop_modes));
             command_line.print ("time_sp: %d\n", selected_tacho_motor.time_sp);
+        }
+
+        /**
+         * List of items in the DCMotors submenu.
+         */
+        enum DCMotorsMenu {
+            SELECT_MOTOR = 1,
+            SHOW_MOTOR_INFO,
+            MAIN_MENU
+        }
+
+        /**
+         * Print the DCMotors menu and handle user input.
+         *
+         * Loops until user selects Main Menu
+         */
+        async void do_dc_motors_menu (ApplicationCommandLine command_line,
+            DataInputStream stdin) throws IOError
+        {
+            var done = false;
+            while (!done) {
+                print_menu_items<DCMotorsMenu> (command_line);
+                switch (yield get_input (command_line, stdin)) {
+                case DCMotorsMenu.SELECT_MOTOR:
+                    yield do_select_dc_motor (command_line, stdin);
+                    break;
+                case DCMotorsMenu.SHOW_MOTOR_INFO:
+                    do_show_dc_motor_info (command_line);
+                    break;
+                case DCMotorsMenu.MAIN_MENU:
+                    done = true;
+                    break;
+                default:
+                    command_line.print ("Invalid selection.\n");
+                    break;
+                }
+            }
+        }
+
+        /**
+         * Print a list of all dc-motor class devices and get user selection.
+         *
+         * DeviceManager.get_dc_motors () is used to get a list of dc motors.
+         *
+         * If the user selects a valid dc motor, selected_dc_motor is set.
+         */
+        async void do_select_dc_motor (ApplicationCommandLine command_line,
+            DataInputStream stdin) throws IOError
+        {
+            var motors = manager.get_dc_motors ();
+            int i = 1;
+            motors.foreach ((motor) => {
+                command_line.print ("%d. %s on %s (%s)\n", i, motor.driver_name,
+                    motor.port_name, motor.device_name);
+                i++;
+            });
+            command_line.print ("\nSelect DCMotor: ");
+            var input = int.parse (yield stdin.read_line_async ());
+            if (input <= 0 || input >= i)
+                command_line.print ("Invalid Selection.\n");
+            else
+                selected_dc_motor = motors[input - 1];
+        }
+
+        /**
+         * Print all of the property values for selected_dc_motor.
+         */
+        void do_show_dc_motor_info (ApplicationCommandLine command_line) {
+            command_line.print ("\n");
+            if (selected_dc_motor == null) {
+                command_line.print ("No DCMotor selected.\n");
+                return;
+            }
+            command_line.print ("device_name: %s\n", selected_dc_motor.device_name);
+            command_line.print ("driver_name: %s\n", selected_dc_motor.driver_name);
+            command_line.print ("port_name: %s\n", selected_dc_motor.port_name);
+            command_line.print ("connected: %s\n", selected_dc_motor.connected ? "true" : "false");
+            command_line.print ("commands: %s\n", string.joinv (", ", selected_dc_motor.commands));
+            command_line.print ("duty_cycle: %d\n", selected_dc_motor.duty_cycle);
+            command_line.print ("duty_cycle_sp: %d\n", selected_dc_motor.duty_cycle_sp);
+            command_line.print ("polarity: %s\n", selected_dc_motor.polarity.to_string ());
+            command_line.print ("ramp_down_ms: %d\n", selected_dc_motor.ramp_down_ms);
+            command_line.print ("ramp_up_ms: %d\n", selected_dc_motor.ramp_up_ms);
         }
 
         /**
@@ -929,6 +1019,23 @@ namespace EV3DevLang {
             ulong handler_id = 0;
             handler_id = motor.notify["connected"].connect (() => {
                 message ("TachoMotor removed: %s on %s (%s)", motor.motor_type,
+                    motor.port_name, motor.device_name);
+                motor.disconnect (handler_id);
+            });
+        }
+
+        /**
+         * Display a message whenever a dc motor is connected.
+         *
+         * Adds handler so message is displayed when the dc motor is
+         * disconnected.
+         */
+        void on_dc_motor_added (DCMotor motor) {
+            message ("DCMotor added: %s on %s (%s)", motor.driver_name,
+                motor.port_name, motor.device_name);
+            ulong handler_id = 0;
+            handler_id = motor.notify["connected"].connect (() => {
+                message ("DCMotor removed: %s on %s (%s)", motor.driver_name,
                     motor.port_name, motor.device_name);
                 motor.disconnect (handler_id);
             });

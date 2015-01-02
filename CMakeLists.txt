@@ -19,6 +19,7 @@ if(EV3DEV_LANG_VALA_DEMO)
 endif(EV3DEV_LANG_VALA_DEMO)
 
 set (EV3DEV_LANG_VALA_COMMON_SOURCE_FILES
+    src/DCMotor.vala
     src/Device.vala
     src/DeviceManager.vala
     src/LED.vala
