@@ -201,6 +201,7 @@ namespace EV3DevLang {
         enum SensorsMenu {
             SELECT_SENSOR = 1,
             SHOW_SENSOR_INFO,
+            WATCH_VALUES,
             SELECT_MODE,
             SEND_COMMAND,
             SET_POLL_MS,
@@ -219,6 +220,9 @@ namespace EV3DevLang {
                     break;
                 case SensorsMenu.SHOW_SENSOR_INFO:
                     do_show_sensor_info (command_line);
+                    break;
+                case SensorsMenu.WATCH_VALUES:
+                    yield do_watch_sensor_values (command_line, stdin);
                     break;
                 case SensorsMenu.SELECT_MODE:
                     yield do_select_sensor_mode (command_line, stdin);
@@ -282,6 +286,36 @@ namespace EV3DevLang {
                 }
             }
             command_line.print ("value(s): %s\n", string.joinv(", ", values));
+        }
+
+        async void do_watch_sensor_values (ApplicationCommandLine command_line,
+            DataInputStream stdin) throws IOError
+        {
+            if (selected_sensor == null) {
+                command_line.print ("No sensor selected.\n");
+                return;
+            }
+            command_line.print ("\nPress [Enter] to stop:\n");
+            var cancellable = new Cancellable ();
+            var handler_id = selected_sensor.notify["connected"].connect (() => {
+                cancellable.cancel ();
+            });
+            var source_id = Timeout.add (100, () => {
+                var values = new string[selected_sensor.num_values];
+                for (int i = 0; i < selected_sensor.num_values; i++) {
+                    try {
+                        values[i] = selected_sensor.get_float_value (i).to_string ();
+                    } catch (Error err) {
+                        values[i] = "err";
+                    }
+                }
+                /* \x1B[2K is an escape code to clear the line */
+                command_line.print ("\x1B[2K\rvalue(s): %s", string.joinv(", ", values));
+                return Source.CONTINUE;
+            });
+            yield stdin.read_line_async (Priority.DEFAULT, cancellable);
+            SignalHandler.disconnect (selected_sensor, handler_id);
+            Source.remove (source_id);
         }
 
         async void do_select_sensor_mode (ApplicationCommandLine command_line,
