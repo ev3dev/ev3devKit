@@ -40,18 +40,14 @@ namespace EV3DevLang {
             TACHO_MOTOR_CLASS
         };
 
-        static Gee.Map<string, EV3DevLang.Device> device_map;
-
-        static construct {
-            device_map = new Gee.HashMap<string, EV3DevLang.Device> ();
-        }
-
+        Gee.Map<string, EV3DevLang.Device> device_map;
         Client udev_client;
 
         public signal void port_added (Port port);
         public signal void sensor_added (Sensor sensor);
 
         public DeviceManager () {
+            device_map = new Gee.HashMap<string, EV3DevLang.Device> ();
             udev_client = new Client (subsystems);
             udev_client.uevent.connect (on_uevent);
             foreach (var subsystem in subsystems) {
