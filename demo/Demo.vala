@@ -52,6 +52,28 @@ namespace EV3DevLang {
             return int.parse (yield stdin.read_line_async ());
         }
 
+        /**
+         * Gets input from user or cancel if device is disconnected.
+         *
+         * @throws IOError.CANCELLED if device was disconnected.
+         */
+        async string? get_input_cancel_on_remove (EV3DevLang.Device device,
+            DataInputStream stdin) throws IOError
+        {
+            var cancellable = new Cancellable ();
+            var handler_id = device.notify["connected"].connect (() => {
+                cancellable.cancel ();
+            });
+            try {
+                return yield stdin.read_line_async (Priority.DEFAULT, cancellable);
+            } finally {
+                device.disconnect (handler_id);
+            }
+        }
+
+        /**
+         * List of items used for Main Menu
+         */
         enum MainMenu {
             PORTS = 1,
             SENSORS,
@@ -160,20 +182,24 @@ namespace EV3DevLang {
                 i++;
             }
             command_line.print ("\nSelect Mode: ");
-            var cancellable = new Cancellable ();
-            var handler_id = selected_port.notify["connected"].connect (() => {
-                cancellable.cancel ();
-            });
-            var input = int.parse (yield stdin.read_line_async (Priority.DEFAULT, cancellable));
-            selected_port.disconnect (handler_id);
-            if (input <= 0 || input >= i) {
-                command_line.print ("Invalid Selection.\n");
-            } else {
-                try {
-                    selected_port.set_mode (selected_port.modes[input - 1]);
-                } catch (Error err) {
-                    command_line.print ("Error: %s\n", err.message);
+            try {
+                var input = int.parse (yield get_input_cancel_on_remove (
+                    selected_port, stdin));
+                if (input <= 0 || input >= i) {
+                    command_line.print ("Invalid Selection.\n");
+                } else {
+                    try {
+                        selected_port.set_mode (selected_port.modes[input - 1]);
+                    } catch (Error err) {
+                        command_line.print ("Error: %s\n", err.message);
+                    }
                 }
+            } catch (IOError err) {
+                if (err is IOError.CANCELLED) {
+                    command_line.print ("Port was disconnected.\n");
+                    return;
+                }
+                throw err;
             }
         }
 
@@ -185,16 +211,19 @@ namespace EV3DevLang {
                 return;
             }
             command_line.print ("\nEnter Device Name: ");
-            var cancellable = new Cancellable ();
-            var handler_id = selected_port.notify["connected"].connect (() => {
-                cancellable.cancel ();
-            });
-            var input = yield stdin.read_line_async (Priority.DEFAULT, cancellable);
-            selected_port.disconnect (handler_id);
             try {
-                selected_port.set_device (input);
-            } catch (Error err) {
-                command_line.print ("Error: %s\n", err.message);
+                var input = yield get_input_cancel_on_remove (selected_port, stdin);
+                try {
+                    selected_port.set_device (input);
+                } catch (Error err) {
+                    command_line.print ("Error: %s\n", err.message);
+                }
+            } catch (IOError err) {
+                if (err is IOError.CANCELLED) {
+                    command_line.print ("Port was disconnected.\n");
+                    return;
+                }
+                throw err;
             }
         }
 
@@ -296,10 +325,6 @@ namespace EV3DevLang {
                 return;
             }
             command_line.print ("\nPress [Enter] to stop:\n");
-            var cancellable = new Cancellable ();
-            var handler_id = selected_sensor.notify["connected"].connect (() => {
-                cancellable.cancel ();
-            });
             var source_id = Timeout.add (100, () => {
                 var values = new string[selected_sensor.num_values];
                 for (int i = 0; i < selected_sensor.num_values; i++) {
@@ -313,9 +338,17 @@ namespace EV3DevLang {
                 command_line.print ("\x1B[2K\rvalue(s): %s", string.joinv(", ", values));
                 return Source.CONTINUE;
             });
-            yield stdin.read_line_async (Priority.DEFAULT, cancellable);
-            selected_sensor.disconnect (handler_id);
-            Source.remove (source_id);
+            try {
+                yield get_input_cancel_on_remove (selected_sensor, stdin);
+            } catch (IOError err) {
+                if (err is IOError.CANCELLED) {
+                    command_line.print ("Sensor was disconnected.\n");
+                    return;
+                }
+                throw err;
+            } finally {
+                Source.remove (source_id);
+            }
         }
 
         async void do_select_sensor_mode (ApplicationCommandLine command_line,
@@ -331,20 +364,24 @@ namespace EV3DevLang {
                 i++;
             }
             command_line.print ("\nSelect Mode: ");
-            var cancellable = new Cancellable ();
-            var handler_id = selected_sensor.notify["connected"].connect (() => {
-                cancellable.cancel ();
-            });
-            var input = int.parse (yield stdin.read_line_async (Priority.DEFAULT, cancellable));
-            selected_sensor.disconnect (handler_id);
-            if (input <= 0 || input >= i) {
-                command_line.print ("Invalid Selection.\n");
-            } else {
-                try {
-                    selected_sensor.set_mode (selected_sensor.modes[input - 1]);
-                } catch (Error err) {
-                    command_line.print ("Error: %s\n", err.message);
+            try {
+                var input = int.parse (yield get_input_cancel_on_remove (
+                    selected_sensor, stdin));
+                if (input <= 0 || input >= i) {
+                    command_line.print ("Invalid Selection.\n");
+                } else {
+                    try {
+                        selected_sensor.set_mode (selected_sensor.modes[input - 1]);
+                    } catch (Error err) {
+                        command_line.print ("Error: %s\n", err.message);
+                    }
                 }
+            } catch (IOError err) {
+                if (err is IOError.CANCELLED) {
+                    command_line.print ("Sensor was disconnected.\n");
+                    return;
+                }
+                throw err;
             }
         }
 
@@ -390,20 +427,24 @@ namespace EV3DevLang {
                 return;
             }
             command_line.print ("\nEnter polling period in milliseconds: ");
-            var cancellable = new Cancellable ();
-            var handler_id = selected_sensor.notify["connected"].connect (() => {
-                cancellable.cancel ();
-            });
-            var input = int.parse (yield stdin.read_line_async (Priority.DEFAULT, cancellable));
-            selected_sensor.disconnect (handler_id);
-            if (input < 0) {
-                command_line.print ("Invalid Selection.\n");
-            } else {
-                try {
-                    selected_sensor.set_poll_ms (input);
-                } catch (Error err) {
-                    command_line.print ("Error: %s\n", err.message);
+            try {
+                var input = int.parse (yield get_input_cancel_on_remove (
+                    selected_sensor, stdin));
+                if (input < 0) {
+                    command_line.print ("Invalid Selection.\n");
+                } else {
+                    try {
+                        selected_sensor.set_poll_ms (input);
+                    } catch (Error err) {
+                        command_line.print ("Error: %s\n", err.message);
+                    }
                 }
+            } catch (IOError err) {
+                if (err is IOError.CANCELLED) {
+                    command_line.print ("Sensor was disconnected.\n");
+                    return;
+                }
+                throw err;
             }
         }
 
