@@ -75,6 +75,13 @@ namespace EV3DevLang {
         public signal void dc_motor_added (DCMotor motor);
 
         /**
+         * Emitted when a new ServoMotor device is connected.
+         *
+         * @param motor The ServoMotor that was added.
+         */
+        public signal void servo_motor_added (ServoMotor motor);
+
+        /**
          * Emitted when a new TachoMotor device is connected.
          *
          * @param motor The TachoMotor that was added.
@@ -157,6 +164,21 @@ namespace EV3DevLang {
         }
 
         /**
+         * Get a list of all ServoMotor devices.
+         *
+         * @return A GenericArray containing all connected ServoMotor devices.
+         */
+        public GenericArray<ServoMotor> get_servo_motors () {
+            var array = new GenericArray<ServoMotor> ();
+            foreach (var device in device_map.values) {
+                var motor = device as ServoMotor;
+                if (motor != null)
+                    array.add (motor);
+            }
+            return array;
+        }
+
+        /**
          * Get a list of all TachoMotor devices.
          *
          * @return A GenericArray containing all connected TachoMotor devices.
@@ -196,6 +218,11 @@ namespace EV3DevLang {
                     var motor = new DCMotor (udev_device);
                     device_map[sysfs_path] = motor;
                     dc_motor_added (motor);
+                    break;
+                case SERVO_MOTOR_CLASS:
+                    var motor = new ServoMotor (udev_device);
+                    device_map[sysfs_path] = motor;
+                    servo_motor_added (motor);
                     break;
                 case TACHO_MOTOR_CLASS:
                     var motor = new TachoMotor (udev_device);

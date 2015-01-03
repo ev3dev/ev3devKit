@@ -3,6 +3,7 @@
  * hardware on bricks running ev3dev
  *
  * Copyright 2014 WasabiFan
+ * Copyright 2015 David Lechner <david@lechnology.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,94 +21,142 @@
  * MA 02110-1301, USA.
  */
 
-using GLib;
-
 namespace EV3DevLang {
-    public class ServoMotor : MotorBase {
-        public ServoMotor (string port = "") {
-            this.motor_device_dir = "/sys/class/servo-motor";
-            base (port);
+    public class ServoMotor : EV3DevLang.Device {
+        /**
+         * Gets the name of the driver that loaded this device.
+         */
+        public string? driver_name {
+            owned get {
+                return udev_device.get_sysfs_attr ("driver_name");
+            }
         }
 
-        //PROPERTIES
+        /**
+         * Gets the name of the port this device is connected to.
+         *
+         * The port name may or may not correspond to an actual Port object.
+         */
+        public string? port_name {
+            owned get {
+                return udev_device.get_sysfs_attr ("port_name");
+            }
+        }
 
-        //~autogen vala_generic-get-set classes.servoMotor>currentClass
+        /**
+         * Gets and sets the current command.
+         */
         public string command {
             owned get {
-                return this.read_string ("command");
+                return try_read_string ("command") ?? "";
             }
             set {
-                this.write_string ("command", value);
+                try_write_string ("command", value);
             }
         }
 
-        public string device_name {
-            owned get {
-                return this.read_string ("device_name");
-            }
-        }
-
-        public string port_name {
-            owned get {
-                return this.read_string ("port_name");
-            }
-        }
-
+        /**
+         * Gets and sets the calibration value for the maximum value.
+         *
+         * For example, on a 180 degree servo, 2500 microseconds should be the
+         * drive the motor to +90 degrees. If the actual rotation is not +90
+         * degrees, this value can be adjusted to correct the error.
+         */
         public int max_pulse_ms {
             get {
-                return this.read_int ("max_pulse_ms");
+                return (int)(try_read_int ("max_pulse_ms") ?? 0);
             }
             set {
-                this.write_int ("max_pulse_ms", value);
+                try_write_int ("max_pulse_ms", value);
             }
         }
 
+        /**
+         * Gets and sets the calibration value for the center value.
+         *
+         * For example, on a 180 degree servo, 1500 microseconds should be the
+         * drive the motor to the center position (0 degrees). If the actual
+         * rotation is not 0 degrees, this value can be adjusted to correct the
+         * error.
+         */
         public int mid_pulse_ms {
             get {
-                return this.read_int ("mid_pulse_ms");
+                return (int)(try_read_int ("mid_pulse_ms") ?? 0);
             }
             set {
-                this.write_int ("mid_pulse_ms", value);
+                try_write_int ("mid_pulse_ms", value);
             }
         }
 
+        /**
+         * Gets and sets the calibration value for the minimum value.
+         *
+         * For example, on a 180 degree servo, 500 microseconds should be the
+         * drive the motor to -90 degrees. If the actual rotation is not -90
+         * degrees, this value can be adjusted to correct the error.
+         */
         public int min_pulse_ms {
             get {
-                return this.read_int ("min_pulse_ms");
+                return (int)(try_read_int ("min_pulse_ms") ?? 0);
             }
             set {
-                this.write_int ("min_pulse_ms", value);
+                try_write_int ("min_pulse_ms", value);
             }
         }
 
+        /**
+         * Gets and sets the polarity of the motor.
+         *
+         * This can be used to invert the positive and negative directions.
+         * For example, if you have two continuous rotation servos that are
+         * used for driving, you can invert the polarity of the left motor so
+         * that a positive position causes both servos to drive forwards.
+         */
         public string polarity {
             owned get {
-                return this.read_string ("polarity");
+                return try_read_string ("polarity") ?? "";
             }
             set {
-                this.write_string ("polarity", value);
+                try_write_string ("polarity", value);
             }
         }
 
+        /**
+         * Gets and sets the current position setpoint.
+         *
+         * The value is -100 to 100. For example, on a 180 degree servo, -100
+         * will drive the motor to -90 degrees, 0 will be the center position
+         * and 100 will drive the motor to +90 degrees.
+         */
         public int position {
             get {
-                return this.read_int ("position");
+                return (int)(try_read_int ("position") ?? 0);
             }
             set {
-                this.write_int ("position", value);
+                try_write_int ("position", value);
             }
         }
 
+        /**
+         * Gets and sets the current rate for the servo.
+         *
+         * The rate is how long it takes the servo to move from 0 to 100. In
+         * other words, full travel from a position of-100 to a position of
+         * 100 will take two times the rate.
+         *
+         * Units are milliseconds. A rate of 0 means 'as fast as possible'.
+         */
         public int rate {
             get {
-                return this.read_int ("rate");
+                return (int)(try_read_int ("rate") ?? 0);
             }
             set {
-                this.write_int ("rate", value);
+                try_write_int ("rate", value);
             }
         }
 
-        //~autogen
-
+        internal ServoMotor (GUdev.Device udev_device) {
+            base (udev_device);
+        }
     }
 }
