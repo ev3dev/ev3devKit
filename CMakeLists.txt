@@ -24,6 +24,7 @@ set (EV3DEV_LANG_VALA_COMMON_SOURCE_FILES
     src/DeviceManager.vala
     src/LED.vala
     src/Port.vala
+    src/PowerSupply.vala
     src/Sensor.vala
     src/ServoMotor.vala
     src/TachoMotor.vala

@@ -3,6 +3,7 @@
  * hardware on bricks running ev3dev
  *
  * Copyright 2014 WasabiFan
+ * Copyright 2015 David Lechner <david@lechnology.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,85 +25,116 @@ using GLib;
 
 namespace EV3DevLang {
     public class PowerSupply : Device {
-        private string power_device_dir = "/sys/class/power_supply/";
-        public string device_name = "legoev3-battery";
-
-        public PowerSupply (string? device_name = "legoev3-battery") {
-            if (device_name != null)
-                this.device_name = device_name;
-
-            try {
-                var directory = File.new_for_path (this.power_device_dir);
-                var enumerator = directory.enumerate_children (FileAttribute.STANDARD_NAME, 0);
-
-                FileInfo device_file;
-                while ((device_file = enumerator.next_file ()) != null) {
-                    if (device_file.get_file_type () == FileType.DIRECTORY)
-                        continue;
-
-                    string device_file_name = device_file.get_name ();
-                    if (device_file_name == this.device_name) {
-                        this.connect (Path.build_path ("/", this.power_device_dir, device_file_name));
-                        return;
-                    }
-                }
-            }
-            catch {}
-
-            this.connected = false;
-        }
-
-        //~autogen vala_generic-get-set classes.powerSupply>currentClass
-
-        public int current_now {
+        /**
+         * Gets the maximum design voltage.
+         *
+         * A full battery should be somewhere around this value.
+         */
+        public double voltage_max_design {
             get {
-                return this.read_int ("current_now");
+                return udev_device.get_sysfs_attr_as_int ("voltage_max_design")
+                    / 1000000d;
             }
         }
 
-        public int voltage_now {
+        /**
+         * Gets the minimum design voltage.
+         *
+         * A empty battery should be somewhere around this value.
+         */
+        public double voltage_min_design {
             get {
-                return this.read_int ("voltage_now");
-            }
-
-        }
-
-        public int voltage_max_design {
-            get {
-                return this.read_int ("voltage_max_design");
+                return udev_device.get_sysfs_attr_as_int ("voltage_min_design")
+                    / 1000000d;
             }
         }
 
-        public int voltage_min_design {
-            get {
-                return this.read_int ("voltage_min_design");
-            }
-        }
-
-        public string technology {
+        /**
+         * Gets the power supply type.
+         *
+         * The legoev3-battery device will return "Battery".
+         *
+         * TODO: Convert string to enum.
+         */
+        public string? supply_type {
             owned get {
-                return this.read_string ("technology");
+                return udev_device.get_sysfs_attr ("type");
             }
         }
 
-        public string motor_type {
+        /**
+         * Gets the technology type.
+         *
+         * If the LEGO EV3 rechargable battery pack is being used, it will
+         * return "Li-ion", otherwise it will return "Unknown".
+         *
+         * TODO: Convert string to enum.
+         */
+        public string? technology {
             owned get {
-                return this.read_string ("type");
+                return udev_device.get_sysfs_attr ("technology");
             }
         }
 
-//~autogen
-
-        public double voltage_volts {
-            get {
-                return (double)this.voltage_now / 1000000d;
+        /**
+         * Gets the scope.
+         *
+         * The legoev3-battery device will return "System".
+         *
+         * TODO: Convert string to enum.
+         */
+        public string? scope {
+            owned get {
+                return udev_device.get_sysfs_attr ("scope");
             }
         }
 
-        public double current_amps {
-            get {
-                return (double)this.current_now / 1000000d;
+        /**
+         * Gets the capacity level.
+         *
+         * Possible values are "Unknown", "Critical", "Low", "Normal", "High",
+         * and "Full"
+         *
+         * TODO: Convert string to enum.
+         */
+        public string? capacity_level {
+            owned get {
+                return udev_device.get_sysfs_attr ("capacity_level");
             }
+        }
+
+        /**
+         * Gets the current battery voltage in volts.
+         */
+        public double voltage {
+            get {
+                return (double)(try_read_int ("voltage_now") ?? 0) / 1000000d;
+            }
+        }
+
+        /**
+         * Gets the current battery current in amps
+         */
+        public double current {
+            get {
+                return (double)(try_read_int ("current_now") ?? 0) / 1000000d;
+            }
+        }
+
+        /**
+         * Gets the current battery power in watts
+         */
+        public double power {
+            get {
+                var p = try_read_int ("power_now");
+                if (p != null)
+                    return (double)(p) / 1000000d;
+                return voltage * current;
+            }
+        }
+
+        internal PowerSupply (GUdev.Device udev_device) {
+            base (udev_device);
         }
     }
 }

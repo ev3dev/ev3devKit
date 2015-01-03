@@ -33,6 +33,7 @@ namespace EV3DevLang {
         const string DC_MOTOR_CLASS = "dc-motor";
         const string SERVO_MOTOR_CLASS = "servo-motor";
         const string TACHO_MOTOR_CLASS = "tacho-motor";
+        const string POWER_SUPPLY_CLASS = "power_supply";
 
         static string[] subsystems = {
             LEGO_PORT_CLASS,
@@ -40,7 +41,8 @@ namespace EV3DevLang {
             LEDS_CLASS,
             DC_MOTOR_CLASS,
             SERVO_MOTOR_CLASS,
-            TACHO_MOTOR_CLASS
+            TACHO_MOTOR_CLASS,
+            POWER_SUPPLY_CLASS
         };
 
         Gee.Map<string, EV3DevLang.Device> device_map;
@@ -87,6 +89,13 @@ namespace EV3DevLang {
          * @param motor The TachoMotor that was added.
          */
         public signal void tacho_motor_added (TachoMotor motor);
+
+        /**
+         * Emitted when a new PowerSupply device is connected.
+         *
+         * @param power_supply The PowerSupply that was added.
+         */
+        public signal void power_supply_added (PowerSupply power_supply);
 
         /**
          * Create new instance of DeviceManager.
@@ -193,6 +202,21 @@ namespace EV3DevLang {
             return array;
         }
 
+        /**
+         * Get a list of all PowerSupply devices.
+         *
+         * @return A GenericArray containing all connected PowerSupply devices.
+         */
+        public GenericArray<PowerSupply> get_power_supplies () {
+            var array = new GenericArray<PowerSupply> ();
+            foreach (var device in device_map.values) {
+                var power_supply = device as PowerSupply;
+                if (power_supply != null)
+                    array.add (power_supply);
+            }
+            return array;
+        }
+
         void on_uevent (string action, GUdev.Device udev_device) {
             var sysfs_path = udev_device.get_sysfs_path ();
 
@@ -228,6 +252,11 @@ namespace EV3DevLang {
                     var motor = new TachoMotor (udev_device);
                     device_map[sysfs_path] = motor;
                     tacho_motor_added (motor);
+                    break;
+                case POWER_SUPPLY_CLASS:
+                    var power_supply = new PowerSupply (udev_device);
+                    device_map[sysfs_path] = power_supply;
+                    power_supply_added (power_supply);
                     break;
                 }
                 break;

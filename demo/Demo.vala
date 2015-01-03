@@ -49,6 +49,7 @@ namespace EV3DevLang {
         TachoMotor? selected_tacho_motor;
         DCMotor? selected_dc_motor;
         ServoMotor? selected_servo_motor;
+        PowerSupply? selected_power_supply;
 
         Demo () {
             // Application class does not support chaining to base(), so this
@@ -74,6 +75,8 @@ namespace EV3DevLang {
             manager.get_dc_motors ().foreach (on_dc_motor_added);
             manager.servo_motor_added.connect (on_servo_motor_added);
             manager.get_servo_motors ().foreach (on_servo_motor_added);
+            manager.power_supply_added.connect (on_power_supply_added);
+            manager.get_power_supplies ().foreach (on_power_supply_added);
         }
 
         /**
@@ -127,6 +130,7 @@ namespace EV3DevLang {
             TACHO_MOTORS,
             DC_MOTORS,
             SERVO_MOTORS,
+            POWER_SUPPLIES,
             QUIT
         }
 
@@ -158,6 +162,9 @@ namespace EV3DevLang {
                     break;
                 case MainMenu.SERVO_MOTORS:
                     yield do_servo_motors_menu (command_line, stdin);
+                    break;
+                case MainMenu.POWER_SUPPLIES:
+                    yield do_power_supply_menu (command_line, stdin);
                     break;
                 case MainMenu.QUIT:
                     done = true;
@@ -1027,6 +1034,90 @@ namespace EV3DevLang {
         }
 
         /**
+         * List of items in the PowerSupply submenu.
+         */
+        enum PowerSuppliesMenu {
+            SELECT_POWER_SUPPLY = 1,
+            SHOW_POWER_SUPPLY_INFO,
+            MAIN_MENU
+        }
+
+        /**
+         * Print the PowerSupply menu and handle user input.
+         *
+         * Loops until user selects Main Menu
+         */
+        async void do_power_supply_menu (ApplicationCommandLine command_line,
+            DataInputStream stdin) throws IOError
+        {
+            var done = false;
+            while (!done) {
+                print_menu_items<PowerSuppliesMenu> (command_line);
+                switch (yield get_input (command_line, stdin)) {
+                case PowerSuppliesMenu.SELECT_POWER_SUPPLY:
+                    yield do_select_power_supply (command_line, stdin);
+                    break;
+                case PowerSuppliesMenu.SHOW_POWER_SUPPLY_INFO:
+                    do_show_power_supply_info (command_line);
+                    break;
+                case PowerSuppliesMenu.MAIN_MENU:
+                    done = true;
+                    break;
+                default:
+                    command_line.print ("Invalid selection.\n");
+                    break;
+                }
+            }
+        }
+
+        /**
+         * Print a list of all power_supply class devices and get user selection.
+         *
+         * DeviceManager.get_power_supplies () is used to get a list of power
+         * supplies.
+         *
+         * If the user selects a valid power supply, selected_power_supply is set.
+         */
+        async void do_select_power_supply (ApplicationCommandLine command_line,
+            DataInputStream stdin) throws IOError
+        {
+            var power_supplies = manager.get_power_supplies ();
+            int i = 1;
+            power_supplies.foreach ((power_supply) => {
+                command_line.print ("%d. %s\n", i, power_supply.device_name);
+                i++;
+            });
+            command_line.print ("\nSelect PowerSupply: ");
+            var input = int.parse (yield stdin.read_line_async ());
+            if (input <= 0 || input >= i)
+                command_line.print ("Invalid Selection.\n");
+            else
+                selected_power_supply = power_supplies[input - 1];
+        }
+
+        /**
+         * Print all of the property values for selected_power_supply.
+         */
+        void do_show_power_supply_info (ApplicationCommandLine command_line) {
+            command_line.print ("\n");
+            if (selected_power_supply == null) {
+                command_line.print ("No PowerSupply selected.\n");
+                return;
+            }
+            command_line.print ("device_name: %s\n", selected_power_supply.device_name);
+            command_line.print ("connected: %s\n", selected_power_supply.connected ? "true" : "false");
+            command_line.print ("voltage: %f\n", selected_power_supply.voltage);
+            command_line.print ("current: %f\n", selected_power_supply.current);
+            command_line.print ("power: %f\n", selected_power_supply.power);
+            command_line.print ("voltage_max_design: %f\n", selected_power_supply.voltage_max_design);
+            command_line.print ("voltage_min_design: %f\n", selected_power_supply.voltage_min_design);
+            command_line.print ("supply_type: %s\n", selected_power_supply.supply_type);
+            command_line.print ("technology: %s\n", selected_power_supply.technology);
+            command_line.print ("scope: %s\n", selected_power_supply.scope);
+            command_line.print ("capacity_level: %s\n", selected_power_supply.capacity_level);
+        }
+
+        /**
          * Entry point for application after calling Application.run () in main ()
          *
          * Starts Main Menu and prints error for anything unhandled in the menus.
@@ -1146,6 +1237,21 @@ namespace EV3DevLang {
                 message ("ServoMotor removed: %s on %s (%s)", motor.driver_name,
                     motor.port_name, motor.device_name);
                 motor.disconnect (handler_id);
+            });
+        }
+
+        /**
+         * Display a message whenever a power supply is connected.
+         *
+         * Adds handler so message is displayed when the power supply is
+         * disconnected.
+         */
+        void on_power_supply_added (PowerSupply power_supply) {
+            message ("PowerSupply added: %s", power_supply.device_name);
+            ulong handler_id = 0;
+            handler_id = power_supply.notify["connected"].connect (() => {
+                message ("PowerSupply removed: %s", power_supply.device_name);
+                power_supply.disconnect (handler_id);
             });
         }
     }
