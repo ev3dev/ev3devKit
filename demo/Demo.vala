@@ -1,6 +1,5 @@
 /*
- * ev3dev-lang-vala - vala library for interacting with LEGO MINDSTORMS EV3
- * hardware on bricks running ev3dev
+ * ev3dev-lang-glib - GLib library for interacting with ev3dev kernel drivers
  *
  * Copyright 2014-2015 David Lechner <david@lechnology.com>
  *
@@ -21,7 +20,7 @@
  */
 
 /*
- * This is a demo application to show how to use the ev3dev-lang-vala library.
+ * This is a demo application to show how to use the ev3dev-lang-glib library.
  * It is overly documented to make it easier to understand.
  */
 

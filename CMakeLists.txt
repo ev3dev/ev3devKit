@@ -6,9 +6,9 @@ list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 set (DATADIR "${CMAKE_INSTALL_PREFIX}/share")
 
-set (PKGDATADIR "${DATADIR}/ev3dev-lang-vala")
-set (EXEC_NAME "ev3dev-lang-vala-demo")
-set (RELEASE_NAME "ev3dev vala language library")
+set (PKGDATADIR "${DATADIR}/ev3dev-lang-glib")
+set (EXEC_NAME "ev3dev-lang-glib-demo")
+set (RELEASE_NAME "ev3dev GLib library")
 set (VERSION "0.1")
 set (VERSION_INFO "alpha")
 
