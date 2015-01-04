@@ -94,14 +94,12 @@ namespace EV3devKit {
 
         /* navigation properties */
 
-        bool _can_focus_when_visible;
         /**
-         * This widget can take the focus
+         * This widget can take the focus.
+         *
+         * Wigets must also be visible in order to take focus.
          */
-        public bool can_focus {
-            get { return _can_focus_when_visible && _visible; }
-            set { _can_focus_when_visible = value; }
-        }
+        public bool can_focus { get; set; }
 
         /**
          * This widget has focus
@@ -273,7 +271,7 @@ namespace EV3devKit {
         /* navigation functions */
 
         public bool focus () {
-            if (!can_focus)
+            if (!can_focus || !visible)
                 return false;
             if (window != null) {
                 window.do_recursive_children ((widget) => {
@@ -314,7 +312,7 @@ namespace EV3devKit {
             }
             int best_distance = 2 * (window.content_bounds.width + window.content_bounds.height);
             window.do_recursive_children ((widget) => {
-                if (widget == this || !widget.can_focus)
+                if (widget == this || !widget.can_focus || !widget.visible)
                     return null;
                 int widget_distance_x = 0;
                 if (widget.border_bounds.x1 > border_bounds.x1 || widget.border_bounds.x2 < border_bounds.x2)
@@ -366,7 +364,7 @@ namespace EV3devKit {
                 var found_this = false;
                 weak Widget first = null;
                 var next = window.do_recursive_children ((widget) => {
-                    if (!widget.can_focus)
+                    if (!widget.can_focus || !widget.visible)
                         return null;
                     if (found_this)
                         return widget;
@@ -509,7 +507,7 @@ namespace EV3devKit {
         /* input handling */
 
         public virtual signal bool key_pressed (uint key_code) {
-            if (can_focus) {
+            if (can_focus && visible) {
                 FocusDirection direction;
                 switch (key_code) {
                 case Key.UP:

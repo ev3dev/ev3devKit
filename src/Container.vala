@@ -188,7 +188,7 @@ namespace EV3devKit {
          */
         public bool focus_first () {
             var focus_widget = do_recursive_children ((widget) => {
-                if (widget.can_focus) {
+                if (widget.can_focus && widget.visible) {
                     if (!widget.focus ())
                         return null;
                     return widget;
