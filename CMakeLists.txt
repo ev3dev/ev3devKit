@@ -116,3 +116,26 @@ add_custom_target(run
 
 install (TARGETS ${EXEC_NAME} RUNTIME DESTINATION bin)
 
+find_package(Valadoc)
+
+add_custom_target(doc
+    COMMAND ${VALADOC_EXECUTABLE}
+        --force
+        --no-protected
+        --package-name=${EXEC_NAME}
+        --package-version=${VERSION}
+        --target-glib=2.40
+        -o ${CMAKE_BINARY_DIR}/doc
+        --pkg=glib-2.0
+        --pkg=gobject-2.0
+        --pkg=gmodule-2.0
+        --pkg=gio-2.0
+        --pkg=gio-unix-2.0
+        --pkg=gee-0.8
+        --pkg=curses
+        --pkg=posix
+        --pkg=linux
+        ${EV3DEV_TK_COMMON_SOURCE_FILES}
+        bindings/*.vapi
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
