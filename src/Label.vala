@@ -144,7 +144,7 @@ namespace EV3devKit {
         protected override void draw_content () {
             if (_text == null)
                 return;
-            if (has_focus || parent.draw_children_as_focused)
+            if (parent.draw_children_as_focused)
                 text_option.fg_color = (TextColor)window.screen.bg_color;
             else
                 text_option.fg_color = (TextColor)window.screen.fg_color;
