@@ -46,8 +46,8 @@ namespace EV3devKit {
         int scroll_indicator_offset;
         bool draw_scrollbar;
 
-        public int max_preferred_height { get; set; default = 100; }
-        public int max_preferred_width { get; set; default = 100; }
+        public int max_preferred_height { get; set; default = 50; }
+        public int max_preferred_width { get; set; default = 50; }
         public ScrollbarVisibility scrollbar_visible {
             get; set; default = ScrollbarVisibility.AUTO;
         }

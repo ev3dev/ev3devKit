@@ -40,7 +40,6 @@ namespace EV3devKit {
             vscroll = new Scroll.vertical () {
                 can_focus = false,
                 border = 0,
-                max_preferred_height = 50,
                 margin_bottom = 9
             };
             content_vbox.add (vscroll);

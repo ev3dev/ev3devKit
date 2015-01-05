@@ -286,9 +286,7 @@ namespace EV3devKit {
                 margin = 10,
                 spacing = 5
             };
-            var vscroll = new Scroll.vertical () {
-                max_preferred_height = 62
-            };
+            var vscroll = new Scroll.vertical ();
             var vscroll_content = new Label ("This is a vertical scroll container."
                 + " It can be used when you have too much stuff to fit on the screen"
                 + " at one time. It is best to not have anything else that can_focus"
