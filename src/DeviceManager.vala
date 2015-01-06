@@ -26,6 +26,10 @@ namespace EV3DevLang {
      * Used to get instances of Device objects.
      */
     public class DeviceManager : Object {
+        // TODO: Hard coding paths like this is not a good idea, but not sure
+        // how to handle this one since it is a driver and not a device.
+        const string NXT_ANALOG_SENSOR_PATH = "/sys/bus/lego/drivers/nxt-analog-sensor";
+
         const string LEGO_PORT_CLASS = "lego-port";
         const string LEGO_SENSOR_CLASS = "lego-sensor";
         const string LEDS_CLASS = "leds";
@@ -214,6 +218,18 @@ namespace EV3DevLang {
                     array.add (power_supply);
             }
             return array;
+        }
+
+        /**
+         * Gets a list of driver names from the nxt-analog-sensor driver.
+         *
+         * Returns null if there was an error, such as the module is not loaded.
+         */
+        public string[]? get_nxt_analog_sensor_driver_names () {
+            var device = udev_client.query_by_sysfs_path (NXT_ANALOG_SENSOR_PATH);
+            if (device == null)
+                return null;
+            return device.get_sysfs_attr_as_strv ("driver_names");
         }
 
         void on_uevent (string action, GUdev.Device udev_device) {
