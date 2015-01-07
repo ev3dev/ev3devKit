@@ -40,8 +40,6 @@ namespace EV3devKit {
         Curses.Screen term;
         MainLoop main_loop;
 
-        public EV3devKit.Screen screen;
-
         public void init () {
             vtfd = open ("/dev/tty0", O_RDWR, 0);
             if (vtfd < 0)
@@ -81,7 +79,7 @@ namespace EV3devKit {
                 error ("%s", e.message);
             }
             main_loop = new MainLoop ();
-            screen = new Screen ();
+            Screen.active_screen = new Screen ();
         }
 
         public void run () {
@@ -114,8 +112,8 @@ namespace EV3devKit {
                 return;
             if (value) {
                 refresh ();
-                if (screen != null)
-                    screen.dirty = true;
+                if (Screen.active_screen != null)
+                    Screen.active_screen.dirty = true;
             } else
                 endwin ();
         }
@@ -128,9 +126,9 @@ namespace EV3devKit {
         int read_input () {
             while (true) {
                 var ch = getch ();
-                if (ch != -1 && screen != null) {
+                if (ch != -1 && Screen.active_screen != null) {
                     Idle.add (() => {
-                        screen.queue_key_code (ch);
+                        Screen.active_screen.queue_key_code (ch);
                         return false;
                     });
                 }

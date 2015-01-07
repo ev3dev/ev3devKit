@@ -26,7 +26,6 @@ using Curses;
 namespace EV3devKit.DesktopTestApp {
     const string main_window_glade_file = "main_window.glade";
 
-    public DesktopScreen screen;
     DesktopScreen color_screen;
     public Gtk.Window main_window;
 
@@ -36,10 +35,10 @@ namespace EV3devKit.DesktopTestApp {
         GRX.set_mode (GRX.GraphicsMode.GRAPHICS_DEFAULT);
 
         var stock_lcd = new FakeEV3LCDDevice ();
-        screen = new DesktopScreen (stock_lcd);
+        Screen.active_screen = new DesktopScreen (stock_lcd);
 
         var color_lcd = new FakeEV3LCDDevice (FakeEV3LCDDevice.DeviceType.ADAFRUIT_18);
-        color_screen = new DesktopScreen (color_lcd, screen);
+        color_screen = new DesktopScreen (color_lcd, (DesktopScreen)Screen.active_screen);
 
         var builder = new Gtk.Builder ();
         Gtk.Box screen1_box;
@@ -54,17 +53,17 @@ namespace EV3devKit.DesktopTestApp {
             (builder.get_object ("screen2_copy_button") as Gtk.Button)
                 .clicked.connect (() => stock_lcd.copy_to_clipboard ());
             (builder.get_object ("up_button") as Gtk.Button)
-                .clicked.connect (() => screen.queue_key_code (Key.UP));
+                .clicked.connect (() => Screen.active_screen.queue_key_code (Key.UP));
             (builder.get_object ("down_button") as Gtk.Button)
-                .clicked.connect (() => screen.queue_key_code (Key.DOWN));
+                .clicked.connect (() => Screen.active_screen.queue_key_code (Key.DOWN));
             (builder.get_object ("left_button") as Gtk.Button)
-                .clicked.connect (() => screen.queue_key_code (Key.LEFT));
+                .clicked.connect (() => Screen.active_screen.queue_key_code (Key.LEFT));
             (builder.get_object ("right_button") as Gtk.Button)
-                .clicked.connect (() => screen.queue_key_code (Key.RIGHT));
+                .clicked.connect (() => Screen.active_screen.queue_key_code (Key.RIGHT));
             (builder.get_object ("enter_button") as Gtk.Button)
-                .clicked.connect (() => screen.queue_key_code ('\n'));
+                .clicked.connect (() => Screen.active_screen.queue_key_code ('\n'));
             (builder.get_object ("back_button") as Gtk.Button)
-                .clicked.connect (() => screen.queue_key_code (Key.BACKSPACE));
+                .clicked.connect (() => Screen.active_screen.queue_key_code (Key.BACKSPACE));
         } catch (Error err) {
             error ("%s", err.message);
         }
@@ -102,7 +101,7 @@ namespace EV3devKit.DesktopTestApp {
                 }
                 return false;
             }
-            screen.queue_key_code (key_code);
+            Screen.active_screen.queue_key_code (key_code);
             return true;
         });
         color_lcd.key_press_event.connect ((event) => stock_lcd.key_press_event (event));

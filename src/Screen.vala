@@ -26,6 +26,8 @@ using GRX;
 
 namespace EV3devKit {
     public class Screen : Object {
+        public static Screen active_screen;
+
         protected LinkedList<Window> window_stack;
         LinkedList<uint?> key_queue;
         protected Context context;
@@ -109,7 +111,7 @@ namespace EV3devKit {
          *
          * @param window The window to add to the stack.
          */
-        public void show_window (Window window) {
+        internal void show_window (Window window) {
             window._screen = this;
             window.shown ();
             window_stack.offer_tail (window);
@@ -119,9 +121,10 @@ namespace EV3devKit {
         /**
          * Remove the window from the window stack.
          *
+         * @param window The window to add to the stack.
          * @return True if the window was removed.
          */
-        public bool close_window (Window window) {
+        internal bool close_window (Window window) {
             var was_top_window = window_stack.peek_tail () == window;
             if (window_stack.remove (window)) {
                 if (window.ref_count > 0) {

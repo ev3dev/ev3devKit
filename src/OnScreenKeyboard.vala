@@ -299,7 +299,7 @@ namespace EV3devKit {
                 if (text[text.length - 1] == ' ')
                     text = text[0:text.length - 1];
                 accepted ();
-                window.screen.close_window (this);
+                close ();
             });
             return button;
         }
@@ -310,7 +310,7 @@ namespace EV3devKit {
             };
             button.pressed.connect (() => {
                 canceled ();
-                window.screen.close_window (this);
+                close ();
             });
             return button;
         }

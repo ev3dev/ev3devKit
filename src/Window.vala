@@ -65,6 +65,28 @@ namespace EV3devKit {
             return true;
         }
 
+        /**
+         * Make the window visble by putting it on top of the window stack.
+         */
+        public void show () {
+            if (Screen.active_screen == null) {
+                critical ("No active screen.");
+                return;
+            }
+            Screen.active_screen.show_window (this);
+        }
+
+        /**
+         * Remove the window from the window stack.
+         *
+         * @return True if the window was removed.
+         */
+        public bool close () {
+            if (_screen == null)
+                return false;
+            return _screen.close_window (this);
+        }
+
         public override void redraw () {
             if (_screen != null && on_screen)
                 _screen.dirty = true;
