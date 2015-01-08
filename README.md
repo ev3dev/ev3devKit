@@ -8,3 +8,5 @@ It is currently in the development stages and is unstable.
 For an example of how it is used, checkout [brickman].
 
 API docs are at http://www.ev3dev.org/ev3devKit/
+
+[brickman]: https://github.com/ev3dev/brickman
