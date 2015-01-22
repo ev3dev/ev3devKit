@@ -1,7 +1,7 @@
 /*
  * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
- * Copyright 2014 David Lechner <david@lechnology.com>
+ * Copyright 2014-2015 David Lechner <david@lechnology.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -116,6 +116,12 @@ namespace EV3devKit {
                 }
             }
             return false;
+        }
+
+        public void remove_all_menu_items () {
+            var iter = menu_item_iter ();
+            while (iter.size > 0)
+                remove_menu_item (iter[0]);
         }
 
         public MenuItemIterator menu_item_iter () {
