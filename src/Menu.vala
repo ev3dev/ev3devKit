@@ -124,6 +124,14 @@ namespace EV3devKit {
                 remove_menu_item (iter[0]);
         }
 
+        public void sort_menu_items (CompareDataFunc<MenuItem> func) {
+            menu_vbox.sort ((a, b) => {
+                var menu_item_a = a.weak_represented_object as MenuItem;
+                var menu_item_b = b.weak_represented_object as MenuItem;
+                return func (menu_item_a, menu_item_b);
+            });
+        }
+
         public MenuItemIterator menu_item_iter () {
             return new MenuItemIterator (this);
         }

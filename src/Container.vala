@@ -182,6 +182,11 @@ namespace EV3devKit {
             }
         }
 
+        public void sort (owned CompareDataFunc<Widget> func) {
+            _children.sort ((owned)func);
+            redraw ();
+        }
+
         /**
          * Focuses the first descendant of the container that can focus
          * @return false if no descendants can focus
