@@ -30,6 +30,13 @@ namespace EV3devKit {
             set { menu_vbox.spacing = value; }
         }
 
+        /**
+         * Used by find_menu_item<T> (MenuItem, T) method.
+         *
+         * @return true if "value" matches "menu_item".
+         */
+        public delegate bool FindFunc<T> (MenuItem menu_item, T value);
+
         public Menu () {
             base.vertical ();
             can_focus = false;
@@ -72,11 +79,19 @@ namespace EV3devKit {
             }
         }
 
-        public MenuItem? get_menu_item (Object represented_object) {
+        /**
+         * Find a MenuItem that matches "value".
+         *
+         * @param value The value to pass to "func".
+         * @param func The function that compares "value" to each MenuItem in
+         * in the Menu.
+         * @return The MenuItem if a match was found, otherwise "null".
+         */
+        public MenuItem? find_menu_item<T> (T value, FindFunc<T> func) {
             foreach (var widget in menu_vbox._children) {
-                var obj = widget.weak_represented_object as MenuItem;
-                if (obj != null && obj.represented_object == represented_object) {
-                    return obj;
+                var menu_item = widget.weak_represented_object as MenuItem;
+                if (menu_item != null && func (menu_item, value)) {
+                    return menu_item;
                 }
             }
             return null;
