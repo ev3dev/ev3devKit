@@ -51,7 +51,7 @@ namespace EV3devKit {
         public StatusBar status_bar { get; protected set; }
 
         public Screen () {
-            this.custom (screen_x () - 1, screen_y () - 1);
+            this.custom (screen_x (), screen_y ());
         }
 
         public Screen.custom (int width, int height, char *context_mem_addr = null) {
