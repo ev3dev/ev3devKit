@@ -91,9 +91,15 @@ namespace EV3devKit {
         }
 
         /**
-         * update scroll_offset so that top/right of child widget is visible
+         * Ensure that a child widget is visible.
+         *
+         * @param child The child widget to scroll to.
          */
         public void scroll_to_child (Widget child) {
+            // check if scroll has been laid out
+            if (content_bounds.x1 == content_bounds.x2 || content_bounds.y1 == content_bounds.y2)
+                return;
+
             // make sure this is really a child of this
             var found_child = do_recursive_children ((widget) => {
                 if (widget == child)
@@ -102,16 +108,22 @@ namespace EV3devKit {
             });
             if (found_child == null)
                 return;
+
+            // make sure layout is up to date.
+            _children[0].do_layout ();
+
+            // Make sure that the whole widget is visible. If the widget is
+            // larger than the visible area, prefer showing the top and left.
             if (direction == ScrollDirection.VERTICAL) {
-                if (child.bounds.y1 < content_bounds.y1)
-                    scroll_offset += child.bounds.y1 - content_bounds.y1;
                 if (child.bounds.y2 > content_bounds.y2)
                     scroll_offset += child.bounds.y2 - content_bounds.y2;
+                if (child.bounds.y1 < content_bounds.y1)
+                    scroll_offset += child.bounds.y1 - content_bounds.y1;
             } else {
-                if (child.bounds.x1 < content_bounds.x1)
-                    scroll_offset += child.bounds.x1 - content_bounds.x1;
                 if (child.bounds.x2 > content_bounds.x2)
                     scroll_offset += child.bounds.x2 - content_bounds.x2;
+                if (child.bounds.x1 < content_bounds.x1)
+                    scroll_offset += child.bounds.x1 - content_bounds.x1;
             }
             redraw ();
         }
