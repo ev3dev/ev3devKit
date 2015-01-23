@@ -89,11 +89,7 @@ namespace EV3devKit {
             if (key_code == null || top_window == null)
                 return;
             // get the currently focused widget or top_window if none
-            var focus_widget = top_window.do_recursive_children ((widget) => {
-                if (widget.has_focus)
-                    return widget;
-                return null;
-            }) ?? top_window;
+            var focus_widget = top_window.get_focused_child () ?? top_window;
             // Trigger the key press event for the focused widget.
             // If it is not handled, pass it to the parent.
             focus_widget.do_recursive_parent ((widget) => {

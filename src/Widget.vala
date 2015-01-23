@@ -397,6 +397,19 @@ namespace EV3devKit {
                 best.focus ();
         }
 
+        /**
+         * Searches this Widget and its children for the currently focused widget.
+         *
+         * @return The focused widget or "null" if no widget is focused.
+         */
+        public Widget? get_focused_child () {
+            return do_recursive_children ((widget) => {
+                if (widget.has_focus)
+                    return widget;
+                return null;
+            });
+        }
+
         /* tree traversal functions */
 
         /**
