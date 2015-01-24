@@ -146,6 +146,22 @@ namespace EV3DevLang {
         }
 
         /**
+         * Get an LED device by name.
+         *
+         * @param name The sysfs device name.
+         * @return The LED object for the device.
+         * @throws IOError if LED is not found.
+         */
+        public LED get_led (string name) throws IOError {
+            foreach (var device in device_map.values) {
+                var led = device as LED;
+                if (led != null && led.name == name)
+                    return led;
+            }
+            throw new IOError.NOT_FOUND ("Could not find LED '%s'", name);
+        }
+
+        /**
          * Get a list of all LED devices.
          *
          * @return A GenericArray containing all connected LED devices.

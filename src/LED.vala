@@ -26,6 +26,26 @@ namespace EV3DevLang {
      */
     public class LED : Device {
         /**
+         * Device name of the left green LED on the EV3 brick.
+         */
+        public const string EV3_GREEN_LEFT = "ev3:green:left";
+
+        /**
+         * Device name of the right green LED on the EV3 brick.
+         */
+        public const string EV3_GREEN_RIGHT = "ev3:green:right";
+
+        /**
+         * Device name of the left red LED on the EV3 brick.
+         */
+        public const string EV3_RED_LEFT = "ev3:red:left";
+
+        /**
+         * Device name of the right red LED on the EV3 brick.
+         */
+        public const string EV3_RED_RIGHT = "ev3:red:right";
+
+        /**
          * Gets the name of the LED.
          */
         public string name {
@@ -90,7 +110,7 @@ namespace EV3DevLang {
         /**
          * Sets the brightness.
          *
-         * @param brightness The polling period in milliseconds.
+         * @param brightness Brighness level between 0 and max_brightness.
          * @throws Error if setting the brightness failed or the device was
          * removed.
          */
