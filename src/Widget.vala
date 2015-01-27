@@ -35,6 +35,13 @@ namespace EV3devKit {
         RIGHT;
     }
 
+    public enum WidgetAlign {
+        FILL,
+        START,
+        CENTER,
+        END;
+    }
+
     public abstract class Widget : Object {
         static int widget_count = 0;
 

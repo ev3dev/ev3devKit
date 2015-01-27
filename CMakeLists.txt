@@ -30,7 +30,6 @@ endif(EV3DEVKIT_DESKTOP)
 
 set (EV3DEV_TK_COMMON_SOURCE_FILES
     demo/DemoWindow.vala
-    src/Align.vala
     src/Box.vala
     src/Button.vala
     src/CheckboxMenuItem.vala
