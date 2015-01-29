@@ -73,7 +73,7 @@ namespace EV3devKit {
          * up ncurses for keyboard input. This must be run before calling anything
          * else using the GRX graphics library.
          *
-         * @param vtfd File descriptor for virtual terminal to use or "null" to
+         * @param vtfd File descriptor for virtual terminal to use or ``null`` to
          * use the current virtual terminal.
          * @throws ConsoleAppError if initialization failed.
          */

@@ -57,7 +57,7 @@ namespace EV3devKit {
          * Creates a new Button with a {@link Label} as the child.
          *
          * @param text The text for the {@link Label}.
-         * @param font The font to use for the widget or "null" to use the
+         * @param font The font to use for the widget or ``null`` to use the
          * default font.
          */
         public Button.with_label (string? text = null, Font? font = null) {

@@ -173,7 +173,7 @@ namespace EV3devKit {
          *
          * @param row The row of the child widget.
          * @param column The column of the child widget.
-         * @return The Widget at the specified location or "null" if there was
+         * @return The Widget at the specified location or ``null`` if there was
          * nothing at that location.
          */
         public Widget? get_child_at (int row, int column)

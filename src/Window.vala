@@ -39,7 +39,7 @@ namespace EV3devKit {
         /**
          * Gets the Screen that this Window is attached to.
          *
-         * Returns "null" if the Window is not in the window stack of a Screen.
+         * Returns ``null`` if the Window is not in the window stack of a Screen.
          */
         public Screen? screen {
             get { return _screen; }
