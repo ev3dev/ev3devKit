@@ -54,7 +54,7 @@ namespace EV3DevLang {
         /**
          * Get a list of supported commands.
          *
-         * Possible commands are "run", "coast" and "brake".
+         * Possible commands are ``run``, ``coast`` and ``brake``.
          */
         public string[]? commands {
             owned get {

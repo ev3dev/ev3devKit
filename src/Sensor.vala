@@ -29,7 +29,7 @@ namespace EV3DevLang {
          * Gets the address.
          *
          * Currently only I2C/NXT sensors use this property. Other sensors will
-         * return "0x00".
+         * return ``0x00``.
          */
         public string? address {
             get {
@@ -97,7 +97,7 @@ namespace EV3DevLang {
         /**
          * Gets the list of available commands.
          *
-         * Sensors that do not support commands will return "null".
+         * Sensors that do not support commands will return ``null``.
          */
         public string[]? commands {
             owned get {

@@ -58,7 +58,7 @@ namespace EV3DevLang {
         }
 
         /**
-         * This is called when udev receives a "change" event from the kernel.
+         * This is called when udev receives a ``change`` event from the kernel.
          *
          * The udev_device object is replaced so that we get the new cached
          * property and attribute values from udev.
@@ -106,7 +106,7 @@ namespace EV3DevLang {
          * Reads an attribute value as an int.
          *
          * @param property The name of the sysfs attribute to write to.
-         * @return The value that was read or "null" if there was an error
+         * @return The value that was read or ``null`` if there was an error
          * while reading.
          */
         protected int? try_read_int (string property) {
@@ -145,7 +145,7 @@ namespace EV3DevLang {
          * Reads an attribute value as a string.
          *
          * @param property The name of the sysfs attribute to write to.
-         * @return The value that was read or "null" if there was an error
+         * @return The value that was read or ``null`` if there was an error
          * while reading.
          */
         protected string? try_read_string (string property) {

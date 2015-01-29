@@ -112,8 +112,8 @@ namespace EV3DevLang {
          * Gets the current status.
          *
          * The status is generally the same as the mode unless there is an
-         * "auto" mode in which case it may return additional values such as
-         * "no-device" or "error".
+         * ``auto`` mode in which case it may return additional values such as
+         * ``no-device`` or ``error``.
          *
          * See the individual port driver documentation for descriptions of the
          * possible values.

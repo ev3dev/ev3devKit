@@ -51,7 +51,7 @@ namespace EV3DevLang {
         /**
          * Gets the power supply type.
          *
-         * The legoev3-battery device will return "Battery".
+         * The legoev3-battery device will return ``Battery``.
          *
          * TODO: Convert string to enum.
          */
@@ -65,7 +65,7 @@ namespace EV3DevLang {
          * Gets the technology type.
          *
          * If the LEGO EV3 rechargable battery pack is being used, it will
-         * return "Li-ion", otherwise it will return "Unknown".
+         * return ``Li-ion``, otherwise it will return ``Unknown``.
          *
          * TODO: Convert string to enum.
          */
@@ -78,7 +78,7 @@ namespace EV3DevLang {
         /**
          * Gets the scope.
          *
-         * The legoev3-battery device will return "System".
+         * The legoev3-battery device will return ``System``.
          *
          * TODO: Convert string to enum.
          */
@@ -91,8 +91,8 @@ namespace EV3DevLang {
         /**
          * Gets the capacity level.
          *
-         * Possible values are "Unknown", "Critical", "Low", "Normal", "High",
-         * and "Full"
+         * Possible values are ``Unknown``, ``Critical``, ``Low``, ``Normal``,
+         * ``High``, and ``Full``
          *
          * TODO: Convert string to enum.
          */

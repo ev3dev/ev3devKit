@@ -66,7 +66,7 @@ namespace EV3DevLang {
         /**
          * Gets the current brightness value.
          *
-         * There is no "notify" signal when the brightness value is changed.
+         * There is no ``notify`` signal when the brightness value is changed.
          */
         public int brightness {
             get {
