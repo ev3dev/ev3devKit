@@ -26,36 +26,141 @@ using Gee;
 using GRX;
 
 namespace EV3devKit {
+    /**
+     * Used by {@link Widget.do_recursive_parent} and {@link Widget.do_recursive_children}
+     * to traverse the widget tree.
+     *
+     * @param widget The current widget in the recursion.
+     * @return ``null`` to continue the recursion or ``widget`` to stop the recursion.
+     */
     public delegate Widget? WidgetFunc (Widget widget);
 
+    /**
+     * Specifies the direction to use for focusing the next widget.
+     */
     public enum FocusDirection {
+        /**
+         * Focus the next widget above the current widget.
+         */
         UP,
+        /**
+         * Focus the next widget below the current widget.
+         */
         DOWN,
+        /**
+         * Focus the next widget to the left of the current widget.
+         */
         LEFT,
+        /**
+         * Focus the next widget to the right of the current widget.
+         */
         RIGHT;
     }
 
+    /**
+     * Specifies how a {@link Widget} should be laid out in a {@link Container}.
+     */
     public enum WidgetAlign {
+        /**
+         * The widget should fill the entire container.
+         */
         FILL,
+        /**
+         * The widget should be aligned to the start (top or left) of the container.
+         */
         START,
+        /**
+         * The widget should be aligned to the center (middle) of the container.
+         */
         CENTER,
+        /**
+         * The widget should be aligned to the end (bottom or right) of the container.
+         */
         END;
     }
 
+    /**
+     * The base class for all UI components.
+     *
+     * Widgets are modeled after Gtk (and other modern UI toolkits). Some of the
+     * layout properties should also be familiar to those that use CSS.
+     *
+     * Each Widget is essentially three concentric rectangles.
+     * {{{
+     * +---------------------------------+
+     * |             margin              |
+     * |   +---------border----------+   |
+     * |   |         padding         |   |
+     * |   |   +-----------------+   |   |
+     * |   |   |     content     |   |   |
+     * |   |   +-----------------+   |   |
+     * |   |                         |   |
+     * |   +-------------------------+   |
+     * |                                 |
+     * +---------------------------------+
+     * }}}
+     *
+     * The margin is used to control spacing between widgets. Nothing should
+     * be drawn in the margin. The border is optional and can also have rounded
+     * corners. The padding area should be filled with a background color unless
+     * the widget is "transparent". The actual graphical representation of the
+     * widget is drawn in the content area.
+     *
+     * Widgets also have a preferred width and height that is used to help
+     * {@link Container}s layout child widgets. Widgets that can reflow their
+     * contents, such as widgets displaying text, can also provide a preferred
+     * width and height for a specified height or width respectively. A
+     * Container will try to make each widget at least the requested size. It
+     * may stretch the widget if needed but should not make it smaller that the
+     * requested size. If a Container does not have enough room for each widget
+     * to be at least the requested size, unexpected results my occur. In this
+     * case, you should consider using a {@link Scroll} Container.
+     */
     public abstract class Widget : Object {
         static int widget_count = 0;
 
         /* layout properties */
 
         /* bounding rectangles - set by parent container */
+
+        /**
+         * The outermost bounding rectangle.
+         */
         protected Rectangle bounds;
+
+        /**
+         * The bounding rectangle for the border.
+         */
         protected Rectangle border_bounds;
+
+        /**
+         * The bounding rectangle for the content area.
+         */
         protected Rectangle content_bounds;
 
+        /**
+         * Gets and sets the top margin for the widget.
+         */
         public int margin_top { get; set; default = 0; }
+
+        /**
+         * Gets and sets the bottom margin for the widget.
+         */
         public int margin_bottom { get; set; default = 0; }
+
+        /**
+         * Gets and sets the left margin for the widget.
+         */
         public int margin_left { get; set; default = 0; }
+
+        /**
+         * Gets and sets the right margin for the widget.
+         */
         public int margin_right { get; set; default = 0; }
+
+        /**
+         * Sets all margins (top, bottom, left, right) for the widget.
+         */
         public int margin {
             set {
                 margin_top = value;
@@ -65,10 +170,29 @@ namespace EV3devKit {
             }
         }
 
+        /**
+         * Gets and sets the top border width for the widget.
+         */
         public int border_top { get; set; default = 0; }
+
+        /**
+         * Gets and sets the bottom border width for the widget.
+         */
         public int border_bottom { get; set; default = 0; }
+
+        /**
+         * Gets and sets the left border width for the widget.
+         */
         public int border_left { get; set; default = 0; }
+
+        /**
+         * Gets and sets the right border width for the widget.
+         */
         public int border_right { get; set; default = 0; }
+
+        /**
+         * Sets all border widths (top, bottom, left, right) for the widget.
+         */
         public int border {
             set {
                 border_top = value;
@@ -77,12 +201,35 @@ namespace EV3devKit {
                 border_right = value;
             }
         }
+
+        /**
+         * Gets and sets the border radius for the widget.
+         */
         public int border_radius { get; set; default = 0; }
 
+        /**
+         * Gets and sets the top padding for the widget.
+         */
         public int padding_top { get; set; default = 0; }
+
+        /**
+         * Gets and sets the bottom padding for the widget.
+         */
         public int padding_bottom { get; set; default = 0; }
+
+        /**
+         * Gets and sets the left padding for the widget.
+         */
         public int padding_left { get; set; default = 0; }
+
+        /**
+         * Gets and sets the right padding for the widget.
+         */
         public int padding_right { get; set; default = 0; }
+
+        /**
+         * Sets all padding (top, bottom, left, right) for the widget.
+         */
         public int padding {
             set {
                 padding_top = value;
@@ -92,9 +239,20 @@ namespace EV3devKit {
             }
         }
 
+        /**
+         * Gets and sets the horizontal alignment for the widget.
+         *
+         * This is used by the parent container to help layout the widget.
+         */
         public WidgetAlign horizontal_align {
             get; set; default = WidgetAlign.FILL;
         }
+
+        /**
+         * Gets and sets the vertical alignment for the widget.
+         *
+         * This is used by the parent container to help layout the widget.
+         */
         public WidgetAlign vertical_align {
             get; set; default = WidgetAlign.FILL;
         }
@@ -104,16 +262,24 @@ namespace EV3devKit {
         /**
          * This widget can take the focus.
          *
-         * Wigets must also be visible in order to take focus.
+         * Widgets must also be visible in order to take focus.
          */
         public bool can_focus { get; set; }
 
         /**
-         * This widget has focus
+         * Gets and sets the focus of this widget.
+         *
+         * Setting ``has_focus`` has no effect if either {@link can_focus} or
+         * {@link visible} is ``false``.
          */
         public bool has_focus { get; protected set; default = false; }
 
         weak Widget? _next_focus_widget_up;
+        /**
+         * Gets and sets the next widget to focus when navigating up.
+         *
+         * This is used to override the default focus traversal and is not required.
+         */
         public Widget? next_focus_widget_up {
             get { return _next_focus_widget_up; }
             set {
@@ -131,6 +297,11 @@ namespace EV3devKit {
         }
 
         weak Widget? _next_focus_widget_down;
+        /**
+         * Gets and sets the next widget to focus when navigating down.
+         *
+         * This is used to override the default focus traversal and is not required.
+         */
         public Widget? next_focus_widget_down {
             get { return _next_focus_widget_down; }
             set {
@@ -148,6 +319,11 @@ namespace EV3devKit {
         }
 
         weak Widget? _next_focus_widget_left;
+        /**
+         * Gets and sets the next widget to focus when navigating left.
+         *
+         * This is used to override the default focus traversal and is not required.
+         */
         public Widget? next_focus_widget_left {
             get { return _next_focus_widget_left; }
             set {
@@ -165,6 +341,11 @@ namespace EV3devKit {
         }
 
         weak Widget? _next_focus_widget_right;
+        /**
+         * Gets and sets the next widget to focus when navigating right.
+         *
+         * This is used to override the default focus traversal and is not required.
+         */
         public Widget? next_focus_widget_right {
             get { return _next_focus_widget_right; }
             set {
@@ -181,8 +362,19 @@ namespace EV3devKit {
             notify_property ("next-focus-widget-right");
         }
 
+        /**
+         * Gets the parent Container of this widget.
+         *
+         * Returns ``null`` if this widget has not been added to a Container.
+         */
         public weak Container? parent { get; protected set; }
 
+        /**
+         * Gets the top level window for this widget.
+         *
+         * Returns ``null`` if this widget or none of its Container ancestors
+         * have been added to a Window.
+         */
         public Window? window {
             owned get {
                 return do_recursive_parent ((widget) => {
@@ -193,9 +385,33 @@ namespace EV3devKit {
 
         /* Other properties */
 
+        /**
+         * Gets and sets the visibility of this widget.
+         *
+         * When a widget is not visible, it still takes up the same amount of
+         * space when the parent Container does its layout - it is just not
+         * drawn.
+         */
         public bool visible { get; set; default = true; }
 
+        /**
+         * Gets and sets a weak reference to a user-defined value.
+         *
+         * This can be used to attach arbitrary data to a widget.
+         *
+         * If the user data is an Object, then {@link represented_object} should
+         * be used instead (so that it will increase the reference count).
+         */
         public void *weak_represented_object { get; set; }
+
+        /**
+         * Gets and sets a reference to a user-defined Object.
+         *
+         * This can be used to attach arbitrary data to a widget.
+         *
+         * If you do not want this widget to have a reference to the Object, then
+         * {@link weak_represented_object} should be used instead.
+         */
         public Object? represented_object { get; set; }
 
         protected Widget () {
@@ -216,7 +432,10 @@ namespace EV3devKit {
             notify["vertical-align"].connect (redraw);
             notify["can-focus"].connect (redraw);
             notify["has-focus"].connect (redraw);
-            notify["visible"].connect (redraw);
+            notify["visible"].connect (() => {
+                if (parent != null)
+                    parent.redraw ();
+            });
             widget_count++;
             //debug ("Created %s widget: %p", get_type ().name (), this);
         }
@@ -228,37 +447,78 @@ namespace EV3devKit {
 */
         /* layout functions */
 
+        /**
+         * Gets the combined width of margins, borders and paddings.
+         *
+         * Specifically, it is the sum of the left and right margins, the left
+         * and right borders and the left and right paddings. It does not
+         * include the width of the content area.
+         */
         public inline int get_margin_border_padding_width () {
             return _margin_left + _margin_right + _border_left
                 + _border_right + _padding_left + _padding_right;
         }
 
+        /**
+         * Gets the combined height of margins, borders and paddings.
+         *
+         * Specifically, it is the sum of the top and bottom margins, the top
+         * and bottom borders and the top and bottom paddings. It does not
+         * include the width of the content area.
+         */
         public inline int get_margin_border_padding_height () {
             return _margin_top + _margin_bottom + _border_top
                 + _border_bottom + _padding_top + _padding_bottom;
         }
 
-        public virtual int get_preferred_width () ensures (result > 0) {
+        /**
+         * Gets the preferred width of the widget.
+         *
+         * This is used by the parent Container to help layout the widget.
+         */
+        protected virtual int get_preferred_width () ensures (result > 0) {
             return int.max (1, get_margin_border_padding_width ());
         }
 
-        public virtual int get_preferred_height () ensures (result > 0) {
+        /**
+         * Gets the preferred height of the widget.
+         *
+         * This is used by the parent Container to help layout the widget.
+         */
+        protected virtual int get_preferred_height () ensures (result > 0) {
             return int.max (1, get_margin_border_padding_height ());
         }
 
-        public virtual int get_preferred_width_for_height (int height)
+        /**
+         * Gets the preferred width of the widget for the specified height.
+         *
+         * This is used by the parent Container to help layout the widget.
+         *
+         * @param height The height to be used by the widget.
+         */
+        protected virtual int get_preferred_width_for_height (int height)
             requires (height > 0) ensures (result > 0)
         {
             return get_preferred_width ();
         }
 
-        public virtual int get_preferred_height_for_width (int width)
+        /**
+         * Gets the preferred height of the widget for the specified width.
+         *
+         * This is used by the parent Container to help layout the widget.
+         *
+         * @param width The width to be used by the widget.
+         */
+        protected virtual int get_preferred_height_for_width (int width)
             requires (width > 0) ensures (result > 0)
         {
             return get_preferred_height ();
         }
 
-        public void set_bounds (int x1, int y1, int x2, int y2)
+        /**
+         * Called by the parent Container to layout this widget.
+         */
+        protected void set_bounds (int x1, int y1, int x2, int y2)
             requires (x1 <= x2 && y1 <= y2)
         {
             bounds.x1 = x1;
@@ -277,6 +537,12 @@ namespace EV3devKit {
 
         /* navigation functions */
 
+        /**
+         * Focuses this widget.
+         *
+         * @return ``true`` if this widget {@link can_focus} and is {@link visible}
+         * or ``false`` if this widget can't be focused.
+         */
         public bool focus () {
             if (!can_focus || !visible)
                 return false;
@@ -291,6 +557,16 @@ namespace EV3devKit {
             return true;
         }
 
+        /**
+         * Focuses the next widget in the specified direction.
+         *
+         * If this widget has one of the ``next_focus_widget_*`` properties set
+         * it will use that value, otherwise, it focus the next widget in the
+         * same Window in that direction. Focus will "wrap" around the screen
+         * if no widgets are found in the specified direction.
+         *
+         * @param direction The direction pass the focus.
+         */
         public void focus_next (FocusDirection direction) {
             if (window == null)
                 return;
@@ -407,7 +683,7 @@ namespace EV3devKit {
         /**
          * Searches this Widget and its children for the currently focused widget.
          *
-         * @return The focused widget or "null" if no widget is focused.
+         * @return The focused widget or ``null`` if no widget is focused.
          */
         public Widget? get_focused_child () {
             return do_recursive_children ((widget) => {
@@ -420,15 +696,20 @@ namespace EV3devKit {
         /* tree traversal functions */
 
         /**
-         * Run a function recursively over widget and all of its children
-         * (if any). The recursion stops when func returns a non-null
-         * value. That value is returned by do_recursive_children.
+         * Run a function recursively over widget and all of its children.
+         *
+         * The recursion stops when ``func`` returns a non-null value.
+         *
+         * @param func The function to call for each recursion.
+         * @param reverse If ``true`` containers with more than one child will
+         * be iterated starting with the last child first.
+         * @return The return value of the last call to ``func``.
          */
         public Widget? do_recursive_children (WidgetFunc func, bool reverse = false) {
             return do_recursive_children_internal (this, func, reverse);
         }
 
-        public static Widget? do_recursive_children_internal (
+        static Widget? do_recursive_children_internal (
             Widget widget, WidgetFunc func, bool reverse)
         {
             var result = func (widget);
@@ -457,15 +738,18 @@ namespace EV3devKit {
         }
 
         /**
-         * Run a function recursively over widget and all of its ancestors
-         * (if any). The recursion stops when func returns a non-null
-         * value. That value is returned by do_recursive_parent.
+         * Run a function recursively over widget and all of its ancestors.
+         *
+         * The recursion stops when ``func`` returns a non-null value.
+         *
+         * @param func The function to call for each recursion.
+         * @return The return value of the last call to ``func``.
          */
         public Widget? do_recursive_parent (WidgetFunc func) {
             return do_recursive_parent_internal (this, func);
         }
 
-        public static Widget? do_recursive_parent_internal (
+        static Widget? do_recursive_parent_internal (
             Widget widget, WidgetFunc func)
         {
             var result = func (widget);
@@ -478,20 +762,50 @@ namespace EV3devKit {
 
         /* drawing functions */
 
+        /**
+         * Notifies that this widget has changed and needs to be redrawn.
+         *
+         * If this widget is displayed on a {@link Screen}, the Screen will be
+         * redrawn.
+         */
         public virtual void redraw () {
-            if (parent != null)
+            if (_visible && parent != null)
                 parent.redraw ();
         }
 
+        /**
+         * Implementations should override this method if they need to handle
+         * laying out its contents.
+         *
+         * Mostly just {@link Container}s need to do this.
+         */
         protected virtual void do_layout () {
         }
 
+        /**
+         * Implementations can override this method if they need to have a
+         * a background.
+         *
+         * Care should be taken to not draw in the margin area and should
+         * respect the border radius.
+         */
         protected virtual void draw_background () {
         }
 
+        /**
+         * Implementations should override this method.
+         *
+         * Care should be taken to not draw outside of the content area.
+         */
         protected virtual void draw_content () {
         }
 
+        /**
+         * Implementations can override this if they need special handling for
+         * the border.
+         *
+         * For example Grid also draws a border between rows and columns.
+         */
         protected virtual void draw_border (GRX.Color color = window.screen.fg_color) {
             if (border_top != 0)
                 filled_box (border_bounds.x1 + border_radius, border_bounds.y1,
@@ -525,7 +839,7 @@ namespace EV3devKit {
             }
         }
 
-        public void draw () {
+        internal void draw () {
             if (!visible)
                 return;
             int x1;
@@ -543,6 +857,18 @@ namespace EV3devKit {
 
         /* input handling */
 
+        /**
+         * Emitted when a key is pressed.
+         *
+         * This event is propitiated to all child widgets until a signal handler
+         * returns ``true`` to indicate that the key has been handled.
+         *
+         * Due to a shortcoming in vala, you currently also have to call
+         * {{{
+         * Signal.stop_emission_by_name (this, "key-pressed");
+         * }}}
+         * in addition to returning ``true``.
+         */
         public virtual signal bool key_pressed (uint key_code) {
             if (can_focus && visible) {
                 FocusDirection direction;

@@ -26,9 +26,23 @@ using Gee;
 using GRX;
 
 namespace EV3devKit {
+    /**
+     * Button shaped {@link Container} to get user input.
+     *
+     * The colors of a button (except for the border) are inverted when it has
+     * focus. Pressing ``ENTER`` will trigger the {@link pressed} signal.
+     */
     public class Button : EV3devKit.Container {
+        /**
+         * Emitted when the Button has been pressed by the user.
+         */
         public signal void pressed ();
 
+        /**
+         * Creates a new Button.
+         *
+         * @param child The child for the button {@link Container}.
+         */
         public Button (Widget? child = null) {
             base (ContainerType.SINGLE);
             if (child != null)
@@ -39,13 +53,23 @@ namespace EV3devKit {
             can_focus = true;
         }
 
+        /**
+         * Creates a new Button with a {@link Label} as the child.
+         *
+         * @param text The text for the {@link Label}.
+         * @param font The font to use for the widget or "null" to use the
+         * default font.
+         */
         public Button.with_label (string? text = null, Font? font = null) {
             this (new Label (text) {
                 font = font ?? Label.default_font
             });
         }
 
-        public override bool draw_children_as_focused {
+        /**
+         * {@inheritDoc}
+         */
+        protected override bool draw_children_as_focused {
             get {
                 if (has_focus)
                     return true;
@@ -53,6 +77,9 @@ namespace EV3devKit {
             }
         }
 
+        /**
+         * {@inheritDoc}
+         */
         protected override void draw_background () {
             if (draw_children_as_focused) {
                 var color = window.screen.mid_color;
@@ -61,7 +88,10 @@ namespace EV3devKit {
             }
         }
 
-        public override bool key_pressed (uint key_code) {
+        /**
+         * Default handler for the key_pressed signal.
+         */
+        protected override bool key_pressed (uint key_code) {
             if (key_code == '\n') {
                 pressed ();
                 Signal.stop_emission_by_name (this, "key-pressed");

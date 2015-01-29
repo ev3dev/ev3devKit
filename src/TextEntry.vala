@@ -26,18 +26,56 @@ using Gee;
 using GRX;
 
 namespace EV3devKit {
+    /**
+     * A wiget for getting user input.
+     */
     public class TextEntry : EV3devKit.Widget {
         const string CONTINUE_RIGHT = "\xaf";
         const string CONTINUE_LEFT = "\xae";
 
+        /**
+         * String containing all numeric characters (``0-9``).
+         */
         public const string NUMERIC = "0123456789";
+
+        /**
+         * String containing numeric characters (``0-9``) and a decimal point (``.``).
+         */
         public const string DECIMAL = NUMERIC + ".";
+
+        /**
+         * String containing hexadecimal numeric characters (``0-9`` and ``A-F``).
+         */
         public const string HEXIDECIMAL = NUMERIC + "ABCDEF";
+
+        /**
+         * String containing uppercase alphabetic characters (``A-Z``).
+         */
         public const string UPPER_ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+        /**
+         * String containing lowercase alphabetic characters (``a-z``).
+         */
         public const string LOWER_ALPHA = "abcdefghijklmnopqrstuvwxyz";
+
+        /**
+         * String containing all alphabetic characters (``a-z`` and ``A-Z``).
+         */
         public const string ALPHA = LOWER_ALPHA + UPPER_ALPHA;
+
+        /**
+         * String containing alphanumeric characters (``a-z``, ``A-Z``, ``0-9`` and ``.-_<space>``).
+         */
         public const string ALPHA_NUM = ALPHA + DECIMAL + "-_ ";
+
+        /**
+         * String containing symbol characters (``!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~``).
+         */
         public const string SYMBOL = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
+
+        /**
+         * String containing all 95 printable ASCII characters.
+         */
         public const string ALPHA_NUM_SYMBOL = ALPHA + NUMERIC + SYMBOL + " ";
 
         Label label;
@@ -48,18 +86,57 @@ namespace EV3devKit {
         string save_text;
         OnScreenKeyboard on_screen_keyboard;
 
+        /**
+         * Gets and sets the test displayed in the text entry.
+         */
         public string text { get; set; }
+
+        /**
+         * Gets and sets the font used in the text entry.
+         */
         public unowned Font font {
             get {return label.font; }
             set { label.font = value; }
         }
+
+        /**
+         * Gets and sets the minimum width for the text entry.
+         */
         public int min_width { get; set; default = 10; }
+
+        /**
+         * Gets and sets the edit-ability of the text entry.
+         */
         public bool can_edit { get; set; default = true; }
+
+        /**
+         * Gets and sets whether the text entry should use an on screen keyboard.
+         */
         public bool use_on_screen_keyboard { get; set; default = true; }
+
+        /**
+         * Gets the current editing state.
+         */
         public bool editing { get; internal set; default = false; }
+
+        /**
+         * Gets and sets a string containing valid characters for the text entry.
+         *
+         * This limits the number of characters that have to be scrolled when
+         * not using the on screen keyboard.
+         */
         public string valid_chars { get; set; default = ALPHA_NUM_SYMBOL; }
+
+        /**
+         * Gets and sets whether the text entry inserts or replaces text.
+         */
         public bool insert { get; set; default = false; }
 
+        /**
+         * Creates a new text entry.
+         *
+         * @param text The initial text.
+         */
         public TextEntry (string text = "") {
             this.text = text;
             label = new Label () {
@@ -76,6 +153,16 @@ namespace EV3devKit {
             notify["parent"].connect (() => label.parent = this.parent);
         }
 
+        /**
+         * Starts an editing session.
+         *
+         * If the text entry uses an on screen keyboard, it will be displayed.
+         * Otherwise, a cursor will be displayed. The left and right arrow keys
+         * move the cursor and the up and down arrow keys change the character
+         * above the cursor using the list of {@link valid_chars}. Either
+         * {@link commit_editing} or {@link cancel_editing} must be called to
+         * end the editing session.
+         */
         public void start_editing () {
             if (_editing)
                 return;
@@ -90,6 +177,11 @@ namespace EV3devKit {
             }
         }
 
+        /**
+         * Commits the changes made in an editing session.
+         *
+         * An editing session is started by calling {@link start_editing}.
+         */
         public void commit_editing () {
             if (!_editing)
                 return;
@@ -100,6 +192,13 @@ namespace EV3devKit {
             }
         }
 
+        /**
+         * Cancels the changes made in an editing session.
+         *
+         * An editing session is started by calling {@link start_editing}.
+         * {@link text} will be reverted to the value saved when
+         * {@link start_editing} was called.
+         */
         public void cancel_editing () {
             if (!_editing)
                 return;
@@ -109,19 +208,26 @@ namespace EV3devKit {
                 on_screen_keyboard = null;
         }
 
-        public override int get_preferred_width () {
+        /**
+         * {@inheritDoc}
+         */
+        protected override int get_preferred_width () {
             return int.max (min_width, font.vala_string_width (text ?? "")
                 + get_margin_border_padding_width ());
         }
 
-        public override int get_preferred_height () {
+        /**
+         * {@inheritDoc}
+         */
+        protected override int get_preferred_height () {
             return label.get_preferred_height () + get_margin_border_padding_height ();
         }
 
         /**
-         * Set the character at the current cursor position
-         * @param c New character.
-         * @param move_next If true, moves the cursor to the next character.
+         * Sets the character at the current cursor position.
+         *
+         * @param c The new character.
+         * @param move_next If true, the cursor will be moved to the next character.
          */
         public void set_char (char c, bool move_next = false) {
             if (!_editing)
@@ -140,7 +246,8 @@ namespace EV3devKit {
         }
 
         /**
-         * Removes the character at the current cursor position
+         * Removes the character at the current cursor position.
+         *
          * @param backspace If true deletes the character before the cursor instead.
          */
         public void delete_char (bool backspace = false) {
@@ -159,6 +266,9 @@ namespace EV3devKit {
 
         /**
          * Increments or decrements the character at the current cursor position.
+         *
+         * Uses {@link valid_chars} to determine the next character.
+         *
          * @param dec If true, decrements instead of increments.
          */
         void inc_char (bool dec = false) {
@@ -170,7 +280,10 @@ namespace EV3devKit {
             set_char (new_char);
         }
 
-        public override bool key_pressed (uint key_code) {
+        /**
+         * Default handler for the key_pressed signal.
+         */
+        protected override bool key_pressed (uint key_code) {
             if (_editing) {
                 if (key_code == Key.UP)
                     inc_char ();
@@ -272,11 +385,17 @@ namespace EV3devKit {
                     label.text[0:continuation_offset + cursor_offset - text_offset]);
         }
 
-        public override void redraw () {
+        /**
+         * {@inheritDoc}
+         */
+        protected override void redraw () {
             label.text = null;
             base.redraw ();
         }
 
+        /**
+         * {@inheritDoc}
+         */
         protected override void do_layout () {
             label.set_bounds (content_bounds.x1, content_bounds.y1,
                 content_bounds.x2, content_bounds.y2);
@@ -284,6 +403,9 @@ namespace EV3devKit {
                 set_label_text ();
         }
 
+        /**
+         * {@inheritDoc}
+         */
         protected override void draw_content () {
             var color = has_focus ? window.screen.mid_color : window.screen.fg_color;
             label.draw ();

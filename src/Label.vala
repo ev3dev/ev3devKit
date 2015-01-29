@@ -25,34 +25,60 @@ using Gee;
 using GRX;
 
 namespace EV3devKit {
+    /**
+     * Widget to display text.
+     *
+     * The text will be automatically wrapped if the parent Container is not
+     * wide enough to fit the entire text value.
+     */
     public class Label : EV3devKit.Widget {
         internal static Font _default_font;
         internal static weak Font default_font;
 
+        // TODO: This is a problem if we try to use default_font before creating an instance of Label
         static construct {
             _default_font = Font.load ("xm6x8");
             default_font = _default_font ??  Font.pc6x8;
         }
 
+        TextOption text_option;
         Gee.List<string>? cached_lines;
         int last_width = 0;
 
+        /**
+         * Gets and sets the text displayed by this Label.
+         */
         public string? text { get; set; }
 
-        TextOption text_option;
+        /**
+         * Gets and sets the Font.
+         */
         public unowned Font font {
             get {return text_option.font; }
             set { text_option.font = value; }
         }
+
+        /**
+         * Gets and sets the horizontal text alignment.
+         */
         public TextHorizAlign text_horizontal_align {
             get { return text_option.x_align; }
             set { text_option.x_align = value; }
         }
+
+        /**
+         * Gets and sets the vertical text alignment.
+         */
         public TextVertAlign text_vertical_align {
             get { return text_option.y_align; }
             set { text_option.y_align = value; }
         }
 
+        /**
+         * Creates a new instance of a Label widget.
+         *
+         * @param text The text displayed by this Label.
+         */
         public Label (string? text = null) {
             this.text = text;
             text_option = new TextOption () {
@@ -68,21 +94,35 @@ namespace EV3devKit {
             notify["text-vertical-align"].connect (redraw);
         }
 
-        public override int get_preferred_width () ensures (result > 0) {
+        /**
+         * {@inheritDoc}
+         */
+        protected override int get_preferred_width () ensures (result > 0) {
             return int.max(1, font.vala_string_width (text ?? ""))
                 + get_margin_border_padding_width ();
         }
-        public override int get_preferred_height () ensures (result > 0) {
+
+        /**
+         * {@inheritDoc}
+         */
+        protected override int get_preferred_height () ensures (result > 0) {
             return int.max(1, (int)font.height) + get_margin_border_padding_height ();
         }
 
-        public override int get_preferred_width_for_height (int height)
+        /**
+         * {@inheritDoc}
+         */
+        protected override int get_preferred_width_for_height (int height)
             requires (height > 0) ensures (result > 0)
         {
             // TODO: create get_lines_for_height () method
             return get_preferred_width ();
         }
-        public override int get_preferred_height_for_width (int width)
+
+        /**
+         * {@inheritDoc}
+         */
+        protected override int get_preferred_height_for_width (int width)
             requires (width > 0) ensures (result > 0)
         {
             var lines = get_lines_for_width (width);
@@ -136,11 +176,17 @@ namespace EV3devKit {
             return lines;
         }
 
-        public override void redraw () {
+        /**
+         * {@inheritDoc}
+         */
+        protected override void redraw () {
             cached_lines = null;
             base.redraw ();
         }
 
+        /**
+         * {@inheritDoc}
+         */
         protected override void draw_content () {
             if (_text == null)
                 return;

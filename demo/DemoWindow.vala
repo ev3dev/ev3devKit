@@ -25,11 +25,19 @@ using Curses;
 using GRX;
 
 namespace EV3devKit {
-
+    /**
+     * Used to demonstrate most of the UI components in ev3devKit.
+     */
     public class DemoWindow : Window {
 
+        /**
+         * Emitted when the use selects the Quit menu item.
+         */
         public signal void quit ();
 
+        /**
+         * Creates a new instance of a demo window.
+         */
         public DemoWindow () {
             var menu = new Menu () {
                 padding_left = 10,
@@ -72,7 +80,7 @@ namespace EV3devKit {
             menu.add_menu_item (quit_menu_item);
         }
 
-        public override bool key_pressed (uint key_code) {
+        protected override bool key_pressed (uint key_code) {
             // ignore back button otherwise we end up with no windows in the stack
             if (key_code == Key.BACKSPACE)
                 return false;

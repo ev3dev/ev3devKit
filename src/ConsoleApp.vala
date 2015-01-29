@@ -26,8 +26,38 @@ using Linux.VirtualTerminal;
 using Posix;
 
 namespace EV3devKit {
+    /**
+     * ConsoleApp does all of the low level setting up of a virtual console
+     * so you don't have to. To use it, your main function should look something
+     * like this:
+     * {{{
+     * static int main (string[] args) {
+     *     try {
+     *         ConsoleApp.init ();
+     *
+     *         // Program-specific initialization which includes something
+     *         // that calls ConsoleApp.quit () when the program is finished.
+     *
+     *         ConsoleApp.run ();
+     *
+     *         // any additional cleanup if needed before application exits.
+     *
+     *         return 0;
+     *     } catch (ConsoleAppError err) {
+     *         critical ("%s", err.message);
+     *     }
+     *     return 1;
+     * }
+     * }}}
+     */
     namespace ConsoleApp {
-        public errordomain ConsoleError {
+        /**
+         * ConsoleApp errors.
+         */
+        public errordomain ConsoleAppError {
+            /**
+             * Indicates that an error occurred while setting the graphics mode.
+             */
             MODE
         }
 
@@ -39,11 +69,15 @@ namespace EV3devKit {
         /**
          * Initialize a console application.
          *
+         * This puts the specified virtual terminal into graphics mode and sets
+         * up ncurses for keyboard input. This must be run before calling anything
+         * else using the GRX graphics library.
+         *
          * @param vtfd File descriptor for virtual terminal to use or "null" to
          * use the current virtual terminal.
-         * @throws ConsoleError if initialization failed.
+         * @throws ConsoleAppError if initialization failed.
          */
-        public void init (int? vtfd = null) throws ConsoleError {
+        public void init (int? vtfd = null) throws ConsoleAppError {
             /* ncurses setup */
 
             if (vtfd != null) {
@@ -59,13 +93,13 @@ namespace EV3devKit {
 
             try {
                 if (!GRX.set_driver ("linuxfb"))
-                    throw new ConsoleError.MODE ("Error setting driver");
+                    throw new ConsoleAppError.MODE ("Error setting driver");
                 if (!GRX.set_mode (GRX.GraphicsMode.GRAPHICS_DEFAULT))
-                    throw new ConsoleError.MODE ("Error setting mode");
+                    throw new ConsoleAppError.MODE ("Error setting mode");
                 Unix.signal_add (SIGHUP, HandleSIGTERM);
                 Unix.signal_add (SIGTERM, HandleSIGTERM);
                 Unix.signal_add (SIGINT, HandleSIGTERM);
-            } catch (ConsoleError e) {
+            } catch (ConsoleAppError e) {
                 release_console ();
                 throw e;
             }
@@ -73,18 +107,26 @@ namespace EV3devKit {
             Screen.active_screen = new Screen ();
         }
 
+        /**
+         * Starts the main loop for the application.
+         *
+         * Does not return until ConsoleApplication.quit () is called.
+         */
         public void run () {
             new Thread<int> ("input", read_input);
             main_loop.run ();
             release_console ();
         }
 
-        void release_console () {
-            GRX.set_driver ("memory"); // releases frame buffer
-        }
-
+        /**
+         * Instructs the main loop to quit.
+         */
         public void quit () {
             main_loop.quit ();
+        }
+
+        void release_console () {
+            GRX.set_driver ("memory"); // releases frame buffer
         }
 
         bool HandleSIGTERM () {

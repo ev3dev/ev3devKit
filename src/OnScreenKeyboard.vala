@@ -26,13 +26,31 @@ using Gee;
 using GRX;
 
 namespace EV3devKit {
+    /**
+     * Specifies the type of keyboard.
+     */
     public enum Keyboard {
+        /**
+         * Uppercase alphabet.
+         */
         UPPER_ALPHA,
+        /**
+         * Lowercase alphabet.
+         */
         LOWER_ALPHA,
+        /**
+         * Numeric.
+         */
         NUMERIC,
+        /**
+         * Other symbols.
+         */
         SYMBOL
     }
 
+    /**
+     * An on screen keyboard for getting user input.
+     */
     public class OnScreenKeyboard : EV3devKit.Window {
         const int KEYBOARD_ROWS = 4;
         const int KEYBOARD_COLS = 10;
@@ -45,6 +63,9 @@ namespace EV3devKit {
         Box vbox;
         Map<ulong, weak Object> signal_id_map;
 
+        /**
+         * Gets and sets the user text.
+         */
         public string text {
             owned get { return text_entry.text[0:text_entry.text.length-1]; }
             set {
@@ -55,9 +76,21 @@ namespace EV3devKit {
 
         Grid? current_keyboard { get; set; }
 
+        /**
+         * Emitted when the user presses the Accept button.
+         */
         public signal void accepted ();
+
+        /**
+         * Emitted when the user presses the Cancel button.
+         */
         public signal void canceled ();
 
+        /**
+         * Creates a new on screen keyboard.
+         *
+         * @param inital_keyboard The type of keyboard to display first.
+         */
         public OnScreenKeyboard (Keyboard inital_keyboard = Keyboard.UPPER_ALPHA) {
             signal_id_map = new HashMap<ulong, weak Object> ();
             vbox = new Box.vertical () {
@@ -321,7 +354,10 @@ namespace EV3devKit {
                 text_entry.text += " ";
         }
 
-        public override bool key_pressed (uint key_code) {
+        /**
+         * Default handler for the key_pressed signal.
+         */
+        protected override bool key_pressed (uint key_code) {
             if (key_code == Key.BACKSPACE)
                 text_entry.delete_char (true);
             else if (key_code == Key.DC) // DELETE

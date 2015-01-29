@@ -19,41 +19,97 @@
  * MA 02110-1301, USA.
  */
 
-/* AbstractScreen.vala - Screen object contains all other widgets */
+/* Screen.vala - Screen object contains all other widgets */
 
 using Gee;
 using GRX;
 
 namespace EV3devKit {
+    /**
+     * Represents a screen that UI elements are displayed on.
+     *
+     * In addition to displaying widgets, the screen also maintains an input
+     * queue that it passes to the top window to handle user input.
+     */
     public class Screen : Object {
-        public static Screen active_screen;
+        /**
+         * The currently active screen.
+         *
+         * Calling {@link Window.show} will display the window on this screen.
+         */
+        public static Screen? active_screen;
 
-        protected LinkedList<Window> window_stack;
+        internal LinkedList<Window> window_stack;
         LinkedList<uint?> key_queue;
-        protected Context context;
+        Context context;
 
         internal Color fg_color;
         internal Color bg_color;
         internal Color mid_color;
 
+        /**
+         * Gets the width of the screen.
+         */
         public int width { get; protected set; }
+
+        /**
+         * Gets the height of the screen.
+         */
         public int height { get; protected set; }
+
+        /**
+         * Gets the height of windows for the screen.
+         *
+         * The value depends on whether or not the status bar is visible.
+         */
         public int window_height {
             get { return height - window_y; }
         }
+
+        /**
+         * Gets the topmost y-axis value for windows on the screen.
+         *
+         * The value depends on whether or not the status bar is visible.
+         */
         public int window_y {
             get { return status_bar.visible ? StatusBar.HEIGHT : 0; }
         }
+
+        /**
+         * Returns ``true`` if any widget has called {@link Widget.redraw} and
+         * the screen has not been redrawn yet.
+         */
         public bool dirty { get; set; default = true; }
+
+        /**
+         * Gets the top window on the window stack.
+         *
+         * Returns ``null`` if there are no windows in the stack.
+         */
         public Window? top_window {
             owned get { return window_stack.peek_tail (); }
         }
+
+        /**
+         * Gets the status bar for the screen.
+         */
         public StatusBar status_bar { get; protected set; }
 
+        /**
+         * Creates a new screen using the current GRX screen information.
+         */
         public Screen () {
             this.custom (screen_x (), screen_y ());
         }
 
+        /**
+         * Creates a new screen with a custom size and optional memory location.
+         *
+         * @param width The width of the screen.
+         * @param height The height of the screen.
+         * @param context_mem_addr The memory address used by the GRX context.
+         * If ``null`` memory will be automatically allocated for the context.
+         */
         public Screen.custom (int width, int height, char *context_mem_addr = null) {
             window_stack = new LinkedList<Window> ();
             key_queue = new LinkedList<uint?> ();
@@ -80,7 +136,15 @@ namespace EV3devKit {
             Timeout.add (50, on_draw_timeout);
         }
 
-        public virtual void refresh () {
+        /**
+         * Add a key code to the queue.
+         */
+        public void queue_key_code (uint key_code) {
+            key_queue.offer_tail (key_code);
+        }
+
+
+        internal virtual void refresh () {
             bit_blt (Context.screen, 0, 0, context, 0, 0, screen_x () - 1, screen_y () - 1);
         }
 
@@ -135,11 +199,7 @@ namespace EV3devKit {
             return false;
         }
 
-        public void queue_key_code (uint key_code) {
-            key_queue.offer_tail (key_code);
-        }
-
-        protected bool on_draw_timeout () {
+        internal bool on_draw_timeout () {
             handle_input ();
             if (dirty) {
                 context.set ();

@@ -22,9 +22,21 @@
 /* RadioMenuItem.vala - Menu items used by Menu widget with radio button */
 
 namespace EV3devKit {
+    /**
+     * A menu item that includes a radio button.
+     */
     public class RadioMenuItem : EV3devKit.MenuItem {
-        public CheckButton radio { get; private set; }
+        /**
+         * Gets the radio button for the menu item.
+         */
+        public CheckButton radio { get; construct set; }
 
+        /**
+         * Creates a new radio button menu item.
+         *
+         * @param text The text for the menu item Label.
+         * @param group The CheckButtonGroup for the radio button.
+         */
         public RadioMenuItem (string text, CheckButtonGroup group) {
             base.with_button (new Button () {
                 border = 0,

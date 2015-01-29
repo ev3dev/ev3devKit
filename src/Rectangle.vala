@@ -22,13 +22,38 @@
 /* Rectangle.vala - Struct for rectangles */
 
 namespace EV3devKit {
+    /**
+     * The bounds of a rectangle.
+     */
     public struct Rectangle {
+        /**
+         * The leftmost x-axis value.
+         */
         public int x1;
+
+        /**
+         * The topmost y-axis value.
+         */
         public int y1;
+
+        /**
+         * The rightmost x-axis value.
+         */
         public int x2;
+
+        /**
+         * The bottommost y-axis value.
+         */
         public int y2;
 
+        /**
+         * Gets the width of the rectangle.
+         */
         public int width { get { return x2 - x1 + 1; } }
+
+        /**
+         * Gets the height of the rectangle.
+         */
         public int height { get { return y2 - y1 + 1; } }
     }
 }

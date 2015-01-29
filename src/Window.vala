@@ -25,27 +25,59 @@ using Curses;
 using GRX;
 
 namespace EV3devKit {
+    /**
+     * Top level widget for displaying other widgets on the {@link Screen}.
+     *
+     * All other widgets must be contained in a Window in order to be displayed
+     * on the {@link Screen}. Windows are displayed in a stack. A new Window is
+     * added to the stack by calling {@link show} and removed from the stack
+     * by calling {@link close}. Only the top-most Window is visible to the user
+     * and only that Window receives user input.
+     */
     public class Window : EV3devKit.Container {
         internal weak Screen? _screen;
+        /**
+         * Gets the Screen that this Window is attached to.
+         *
+         * Returns "null" if the Window is not in the window stack of a Screen.
+         */
         public Screen? screen {
             get { return _screen; }
         }
 
+        /**
+         * Returns true if the Window is currently displayed on the Screen.
+         *
+         * In other words, this Window is on top of the Window stack. Only one
+         * Window and one Dialog can be ``on_screen`` at a time.
+         */
         public bool on_screen { get; set; default = false; }
 
+        /**
+         * Emitted the first time this Window is shown on a Screen.
+         */
         public virtual signal void shown () {
             if (!descendant_has_focus)
                 focus_first ();
         }
 
+        /**
+         * Emitted when this window is closed (removed from the window stack).
+         */
         public virtual signal void closed () {
         }
 
+        /**
+         * Creates a new instance of a Window.
+         */
         public Window () {
             base (ContainerType.SINGLE);
         }
 
-        public override bool key_pressed (uint key_code) {
+        /**
+         * Default handler for the key_pressed signal.
+         */
+        protected override bool key_pressed (uint key_code) {
             switch (key_code) {
             case Key.UP:
             case Key.DOWN:
@@ -66,7 +98,7 @@ namespace EV3devKit {
         }
 
         /**
-         * Make the window visble by putting it on top of the window stack.
+         * Make the window visible by putting it on top of the window stack.
          */
         public void show () {
             if (Screen.active_screen == null) {
@@ -79,6 +111,9 @@ namespace EV3devKit {
         /**
          * Remove the window from the window stack.
          *
+         * If it was the top Window on the stack, the next window will become
+         * visible.
+         *
          * @return True if the window was removed.
          */
         public bool close () {
@@ -87,6 +122,9 @@ namespace EV3devKit {
             return _screen.close_window (this);
         }
 
+        /**
+         * {@inheritDoc}
+         */
         public override void redraw () {
             if (_screen != null && on_screen)
                 _screen.dirty = true;

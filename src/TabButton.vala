@@ -26,9 +26,20 @@ using Gee;
 using GRX;
 
 namespace EV3devKit {
+    /**
+     * Button used for the tab of a {@link NotebookTab}.
+     */
     public class TabButton : EV3devKit.Button {
-        public bool active { get; set; }
+        /**
+         * Gets the active state of this tab.
+         *
+         * The "active" tab is the currently selected/displayed tab.
+         */
+        public bool active { get; internal set; }
 
+        /**
+         * Creates a new tab button.
+         */
         public TabButton (string? text = null) {
             base (new Label (text));
             border_radius = 3;
@@ -40,6 +51,9 @@ namespace EV3devKit {
             });
         }
 
+        /**
+         * {@inheritDoc}
+         */
         protected override void draw_background () {
             if (draw_children_as_focused) {
                 var color = window.screen.mid_color;
@@ -49,6 +63,9 @@ namespace EV3devKit {
             base.draw_background ();
         }
 
+        /**
+         * {@inheritDoc}
+         */
         protected override void draw_border (GRX.Color color = window.screen.fg_color) {
             if (border_top != 0)
                 filled_box (border_bounds.x1 + border_radius, border_bounds.y1,

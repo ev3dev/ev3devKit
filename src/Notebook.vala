@@ -19,13 +19,20 @@
  * MA 02110-1301, USA.
  */
 
-/* Notebook.vala - Widget that represents a checkbox or radio button */
+/* Notebook.vala - Container with tabs used to display multiple pages */
 
 using Curses;
 using Gee;
 using GRX;
 
 namespace EV3devKit {
+    /**
+     * A tabbed widget for displaying multiple "pages".
+     *
+     * Note: Calling {@link Container.add} and {@link Container.remove} on a
+     * Notebook will result in unexpected behavior. Use {@link add_tab} and
+     * {@link remove_tab} instead.
+     */
     public class Notebook : EV3devKit.Container {
         Box notebook_vbox;
         Box tab_hbox;
@@ -33,6 +40,9 @@ namespace EV3devKit {
         Gee.Map<weak NotebookTab, weak TabButton> button_map;
 
         weak NotebookTab _active_tab;
+        /**
+         * Gets and sets the active (visible) tab of the notebook.
+         */
         public weak NotebookTab active_tab {
             get { return _active_tab; }
             set {
@@ -46,6 +56,9 @@ namespace EV3devKit {
             }
         }
 
+        /**
+         * Creates a new notebook.
+         */
         public Notebook () {
             base (ContainerType.SINGLE);
             tabs = new LinkedList<NotebookTab> ();
@@ -65,6 +78,14 @@ namespace EV3devKit {
             notify["active_tab"].connect (redraw);
         }
 
+        /**
+         * Adds a new tab to the end of the notebook.
+         *
+         * If the new tab already belongs to a notebook, it will be removed from
+         * that notebook before it is added to this notebook.
+         *
+         * @param tab The notebook tab to add.
+         */
         public void add_tab (NotebookTab tab) {
             if (tab.notebook != null)
                 tab.notebook.remove (tab);
@@ -84,6 +105,11 @@ namespace EV3devKit {
                 active_tab = tab;
         }
 
+        /**
+         * Remove the specified tab from this notebook.
+         *
+         * @param tab The notebook tab to remove.
+         */
         public void remove_tab (NotebookTab tab) {
             tabs.remove (tab);
             var button = button_map[tab];
@@ -91,6 +117,9 @@ namespace EV3devKit {
             button_map.unset (tab);
         }
 
+        /**
+         * {@inheritDoc}
+         */
         protected override void draw_border (GRX.Color color = window.screen.fg_color) {
             var notebook_y1 = border_bounds.y1 + tab_hbox.bounds. height;
             if (border_top != 0)

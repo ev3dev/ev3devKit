@@ -27,21 +27,47 @@ using GRX;
 
 namespace EV3devKit {
 
+    /**
+     * The style of a {@link CheckButton}.
+     */
     public enum CheckButtonType {
+        /**
+         * The {@link CheckButton} is a checkbox (on/off).
+         */
         CHECKBOX,
+        /**
+         * The {@link CheckButton} is a radio button (part of a {@link CheckButtonGroup}).
+         */
         RADIO;
     }
 
+    /**
+     * Manages groups of {@link CheckButton}s.
+     */
     public class CheckButtonGroup : Object {
+        /**
+         * Gets the currently selected {@link CheckButton} in the group.
+         */
         public weak CheckButton selected_item { get; internal set; }
+
+        /**
+         * Creates a new group.
+         */
         public CheckButtonGroup () {
         }
     }
 
+    /**
+     * A checkable button widget. There are two variations, a checkbox and a
+     * radio button.
+     */
     public class CheckButton : EV3devKit.Widget {
         CheckButtonType check_button_type;
 
         bool _checked = false;
+        /**
+         * Gets and sets the state of the CheckButton.
+         */
         public bool checked {
             get { return _checked; }
             set {
@@ -63,9 +89,26 @@ namespace EV3devKit {
                     group.selected_item = null;
             }
         }
-        public CheckButtonGroup? group { get; private set; }
 
+        /**
+         * Gets the group that the CheckButton has been asigned to. Returns
+         * ``null`` for checkboxes since they don't have groups.
+         */
+        public CheckButtonGroup? group { get; construct set; }
+
+        /**
+         * Gets and sets the outer size (width and height) of the CheckButton
+         * in pixels.
+         */
         public int outer_size { get; set; default = 9; }
+
+        /**
+         * Gets and sets the inner size (width and height) of the CheckButton
+         * in pixels.
+         *
+         * This is the size of the filled in portion that is only visible when
+         * the CheckButton is checked.
+         */
         public int inner_size { get; set; default = 5; }
 
         CheckButton (CheckButtonType type, CheckButtonGroup? group = null)
@@ -82,22 +125,43 @@ namespace EV3devKit {
             notify["inner-size"].connect (redraw);
         }
 
+        /**
+         * Creates a new instance of a checkbox button.
+         *
+         * Checkboxes are on/off and not part of a group.
+         */
         public CheckButton.checkbox () {
             this (CheckButtonType.CHECKBOX);
         }
 
+        /**
+         * Creates a new instance of a radio button.
+         *
+         * Only one radio button in a group can be selected at a time.
+         *
+         * @param group The group that this radio button belongs to.
+         */
         public CheckButton.radio (CheckButtonGroup group) {
             this (CheckButtonType.RADIO, group);
         }
 
-        public override int get_preferred_width () {
+        /**
+         * {@inheritDoc}
+         */
+        protected override int get_preferred_width () {
             return outer_size + get_margin_border_padding_width ();
         }
 
-        public override int get_preferred_height () {
+        /**
+         * {@inheritDoc}
+         */
+        protected override int get_preferred_height () {
             return outer_size + get_margin_border_padding_height ();
         }
 
+        /**
+         * {@inheritDoc}
+         */
         protected override void draw_content () {
             unowned GRX.Color color;
             if (has_focus || parent.draw_children_as_focused) {
@@ -126,6 +190,9 @@ namespace EV3devKit {
             }
         }
 
+        /**
+         * Default handler for the key_pressed signal.
+         */
         protected override bool key_pressed (uint key_code) {
             if (key_code == '\n') {
                 if (check_button_type == CheckButtonType.CHECKBOX)

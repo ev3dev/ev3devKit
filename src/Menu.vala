@@ -22,9 +22,19 @@
 /* Menu.vala - Menu widget */
 
 namespace EV3devKit {
+    /**
+     * A scrollable menu widget that displays a list of {@link MenuItem}s.
+     *
+     * The menu is basically a {@link Scroll} with a vertical {@link Box} that
+     * contains buttons. It automatically handles things like making sure the
+     * focused {@link MenuItem} is visible on the screen.
+     */
     public class Menu : EV3devKit.Scroll {
         Box menu_vbox;
 
+        /**
+         * Gets and sets the spacing in pixels between menu items.
+         */
         public int spacing {
             get { return menu_vbox.spacing; }
             set { menu_vbox.spacing = value; }
@@ -37,6 +47,9 @@ namespace EV3devKit {
          */
         public delegate bool FindFunc<T> (MenuItem menu_item, T value);
 
+        /**
+         * Creates a new menu widget.
+         */
         public Menu () {
             base.vertical ();
             can_focus = false;
@@ -97,6 +110,12 @@ namespace EV3devKit {
             return null;
         }
 
+        /**
+         * Searches for the specified menu item.
+         *
+         * @param item The menu item to search for.
+         * @return ``true`` if the menu item was found.
+         */
         public bool has_menu_item (MenuItem item) {
             foreach (var widget in menu_vbox._children) {
                 var obj = widget.weak_represented_object as MenuItem;
@@ -107,6 +126,14 @@ namespace EV3devKit {
             return false;
         }
 
+        /**
+         * Adds a menu item to the end of the menu.
+         *
+         * If the menu item is already in another menu, it will be removed from
+         * that menu before being added to this menu.
+         *
+         * @param item Them menu item to add.
+         */
         public void add_menu_item (MenuItem item)
             requires (item.button.weak_represented_object == item)
         {
@@ -117,6 +144,13 @@ namespace EV3devKit {
             item.menu = this;
         }
 
+        /**
+         * Removes the specified menu item from this menu.
+         *
+         * @param item The menu item to remove.
+         * @return ``true`` if the menu item was removed or ``false`` if the
+         * menu item was not found in this menu.
+         */
         public bool remove_menu_item (MenuItem item) {
             foreach (var child in menu_vbox._children) {
                 var obj = child.weak_represented_object as MenuItem;
@@ -133,12 +167,20 @@ namespace EV3devKit {
             return false;
         }
 
+        /**
+         * Removes all menu items from this menu.
+         */
         public void remove_all_menu_items () {
             var iter = menu_item_iter ();
             while (iter.size > 0)
                 remove_menu_item (iter[0]);
         }
 
+        /**
+         * Sorts the items in this menu using the specified function.
+         *
+         * @param func The function to use for sorting.
+         */
         public void sort_menu_items (CompareDataFunc<MenuItem> func) {
             menu_vbox.sort ((a, b) => {
                 var menu_item_a = a.weak_represented_object as MenuItem;
@@ -147,10 +189,16 @@ namespace EV3devKit {
             });
         }
 
+        /**
+         * Gets an iterator for iterating the items in this menu.
+         */
         public MenuItemIterator menu_item_iter () {
             return new MenuItemIterator (this);
         }
 
+        /**
+         * Object used to iterate {@link MenuItem}s.
+         */
         public class MenuItemIterator {
             Menu menu;
 
@@ -158,8 +206,17 @@ namespace EV3devKit {
                 this.menu = menu;
             }
 
+            /**
+             * Gets the number of items in the Menu.
+             */
             public int size { get { return menu.menu_vbox.children.size; } }
 
+            /**
+             * Gets the item at the specified index.
+             *
+             * @param index The index of the item.
+             * @return The item at the specified index.
+             */
             public MenuItem get (int index) {
                 return menu.menu_vbox.children[index].weak_represented_object as MenuItem;
             }

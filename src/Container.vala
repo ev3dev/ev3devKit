@@ -40,13 +40,16 @@ namespace EV3devKit {
         MULTIPLE
     }
 
+    /**
+     * A {@link Widget} that can contain other Widgets.
+     */
     public abstract class Container : EV3devKit.Widget {
         protected LinkedList<Widget> _children;
 
         /**
          * Gets the first child of the Container.
          *
-         * Useful when container_type == ContainerType.SINGLE
+         * Useful when ``container_type == ContainerType.SINGLE``
          */
         public Widget? child {
             owned get {
@@ -63,6 +66,10 @@ namespace EV3devKit {
             owned get { return _children.read_only_view; }
         }
 
+        /**
+         * Returns true if any of the children of this Container currently has
+         * focus.
+         */
         public bool descendant_has_focus {
             get {
                 foreach (var item in _children) {
@@ -78,6 +85,13 @@ namespace EV3devKit {
             }
         }
 
+        /**
+         * Returns true if children of this Container should be drawn as focused
+         * in addition to the Container itself.
+         *
+         * Implementations of custom widgets should check ``parent.draw_children_as_focused``
+         * as part of their ``draw_content`` method.
+         */
         public virtual bool draw_children_as_focused {
             get {
                 if (parent != null)
@@ -86,11 +100,33 @@ namespace EV3devKit {
             }
         }
 
-        public ContainerType container_type { get; private set; }
+        /**
+         * Gets the type of container.
+         *
+         * The type indicates if it can only have one child or if it can have
+         * multiple children.
+         */
+        public ContainerType container_type { get; construct set; }
 
+        /**
+         * Emitted when a child is added to this Container.
+         *
+         * @param child The child that was added.
+         */
         public signal void child_added (Widget child);
+
+        /**
+         * Emitted when a child is removed from this Container.
+         *
+         * @param child The child that was removed.
+         */
         public signal void child_removed (Widget child);
 
+        /**
+         * Creates a new instance of a Container.
+         *
+         * @param type The type of Container.
+         */
         protected Container (ContainerType type) {
             container_type = type;
             _children = new LinkedList<Widget> ();
@@ -101,21 +137,29 @@ namespace EV3devKit {
             while (_children.size > 0) {
                 var child = _children.last ();
                 remove (child);
-                //debug ("%s child.ref_count: %u", get_type ().name (), child.ref_count);
             }
         }
 
-        public override int get_preferred_width () ensures (result > 0) {
+        /**
+         * {@inheritDoc}
+         */
+        protected override int get_preferred_width () ensures (result > 0) {
             return int.max(1, (child == null ? 0 : child.get_preferred_width ())
                 + get_margin_border_padding_width ());
         }
 
-        public override int get_preferred_height () ensures (result > 0) {
+        /**
+         * {@inheritDoc}
+         */
+        protected override int get_preferred_height () ensures (result > 0) {
             return int.max(1, (child == null ? 0 : child.get_preferred_height ())
                 + get_margin_border_padding_height ());
         }
 
-        public override int get_preferred_width_for_height (int height)
+        /**
+         * {@inheritDoc}
+         */
+        protected override int get_preferred_width_for_height (int height)
             requires (height > 0) ensures (result > 0)
         {
             result = get_margin_border_padding_width ();
@@ -124,7 +168,10 @@ namespace EV3devKit {
             return int.max (1, result);
         }
 
-        public override int get_preferred_height_for_width (int width)
+        /**
+         * {@inheritDoc}
+         */
+        protected override int get_preferred_height_for_width (int width)
             requires (width > 0) ensures (result > 0)
         {
             result = get_margin_border_padding_height ();
@@ -133,6 +180,23 @@ namespace EV3devKit {
             return int.max (1, result);
         }
 
+        /**
+         * Adds a new Widget to this Container.
+         *
+         * If this Container is {@link ContainerType.SINGLE} and already has a
+         * child widget, that widget will be removed and replaced by the new
+         * widget.
+         *
+         * If this container is {@link ContainerType.MULTIPLE}, the new widget
+         * will be added to the end of the list of children.
+         *
+         * If the widget being added is already contained in another Container,
+         * it will be removed from that container before it is added to this one.
+         *
+         * Window widgets cannot be children.
+         *
+         * @param widget The Widget to add to this container.
+         */
         public void add (Widget widget) requires (!(widget is Window)) {
             if (widget.parent != null)
                 widget.parent.remove (widget);
@@ -149,8 +213,17 @@ namespace EV3devKit {
 
         /**
          * Insert a widget before an existing widget.
+         *
+         * The new widget will be inserted in the list of children immediately
+         * before the specified existing widget. If the existing widget is not
+         * a child of this container, the new widget will not be added.
+         *
+         * This method is not allowed for {@link ContainerType.SINGLE}.
+         *
+         * Window widgets cannot be children.
+         *
          * @param new_widget The widget to insert.
-         * @param exisisting_widget The widget to insert the parameter before.
+         * @param existing_widget The widget to insert the parameter before.
          */
         public void insert_before (Widget new_widget, Widget existing_widget)
             requires (!(new_widget is Window) && container_type != ContainerType.SINGLE)
@@ -173,6 +246,11 @@ namespace EV3devKit {
             child_added (new_widget);
         }
 
+        /**
+         * Removes a widget from the list of children.
+         *
+         * @param widget The widget to remove.
+         */
         public void remove (Widget widget) requires (!(widget is Window)) {
             if (_children.remove (widget)) {
                 widget.parent = null;
@@ -182,14 +260,20 @@ namespace EV3devKit {
             }
         }
 
+        /**
+         * Sorts the list of children using the provided function.
+         *
+         * @param func A function that compares two widgets.
+         */
         public void sort (owned CompareDataFunc<Widget> func) {
             _children.sort ((owned)func);
             redraw ();
         }
 
         /**
-         * Focuses the first descendant of the container that can focus
-         * @return false if no descendants can focus
+         * Focuses the first descendant of the container that can focus.
+         *
+         * @return false if no descendants can focus.
          */
         public bool focus_first () {
             var focus_widget = do_recursive_children ((widget) => {
@@ -203,6 +287,15 @@ namespace EV3devKit {
             return focus_widget != null;
         }
 
+        /**
+         * Sets the bounding rectangles for a child widget.
+         *
+         * @param child The target child widget.
+         * @param x1 The left x coordinate.
+         * @param y1 The top y coordinate.
+         * @param x2 The right x coordinate.
+         * @param x2 The bottom y coordinate.
+         */
         protected void set_child_bounds (Widget child, int x1, int y1, int x2, int y2)
             requires (x1 <= x2 && y1 <= y2)
         {
@@ -240,12 +333,18 @@ namespace EV3devKit {
             child.set_bounds (x1, y1, x2, y2);
         }
 
+        /**
+         * {@inheritDoc}
+         */
         protected override void do_layout () {
             foreach (var child in _children)
                 set_child_bounds (child, content_bounds.x1, content_bounds.y1,
                     content_bounds.x2, content_bounds.y2);
         }
 
+        /**
+         * {@inheritDoc}
+         */
         protected override void draw_content () {
             foreach (var child in _children)
                 child.draw ();

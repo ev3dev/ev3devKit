@@ -24,7 +24,18 @@
 using GRX;
 
 namespace EV3devKit {
+    /**
+     * An empty widget that is used to distribute left over space in a container.
+     *
+     * For example, if a Spacer is added to a vertical Box between two other
+     * widgets, the first will be positioned at the top of the box and the second
+     * at the bottom of the box. The Spacer will take up the remaining space
+     * between them.
+     */
     public class Spacer : EV3devKit.Widget {
+        /**
+         * Create a new spacer.
+         */
         public Spacer () {
         }
     }

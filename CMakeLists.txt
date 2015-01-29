@@ -24,7 +24,6 @@ if(EV3DEVKIT_DESKTOP)
 else(EV3DEVKIT_DESKTOP)
     set (EV3DEV_TK_SOURCE_FILES
         demo/main.vala
-        src/ConsoleApp.vala
     )
 endif(EV3DEVKIT_DESKTOP)
 
@@ -34,6 +33,7 @@ set (EV3DEV_TK_COMMON_SOURCE_FILES
     src/Button.vala
     src/CheckboxMenuItem.vala
     src/CheckButton.vala
+    src/ConsoleApp.vala
     src/Container.vala
     src/Dialog.vala
     src/Grid.vala
@@ -117,14 +117,17 @@ install (TARGETS ${EXEC_NAME} RUNTIME DESTINATION bin)
 
 find_package(Valadoc)
 
+set(DOC_DIR "${CMAKE_BINARY_DIR}/doc")
+
+add_custom_target(docclean rm -rf ${DOC_DIR})
+
 add_custom_target(doc
+    COMMENT "Generating valadocs in ${DOC_DIR}"
     COMMAND ${VALADOC_EXECUTABLE}
-        --force
-        --no-protected
+        -o ${DOC_DIR}
         --package-name=${EXEC_NAME}
         --package-version=${VERSION}
         --target-glib=2.40
-        -o ${CMAKE_BINARY_DIR}/doc
         --pkg=glib-2.0
         --pkg=gobject-2.0
         --pkg=gmodule-2.0
@@ -134,7 +137,9 @@ add_custom_target(doc
         --pkg=curses
         --pkg=posix
         --pkg=linux
+        --driver ${VALA_VERSION}
         ${EV3DEV_TK_COMMON_SOURCE_FILES}
         bindings/*.vapi
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    DEPENDS docclean
 )

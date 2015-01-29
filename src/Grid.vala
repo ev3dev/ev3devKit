@@ -26,6 +26,9 @@ using Gee;
 using GRX;
 
 namespace EV3devKit {
+    /**
+     * A container that lays out it children in a grid.
+     */
     public class Grid : EV3devKit.Container {
         struct Pair {
             int row;
@@ -38,6 +41,9 @@ namespace EV3devKit {
         Map<weak Widget,Pair?> position_map;
         Map<weak Widget,Pair?> span_map;
 
+        /**
+         * Sets all border widths (top, bottom, left, right, row, column) for the widget.
+         */
         public new int border {
             set {
                 border_top = value;
@@ -49,9 +55,24 @@ namespace EV3devKit {
             }
         }
 
+        /**
+         * Gets and sets the width of the border that is drawn between rows of
+         * the Grid.
+         */
         public int border_row { get; set; }
+
+        /**
+         * Gets and sets the width of the border that is drawn between columns
+         * of the Grid.
+         */
         public int border_column { get; set; }
 
+        /**
+         * Creates a new instance of a grid container.
+         *
+         * @param rows The number of rows in the grid. Must be > 0.
+         * @param columns The number of columns in the grid. Must be > 0.
+         */
         public Grid (uint rows, uint columns) requires (rows > 0 && columns > 0) {
             base (ContainerType.MULTIPLE);
             size.row = (int)rows;
@@ -73,7 +94,10 @@ namespace EV3devKit {
             }
         }
 
-        public override int get_preferred_width () ensures (result > 0) {
+        /**
+         * {@inheritDoc}
+         */
+        protected override int get_preferred_width () ensures (result > 0) {
             result = 0;
             for (uint row = 0; row < size.row; row++) {
                 int row_width = 0;
@@ -88,7 +112,10 @@ namespace EV3devKit {
             return result + _border_column * (size.col - 1) + get_margin_border_padding_width ();
         }
 
-        public override int get_preferred_height () ensures (result > 0) {
+        /**
+         * {@inheritDoc}
+         */
+        protected override int get_preferred_height () ensures (result > 0) {
             result = 0;
             for (uint col = 0; col < size.col; col++) {
                 int col_height = 0;
@@ -103,18 +130,32 @@ namespace EV3devKit {
             return result + _border_row * (size.row - 1) + get_margin_border_padding_width ();
         }
 
-        public override int get_preferred_width_for_height (int height)
+        /**
+         * {@inheritDoc}
+         */
+        protected override int get_preferred_width_for_height (int height)
             requires (height > 0) ensures (result > 0)
         {
             return get_preferred_width ();
         }
 
-        public override int get_preferred_height_for_width (int width)
+        /**
+         * {@inheritDoc}
+         */
+        protected override int get_preferred_height_for_width (int width)
         requires (width > 0) ensures (result > 0)
         {
             return get_preferred_height ();
         }
 
+        /**
+         * Gets the row and column of a widget contained in the Grid.
+         *
+         * @param child The widget to look for in the grid.
+         * @param row The row that contains the child.
+         * @param column The column that contains the child.
+         * @return true if the child was found.
+         */
         public bool get_position_for_child (Widget child, out int row, out int column) {
             if (!(_children.contains (child))) {
                 row = -1;
@@ -127,12 +168,29 @@ namespace EV3devKit {
             return true;
         }
 
+        /**
+         * Gets the child widget at the specified row and column.
+         *
+         * @param row The row of the child widget.
+         * @param column The column of the child widget.
+         * @return The Widget at the specified location or "null" if there was
+         * nothing at that location.
+         */
         public Widget? get_child_at (int row, int column)
             requires (row >= 0 && row < size.row && column >= 0 && column < size.col)
         {
             return grid[row,column];
         }
 
+        /**
+         * Add a widget to the specified row and column with optional spans.
+         *
+         * @param child The widget to add.
+         * @param row The row to add the widget to.
+         * @param column The column to add the widget to.
+         * @param rowspan The number of rows that the widget will span.
+         * @param colspan The number of columns that the widget will span.
+         */
         public void add_at (Widget child, int row, int column, int rowspan = 1, int colspan = 1)
             requires (row >= 0 && column >=0 && row + rowspan <= size.row
                     && column + colspan <= size.col && rowspan > 0 && colspan > 0)
@@ -188,6 +246,9 @@ namespace EV3devKit {
             }
         }
 
+        /**
+         * {@inheritDoc}
+         */
         protected override void do_layout () {
             cells = new Rectangle[size.row,size.col];
             int cell_x = content_bounds.x1;
@@ -215,7 +276,7 @@ namespace EV3devKit {
                     var widget = grid[row,col];
                     if (widget != null) {
                         int colspan = span_map[widget].col - 1;
-                        // just storing the x values for retreival in the next for loop
+                        // just storing the x values for retrieval in the next for loop
                         widget.set_bounds (cells[row,col].x1, 0, cells[row,col+colspan].x2, 0);
                         col += colspan;
                     }
@@ -234,6 +295,9 @@ namespace EV3devKit {
             }
         }
 
+        /**
+         * {@inheritDoc}
+         */
         protected override void draw_border (GRX.Color color) {
             base.draw_border (color);
             // draw the vertical grid lines between each column

@@ -19,21 +19,31 @@
  * MA 02110-1301, USA.
  */
 
-/* NotebookTab.vala - Widget that represents a checkbox or radio button */
+/* NotebookTab.vala - Container for a tab of a Notebook */
 
 using Curses;
 using Gee;
 using GRX;
 
 namespace EV3devKit {
+    /**
+     * Container for a single tab of a {@link Notebook}.
+     */
     public class NotebookTab : EV3devKit.Container {
         internal weak Notebook? notebook;
 
-        public string title { get; internal set; }
+        /**
+         * Gets and sets the title displayed on the tab.
+         */
+        public string title { get; set; }
 
+        /**
+         * Creates a new notebook tab.
+         */
         public NotebookTab (string title) {
             base (ContainerType.SINGLE);
             this.title = title;
+            notify["title"].connect (redraw);
         }
     }
 }

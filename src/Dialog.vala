@@ -25,14 +25,26 @@ using Curses;
 using GRX;
 
 namespace EV3devKit {
+    /**
+     * A dialog window for displaying pop-up messages.
+     *
+     * Unlike a regular Window, a Dialog does not take up the full screen area.
+     * Instead, it displays a smaller area with the previous window partially
+     * visible behind it.
+     */
     public class Dialog : EV3devKit.Window {
-        
+        /**
+         * Creates a new instance of a dialog window.
+         */
         public Dialog () {
             margin = 20;
             border = 1;
             border_radius = 10;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         protected override void do_layout () {
             set_bounds (0, 0, _screen.width - 1, _screen.height - 1);
             foreach (var child in _children)
@@ -40,6 +52,9 @@ namespace EV3devKit {
                     content_bounds.x2, content_bounds.y2);
         }
 
+        /**
+         * {@inheritDoc}
+         */
         protected override void draw_background () {
             var color = screen.bg_color;
             filled_rounded_box (border_bounds.x1, border_bounds.y1,

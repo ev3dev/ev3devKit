@@ -22,17 +22,43 @@
 /* MenuItem.vala - Base class for menu items used by Menu widget */
 
 namespace EV3devKit {
+    /**
+     * Object used by {@link Menu} to represent a menu item.
+     *
+     * Note: MenuItems do not inherit from {@link Widget}.
+     */
     public class MenuItem : Object {
         static int menu_item_count = 0;
 
         internal ulong notify_has_focus_signal_id;
 
-        public weak Menu menu { get; internal set; }
-        public Button button { get; private set; }
-        public Label label { get; private set; }
+        /**
+         * Gets the Menu that this menu item belongs to.
+         *
+         * Returns ``null`` if this MenuItem has not been added to a Menu.
+         */
+        public weak Menu? menu { get; internal set; }
+
+        /**
+         * Gets the Button that is the Container for the menu item.
+         */
+        public Button button { get; construct set; }
+
+        /**
+         * Gets the Lable for the menu item.
+         */
+        public Label label { get; construct set; }
+
+        /**
+         * Gets and sets a user-defined object that the menu item represents.
+         */
         public Object? represented_object { get; set; }
 
-
+        /**
+         * Creates a new menu item with the specified text.
+         *
+         * @param text The text for the menu item's label.
+         */
         public MenuItem (string text) {
             this.with_button (new Button () {
                 border = 0,
@@ -42,7 +68,12 @@ namespace EV3devKit {
         }
 
         /**
-         * this is the main constructor that should be called by superclasses
+         * Creates a new menu item using the provided button and label.
+         *
+         * This is the main constructor that should be called by superclasses.
+         *
+         * Note: MenuItem uses ``button.weak_represented_object`` internally, so
+         * implementations must not set that property.
          */
         protected MenuItem.with_button (Button button, Label label) {
             this.button = button;

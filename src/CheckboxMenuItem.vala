@@ -22,9 +22,20 @@
 /* CheckboxMenuItem.vala - Menu item used by Menu widget that has a checkbox */
 
 namespace EV3devKit {
+    /**
+     * {@link MenuItem} with a checkbox.
+     */
     public class CheckboxMenuItem : EV3devKit.MenuItem {
-        public CheckButton checkbox { get; private set; }
+        /**
+         * Gets the checkbox widget for this menu item.
+         */
+        public CheckButton checkbox { get; construct set; }
 
+        /**
+         * Creates a new checkbox menu item.
+         *
+         * @param text The text for the label of the menu item.
+         */
         public CheckboxMenuItem (string text) {
             base.with_button (new Button () {
                 border = 0,

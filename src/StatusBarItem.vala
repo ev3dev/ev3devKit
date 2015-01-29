@@ -22,23 +22,45 @@
  */
 
 namespace EV3devKit {
+    /**
+     * Represents an item that is displayed in a {@link StatusBar}.
+     */
     public abstract class StatusBarItem : Object {
         public const int HEIGHT = 9;
         internal weak StatusBar? status_bar;
 
+        /**
+         * Gets and sets the visibility of this item.
+         */
         public bool visible { get; protected set; default = true; }
 
+        /**
+         * Creates a new status bar item.
+         */
         protected StatusBarItem () {
-            notify["visible"].connect (redraw);
+            notify["visible"].connect (() => {
+                if (status_bar != null)
+                    status_bar.redraw ();
+            });
         }
 
-        public void redraw () {
+        /**
+         * Notifies the status bar that this item has changed and needs to be
+         * redrawn.
+         *
+         * Does nothing if this item has not been added to a status bar or this
+         * item is not visible.
+         */
+        protected void redraw () {
             if (_visible && status_bar != null)
                 status_bar.redraw ();
         }
 
         /**
-         * Draws the status bar item
+         * Draws the status bar item.
+         *
+         * This is called by the status bar and should not be called manually.
+         *
          * @param x The starting position for the status bar item
          * @param align The alignment of the status bar item
          * @return The width of the status bar item

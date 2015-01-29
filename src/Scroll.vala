@@ -26,19 +26,45 @@ using Gee;
 using GRX;
 
 namespace EV3devKit {
+    /**
+     * Specifies the direction of scrolling.
+     */
     public enum ScrollDirection {
+        /**
+         * Scroll horizontally.
+         */
         HORIZONTAL,
+        /**
+         * Scroll vertically.
+         */
         VERTICAL
     }
 
+    /**
+     * Specifies if/when a scrollbar should be displayed.
+     */
     public enum ScrollbarVisibility {
+        /**
+         * The scrollbar is only displayed when the contents are larger than
+         * the Scroll area.
+         */
         AUTO,
+        /**
+         * Never show the scrollbar.
+         */
         ALWAYS_HIDE,
+        /**
+         * Always show the scrollbar.
+         */
         ALWAYS_SHOW
     }
 
+    /**
+     * A scrollable container for displaying content that is too large to fit
+     * on the screen.
+     */
     public class Scroll : EV3devKit.Container {
-        public const int SCROLLBAR_SIZE = 7;
+        const int SCROLLBAR_SIZE = 7;
 
         ScrollDirection direction;
         int scroll_offset;
@@ -46,11 +72,27 @@ namespace EV3devKit {
         int scroll_indicator_offset;
         bool draw_scrollbar;
 
-        public int max_preferred_height { get; set; default = 50; }
+        /**
+         * Gets and sets the maximum preferred width for the scroll area.
+         */
         public int max_preferred_width { get; set; default = 50; }
+
+        /**
+         * Gets and sets the maximum preferred height for the scroll area.
+         */
+        public int max_preferred_height { get; set; default = 50; }
+
+        /**
+         * Gets and sets the visibility of the scrollbar.
+         */
         public ScrollbarVisibility scrollbar_visible {
             get; set; default = ScrollbarVisibility.AUTO;
         }
+
+        /**
+         * Gets and sets the default scroll distance in pixels used by
+         * {@link scroll_forward} and {@link scroll_backward}.
+         */
         public int scroll_amount { get; set; default = 8; }
 
         Scroll (ScrollDirection direction) {
@@ -64,16 +106,23 @@ namespace EV3devKit {
             notify["scrollbar-visible"].connect (redraw);
         }
 
+        /**
+         * Creates a new scroll area that scrolls horizontally.
+         */
         public Scroll.horizontal () {
             this (ScrollDirection.HORIZONTAL);
         }
 
+        /**
+         * Creates a new scroll area that scrolls vertically.
+         */
         public Scroll.vertical () {
             this (ScrollDirection.VERTICAL);
         }
 
         /**
          * Scroll forward (down or right) by the specified amount.
+         *
          * @param amount The amount to scroll in pixels.
          */
         public void scroll_forward (int amount = scroll_amount) {
@@ -128,7 +177,10 @@ namespace EV3devKit {
             redraw ();
         }
 
-        public override int get_preferred_width () ensures (result > 0) {
+        /**
+         * {@inheritDoc}
+         */
+        protected override int get_preferred_width () ensures (result > 0) {
             result =  base.get_preferred_width () + get_margin_border_padding_width ();
             if (direction == ScrollDirection.VERTICAL && scrollbar_visible != ScrollbarVisibility.ALWAYS_HIDE)
                 result += SCROLLBAR_SIZE;
@@ -137,7 +189,10 @@ namespace EV3devKit {
             return result;
         }
 
-        public override int get_preferred_height () ensures (result > 0) {
+        /**
+         * {@inheritDoc}
+         */
+        protected override int get_preferred_height () ensures (result > 0) {
             result =  base.get_preferred_height () + get_margin_border_padding_height ();
             if (direction == ScrollDirection.HORIZONTAL && scrollbar_visible != ScrollbarVisibility.ALWAYS_HIDE)
                 result += SCROLLBAR_SIZE;
@@ -146,7 +201,10 @@ namespace EV3devKit {
             return result;
         }
 
-        public override int get_preferred_width_for_height (int height)
+        /**
+         * {@inheritDoc}
+         */
+        protected override int get_preferred_width_for_height (int height)
             requires (height > 0) ensures (result > 0)
         {
             result =  get_margin_border_padding_width ();
@@ -161,7 +219,10 @@ namespace EV3devKit {
             return result;
         }
 
-        public override int get_preferred_height_for_width (int width)
+        /**
+         * {@inheritDoc}
+         */
+        protected override int get_preferred_height_for_width (int width)
             requires (width > 0) ensures (result > 0)
         {
             result =  get_margin_border_padding_height ();
@@ -176,6 +237,9 @@ namespace EV3devKit {
             return result;
         }
 
+        /**
+         * Default handler for the key_pressed signal.
+         */
         protected override bool key_pressed (uint key_code) {
             if (has_focus) {
                 if ((direction == ScrollDirection.VERTICAL && key_code == Key.UP)
@@ -193,6 +257,9 @@ namespace EV3devKit {
             return base.key_pressed (key_code);
         }
 
+        /**
+         * {@inheritDoc}
+         */
         protected override void do_layout () {
             if (direction == ScrollDirection.VERTICAL) {
                 var child_height = 0;
@@ -265,6 +332,9 @@ namespace EV3devKit {
             }
         }
 
+        /**
+         * {@inheritDoc}
+         */
         protected override void draw_content () {
             do_layout ();
             var color = has_focus ? window.screen.mid_color : window.screen.fg_color;

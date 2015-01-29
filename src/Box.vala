@@ -19,7 +19,7 @@
  * MA 02110-1301, USA.
  */
 
-/* Box.vala - Container for displaying widgets horizontally or vertically */
+/* Box.vala - {@link Container} for displaying widgets horizontally or vertically */
 
 using Gee;
 using GRX;
@@ -31,34 +31,84 @@ namespace EV3devKit {
      */
     public enum BoxDirection {
         /**
-         * Container can only have one child.
+         * The Box lays out widgets in a horizontal row.
          */
         HORIZONTAL,
         /**
-         * Container can have more than one child.
+         * The Box lays out widgets in a vertical column.
          */
         VERTICAL;
     }
 
+    /**
+     * Container for laying out widgets horizontally or vertically.
+     *
+     * A horizontal box with 3 children might look like this:
+     *
+     * {{{
+     * +-----+-----+----------------+
+     * |     |     |                |
+     * |  1  |  2  |       3        |
+     * |     |     |                |
+     * +-----+-----+----------------+
+     * }}}
+     *
+     * If the last child Widget has ``horizontal_align == WidgetAlign.FILL``
+     * and there are no {@link Spacer} child widgets, the last widget will be
+     * stretched to fill the remaining space. Otherwise, the {@link Widget.horizontal_align}
+     * property will have no effect.
+     *
+     * The {@link Widget.vertical_align} property can be used to position the
+     * child widgets vertically. {@link WidgetAlign.START} will align the widget
+     * to the top of the Box, {@link WidgetAlign.CENTER} will align it in the
+     * middle of the Box, {@link WidgetAlign.END} will align it to the bottom of
+     * the box and {@link WidgetAlign.FILL} will use the entire height of the box.
+     *
+     * Vertical boxes work similarly except the vertical and horizontal properties
+     * are swapped.
+     */
     public class Box : EV3devKit.Container {
-        public BoxDirection direction { get; private set; }
+        /**
+         * Gets the layout direction of the Box.
+         */
+        public BoxDirection direction { get; construct set; }
+
+        /**
+         * Gets and sets the spacing in pixels between the widgets in the box.
+         *
+         * Default value is 2 pixels.
+         */
         public int spacing { get; set; default = 2; }
 
-         Box (BoxDirection direction) {
+        /**
+         * Create a new instance of Box.
+         *
+         * @param direction The direction to layout widgets.
+         */
+        Box (BoxDirection direction) {
              base (ContainerType.MULTIPLE);
              this.direction = direction;
              notify["spacing"].connect (redraw);
         }
 
+        /**
+         * Create a new instance of Box with widgets laid out vertically.
+         */
         public Box.vertical () {
             this (BoxDirection.VERTICAL);
         }
 
+        /**
+         * Create a new instance of Box with widgets laid out horizontally.
+         */
         public Box.horizontal () {
             this (BoxDirection.HORIZONTAL);
         }
 
-        public override int get_preferred_width () ensures (result > 0) {
+        /**
+         * {@inheritDoc}
+         */
+        protected override int get_preferred_width () ensures (result > 0) {
             int width = 0;
             if (direction == BoxDirection.HORIZONTAL) {
                 foreach (var item in _children)
@@ -71,7 +121,10 @@ namespace EV3devKit {
             return int.max (1, width + get_margin_border_padding_width ());
         }
 
-        public override int get_preferred_height () ensures (result > 0) {
+        /**
+         * {@inheritDoc}
+         */
+        protected override int get_preferred_height () ensures (result > 0) {
             int height = 0;
             if (direction == BoxDirection.VERTICAL) {
                 foreach (var item in _children)
@@ -84,7 +137,10 @@ namespace EV3devKit {
             return int.max (1, height + get_margin_border_padding_height ());
         }
 
-        public override int get_preferred_width_for_height (int height)
+        /**
+         * {@inheritDoc}
+         */
+        protected override int get_preferred_width_for_height (int height)
             requires (height > 0)  ensures (result > 0)
         {
             int width = 0;
@@ -99,7 +155,10 @@ namespace EV3devKit {
             return int.max (1, width + get_margin_border_padding_width ());
         }
 
-        public override int get_preferred_height_for_width (int width)
+        /**
+         * {@inheritDoc}
+         */
+        protected override int get_preferred_height_for_width (int width)
             requires (width > 0) ensures (result > 0)
         {
             int height = 0;
@@ -114,7 +173,10 @@ namespace EV3devKit {
             return int.max (1, height + get_margin_border_padding_height ());
         }
 
-        public override void do_layout () {
+        /**
+         * {@inheritDoc}
+         */
+        protected override void do_layout () {
             if (direction == BoxDirection.HORIZONTAL) {
                 int total_width = 0;
                 int spacer_count = 0;

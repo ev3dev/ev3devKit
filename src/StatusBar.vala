@@ -18,14 +18,20 @@
  */
 
 /*
- * StatusBar.vala - statusbar that can be displayed at the top of a screen
+ * StatusBar.vala - status bar that can be displayed at the top of a screen
  */
 
 using Gee;
 using GRX;
 
 namespace EV3devKit {
+    /**
+     * A status bar that displays at the top of a {@link Screen}.
+     */
     public class StatusBar : Object {
+        /**
+         * The height of the status bar.
+         */
         public const int HEIGHT = 12;
         const int PADDING = 2;
 
@@ -33,14 +39,23 @@ namespace EV3devKit {
         ArrayList<StatusBarItem> left_items;
         ArrayList<StatusBarItem> right_items;
 
+        /**
+         * Gets or sets the visibility of the status bar.
+         */
         public bool visible { get; set; default = true; }
 
+        /**
+         * Tells the screen to refresh.
+         *
+         * Does nothing if the status bar is not attached to a screen or is not
+         * visible.
+         */
         public void redraw () {
             if (_visible && screen != null)
                 screen.dirty = true;
         }
 
-        public void draw () {
+        internal void draw () {
             filled_box (0, 0, screen.width - 1, HEIGHT - 1, screen.bg_color);
             var x = 0;
             foreach (var item in left_items) {
@@ -55,23 +70,47 @@ namespace EV3devKit {
             line (0, HEIGHT - 1, screen.width - 1, HEIGHT - 1, screen.fg_color);
         }
 
+        /**
+         * Adds a status bar item to the left side of the status bar.
+         *
+         * @param item The status bar item to add.
+         */
         public void add_left (StatusBarItem item) {
             left_items.add (item);
             item.status_bar = this;
         }
 
+        /**
+         * Adds a status bar item to the right side of the status bar.
+         *
+         * @param item The status bar item to add.
+         */
         public void add_right (StatusBarItem item) {
             right_items.add (item);
             item.status_bar = this;
         }
 
+        /**
+         * Creates a new status bar.
+         */
         public StatusBar () {
             left_items = new ArrayList<StatusBarItem> ();
             right_items = new ArrayList<StatusBarItem> ();
         }
 
+        /**
+         * Specifies if a status bar item is in the group on the right or left
+         * side of the status bar.
+         */
         public enum Align {
-            LEFT, RIGHT
+            /**
+             * The status bar item is in the left hand group.
+             */
+            LEFT,
+            /**
+             * The status bar item is in the right hand group.
+             */
+            RIGHT
         }
     }
 }

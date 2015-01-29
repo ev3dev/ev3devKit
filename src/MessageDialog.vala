@@ -25,9 +25,20 @@ using Curses;
 using GRX;
 
 namespace EV3devKit {
+    /**
+     * A dialog for displaying a message.
+     *
+     * The dialog contains a title and message separated by a horizontal line.
+     */
     public class MessageDialog : EV3devKit.Dialog {
         Scroll vscroll;
 
+        /**
+         * Creates a new message dialog.
+         *
+         * @param title The title text.
+         * @param message The message text.
+         */
         public MessageDialog (string title, string message) {
             var content_vbox = new Box.vertical ();
             add (content_vbox);
@@ -47,6 +58,9 @@ namespace EV3devKit {
             vscroll.add (message_label);
         }
 
+        /**
+         * Default handler for the key_pressed signal.
+         */
         public override bool key_pressed (uint key_code) {
             switch (key_code) {
             case Key.UP:
