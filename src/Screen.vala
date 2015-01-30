@@ -39,23 +39,42 @@ namespace EV3devKit {
          */
         public static Screen? active_screen;
 
-        internal LinkedList<Window> window_stack;
+        protected LinkedList<Window> window_stack;
         LinkedList<uint?> key_queue;
         Context context;
 
-        internal Color fg_color;
-        internal Color bg_color;
-        internal Color mid_color;
+        /**
+         * Gets and sets the foreground color.
+         *
+         * This color is used by widget drawing functions for things like text
+         * and borders.
+         */
+        public Color fg_color { get; set; }
+
+        /**
+         * Gets and sets the background color.
+         *
+         * This color is used by widget drawing functions for things like filling
+         * background areas.
+         */
+        public Color bg_color { get; set; }
+
+        /**
+         * Gets and sets the intermediate color.
+         *
+         * This color is used by widget drawing functions to indicate focus.
+         */
+        public Color mid_color { get; set; }
 
         /**
          * Gets the width of the screen.
          */
-        public int width { get; protected set; }
+        public int width { get; construct set; }
 
         /**
          * Gets the height of the screen.
          */
-        public int height { get; protected set; }
+        public int height { get; construct set; }
 
         /**
          * Gets the height of windows for the screen.
@@ -93,7 +112,7 @@ namespace EV3devKit {
         /**
          * Gets the status bar for the screen.
          */
-        public StatusBar status_bar { get; protected set; }
+        public StatusBar status_bar { get; internal set; }
 
         /**
          * Creates a new screen using the current GRX screen information.
@@ -133,7 +152,7 @@ namespace EV3devKit {
                 mid_color = Color.alloc (0, 0, 255);
             this.width = width;
             this.height = height;
-            Timeout.add (50, on_draw_timeout);
+            Timeout.add (50, draw);
         }
 
         /**
@@ -143,8 +162,13 @@ namespace EV3devKit {
             key_queue.offer_tail (key_code);
         }
 
-
-        internal virtual void refresh () {
+        /**
+         * Refresh the screen.
+         *
+         * Everything is drawn on a {@link GRX.Context} in memory. Refreshing
+         * copies this to the actual screen so that it is displayed to the user.
+         */
+        protected virtual void refresh () {
             bit_blt (Context.screen, 0, 0, context, 0, 0, screen_x () - 1, screen_y () - 1);
         }
 
@@ -172,10 +196,12 @@ namespace EV3devKit {
          * @param window The window to add to the stack.
          */
         internal void show_window (Window window) {
-            window._screen = this;
-            window.shown ();
+            if (window.screen != null)
+                window.screen.close_window (window);
+            window.screen = this;
             window_stack.offer_tail (window);
             dirty = true;
+            window.shown ();
         }
 
         /**
@@ -188,7 +214,7 @@ namespace EV3devKit {
             var was_top_window = window_stack.peek_tail () == window;
             if (window_stack.remove (window)) {
                 if (window.ref_count > 0) {
-                    window._screen = null;
+                    window.screen = null;
                     window.closed ();
                 }
                 if (was_top_window && window_stack.size > 0)
@@ -199,7 +225,10 @@ namespace EV3devKit {
             return false;
         }
 
-        internal bool on_draw_timeout () {
+        /**
+         * Draws the topmost window and dialog on the screen.
+         */
+        protected bool draw () {
             handle_input ();
             if (dirty) {
                 context.set ();

@@ -46,7 +46,7 @@ namespace EV3devKit {
          * {@inheritDoc}
          */
         protected override void do_layout () {
-            set_bounds (0, 0, _screen.width - 1, _screen.height - 1);
+            set_bounds (0, 0, screen.width - 1, screen.height - 1);
             foreach (var child in _children)
                 set_child_bounds (child, content_bounds.x1, content_bounds.y1,
                     content_bounds.x2, content_bounds.y2);

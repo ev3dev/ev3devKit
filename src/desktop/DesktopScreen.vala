@@ -62,7 +62,7 @@ namespace EV3devKit {
                 var save_slave_window_stack = slave.window_stack;
                 slave.window_stack = window_stack;
                 slave.dirty = true;
-                slave.on_draw_timeout ();
+                slave.draw ();
                 slave.status_bar = save_slave_status_bar;
                 slave.window_stack = save_slave_window_stack;
                 slave.dirty = false;
@@ -73,7 +73,7 @@ namespace EV3devKit {
 
         void set_screen_for_each_window (Screen screen) {
             foreach (var window in window_stack) {
-                window._screen = screen;
+                window.screen = screen;
                     if (master != null) {
                     window.do_recursive_children ((child) => {
                         child.redraw ();

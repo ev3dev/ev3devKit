@@ -35,15 +35,12 @@ namespace EV3devKit {
      * and only that Window receives user input.
      */
     public class Window : EV3devKit.Container {
-        internal weak Screen? _screen;
         /**
          * Gets the Screen that this Window is attached to.
          *
          * Returns ``null`` if the Window is not in the window stack of a Screen.
          */
-        public Screen? screen {
-            get { return _screen; }
-        }
+        public weak Screen? screen { get; internal set; }
 
         /**
          * Returns true if the Window is currently displayed on the Screen.
@@ -99,13 +96,15 @@ namespace EV3devKit {
 
         /**
          * Make the window visible by putting it on top of the window stack.
+         *
+         * @param screen The screen to show the window on.
          */
-        public void show () {
-            if (Screen.active_screen == null) {
+        public void show (Screen screen = Screen.active_screen) {
+            if (screen == null) {
                 critical ("No active screen.");
                 return;
             }
-            Screen.active_screen.show_window (this);
+            screen.show_window (this);
         }
 
         /**

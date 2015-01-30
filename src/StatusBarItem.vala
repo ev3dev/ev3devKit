@@ -27,7 +27,13 @@ namespace EV3devKit {
      */
     public abstract class StatusBarItem : Object {
         public const int HEIGHT = 9;
-        internal weak StatusBar? status_bar;
+
+        /**
+         * Gets the status bar this item has been assigned to.
+         *
+         * Returns ``null` if it has not assigned to a status bar.
+         */
+        public weak StatusBar? status_bar { get; internal set; }
 
         /**
          * Gets and sets the visibility of this item.

@@ -35,9 +35,15 @@ namespace EV3devKit {
         public const int HEIGHT = 12;
         const int PADDING = 2;
 
-        internal weak Screen? screen;
         ArrayList<StatusBarItem> left_items;
         ArrayList<StatusBarItem> right_items;
+
+        /**
+         * Gets the screen the status bar is assigned to.
+         *
+         * Returns ``null`` if the status bar is not assined to a screen.
+         */
+        public weak Screen? screen { get; internal set; }
 
         /**
          * Gets or sets the visibility of the status bar.
