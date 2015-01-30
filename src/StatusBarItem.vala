@@ -31,7 +31,7 @@ namespace EV3devKit {
         /**
          * Gets the status bar this item has been assigned to.
          *
-         * Returns ``null` if it has not assigned to a status bar.
+         * Returns ``null`` if it has not assigned to a status bar.
          */
         public weak StatusBar? status_bar { get; internal set; }
 

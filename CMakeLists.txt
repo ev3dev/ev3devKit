@@ -224,8 +224,6 @@ if (VALADOC_FOUND)
         ${LIBRARY_SOURCE_FILES}
         ${DESKTOP_LIBRARY_SOURCE_FILES}
         bindings/*.vapi
-    OUTPUT
-        "${CMAKE_BINARY_DIR}/doc"
     PACKAGE_NAME
         ${LIBRARY_NAME}
     PACKAGE_VERSION
