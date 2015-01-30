@@ -14,7 +14,7 @@ For an example of how it is used, checkout [brickman].
 ## Status
 
 This is currently in the development stages and is unstable. The device driver
-interfaces require the latest ev3dev kernel (currently n3.16.7-ckt4-ev3dev1).
+interfaces require the latest ev3dev kernel (currently v3.16.7-ckt4-ev3dev1).
 
 ## Compiling
 
@@ -22,7 +22,10 @@ Since this is unstable, it is currently setup to compile as a static library.
 To get something usable on the EV3 brick, you should compile using [brickstrap].
 
     # include install build depends
-    $ sudo apt-get install cmake valac libgrx20-dev
+    $ sudo apt-get install cmake valac libgee-0.8-dev libgirepository1.0-dev \
+    libgudev-1.0-dev libncurses5-dev libjpeg62-turbo-dev libpng12-dev libgrx-dev
+    # if you are building for desktop (see below) you also need
+    $ sudo apt-get install libgtk-3-dev
     # clone the git repo
     $ git clone git://github.com/ev3dev/ev3devKit
     # create a build directory (not in cloned ev3devKit directory).
@@ -40,7 +43,7 @@ ensure that they take effect (you can use `nuke.sh` to do this).
 * Do not build the demo programs: `-DEV3DEVKIT_NO_DEMO=1`
 
 ## Documentation
-API docs are at http://www.ev3dev.org/ev3devKit/ev3devKit/index.htm
+API docs are at http://www.ev3dev.org/ev3devKit/ev3devKit/EV3devKit.html
 
 [GLib]: https://developer.gnome.org/glib/stable/index.html
 [GObject]: https://developer.gnome.org/gobject/stable/index.html
