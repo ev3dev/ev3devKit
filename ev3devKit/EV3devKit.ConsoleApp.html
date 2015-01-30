@@ -37,8 +37,8 @@
         <hr class="main_hr"/>
         <h2 class="main_title">Description:</h2>
         <div class="description">
-          <p>ConsoleApp does all of the low level setting up of a virtual console so you don't have to. To use it, your main function should look 
-            something like this: <pre class="main_source">static int main (string[] args) {<br/>    try {<br/>        ConsoleApp.init ();<br/><br/>        // Program-specific initialization which includes something<br/>        // that calls ConsoleApp.quit () when the program is finished.<br/><br/>        ConsoleApp.run ();<br/><br/>        // any additional cleanup if needed before application exits.<br/><br/>        return 0;<br/>    } catch (ConsoleAppError err) {<br/>        critical ("%s", err.message);<br/>    }<br/>    return 1;<br/>}</pre>
+          <p>Does all of the low level setting up of a virtual console so you don't have to.</p>
+          <p>To use it, your main function should look something like this: <pre class="main_source">using EV3devKit;<br/><br/>static int main (string[] args) {<br/>    try {<br/>        ConsoleApp.init ();<br/><br/>        // Program-specific initialization which includes something<br/>        // that calls ConsoleApp.quit () when the program is finished.<br/><br/>        ConsoleApp.run ();<br/><br/>        // any additional cleanup if needed before application exits.<br/><br/>        return 0;<br/>    } catch (ConsoleAppError err) {<br/>        critical ("%s", err.message);<br/>    }<br/>    return 1;<br/>}</pre>
           </p>
         </div>
         <h2 class="main_title">Content:</h2>

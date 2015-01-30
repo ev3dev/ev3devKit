@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <title>EV3devKit.UI.StatusBarItem &ndash; ev3devKit &ndash; Vala Binding Reference</title>
+    <link href="../style.css" rel="stylesheet" type="text/css"/><script src="../scripts.js" type="text/javascript">
+    </script>
+  </head>
+  <body>
+    <div class="site_header">EV3devKit.UI.StatusBarItem &ndash; ev3devKit Reference Manual</div>
+    <div class="site_body">
+      <div class="site_navigation">
+        <ul class="navi_main">
+          <li class="package_index"><a href="../index.html">Packages</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="package"><a href="index.htm">ev3devKit</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="namespace"><a href="EV3devKit.html">EV3devKit</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="namespace"><a href="EV3devKit.UI.html">UI</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="abstract_class">StatusBarItem</li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="constant"><a href="EV3devKit.UI.StatusBarItem.HEIGHT.html">HEIGHT</a></li>
+          <li class="property"><a href="EV3devKit.UI.StatusBarItem.status_bar.html">status_bar</a></li>
+          <li class="property"><a href="EV3devKit.UI.StatusBarItem.visible.html">visible</a></li>
+          <li class="creation_method"><a href="EV3devKit.UI.StatusBarItem.StatusBarItem.html">StatusBarItem</a></li>
+          <li class="abstract_method"><a href="EV3devKit.UI.StatusBarItem.draw.html">draw</a></li>
+          <li class="method"><a href="EV3devKit.UI.StatusBarItem.redraw.html">redraw</a></li>
+        </ul>
+      </div>
+      <div class="site_content">
+        <h1 class="main_title">StatusBarItem</h1>
+        <hr class="main_hr"/>
+        <h2 class="main_title">Object Hierarchy:</h2>
+        
+        <img class="main_diagram" usemap="#EV3devKit.UI.StatusBarItem" alt="Object hierarchy for StatusBarItem" src="img/EV3devKit.UI.StatusBarItem.png"/>
+      
+
+      <map id="EV3devKit.UI.StatusBarItem" name="EV3devKit.UI.StatusBarItem">
+<area shape="rect" id="node1" href="EV3devKit.UI.StatusBarItem.html" title="EV3devKit.UI.StatusBarItem" alt="" coords="4,101,240,149"/>
+</map>
+
+        <h2 class="main_title">Description:</h2>
+        <div class="main_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">abstract</span> <span class="main_keyword">class</span> <b><span class="abstract_class">StatusBarItem</span></b> : <span class="main_type"><span class="class">Object</span></span>
+        </div>
+        <div class="description">
+          <p>Represents an item that is displayed in a <a href="EV3devKit.UI.StatusBar.html" class="class">StatusBar</a>.</p>
+        </div><br/>
+        <div class="namespace_note"><b>Namespace:</b> <a href="EV3devKit.UI.html">EV3devKit.UI</a>
+        </div>
+        <div class="package_note"><b>Package:</b> <a href="index.htm">ev3devKit</a>
+        </div>
+        <h2 class="main_title">Content:</h2>
+        <h3 class="main_title">Constants:</h3>
+        <ul class="navi_inline">
+          <li class="constant"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">const</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="EV3devKit.UI.StatusBarItem.HEIGHT.html" class="constant">HEIGHT</a></b>
+            </span>
+            <div class="leaf_brief_description">
+            </div></li>
+        </ul>
+        <h3 class="main_title">Properties:</h3>
+        <ul class="navi_inline">
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">weak</span> <span class="main_type"><a href="EV3devKit.UI.StatusBar.html" class="class">StatusBar</a></span>? <b><a href="EV3devKit.UI.StatusBarItem.status_bar.html" class="property">status_bar</a></b> { <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Gets the status bar this item has been assigned to.</span>
+            </div></li>
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">bool</span></span> <b><a href="EV3devKit.UI.StatusBarItem.visible.html" class="property">visible</a></b> { <span class="main_keyword">protected</span> <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Gets and sets the visibility of this item.</span>
+            </div></li>
+        </ul>
+        <h3 class="main_title">Creation methods:</h3>
+        <ul class="navi_inline">
+          <li class="creation_method"><span class="leaf_code_definition"><span class="main_keyword">protected</span> <b><a href="EV3devKit.UI.StatusBarItem.StatusBarItem.html" class="creation_method">StatusBarItem</a></b> ()
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Creates a new status bar item.</span>
+            </div></li>
+        </ul>
+        <h3 class="main_title">Methods:</h3>
+        <ul class="navi_inline">
+          <li class="method"><span class="leaf_code_definition"><span class="main_keyword">protected</span> <span class="main_keyword">void</span> <b><a href="EV3devKit.UI.StatusBarItem.redraw.html" class="method">redraw</a></b> ()
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Notifies the status bar that this item has changed and needs to be 
+                redrawn.</span>
+            </div></li>
+          <li class="abstract_method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">abstract</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="EV3devKit.UI.StatusBarItem.draw.html" class="abstract_method">draw</a></b> (<span class="main_basic_type"><span class="struct">int</span></span> x, <span class="main_type"><a href="EV3devKit.UI.StatusBar.Align.html" class="enum">Align</a></span> align)
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Draws the status bar item.</span>
+            </div></li>
+        </ul>
+        <h3 class="main_title">Inherited Members:</h3>
+        <div class="box">
+          <div class="headline">
+            <div class="text">All known members inherited from class GLib.Object</div>
+            <div class="toggle">
+              <img onclick="toggle_box  (this, 'box-content-74')" src="../coll_open.png">&nbsp;</div>
+            </div>
+            <div class="content" id="box-content-74">
+              <div class="column">
+                <ul class="navi_inline">
+                  <li class="static_method">@new</li>
+                  <li class="static_method">newv</li>
+                  <li class="static_method">new_valist</li>
+                  <li class="method">get_type</li>
+                  <li class="method">get_class</li>
+                  <li class="method">@ref</li>
+                  <li class="method">unref</li>
+                  <li class="method">ref_sink</li>
+                  <li class="method">weak_ref</li>
+                  <li class="method">weak_unref</li>
+                  <li class="method">add_weak_pointer</li>
+                  <li class="method">remove_weak_pointer</li>
+                </ul>
+              </div>
+              <div class="column">
+                <ul class="navi_inline">
+                  <li class="method">@get</li>
+                  <li class="method">@set</li>
+                  <li class="method">get_property</li>
+                  <li class="method">set_property</li>
+                  <li class="method">get_data</li>
+                  <li class="method">set_data</li>
+                  <li class="method">set_data_full</li>
+                  <li class="method">steal_data</li>
+                  <li class="method">get_qdata</li>
+                  <li class="method">set_qdata</li>
+                  <li class="method">set_qdata_full</li>
+                  <li class="method">steal_qdata</li>
+                </ul>
+              </div>
+              <div class="column">
+                <ul class="navi_inline">
+                  <li class="method">freeze_notify</li>
+                  <li class="method">thaw_notify</li>
+                  <li class="virtual_method">dispose</li>
+                  <li class="virtual_method">constructed</li>
+                  <li class="method">notify_property</li>
+                  <li class="method">connect</li>
+                  <li class="method">disconnect</li>
+                  <li class="method">add_toggle_ref</li>
+                  <li class="method">remove_toggle_ref</li>
+                  <li class="method">bind_property</li>
+                  <li class="signal">notify</li>
+                  <li class="field">ref_count</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><br/>
+      <div class="site_footer">Generated by <a href="http://www.valadoc.org/">Valadoc</a>
+      </div>
+    </body>
+  </html>

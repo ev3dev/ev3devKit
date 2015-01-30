@@ -24,145 +24,33 @@
         <hr class="navi_hr"/>
         <ul class="navi_main">
           <li class="namespace"><a href="EV3devKit.ConsoleApp.html">ConsoleApp</a></li>
-          <li class="namespace"><a href="EV3devKit.DesktopTestApp.html">DesktopTestApp</a></li>
-          <li class="enum"><a href="EV3devKit.BoxDirection.html">BoxDirection</a></li>
-          <li class="enum"><a href="EV3devKit.CheckButtonType.html">CheckButtonType</a></li>
-          <li class="enum"><a href="EV3devKit.ContainerType.html">ContainerType</a></li>
-          <li class="enum"><a href="EV3devKit.FocusDirection.html">FocusDirection</a></li>
-          <li class="enum"><a href="EV3devKit.Keyboard.html">Keyboard</a></li>
-          <li class="enum"><a href="EV3devKit.ScrollDirection.html">ScrollDirection</a></li>
-          <li class="enum"><a href="EV3devKit.ScrollbarVisibility.html">ScrollbarVisibility</a></li>
-          <li class="enum"><a href="EV3devKit.WidgetAlign.html">WidgetAlign</a></li>
-          <li class="class"><a href="EV3devKit.Box.html">Box</a></li>
-          <li class="class"><a href="EV3devKit.Button.html">Button</a></li>
-          <li class="class"><a href="EV3devKit.CheckButton.html">CheckButton</a></li>
-          <li class="class"><a href="EV3devKit.CheckButtonGroup.html">CheckButtonGroup</a></li>
-          <li class="class"><a href="EV3devKit.CheckboxMenuItem.html">CheckboxMenuItem</a></li>
-          <li class="abstract_class"><a href="EV3devKit.Container.html">Container</a></li>
-          <li class="class"><a href="EV3devKit.DesktopScreen.html">DesktopScreen</a></li>
-          <li class="class"><a href="EV3devKit.Dialog.html">Dialog</a></li>
-          <li class="class"><a href="EV3devKit.FakeEV3LCDDevice.html">FakeEV3LCDDevice</a></li>
-          <li class="class"><a href="EV3devKit.Grid.html">Grid</a></li>
-          <li class="class"><a href="EV3devKit.Label.html">Label</a></li>
-          <li class="class"><a href="EV3devKit.Menu.html">Menu</a></li>
-          <li class="class"><a href="EV3devKit.MenuItem.html">MenuItem</a></li>
-          <li class="class"><a href="EV3devKit.MessageDialog.html">MessageDialog</a></li>
-          <li class="class"><a href="EV3devKit.Notebook.html">Notebook</a></li>
-          <li class="class"><a href="EV3devKit.NotebookTab.html">NotebookTab</a></li>
-          <li class="class"><a href="EV3devKit.OnScreenKeyboard.html">OnScreenKeyboard</a></li>
-          <li class="class"><a href="EV3devKit.RadioMenuItem.html">RadioMenuItem</a></li>
-          <li class="class"><a href="EV3devKit.Screen.html">Screen</a></li>
-          <li class="class"><a href="EV3devKit.Scroll.html">Scroll</a></li>
-          <li class="class"><a href="EV3devKit.Spacer.html">Spacer</a></li>
-          <li class="class"><a href="EV3devKit.StatusBar.html">StatusBar</a></li>
-          <li class="abstract_class"><a href="EV3devKit.StatusBarItem.html">StatusBarItem</a></li>
-          <li class="class"><a href="EV3devKit.TabButton.html">TabButton</a></li>
-          <li class="class"><a href="EV3devKit.TextEntry.html">TextEntry</a></li>
-          <li class="abstract_class"><a href="EV3devKit.Widget.html">Widget</a></li>
-          <li class="class"><a href="EV3devKit.Window.html">Window</a></li>
-          <li class="struct"><a href="EV3devKit.Rectangle.html">Rectangle</a></li>
-          <li class="delegate"><a href="EV3devKit.WidgetFunc.html">WidgetFunc</a></li>
+          <li class="namespace"><a href="EV3devKit.Desktop.html">Desktop</a></li>
+          <li class="namespace"><a href="EV3devKit.Devices.html">Devices</a></li>
+          <li class="namespace"><a href="EV3devKit.UI.html">UI</a></li>
         </ul>
       </div>
       <div class="site_content">
         <h1 class="main_title">EV3devKit</h1>
         <hr class="main_hr"/>
         <h2 class="main_title">Description:</h2>
+        <div class="description">
+          <p>Toolkit for developing applications using ev3dev.</p>
+          <p><pre class="main_source">            _____     _            _  ___ _<br/>  _____   _|___ /  __| | _____   _| |/ (_) |_<br/> / _ \ \ / / |_ \ / _` |/ _ \ \ / / ' /| | __|<br/>|  __/\ V / ___) | (_| |  __/\ V /| . \| | |_<br/> \___| \_/ |____/ \__,_|\___| \_/ |_|\_\_|\__|</pre>
+          </p>
+          <p>Find out more about ev3dev at <a href="http://www.ev3dev.org">http://www.ev3dev.org</a>.</p>
+        </div>
         <h2 class="main_title">Content:</h2>
         <h3 class="main_title">Namespaces:</h3>
         <ul class="navi_inline">
-          <li class="namespace"><a href="EV3devKit.ConsoleApp.html">ConsoleApp</a> - <span class="brief_description">ConsoleApp does all of the low 
-              level setting up of a virtual console so you don't have to. To use it, your main function should look something like this: <pre class="main_source">static int main (string[] args) {<br/>    try {<br/>        ConsoleApp.init ();<br/><br/>        // Program-specific initialization which includes something<br/>        // that calls ConsoleApp.quit () when the program is finished.<br/><br/>        ConsoleApp.run ();<br/><br/>        // any additional cleanup if needed before application exits.<br/><br/>        return 0;<br/>    } catch (ConsoleAppError err) {<br/>        critical ("%s", err.message);<br/>    }<br/>    return 1;<br/>}</pre>
-            </span></li>
-          <li class="namespace"><a href="EV3devKit.DesktopTestApp.html">DesktopTestApp</a> - </li>
-        </ul>
-        <h3 class="main_title">Classes:</h3>
-        <ul class="navi_inline">
-          <li class="class"><a href="EV3devKit.Box.html">Box</a> - <span class="brief_description">Container for laying out widgets horizontally or 
-              vertically.</span></li>
-          <li class="class"><a href="EV3devKit.Button.html">Button</a> - <span class="brief_description">Button shaped 
-              <a href="EV3devKit.Container.html" class="abstract_class">Container</a> to get user input.</span></li>
-          <li class="class"><a href="EV3devKit.CheckboxMenuItem.html">CheckboxMenuItem</a> - <span class="brief_description">
-              <a href="EV3devKit.MenuItem.html" class="class">MenuItem</a> with a checkbox.</span></li>
-          <li class="class"><a href="EV3devKit.CheckButtonGroup.html">CheckButtonGroup</a> - <span class="brief_description">Manages groups of 
-              <a href="EV3devKit.CheckButton.html" class="class">CheckButton</a>s.</span></li>
-          <li class="class"><a href="EV3devKit.CheckButton.html">CheckButton</a> - <span class="brief_description">A checkable button widget. There 
-              are two variations, a checkbox and a radio button.</span></li>
-          <li class="abstract_class"><a href="EV3devKit.Container.html">Container</a> - <span class="brief_description">A 
-              <a href="EV3devKit.Widget.html" class="abstract_class">Widget</a> that can contain other Widgets.</span></li>
-          <li class="class"><a href="EV3devKit.Dialog.html">Dialog</a> - <span class="brief_description">A dialog window for displaying pop-up 
-              messages.</span></li>
-          <li class="class"><a href="EV3devKit.Grid.html">Grid</a> - <span class="brief_description">A container that lays out it children in a grid.
-            </span></li>
-          <li class="class"><a href="EV3devKit.Label.html">Label</a> - <span class="brief_description">Widget to display text.</span></li>
-          <li class="class"><a href="EV3devKit.Menu.html">Menu</a> - <span class="brief_description">A scrollable menu widget that displays a list of 
-              <a href="EV3devKit.MenuItem.html" class="class">MenuItem</a>s.</span></li>
-          <li class="class"><a href="EV3devKit.MenuItem.html">MenuItem</a> - <span class="brief_description">Object used by 
-              <a href="EV3devKit.Menu.html" class="class">Menu</a> to represent a menu item.</span></li>
-          <li class="class"><a href="EV3devKit.MessageDialog.html">MessageDialog</a> - <span class="brief_description">A dialog for displaying a 
-              message.</span></li>
-          <li class="class"><a href="EV3devKit.Notebook.html">Notebook</a> - <span class="brief_description">A tabbed widget for displaying multiple 
-              "pages".</span></li>
-          <li class="class"><a href="EV3devKit.NotebookTab.html">NotebookTab</a> - <span class="brief_description">Container for a single tab of a 
-              <a href="EV3devKit.Notebook.html" class="class">Notebook</a>.</span></li>
-          <li class="class"><a href="EV3devKit.OnScreenKeyboard.html">OnScreenKeyboard</a> - <span class="brief_description">An on screen keyboard for
-              getting user input.</span></li>
-          <li class="class"><a href="EV3devKit.RadioMenuItem.html">RadioMenuItem</a> - <span class="brief_description">A menu item that includes a 
-              radio button.</span></li>
-          <li class="class"><a href="EV3devKit.Screen.html">Screen</a> - <span class="brief_description">Represents a screen that UI elements are 
-              displayed on.</span></li>
-          <li class="class"><a href="EV3devKit.Scroll.html">Scroll</a> - <span class="brief_description">A scrollable container for displaying content
-              that is too large to fit on the screen.</span></li>
-          <li class="class"><a href="EV3devKit.Spacer.html">Spacer</a> - <span class="brief_description">An empty widget that is used to distribute 
-              left over space in a container.</span></li>
-          <li class="class"><a href="EV3devKit.StatusBar.html">StatusBar</a> - <span class="brief_description">A status bar that displays at the top 
-              of a <a href="EV3devKit.Screen.html" class="class">Screen</a>.</span></li>
-          <li class="abstract_class"><a href="EV3devKit.StatusBarItem.html">StatusBarItem</a> - <span class="brief_description">Represents an item 
-              that is displayed in a <a href="EV3devKit.StatusBar.html" class="class">StatusBar</a>.</span></li>
-          <li class="class"><a href="EV3devKit.TabButton.html">TabButton</a> - <span class="brief_description">Button used for the tab of a 
-              <a href="EV3devKit.NotebookTab.html" class="class">NotebookTab</a>.</span></li>
-          <li class="class"><a href="EV3devKit.TextEntry.html">TextEntry</a> - <span class="brief_description">A wiget for getting user input.</span>
-          </li>
-          <li class="abstract_class"><a href="EV3devKit.Widget.html">Widget</a> - <span class="brief_description">The base class for all UI 
-              components.</span></li>
-          <li class="class"><a href="EV3devKit.Window.html">Window</a> - <span class="brief_description">Top level widget for displaying other widgets
-              on the <a href="EV3devKit.Screen.html" class="class">Screen</a>.</span></li>
-          <li class="class"><a href="EV3devKit.FakeEV3LCDDevice.html">FakeEV3LCDDevice</a> - </li>
-          <li class="class"><a href="EV3devKit.DesktopScreen.html">DesktopScreen</a> - </li>
-        </ul>
-        <h3 class="main_title">Structs:</h3>
-        <ul class="navi_inline">
-          <li class="struct"><a href="EV3devKit.Rectangle.html">Rectangle</a> - <span class="brief_description">The bounds of a rectangle.</span></li>
-        </ul>
-        <h3 class="main_title">Enums:</h3>
-        <ul class="navi_inline">
-          <li class="enum"><a href="EV3devKit.BoxDirection.html">BoxDirection</a> - <span class="brief_description">Specifies the number of children a
-              container can have.</span></li>
-          <li class="enum"><a href="EV3devKit.CheckButtonType.html">CheckButtonType</a> - <span class="brief_description">The style of a 
-              <a href="EV3devKit.CheckButton.html" class="class">CheckButton</a>.</span></li>
-          <li class="enum"><a href="EV3devKit.ContainerType.html">ContainerType</a> - <span class="brief_description">Specifies the number of children
-              a container can have.</span></li>
-          <li class="enum"><a href="EV3devKit.Keyboard.html">Keyboard</a> - <span class="brief_description">Specifies the type of keyboard.</span>
-          </li>
-          <li class="enum"><a href="EV3devKit.ScrollDirection.html">ScrollDirection</a> - <span class="brief_description">Specifies the direction of 
-              scrolling.</span></li>
-          <li class="enum"><a href="EV3devKit.ScrollbarVisibility.html">ScrollbarVisibility</a> - <span class="brief_description">Specifies if/when a 
-              scrollbar should be displayed.</span></li>
-          <li class="enum"><a href="EV3devKit.FocusDirection.html">FocusDirection</a> - <span class="brief_description">Specifies the direction to use
-              for focusing the next widget.</span></li>
-          <li class="enum"><a href="EV3devKit.WidgetAlign.html">WidgetAlign</a> - <span class="brief_description">Specifies how a 
-              <a href="EV3devKit.Widget.html" class="abstract_class">Widget</a> should be laid out in a 
-              <a href="EV3devKit.Container.html" class="abstract_class">Container</a>.</span></li>
-        </ul>
-        <h3 class="main_title">Delegates:</h3>
-        <ul class="navi_inline">
-          <li class="delegate"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">delegate</span> <span class="main_type"><a href="EV3devKit.Widget.html" class="abstract_class">Widget</a></span>? <b><a href="EV3devKit.WidgetFunc.html" class="delegate">WidgetFunc</a></b> (<span class="main_type"><a href="EV3devKit.Widget.html" class="abstract_class">Widget</a></span> widget)
-            </span>
-            <div class="leaf_brief_description"><span class="brief_description">Used by 
-                <a href="EV3devKit.Widget.do_recursive_parent.html" class="method">Widget.do_recursive_parent</a> and 
-                <a href="EV3devKit.Widget.do_recursive_children.html" class="method">Widget.do_recursive_children</a> to traverse the widget tree.
-              </span>
-            </div></li>
+          <li class="namespace"><a href="EV3devKit.ConsoleApp.html">ConsoleApp</a> - <span class="brief_description">Does all of the low level setting
+              up of a virtual console so you don't have to.</span></li>
+          <li class="namespace"><a href="EV3devKit.Desktop.html">Desktop</a> - <span class="brief_description">A framework for developing and testing 
+              <a href="EV3devKit.UI.html" class="namespace">EV3devKit.UI</a> components in a desktop environment.</span></li>
+          <li class="namespace"><a href="EV3devKit.Desktop.GtkApp.html">GtkApp</a> - <span class="brief_description">Does all of the low level setting
+              up of a desktop application so you don't have to.</span></li>
+          <li class="namespace"><a href="EV3devKit.Devices.html">Devices</a> - </li>
+          <li class="namespace"><a href="EV3devKit.UI.html">UI</a> - <span class="brief_description">Library for building user interfaces on small 
+              screens (like the EV3 LCD).</span></li>
         </ul>
       </div>
     </div><br/>

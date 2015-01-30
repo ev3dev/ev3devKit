@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <title>EV3devKit.UI.MenuItem &ndash; ev3devKit &ndash; Vala Binding Reference</title>
+    <link href="../style.css" rel="stylesheet" type="text/css"/><script src="../scripts.js" type="text/javascript">
+    </script>
+  </head>
+  <body>
+    <div class="site_header">EV3devKit.UI.MenuItem &ndash; ev3devKit Reference Manual</div>
+    <div class="site_body">
+      <div class="site_navigation">
+        <ul class="navi_main">
+          <li class="package_index"><a href="../index.html">Packages</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="package"><a href="index.htm">ev3devKit</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="namespace"><a href="EV3devKit.html">EV3devKit</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="namespace"><a href="EV3devKit.UI.html">UI</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="class">MenuItem</li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="property"><a href="EV3devKit.UI.MenuItem.button.html">button</a></li>
+          <li class="property"><a href="EV3devKit.UI.MenuItem.label.html">label</a></li>
+          <li class="property"><a href="EV3devKit.UI.MenuItem.menu.html">menu</a></li>
+          <li class="property"><a href="EV3devKit.UI.MenuItem.represented_object.html">represented_object</a></li>
+          <li class="creation_method"><a href="EV3devKit.UI.MenuItem.MenuItem.html">MenuItem</a></li>
+          <li class="creation_method"><a href="EV3devKit.UI.MenuItem.MenuItem.with_button.html">MenuItem.with_button</a></li>
+        </ul>
+      </div>
+      <div class="site_content">
+        <h1 class="main_title">MenuItem</h1>
+        <hr class="main_hr"/>
+        <h2 class="main_title">Object Hierarchy:</h2>
+        <img class="main_diagram" usemap="#EV3devKit.UI.MenuItem" alt="Object hierarchy for MenuItem" src="img/EV3devKit.UI.MenuItem.png"/>
+
+      <map id="EV3devKit.UI.MenuItem" name="EV3devKit.UI.MenuItem">
+<area shape="rect" id="node1" href="EV3devKit.UI.MenuItem.html" title="EV3devKit.UI.MenuItem" alt="" coords="4,101,213,149"/>
+</map>
+
+        <h2 class="main_title">Description:</h2>
+        <div class="main_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">class</span> <b><span class="class">MenuItem</span></b> : <span class="main_type"><span class="class">Object</span></span>
+        </div>
+        <div class="description">
+          <p>Object used by <a href="EV3devKit.UI.Menu.html" class="class">Menu</a> to represent a menu item.</p>
+          <div class="main_notification_block"><span class="main_block_headline">Note:</span> 
+            <div class="main_block_content">
+              <p>MenuItems do not inherit from <a href="EV3devKit.UI.Widget.html" class="abstract_class">Widget</a>. </p>
+            </div>
+          </div>
+        </div>
+        <div class="box">
+          <div class="headline">
+            <div class="text">All known sub-classes:</div>
+            <div class="toggle">
+              <img onclick="toggle_box  (this, 'box-content-46')" src="../coll_open.png">&nbsp;</div>
+            </div>
+            <div class="content" id="box-content-46">
+              <div class="column">
+                <ul class="navi_inline">
+                  <li class="class"><a href="EV3devKit.UI.CheckboxMenuItem.html">CheckboxMenuItem</a></li>
+                </ul>
+              </div>
+              <div class="column">
+                <ul class="navi_inline">
+                  <li class="class"><a href="EV3devKit.UI.RadioMenuItem.html">RadioMenuItem</a></li>
+                </ul>
+              </div>
+              <div class="column">
+                <ul class="navi_inline">
+                </ul>
+              </div>
+            </div>
+          </div><br/>
+          <div class="namespace_note"><b>Namespace:</b> <a href="EV3devKit.UI.html">EV3devKit.UI</a>
+          </div>
+          <div class="package_note"><b>Package:</b> <a href="index.htm">ev3devKit</a>
+          </div>
+          <h2 class="main_title">Content:</h2>
+          <h3 class="main_title">Properties:</h3>
+          <ul class="navi_inline">
+            <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">weak</span> <span class="main_type"><a href="EV3devKit.UI.Menu.html" class="class">Menu</a></span>? <b><a href="EV3devKit.UI.MenuItem.menu.html" class="property">menu</a></b> { <span class="main_keyword">get</span>; }
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Gets the Menu that this menu item belongs to.</span>
+              </div></li>
+            <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="EV3devKit.UI.Button.html" class="class">Button</a></span> <b><a href="EV3devKit.UI.MenuItem.button.html" class="property">button</a></b> { <span class="main_keyword">construct</span> <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Gets the Button that is the Container for the menu item.</span>
+              </div></li>
+            <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="EV3devKit.UI.Label.html" class="class">Label</a></span> <b><a href="EV3devKit.UI.MenuItem.label.html" class="property">label</a></b> { <span class="main_keyword">construct</span> <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Gets the Lable for the menu item.</span>
+              </div></li>
+            <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><span class="class">Object</span></span>? <b><a href="EV3devKit.UI.MenuItem.represented_object.html" class="property">represented_object</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Gets and sets a user-defined object that the menu item represents.
+                </span>
+              </div></li>
+          </ul>
+          <h3 class="main_title">Creation methods:</h3>
+          <ul class="navi_inline">
+            <li class="creation_method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <b><a href="EV3devKit.UI.MenuItem.MenuItem.html" class="creation_method">MenuItem</a></b> (<span class="main_basic_type"><span class="class">string</span></span> text)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Creates a new menu item with the specified text.</span>
+              </div></li>
+            <li class="creation_method"><span class="leaf_code_definition"><span class="main_keyword">protected</span> <b><a href="EV3devKit.UI.MenuItem.MenuItem.with_button.html" class="creation_method">MenuItem.with_button</a></b> (<span class="main_type"><a href="EV3devKit.UI.Button.html" class="class">Button</a></span> button, <span class="main_type"><a href="EV3devKit.UI.Label.html" class="class">Label</a></span> label)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Creates a new menu item using the provided button and label.</span>
+              </div></li>
+          </ul>
+          <h3 class="main_title">Inherited Members:</h3>
+          <div class="box">
+            <div class="headline">
+              <div class="text">All known members inherited from class GLib.Object</div>
+              <div class="toggle">
+                <img onclick="toggle_box  (this, 'box-content-47')" src="../coll_open.png">&nbsp;</div>
+              </div>
+              <div class="content" id="box-content-47">
+                <div class="column">
+                  <ul class="navi_inline">
+                    <li class="static_method">@new</li>
+                    <li class="static_method">newv</li>
+                    <li class="static_method">new_valist</li>
+                    <li class="method">get_type</li>
+                    <li class="method">get_class</li>
+                    <li class="method">@ref</li>
+                    <li class="method">unref</li>
+                    <li class="method">ref_sink</li>
+                    <li class="method">weak_ref</li>
+                    <li class="method">weak_unref</li>
+                    <li class="method">add_weak_pointer</li>
+                    <li class="method">remove_weak_pointer</li>
+                  </ul>
+                </div>
+                <div class="column">
+                  <ul class="navi_inline">
+                    <li class="method">@get</li>
+                    <li class="method">@set</li>
+                    <li class="method">get_property</li>
+                    <li class="method">set_property</li>
+                    <li class="method">get_data</li>
+                    <li class="method">set_data</li>
+                    <li class="method">set_data_full</li>
+                    <li class="method">steal_data</li>
+                    <li class="method">get_qdata</li>
+                    <li class="method">set_qdata</li>
+                    <li class="method">set_qdata_full</li>
+                    <li class="method">steal_qdata</li>
+                  </ul>
+                </div>
+                <div class="column">
+                  <ul class="navi_inline">
+                    <li class="method">freeze_notify</li>
+                    <li class="method">thaw_notify</li>
+                    <li class="virtual_method">dispose</li>
+                    <li class="virtual_method">constructed</li>
+                    <li class="method">notify_property</li>
+                    <li class="method">connect</li>
+                    <li class="method">disconnect</li>
+                    <li class="method">add_toggle_ref</li>
+                    <li class="method">remove_toggle_ref</li>
+                    <li class="method">bind_property</li>
+                    <li class="signal">notify</li>
+                    <li class="field">ref_count</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><br/>
+        <div class="site_footer">Generated by <a href="http://www.valadoc.org/">Valadoc</a>
+        </div>
+      </body>
+    </html>
