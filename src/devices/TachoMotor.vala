@@ -1,5 +1,5 @@
 /*
- * ev3dev-lang-glib - GLib library for interacting with ev3dev kernel drivers
+ * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 WasabiFan
  * Copyright 2015 David Lechner <david@lechnology.com>
@@ -20,8 +20,8 @@
  * MA 02110-1301, USA.
  */
 
-namespace EV3DevLang {
-    public class TachoMotor : EV3DevLang.Device {
+namespace EV3devKit.Devices {
+    public class TachoMotor : EV3devKit.Devices.Device {
         public int duty_cycle {
             get {
                 return (int)(try_read_int ("duty_cycle") ?? 0);

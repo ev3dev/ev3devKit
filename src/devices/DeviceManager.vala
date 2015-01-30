@@ -1,5 +1,5 @@
 /*
- * ev3dev-lang-glib - GLib library for interacting with ev3dev kernel drivers
+ * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014-2015 David Lechner <david@lechnology.com>
  *
@@ -21,7 +21,7 @@
 
 using GUdev;
 
-namespace EV3DevLang {
+namespace EV3devKit.Devices {
     /**
      * Used to get instances of Device objects.
      */
@@ -48,7 +48,7 @@ namespace EV3DevLang {
             POWER_SUPPLY_CLASS
         };
 
-        Gee.Map<string, EV3DevLang.Device> device_map;
+        Gee.Map<string, EV3devKit.Devices.Device> device_map;
         Client udev_client;
 
         /**
@@ -104,7 +104,7 @@ namespace EV3DevLang {
          * Create new instance of DeviceManager.
          */
         public DeviceManager () {
-            device_map = new Gee.HashMap<string, EV3DevLang.Device> ();
+            device_map = new Gee.HashMap<string, EV3devKit.Devices.Device> ();
             udev_client = new Client (subsystems);
             udev_client.uevent.connect (on_uevent);
             foreach (var subsystem in subsystems) {

@@ -7,7 +7,8 @@ list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 set (DATADIR "${CMAKE_INSTALL_PREFIX}/share")
 
 set (PKGDATADIR "${DATADIR}/ev3devKit")
-set (EXEC_NAME "ev3devKit-demo")
+set (DEVICES_DEMO_EXEC_NAME "ev3devKit-devices-demo")
+set (UI_DEMO_EXEC_NAME "ev3devKit-ui-demo")
 set (VERSION "0.1")
 
 set (LIBRARY_NAME "ev3devKit")
@@ -21,6 +22,7 @@ set (COMMON_PACKAGES
     gio-2.0
     gio-unix-2.0
     gee-0.8
+    gudev-1.0
     curses
     posix
     linux
@@ -32,6 +34,7 @@ set (COMMON_MODULES
     gio-2.0
     gio-unix-2.0
     gee-0.8
+    gudev-1.0
     ncurses
     libpng12
 )
@@ -39,18 +42,31 @@ set (DESKTOP_MODULES gtk+-3.0)
 set (DESKTOP_PACKAGES gtk+-3.0)
 
 if (EV3DEVKIT_DESKTOP)
-    set (EXEC_SOURCE_FILES
-        demo/DemoWindow.vala
-        desktop-demo/main.vala
+    set (UI_DEMO_SOURCE_FILES
+        demo/UIDemoWindow.vala
+        demo/ui_desktop_demo.vala
     )
 else (EV3DEVKIT_DESKTOP)
-    set (EXEC_SOURCE_FILES
+    set (UI_DEMO_SOURCE_FILES
         demo/DemoWindow.vala
-        demo/main.vala
+        demo/ui_demo.vala
     )
 endif (EV3DEVKIT_DESKTOP)
 
+set (DEVICES_DEMO_SOURCE_FILES
+    demo/devices_demo.vala
+)
+
 set (LIBRARY_SOURCE_FILES
+    src/devices/DCMotor.vala
+    src/devices/Device.vala
+    src/devices/DeviceManager.vala
+    src/devices/LED.vala
+    src/devices/Port.vala
+    src/devices/PowerSupply.vala
+    src/devices/Sensor.vala
+    src/devices/ServoMotor.vala
+    src/devices/TachoMotor.vala
     src/ui/Box.vala
     src/ui/Button.vala
     src/ui/CheckboxMenuItem.vala
@@ -91,7 +107,7 @@ pkg_check_modules (DEPS REQUIRED
     ${DESKTOP_MODULES}
 )
 add_definitions (${DEPS_CFLAGS})
-link_libraries (${DEPS_LIBRARIES} grx20 jpeg png)
+link_libraries (${DEPS_LIBRARIES} grx20 jpeg png m)
 link_directories (${DEPS_LIBRARY_DIRS})
 
 find_package (Vala REQUIRED)
@@ -187,8 +203,42 @@ endif (EV3DEVKIT_DESKTOP)
 
 
 if (NOT EV3DEVKIT_NO_DEMO)
-    vala_precompile(EXEC_VALA_C ${EXEC_NAME}
-        ${EXEC_SOURCE_FILES}
+
+    set (EXEC_LIBRARY_DEPENDS ${LIBRARY_NAME})
+    if (EV3DEVKIT_DESKTOP)
+        list (APPEND EXEC_LIBRARY_DEPENDS ${DESKTOP_LIBRARY_NAME})
+    endif (EV3DEVKIT_DESKTOP)
+
+    # Device driver demo program
+
+    vala_precompile(DEVICES_DEMO_EXEC_VALA_C ${DEVICES_DEMO_EXEC_NAME}
+        ${DEVICES_DEMO_SOURCE_FILES}
+    PACKAGES
+        ${EXEC_PACKAGES}
+    CUSTOM_VAPIS
+        bindings/*.vapi
+        ${EXEC_VAPI}
+    OPTIONS
+        --target-glib=${TARGET_GLIB}
+        --thread
+    )
+
+    add_executable (${DEVICES_DEMO_EXEC_NAME} ${DEVICES_DEMO_EXEC_VALA_C})
+    add_dependencies (${DEVICES_DEMO_EXEC_NAME} ${EXEC_LIBRARY_DEPENDS})
+    target_link_libraries (${DEVICES_DEMO_EXEC_NAME} ${EXEC_LIBRARY_DEPENDS})
+
+    add_custom_target (run-${DEVICES_DEMO_EXEC_NAME}
+        COMMAND ${DEVICES_DEMO_EXEC_NAME}
+        DEPENDS ${DEVICES_DEMO_EXEC_NAME}
+        WORKING_DIRECTORY ${CMAKE_PROJECT_DIR}
+    )
+
+    install (TARGETS ${DEVICES_DEMO_EXEC_NAME} RUNTIME DESTINATION bin)
+
+    # User interface demo program
+
+    vala_precompile(UI_DEMO_EXEC_VALA_C ${UI_DEMO_EXEC_NAME}
+        ${UI_DEMO_SOURCE_FILES}
     PACKAGES
         ${EXEC_PACKAGES}
     CUSTOM_VAPIS
@@ -204,17 +254,17 @@ if (NOT EV3DEVKIT_NO_DEMO)
         list (APPEND EXEC_LIBRARY_DEPENDS ${DESKTOP_LIBRARY_NAME})
     endif (EV3DEVKIT_DESKTOP)
 
-    add_executable (${EXEC_NAME} ${EXEC_VALA_C})
-    add_dependencies (${EXEC_NAME} ${EXEC_LIBRARY_DEPENDS})
-    target_link_libraries (${EXEC_NAME} ${EXEC_LIBRARY_DEPENDS})
+    add_executable (${UI_DEMO_EXEC_NAME} ${UI_DEMO_EXEC_VALA_C})
+    add_dependencies (${UI_DEMO_EXEC_NAME} ${EXEC_LIBRARY_DEPENDS})
+    target_link_libraries (${UI_DEMO_EXEC_NAME} ${EXEC_LIBRARY_DEPENDS})
 
-    add_custom_target (run
-        COMMAND ${EXEC_NAME}
-        DEPENDS ${EXEC_NAME}
+    add_custom_target (run-${UI_DEMO_EXEC_NAME}
+        COMMAND ${UI_DEMO_EXEC_NAME}
+        DEPENDS ${UI_DEMO_EXEC_NAME}
         WORKING_DIRECTORY ${CMAKE_PROJECT_DIR}
     )
 
-    install (TARGETS ${EXEC_NAME} RUNTIME DESTINATION bin)
+    install (TARGETS ${UI_DEMO_EXEC_NAME} RUNTIME DESTINATION bin)
 endif (NOT EV3DEVKIT_NO_DEMO)
 
 find_package (Valadoc)

@@ -1,5 +1,5 @@
 /*
- * ev3dev-lang-glib - GLib library for interacting with ev3dev kernel drivers
+ * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 WasabiFan
  * Copyright 2014-2015 David Lechner <david@lechnology.com>
@@ -22,7 +22,7 @@
 
 using GUdev;
 
-namespace EV3DevLang {
+namespace EV3devKit.Devices {
     public errordomain DeviceError {
         NOT_CONNECTED
     }

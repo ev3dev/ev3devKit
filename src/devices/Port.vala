@@ -1,5 +1,5 @@
 /*
- * ev3dev-lang-glib - GLib library for interacting with ev3dev kernel drivers
+ * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 WasabiFan
  * Copyright 2014-2015 David Lechner <david@lechnology.com>
@@ -22,14 +22,14 @@
 
 using GUdev;
 
-namespace EV3DevLang {
+namespace EV3devKit.Devices {
     /**
      * Represents a port that sensors and motors are plugged into.
      *
      * Ports can be Input Ports and Output Ports on the EV3 itself or on sensor
      * or motor multiplexers or even the ports on the WeDo USB hub.
      */
-    public class Port : EV3DevLang.Device {
+    public class Port : EV3devKit.Devices.Device {
         /**
          * The value returned by port_name for Input Port 1 on the EV3 itself.
          */

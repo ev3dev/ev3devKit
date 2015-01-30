@@ -1,5 +1,5 @@
 /*
- * ev3dev-lang-glib - GLib library for interacting with ev3dev kernel drivers
+ * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 WasabiFan
  * Copyright 2015-2015 David Lechner <david@lechnology.com>
@@ -20,11 +20,11 @@
  * MA 02110-1301, USA.
  */
 
-namespace EV3DevLang {
+namespace EV3devKit.Devices {
     /**
      * Represents a LEGO MINDSTORMS or LEGO WeDo sensor
      */
-    public class Sensor : EV3DevLang.Device {
+    public class Sensor : EV3devKit.Devices.Device {
         /**
          * Gets the address.
          *

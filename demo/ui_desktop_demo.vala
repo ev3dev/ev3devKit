@@ -19,19 +19,19 @@
  * MA 02110-1301, USA.
  */
 
-/* main.vala - main function for running demo */
+/* main.vala - main function for running UI demo on desktop */
+
+using EV3devKit.Desktop;
 
 namespace EV3devKit.Demo {
-
     public static int main (string[] args) {
+        GtkApp.init (args);
 
-        ConsoleApp.init ();
-
-        var demo_window = new DemoWindow ();
-        demo_window.quit.connect (ConsoleApp.quit);
+        var demo_window = new UIDemoWindow ();
+        demo_window.quit.connect (GtkApp.quit);
         demo_window.show ();
 
-        ConsoleApp.run ();
+        GtkApp.run ();
 
         return 0;
     }

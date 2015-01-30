@@ -1,5 +1,5 @@
 /*
- * ev3dev-lang-glib - GLib library for interacting with ev3dev kernel drivers
+ * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014-2015 David Lechner <david@lechnology.com>
  *
@@ -24,7 +24,13 @@
  * It is overly documented to make it easier to understand.
  */
 
-namespace EV3DevLang {
+using EV3devKit.Devices;
+
+namespace EV3devKit.Demo {
+    // Not acutally used. This is a workaround for a bug that causes compiler error:
+    // "EV3devKit.UI.Window.key_pressed: no suitable method found to override"
+    public EV3devKit.UI.Window dummy;
+
     /**
      * Demo application
      *
@@ -38,6 +44,7 @@ namespace EV3DevLang {
      * the user browse all of the devices connected to the EV3.
      */
     public class Demo : Application {
+
         // The DeviceManager is how we get objects for hardware devices
         DeviceManager manager;
         // There is a variable for each type of supported device to keep a
@@ -105,7 +112,7 @@ namespace EV3DevLang {
          *
          * @throws IOError.CANCELLED if device was disconnected.
          */
-        async string? get_input_cancel_on_remove (EV3DevLang.Device device,
+        async string? get_input_cancel_on_remove (EV3devKit.Devices.Device device,
             DataInputStream stdin) throws IOError
         {
             var cancellable = new Cancellable ();

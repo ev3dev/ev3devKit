@@ -4,10 +4,17 @@ Programming toolkit for ev3dev
 
 ## About
 
-This is a [GLib] based library that provides user interface widgets for ev3dev.
-It is currently in the development stages and is unstable.
+This is a [GLib]/[GObject] based library that provides a number of programming
+interfaces for ev3dev, including user interface and device driver interface.
+It is written in vala, but since it uses GObjects, it can be used with many
+[languages] via [GObjectIntrospection].
 
 For an example of how it is used, checkout [brickman].
+
+## Status
+
+This is currently in the development stages and is unstable. The device driver
+interfaces require the latest ev3dev kernel (currently n3.16.7-ckt4-ev3dev1).
 
 ## Compiling
 
@@ -26,15 +33,18 @@ To get something usable on the EV3 brick, you should compile using [brickstrap].
     
 You can add additional build option to the `cmake` command. Note: you need to
 delete *everything* in the build directory when changing `cmake` options to
-ensure that they take effect.
+ensure that they take effect (you can use `nuke.sh` to do this).
 
 * Enable debugging: `-DCMAKE_BUILD_TYPE=Debug`
 * Build additional library for running on a desktop: `-DEV3DEVKIT_DESKTOP=1`
-* Do not build the demo program: `-DEV3DEVKIT_NO_DEMO=1`
+* Do not build the demo programs: `-DEV3DEVKIT_NO_DEMO=1`
 
 ## Documentation
 API docs are at http://www.ev3dev.org/ev3devKit/ev3devKit/index.htm
 
-[GLib]: https://developer.gnome.org/glib/2.40/
+[GLib]: https://developer.gnome.org/glib/stable/index.html
+[GObject]: https://developer.gnome.org/gobject/stable/index.html
+[languages]: https://wiki.gnome.org/Projects/GObjectIntrospection/Users
+[GObjectIntrospection]: https://wiki.gnome.org/Projects/GObjectIntrospection
 [brickman]: https://github.com/ev3dev/brickman
 [brickstrap]: https://github.com/ev3dev/ev3dev/wiki/Using-brickstrap-to-cross-compile-and-debug

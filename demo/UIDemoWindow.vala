@@ -19,7 +19,7 @@
  * MA 02110-1301, USA.
  */
 
-/* DemoWindow.vala - Main window for widget demos */
+/* UIDemoWindow.vala - Main window for widget demos */
 
 using Curses;
 using EV3devKit.UI;
@@ -29,7 +29,7 @@ namespace EV3devKit.Demo {
     /**
      * Used to demonstrate most of the UI components in ev3devKit.
      */
-    public class DemoWindow : UI.Window {
+    public class UIDemoWindow : UI.Window {
 
         /**
          * Emitted when the use selects the Quit menu item.
@@ -39,7 +39,7 @@ namespace EV3devKit.Demo {
         /**
          * Creates a new instance of a demo window.
          */
-        public DemoWindow () {
+        public UIDemoWindow () {
             var menu = new UI.Menu () {
                 padding_left = 10,
                 padding_right = 10,
@@ -274,7 +274,7 @@ namespace EV3devKit.Demo {
             weak CheckButtonGroup weak_radiobutton_group1 = radiobutton_group1;
             radiobutton_group1.notify["selected-item"].connect (() => {
                 var selected = weak_radiobutton_group1.selected_item;
-                group1_selected_label.text = selected == null ? "none" 
+                group1_selected_label.text = selected == null ? "none"
                     : "#%d selected".printf ((int)selected.weak_represented_object);
             });
             radiobutton1.checked = true;

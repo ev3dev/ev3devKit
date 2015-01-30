@@ -1,5 +1,5 @@
 /*
- * ev3dev-lang-glib - GLib library for interacting with ev3dev kernel drivers
+ * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 WasabiFan
  * Copyright 2015 David Lechner <david@lechnology.com>
@@ -20,8 +20,8 @@
  * MA 02110-1301, USA.
  */
 
-namespace EV3DevLang {
-    public class ServoMotor : EV3DevLang.Device {
+namespace EV3devKit.Devices {
+    public class ServoMotor : EV3devKit.Devices.Device {
         /**
          * Gets the name of the driver that loaded this device.
          */
