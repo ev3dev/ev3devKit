@@ -1,5 +1,5 @@
 /*
- * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
+ * EV3devKit.UI - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 David Lechner <david@lechnology.com>
  *
@@ -19,24 +19,25 @@
  * MA 02110-1301, USA.
  */
 
-/* CheckboxMenuItem.vala - Menu item used by Menu widget that has a checkbox */
+/* RadioMenuItem.vala - Menu items used by Menu widget with radio button */
 
-namespace EV3devKit {
+namespace EV3devKit.UI {
     /**
-     * {@link MenuItem} with a checkbox.
+     * A menu item that includes a radio button.
      */
-    public class CheckboxMenuItem : EV3devKit.MenuItem {
+    public class RadioMenuItem : EV3devKit.UI.MenuItem {
         /**
-         * Gets the checkbox widget for this menu item.
+         * Gets the radio button for the menu item.
          */
-        public CheckButton checkbox { get; construct set; }
+        public CheckButton radio { get; construct set; }
 
         /**
-         * Creates a new checkbox menu item.
+         * Creates a new radio button menu item.
          *
-         * @param text The text for the label of the menu item.
+         * @param text The text for the menu item Label.
+         * @param group The CheckButtonGroup for the radio button.
          */
-        public CheckboxMenuItem (string text) {
+        public RadioMenuItem (string text, CheckButtonGroup group) {
             base.with_button (new Button () {
                 border = 0,
                 border_radius = 0
@@ -46,12 +47,12 @@ namespace EV3devKit {
             label.horizontal_align = WidgetAlign.START;
             hbox.add (label);
             hbox.add (new Spacer ());
-            checkbox = new CheckButton.checkbox () {
+            radio = new CheckButton.radio (group) {
                 padding = 0,
                 can_focus = false
             };
-            hbox.add (checkbox);
-            button.pressed.connect (() => checkbox.checked = !checkbox.checked);
+            hbox.add (radio);
+            button.pressed.connect (() => radio.checked = !radio.checked);
         }
     }
 }

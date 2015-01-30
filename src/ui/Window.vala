@@ -1,5 +1,5 @@
 /*
- * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
+ * EV3devKit.UI - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 David Lechner <david@lechnology.com>
  *
@@ -24,7 +24,7 @@
 using Curses;
 using GRX;
 
-namespace EV3devKit {
+namespace EV3devKit.UI {
     /**
      * Top level widget for displaying other widgets on the {@link Screen}.
      *
@@ -34,7 +34,7 @@ namespace EV3devKit {
      * by calling {@link close}. Only the top-most Window is visible to the user
      * and only that Window receives user input.
      */
-    public class Window : EV3devKit.Container {
+    public class Window : EV3devKit.UI.Container {
         /**
          * Gets the Screen that this Window is attached to.
          *

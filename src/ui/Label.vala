@@ -1,5 +1,5 @@
 /*
- * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
+ * EV3devKit.UI - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 David Lechner <david@lechnology.com>
  *
@@ -24,14 +24,14 @@
 using Gee;
 using GRX;
 
-namespace EV3devKit {
+namespace EV3devKit.UI {
     /**
      * Widget to display text.
      *
      * The text will be automatically wrapped if the parent Container is not
      * wide enough to fit the entire text value.
      */
-    public class Label : EV3devKit.Widget {
+    public class Label : EV3devKit.UI.Widget {
         internal static Font _default_font;
         internal static weak Font default_font;
 

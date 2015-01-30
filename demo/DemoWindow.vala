@@ -22,13 +22,14 @@
 /* DemoWindow.vala - Main window for widget demos */
 
 using Curses;
+using EV3devKit.UI;
 using GRX;
 
-namespace EV3devKit {
+namespace EV3devKit.Demo {
     /**
      * Used to demonstrate most of the UI components in ev3devKit.
      */
-    public class DemoWindow : Window {
+    public class DemoWindow : UI.Window {
 
         /**
          * Emitted when the use selects the Quit menu item.
@@ -39,43 +40,43 @@ namespace EV3devKit {
          * Creates a new instance of a demo window.
          */
         public DemoWindow () {
-            var menu = new Menu () {
+            var menu = new UI.Menu () {
                 padding_left = 10,
                 padding_right = 10,
                 border = 0
             };
             add (menu);
-            var message_dialog_menu_item = new MenuItem ("MessageDialog");
+            var message_dialog_menu_item = new UI.MenuItem ("MessageDialog");
             message_dialog_menu_item.button.pressed.connect (on_message_dialog_menu_item_button_pressed);
             menu.add_menu_item (message_dialog_menu_item);
-            var notebook_menu_item = new MenuItem ("Notebook");
+            var notebook_menu_item = new UI.MenuItem ("Notebook");
             notebook_menu_item.button.pressed.connect (on_notebook_menu_item_button_pressed);
             menu.add_menu_item (notebook_menu_item);
-            var status_bar_menu_item = new MenuItem ("StatusBar");
+            var status_bar_menu_item = new UI.MenuItem ("StatusBar");
             status_bar_menu_item.button.pressed.connect (on_status_bar_menu_item_button_pressed);
             menu.add_menu_item (status_bar_menu_item);
-            var fonts_menu_item = new MenuItem ("Fonts");
+            var fonts_menu_item = new UI.MenuItem ("Fonts");
             fonts_menu_item.button.pressed.connect (on_fonts_menu_item_button_pressed);
             menu.add_menu_item (fonts_menu_item);
-            var menu_menu_item = new MenuItem ("Menu");
+            var menu_menu_item = new UI.MenuItem ("Menu");
             menu_menu_item.button.pressed.connect (on_menu_menu_item_button_pressed);
             menu.add_menu_item (menu_menu_item);
-            var grid_menu_item = new MenuItem ("Grid");
+            var grid_menu_item = new UI.MenuItem ("Grid");
             grid_menu_item.button.pressed.connect (on_grid_menu_item_button_pressed);
             menu.add_menu_item (grid_menu_item);
-            var text_entry_menu_item = new MenuItem ("TextEntry");
+            var text_entry_menu_item = new UI.MenuItem ("TextEntry");
             text_entry_menu_item.button.pressed.connect (on_text_entry_menu_item_button_pressed);
             menu.add_menu_item (text_entry_menu_item);
-            var dialog_menu_item = new MenuItem ("Dialog");
+            var dialog_menu_item = new UI.MenuItem ("Dialog");
             dialog_menu_item.button.pressed.connect (on_dialog_menu_item_pressed);
             menu.add_menu_item (dialog_menu_item);
-            var check_button_menu_item = new MenuItem ("CheckButton");
+            var check_button_menu_item = new UI.MenuItem ("CheckButton");
             menu.add_menu_item (check_button_menu_item);
             check_button_menu_item.button.pressed.connect (on_check_button_menu_item_button_pressed);
-            var scroll_menu_item = new MenuItem ("Scroll");
+            var scroll_menu_item = new UI.MenuItem ("Scroll");
             menu.add_menu_item (scroll_menu_item);
             scroll_menu_item.button.pressed.connect (on_show_scroll_button_pressed);
-            var quit_menu_item = new MenuItem ("Quit");
+            var quit_menu_item = new UI.MenuItem ("Quit");
             quit_menu_item.button.pressed.connect (() => quit ());
             menu.add_menu_item (quit_menu_item);
         }
@@ -96,7 +97,7 @@ namespace EV3devKit {
         }
 
         void on_notebook_menu_item_button_pressed () {
-            var window = new Window ();
+            var window = new UI.Window ();
             var notebook = new Notebook ();
             window.add (notebook);
             var tab1 = new NotebookTab ("Tab 1");
@@ -119,13 +120,13 @@ namespace EV3devKit {
             tab3.add (tab3_vbox);
             var tab3_label = new Label ("This is Tab 3.");
             tab3_vbox.add (tab3_label);
-            var tab3_button = new Button.with_label ("Do Nothing");
+            var tab3_button = new UI.Button.with_label ("Do Nothing");
             tab3_vbox.add (tab3_button);
             window.show ();
         }
 
         void on_status_bar_menu_item_button_pressed () {
-            var window = new Window ();
+            var window = new UI.Window ();
             var vbox = new Box.vertical () {
                 padding = 6
             };
@@ -162,7 +163,7 @@ namespace EV3devKit {
             // a little trick to have twice as much space below the message as above the message.
             var button_spacer1 = new Spacer ();
             var button_spacer2 = new Spacer ();
-            var ok_button = new Button.with_label ("OK") {
+            var ok_button = new UI.Button.with_label ("OK") {
                 horizontal_align = WidgetAlign.CENTER,
                 vertical_align = WidgetAlign.END
             };
@@ -185,7 +186,7 @@ namespace EV3devKit {
         }
 
         void on_check_button_menu_item_button_pressed () {
-            var window = new Window ();
+            var window = new UI.Window ();
             var vbox = new Box.vertical () {
                 margin = 10
             };
@@ -216,7 +217,7 @@ namespace EV3devKit {
             };
             checkbox2_hbox.add (checkbox2);
             checkbox2_hbox.add (checkbox2_label);
-            var checkbox2_button = new Button (checkbox2_hbox) {
+            var checkbox2_button = new UI.Button (checkbox2_hbox) {
                 border = 0,
                 border_radius = 0
             };
@@ -288,7 +289,7 @@ namespace EV3devKit {
         }
 
         void on_show_scroll_button_pressed () {
-            var window = new Window ();
+            var window = new UI.Window ();
             var vbox = new Box.vertical () {
                 margin = 10,
                 spacing = 5
@@ -313,7 +314,7 @@ namespace EV3devKit {
         }
 
         void on_text_entry_menu_item_button_pressed () {
-            var window = new Window ();
+            var window = new UI.Window ();
             var vbox = new Box.vertical () {
                 margin = 10
             };
@@ -335,7 +336,7 @@ namespace EV3devKit {
         }
 
         void on_grid_menu_item_button_pressed () {
-            var window = new Window ();
+            var window = new UI.Window ();
             var grid = new Grid (3, 4) {
                 margin = 5,
                 border = 2
@@ -385,8 +386,8 @@ namespace EV3devKit {
 
         void on_menu_menu_item_button_pressed () {
             int count = 1;
-            var window = new Window ();
-            var menu = new Menu () {
+            var window = new UI.Window ();
+            var menu = new UI.Menu () {
                 margin = 10
             };
             window.add (menu);
@@ -398,11 +399,11 @@ namespace EV3devKit {
             var radio2_menu_item = new RadioMenuItem ("Radio2", radio_group);
             menu.add_menu_item (radio2_menu_item);
             radio1_menu_item.radio.checked = true;
-            var add_new_menu_item = new MenuItem ("Add new item");
-            weak Menu weak_menu = menu;
+            var add_new_menu_item = new UI.MenuItem ("Add new item");
+            weak UI.Menu weak_menu = menu;
             add_new_menu_item.button.pressed.connect (() => {
-                var new_item = new MenuItem ("Remove me %d".printf (count++));
-                weak MenuItem weak_new_item = new_item;
+                var new_item = new UI.MenuItem ("Remove me %d".printf (count++));
+                weak UI.MenuItem weak_new_item = new_item;
                 new_item.button.pressed.connect (() => {
                     weak_new_item.menu.remove_menu_item (weak_new_item);
                 });
@@ -421,7 +422,7 @@ namespace EV3devKit {
                 string? file_name = null;
                 var font_list = new Gee.LinkedList<string> ();
 
-                var window = new Window ();
+                var window = new UI.Window ();
                 var vscroll = new Scroll.vertical () {
                     scroll_amount = 64,
                     border = 0
@@ -458,7 +459,7 @@ namespace EV3devKit {
                 vbox.add (vscroll);
                 var label = new Label (err.message);
                 vscroll.add (label);
-                var ok_button = new Button.with_label ("OK") {
+                var ok_button = new UI.Button.with_label ("OK") {
                     horizontal_align = WidgetAlign.CENTER
                 };
                 weak Dialog weak_dialog = dialog;

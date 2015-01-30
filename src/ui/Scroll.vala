@@ -1,5 +1,5 @@
 /*
- * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
+ * EV3devKit.UI - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 David Lechner <david@lechnology.com>
  *
@@ -25,7 +25,7 @@ using Curses;
 using Gee;
 using GRX;
 
-namespace EV3devKit {
+namespace EV3devKit.UI {
     /**
      * Specifies the direction of scrolling.
      */
@@ -63,7 +63,7 @@ namespace EV3devKit {
      * A scrollable container for displaying content that is too large to fit
      * on the screen.
      */
-    public class Scroll : EV3devKit.Container {
+    public class Scroll : EV3devKit.UI.Container {
         const int SCROLLBAR_SIZE = 7;
 
         ScrollDirection direction;

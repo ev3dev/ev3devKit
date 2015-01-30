@@ -1,5 +1,5 @@
 /*
- * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
+ * EV3devKit.UI - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright (C) 2014 David Lechner <david@lechnology.com>
  *
@@ -24,7 +24,7 @@
 using Gee;
 using GRX;
 
-namespace EV3devKit {
+namespace EV3devKit.UI {
     /**
      * A status bar that displays at the top of a {@link Screen}.
      */

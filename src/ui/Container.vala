@@ -1,5 +1,5 @@
 /*
- * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
+ * EV3devKit.UI - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 David Lechner <david@lechnology.com>
  *
@@ -24,7 +24,7 @@
 using Gee;
 using GRX;
 
-namespace EV3devKit {
+namespace EV3devKit.UI {
 
     /**
      * Specifies the number of children a container can have.
@@ -43,7 +43,7 @@ namespace EV3devKit {
     /**
      * A {@link Widget} that can contain other Widgets.
      */
-    public abstract class Container : EV3devKit.Widget {
+    public abstract class Container : EV3devKit.UI.Widget {
         protected LinkedList<Widget> _children;
 
         /**

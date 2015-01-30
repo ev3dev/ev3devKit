@@ -21,7 +21,7 @@
 
 /* main.vala - main function for running demo */
 
-namespace EV3devKit {
+namespace EV3devKit.Demo {
 
     public static int main (string[] args) {
 

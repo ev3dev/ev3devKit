@@ -1,5 +1,5 @@
 /*
- * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
+ * EV3devKit.UI - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 David Lechner <david@lechnology.com>
  *
@@ -25,7 +25,16 @@ using Curses;
 using Gee;
 using GRX;
 
-namespace EV3devKit {
+/**
+ * Library for building user interfaces on small screens (like the EV3 LCD).
+ *
+ * This library is modeled after GTK (and other modern UI toolkits). It uses
+ * {@link Widget}s as the basic building blocks for building the user interface.
+ * {@link Container}s are used to group and layout widgets. {@link Window}s are
+ * the top-level Container and are displayed to the user using a {@link Screen}
+ * that represents a physical screen.
+ */
+namespace EV3devKit.UI {
     /**
      * Used by {@link Widget.do_recursive_parent} and {@link Widget.do_recursive_children}
      * to traverse the widget tree.
@@ -82,7 +91,7 @@ namespace EV3devKit {
     /**
      * The base class for all UI components.
      *
-     * Widgets are modeled after Gtk (and other modern UI toolkits). Some of the
+     * Widgets are modeled after GTK (and other modern UI toolkits). Some of the
      * layout properties should also be familiar to those that use CSS.
      *
      * Each Widget is essentially three concentric rectangles.

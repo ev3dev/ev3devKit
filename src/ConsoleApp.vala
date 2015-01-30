@@ -22,15 +22,33 @@
 /* ConsoleApp.vala - Graphic mode console application that uses ncurses for input */
 
 using Curses;
+using EV3devKit.UI;
 using Linux.VirtualTerminal;
 using Posix;
 
+/**
+ * Toolkit for developing applications using ev3dev.
+ *
+ * {{{
+ *             _____     _            _  ___ _
+ *   _____   _|___ /  __| | _____   _| |/ (_) |_
+ *  / _ \ \ / / |_ \ / _` |/ _ \ \ / / ' /| | __|
+ * |  __/\ V / ___) | (_| |  __/\ V /| . \| | |_
+ *  \___| \_/ |____/ \__,_|\___| \_/ |_|\_\_|\__|
+ *
+ * }}}
+ *
+ * Find out more about ev3dev at [[http://www.ev3dev.org]].
+ */
 namespace EV3devKit {
     /**
-     * ConsoleApp does all of the low level setting up of a virtual console
-     * so you don't have to. To use it, your main function should look something
-     * like this:
+     * Does all of the low level setting up of a virtual console so you don't
+     * have to.
+     *
+     * To use it, your main function should look something like this:
      * {{{
+     * using EV3devKit;
+     *
      * static int main (string[] args) {
      *     try {
      *         ConsoleApp.init ();
@@ -104,7 +122,7 @@ namespace EV3devKit {
                 throw e;
             }
             main_loop = new MainLoop ();
-            Screen.active_screen = new Screen ();
+            UI.Screen.active_screen = new UI.Screen ();
         }
 
         /**
@@ -137,9 +155,9 @@ namespace EV3devKit {
         int read_input () {
             while (true) {
                 var ch = getch ();
-                if (ch != -1 && Screen.active_screen != null) {
+                if (ch != -1 && UI.Screen.active_screen != null) {
                     Idle.add (() => {
-                        Screen.active_screen.queue_key_code (ch);
+                        UI.Screen.active_screen.queue_key_code (ch);
                         return false;
                     });
                 }

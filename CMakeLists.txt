@@ -51,38 +51,38 @@ else (EV3DEVKIT_DESKTOP)
 endif (EV3DEVKIT_DESKTOP)
 
 set (LIBRARY_SOURCE_FILES
-    src/Box.vala
-    src/Button.vala
-    src/CheckboxMenuItem.vala
-    src/CheckButton.vala
+    src/ui/Box.vala
+    src/ui/Button.vala
+    src/ui/CheckboxMenuItem.vala
+    src/ui/CheckButton.vala
+    src/ui/Container.vala
+    src/ui/Dialog.vala
+    src/ui/Grid.vala
+    src/ui/Label.vala
+    src/ui/Menu.vala
+    src/ui/MenuItem.vala
+    src/ui/MessageDialog.vala
+    src/ui/Notebook.vala
+    src/ui/NotebookTab.vala
+    src/ui/OnScreenKeyboard.vala
+    src/ui/RadioMenuItem.vala
+    src/ui/Rectangle.vala
+    src/ui/Screen.vala
+    src/ui/Scroll.vala
+    src/ui/Spacer.vala
+    src/ui/StatusBar.vala
+    src/ui/StatusBarItem.vala
+    src/ui/TabButton.vala
+    src/ui/TextEntry.vala
+    src/ui/Widget.vala
+    src/ui/Window.vala
     src/ConsoleApp.vala
-    src/Container.vala
-    src/Dialog.vala
-    src/Grid.vala
-    src/Label.vala
-    src/Menu.vala
-    src/MenuItem.vala
-    src/MessageDialog.vala
-    src/Notebook.vala
-    src/NotebookTab.vala
-    src/OnScreenKeyboard.vala
-    src/RadioMenuItem.vala
-    src/Rectangle.vala
-    src/Screen.vala
-    src/Scroll.vala
-    src/Spacer.vala
-    src/StatusBar.vala
-    src/StatusBarItem.vala
-    src/TabButton.vala
-    src/TextEntry.vala
-    src/Widget.vala
-    src/Window.vala
 )
 
 set (DESKTOP_LIBRARY_SOURCE_FILES
-    src/desktop/FakeEV3LCDDevice.vala
-    src/desktop/DesktopScreen.vala
-    src/desktop/DesktopTestApp.vala
+    src/desktop/GtkApp.vala
+    src/desktop/GtkFramebuffer.vala
+    src/desktop/GtkScreen.vala
 )
 
 find_package (PkgConfig REQUIRED)

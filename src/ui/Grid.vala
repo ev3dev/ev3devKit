@@ -1,5 +1,5 @@
 /*
- * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
+ * EV3devKit.UI - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 David Lechner <david@lechnology.com>
  *
@@ -25,11 +25,11 @@ using Curses;
 using Gee;
 using GRX;
 
-namespace EV3devKit {
+namespace EV3devKit.UI {
     /**
      * A container that lays out it children in a grid.
      */
-    public class Grid : EV3devKit.Container {
+    public class Grid : EV3devKit.UI.Container {
         struct Pair {
             int row;
             int col;

@@ -21,15 +21,17 @@
 
 /* main.vala - main function for running demo on desktop */
 
-namespace EV3devKit {
+using EV3devKit.Desktop;
+
+namespace EV3devKit.Demo {
     public static int main (string[] args) {
-        DesktopTestApp.init (args);
+        GtkApp.init (args);
 
         var demo_window = new DemoWindow ();
-        demo_window.quit.connect (DesktopTestApp.quit);
+        demo_window.quit.connect (GtkApp.quit);
         demo_window.show ();
 
-        DesktopTestApp.run ();
+        GtkApp.run ();
 
         return 0;
     }

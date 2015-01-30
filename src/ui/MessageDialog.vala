@@ -1,5 +1,5 @@
 /*
- * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
+ * EV3devKit.UI - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 David Lechner <david@lechnology.com>
  *
@@ -24,13 +24,13 @@
 using Curses;
 using GRX;
 
-namespace EV3devKit {
+namespace EV3devKit.UI {
     /**
      * A dialog for displaying a message.
      *
      * The dialog contains a title and message separated by a horizontal line.
      */
-    public class MessageDialog : EV3devKit.Dialog {
+    public class MessageDialog : EV3devKit.UI.Dialog {
         Scroll vscroll;
 
         /**

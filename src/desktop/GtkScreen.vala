@@ -19,41 +19,59 @@
  * MA 02110-1301, USA.
  */
 
-/* DesktopScreen.vala - Screen implementation for desktop (Gtk) */
+/* GtkScreen.vala - Screen implementation for desktop (Gtk) */
 
 using Gee;
 using GRX;
 
-namespace EV3devKit {
-    public class DesktopScreen : EV3devKit.Screen {
-        FakeEV3LCDDevice lcd;
-        weak DesktopScreen? master;
-        Gee.List<weak DesktopScreen> slaves;
+namespace EV3devKit.Desktop {
+    /**
+     * A Screen that can be embedded in a Gtk application.
+     *
+     * GtkScreens can be linked in a master-slave type connection so that the
+     * UI on the master screen can be viewed simultaneously on the slave screens.
+     * This lets you view your UI on multiple resolutions and color depths at
+     * the same time.
+     */
+    public class GtkScreen : EV3devKit.UI.Screen {
+        GtkFramebuffer fb;
+        weak GtkScreen? master;
+        Gee.List<weak GtkScreen> slaves;
 
-        public DesktopScreen (FakeEV3LCDDevice lcd, DesktopScreen? master = null) {
-            base.custom (lcd.info.width, lcd.info.height, lcd.pixbuf_data);
-            this.lcd = lcd;
-            if (lcd.info.use_custom_colors) {
-                fg_color = lcd.info.fg_color;
-                bg_color = lcd.info.bg_color;
-                mid_color = lcd.info.mid_color;
+        /**
+         * Creates a new screen.
+         *
+         * @param fb The frambuffer that the screen will be displayed on.
+         * @param master If specified, this screen will used the window stack
+         * and status bar from the master screen.
+         */
+        public GtkScreen (GtkFramebuffer fb, GtkScreen? master = null) {
+            base.custom (fb.info.width, fb.info.height, fb.pixbuf_data);
+            this.fb = fb;
+            if (fb.info.use_custom_colors) {
+                fg_color = fb.info.fg_color;
+                bg_color = fb.info.bg_color;
+                mid_color = fb.info.mid_color;
             }
             this.master = master;
-            slaves = new ArrayList<DesktopScreen> ();
+            slaves = new ArrayList<GtkScreen> ();
             if (master != null) {
                 master.slaves.add (this);
             }
         }
 
-        ~DesktopScreen () {
+        ~GtkScreen () {
             master.slaves.remove (this);
             foreach (var slave in slaves) {
                 slave.master = null;
             }
         }
 
-        public override void refresh () {
-            lcd.refresh ();
+        /**
+         * {@inheritDoc}
+         */
+        protected override void refresh () {
+            fb.refresh ();
             foreach (var slave in slaves) {
                 status_bar.screen = slave;
                 var save_slave_status_bar = slave.status_bar;
@@ -71,7 +89,7 @@ namespace EV3devKit {
             set_screen_for_each_window (this);
         }
 
-        void set_screen_for_each_window (Screen screen) {
+        void set_screen_for_each_window (UI.Screen screen) {
             foreach (var window in window_stack) {
                 window.screen = screen;
                     if (master != null) {

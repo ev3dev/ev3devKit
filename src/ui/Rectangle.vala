@@ -1,5 +1,5 @@
 /*
- * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
+ * EV3devKit.UI - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 David Lechner <david@lechnology.com>
  *
@@ -21,7 +21,7 @@
 
 /* Rectangle.vala - Struct for rectangles */
 
-namespace EV3devKit {
+namespace EV3devKit.UI {
     /**
      * The bounds of a rectangle.
      */

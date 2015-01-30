@@ -1,5 +1,5 @@
 /*
- * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
+ * EV3devKit.UI - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 David Lechner <david@lechnology.com>
  *
@@ -24,7 +24,7 @@
 using Gee;
 using GRX;
 
-namespace EV3devKit {
+namespace EV3devKit.UI {
 
     /**
      * Specifies the number of children a container can have.
@@ -67,7 +67,7 @@ namespace EV3devKit {
      * Vertical boxes work similarly except the vertical and horizontal properties
      * are swapped.
      */
-    public class Box : EV3devKit.Container {
+    public class Box : EV3devKit.UI.Container {
         /**
          * Gets the layout direction of the Box.
          */

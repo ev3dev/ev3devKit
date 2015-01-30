@@ -1,5 +1,5 @@
 /*
- * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
+ * EV3devKit.UI - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 David Lechner <david@lechnology.com>
  *
@@ -24,7 +24,7 @@
 using Curses;
 using GRX;
 
-namespace EV3devKit {
+namespace EV3devKit.UI {
     /**
      * A dialog window for displaying pop-up messages.
      *
@@ -32,7 +32,7 @@ namespace EV3devKit {
      * Instead, it displays a smaller area with the previous window partially
      * visible behind it.
      */
-    public class Dialog : EV3devKit.Window {
+    public class Dialog : EV3devKit.UI.Window {
         /**
          * Creates a new instance of a dialog window.
          */

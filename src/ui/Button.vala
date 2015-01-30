@@ -1,5 +1,5 @@
 /*
- * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
+ * EV3devKit.UI - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 David Lechner <david@lechnology.com>
  *
@@ -25,14 +25,14 @@ using Curses;
 using Gee;
 using GRX;
 
-namespace EV3devKit {
+namespace EV3devKit.UI {
     /**
      * Button shaped {@link Container} to get user input.
      *
      * The colors of a button (except for the border) are inverted when it has
      * focus. Pressing ``ENTER`` will trigger the {@link pressed} signal.
      */
-    public class Button : EV3devKit.Container {
+    public class Button : EV3devKit.UI.Container {
         /**
          * Emitted when the Button has been pressed by the user.
          */

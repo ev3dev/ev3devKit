@@ -18,17 +18,17 @@
  */
 
 /*
- * FakeEV3LCDDevice.vala:
+ * GtkFramebuffer.vala:
  *
- * U8g.Device that simulates the EV3 LCD.
+ * Simulates a framebuffer device using a Gtk.Image in a Gtk.EventBox.
  */
 
 using Gee;
 using Gtk;
 using GRX;
 
-namespace EV3devKit {
-    public class FakeEV3LCDDevice : Gtk.EventBox {
+namespace EV3devKit.Desktop {
+    public class GtkFramebuffer : Gtk.EventBox {
         public struct Info {
             public int width;
             public int height;
@@ -54,7 +54,7 @@ namespace EV3devKit {
 
         public Info info { get; private set; }
 
-        public FakeEV3LCDDevice (DeviceType type = DeviceType.STOCK) {
+        public GtkFramebuffer (DeviceType type = DeviceType.STOCK) {
             can_focus = true;
             button_press_event.connect ((event) => {
                 grab_focus ();

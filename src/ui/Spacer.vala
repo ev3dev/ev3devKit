@@ -1,5 +1,5 @@
 /*
- * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
+ * EV3devKit.UI - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 David Lechner <david@lechnology.com>
  *
@@ -23,7 +23,7 @@
 
 using GRX;
 
-namespace EV3devKit {
+namespace EV3devKit.UI {
     /**
      * An empty widget that is used to distribute left over space in a container.
      *
@@ -32,7 +32,7 @@ namespace EV3devKit {
      * at the bottom of the box. The Spacer will take up the remaining space
      * between them.
      */
-    public class Spacer : EV3devKit.Widget {
+    public class Spacer : EV3devKit.UI.Widget {
         /**
          * Create a new spacer.
          */

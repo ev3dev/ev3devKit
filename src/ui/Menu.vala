@@ -1,5 +1,5 @@
 /*
- * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
+ * EV3devKit.UI - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014-2015 David Lechner <david@lechnology.com>
  *
@@ -21,7 +21,7 @@
 
 /* Menu.vala - Menu widget */
 
-namespace EV3devKit {
+namespace EV3devKit.UI {
     /**
      * A scrollable menu widget that displays a list of {@link MenuItem}s.
      *
@@ -29,7 +29,7 @@ namespace EV3devKit {
      * contains buttons. It automatically handles things like making sure the
      * focused {@link MenuItem} is visible on the screen.
      */
-    public class Menu : EV3devKit.Scroll {
+    public class Menu : EV3devKit.UI.Scroll {
         Box menu_vbox;
 
         /**
