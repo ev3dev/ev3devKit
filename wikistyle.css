@@ -64,6 +64,7 @@ div.main_block_content {
 	padding-top: 5px;
 	margin: 10px;
 
+	font-family: monospace;
 	border-color: #aaaaff;
 	background-color: #eeeeff;
 	border-style: solid;
@@ -241,169 +242,169 @@ h3.main_title {
 .css_content_link_constant {
 	background-image:url(constant.png);
 	display:inline-block;
-	padding-right:17px;
+	padding-left:17px;
 	background-repeat:no-repeat;
-	background-position:center right;
+	background-position:center left;
 	border:0px;
 }
 .css_content_link_namespace {
 	background-image:url(namespace.png);
 	display:inline-block;
-	padding-right:17px;
+	padding-left:17px;
 	background-repeat:no-repeat;
-	background-position:center right;
+	background-position:center left;
 	border:0px;
 }
 .css_content_link_struct {
 	background-image:url(struct.png);
 	display:inline-block;
-	padding-right:17px;
+	padding-left:17px;
 	background-repeat:no-repeat;
-	background-position:center right;
+	background-position:center left;
 	border:0px;
 }
 .css_content_link_interface {
 	background-image:url(interface.png);
 	display:inline-block;
-	padding-right:17px;
+	padding-left:17px;
 	background-repeat:no-repeat;
-	background-position:center right;
+	background-position:center left;
 	border:0px;
 }
 .css_content_link_enum {
 	background-image:url(enum.png);
 	display:inline-block;
-	padding-right:17px;
+	padding-left:17px;
 	background-repeat:no-repeat;
-	background-position:center right;
+	background-position:center left;
 	border:0px;
 }
 .css_content_link_errordomain {
 	background-image:url(errordomain.png);
 	display:inline-block;
-	padding-right:17px;
+	padding-left:17px;
 	background-repeat:no-repeat;
-	background-position:center right;
+	background-position:center left;
 	border:0px;
 }
 .css_content_link_delegate {
 	background-image:url(delegate.png);
 	display:inline-block;
-	padding-right:17px;
+	padding-left:17px;
 	background-repeat:no-repeat;
-	background-position:center right;
+	background-position:center left;
 	border:0px;
 }
 .css_content_link_signal {
 	background-image:url(signal.png);
 	display:inline-block;
-	padding-right:17px;
+	padding-left:17px;
 	background-repeat:no-repeat;
-	background-position:center right;
+	background-position:center left;
 	border:0px;
 }
 .css_content_link_field {
 	background-image:url(field.png);
 	display:inline-block;
-	padding-right:17px;
+	padding-left:17px;
 	background-repeat:no-repeat;
-	background-position:center right;
+	background-position:center left;
 	border:0px;
 }
 .css_content_link_enumvalue {
 	background-image:url(enumvalue.png);
 	display:inline-block;
-	padding-right:17px;
+	padding-left:17px;
 	background-repeat:no-repeat;
-	background-position:center right;
+	background-position:center left;
 	border:0px;
 }
 .css_content_link_errorcode {
 	background-image:url(errorcode.png);
 	display:inline-block;
-	padding-right:17px;
+	padding-left:17px;
 	background-repeat:no-repeat;
-	background-position:center right;
+	background-position:center left;
 	border:0px;
 }
 .css_content_link_class {
 	background-image:url(class.png);
 	display:inline-block;
-	padding-right:17px;
+	padding-left:17px;
 	background-repeat:no-repeat;
-	background-position:center right;
+	background-position:center left;
 	border:0px;
 }
 .css_content_link_abstract_class {
 	background-image:url(abstractclass.png);
 	display:inline-block;
-	padding-right:17px;
+	padding-left:17px;
 	background-repeat:no-repeat;
-	background-position:center right;
+	background-position:center left;
 	border:0px;
 }
 .css_content_link_property {
 	background-image:url(property.png);
 	display:inline-block;
-	padding-right:17px;
+	padding-left:17px;
 	background-repeat:no-repeat;
-	background-position:center right;
+	background-position:center left;
 	border:0px;
 }
 .css_content_link_virtual_property {
 	background-image:url(virtualproperty.png);
 	display:inline-block;
-	padding-right:17px;
+	padding-left:17px;
 	background-repeat:no-repeat;
-	background-position:center right;
+	background-position:center left;
 	border:0px;
 }
 .css_content_link_abstract_property {
 	background-image:url(abstractproperty.png);
 	display:inline-block;
-	padding-right:17px;
+	padding-left:17px;
 	background-repeat:no-repeat;
-	background-position:center right;
+	background-position:center left;
 	border:0px;
 }
 .css_content_link_method {
 	background-image:url(method.png);
 	display:inline-block;
-	padding-right:17px;
+	padding-left:17px;
 	background-repeat:no-repeat;
-	background-position:center right;
+	background-position:center left;
 	border:0px;
 }
 .css_content_link_static_method {
 	background-image:url(staticmethod.png);
 	display:inline-block;
-	padding-right:17px;
+	padding-left:17px;
 	background-repeat:no-repeat;
-	background-position:center right;
+	background-position:center left;
 	border:0px;
 }
 .css_content_link_virtual_method {
 	background-image:url(virtualmethod.png);
 	display:inline-block;
-	padding-right:17px;
+	padding-left:17px;
 	background-repeat:no-repeat;
-	background-position:center right;
+	background-position:center left;
 	border:0px;
 }
 .css_content_link_abstract_method {
 	background-image:url( abstractmethod.png );
 	display:inline-block;
-	padding-right:17px;
+	padding-left:17px;
 	background-repeat:no-repeat;
-	background-position:center right;
+	background-position:center left;
 	border:0px;
 }
 .css_content_link_construction_method {
 	background-image:url(constructor.png);
 	display:inline-block;
-	padding-right:17px;
+	padding-left:17px;
 	background-repeat:no-repeat;
-	background-position:center right;
+	background-position:center left;
 	border:0px;
 }
 
