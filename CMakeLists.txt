@@ -114,6 +114,9 @@ GENERATE_HEADER
     ${LIBRARY_NAME}
 )
 
+# There is a bug in valac that causes an unowned compact class to lose
+# the "unowned" qualifier when generating a vapi. So, we are calling a
+# script we wrote to fix it.
 add_custom_command (OUTPUT
     ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}.vapi
 COMMAND
@@ -215,32 +218,22 @@ if (NOT EV3DEVKIT_NO_DEMO)
 endif (NOT EV3DEVKIT_NO_DEMO)
 
 find_package (Valadoc)
-
-set (DOC_DIR "${CMAKE_BINARY_DIR}/doc")
-
-add_custom_target (docclean rm -rf ${DOC_DIR})
-
-add_custom_target (doc
-    COMMENT "Generating valadocs in ${DOC_DIR}"
-    COMMAND ${VALADOC_EXECUTABLE}
-        -o ${DOC_DIR}
-        --package-name=${LIBRARY_NAME}
-        --package-version=${VERSION}
-        --target-glib=${TARGET_GLIB}
-        --pkg=glib-2.0
-        --pkg=gobject-2.0
-        --pkg=gmodule-2.0
-        --pkg=gio-2.0
-        --pkg=gio-unix-2.0
-        --pkg=gee-0.8
-        --pkg=curses
-        --pkg=posix
-        --pkg=linux
-        --pkg=gtk+-3.0
-        --driver ${VALA_VERSION}
+if (VALADOC_FOUND)
+    include (ValadocGenerate)
+    generate_valadoc (
         ${LIBRARY_SOURCE_FILES}
         ${DESKTOP_LIBRARY_SOURCE_FILES}
         bindings/*.vapi
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    DEPENDS docclean
-)
+    OUTPUT
+        "${CMAKE_BINARY_DIR}/doc"
+    PACKAGE_NAME
+        ${LIBRARY_NAME}
+    PACKAGE_VERSION
+        ${VERSION}
+    OPTIONS
+        --target-glib=${TARGET_GLIB}
+    PACKAGES
+        ${COMMON_PACKAGES}
+        ${DESKTOP_PACKAGES}
+    )
+endif (VALADOC_FOUND)
