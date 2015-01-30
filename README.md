@@ -33,7 +33,7 @@ ensure that they take effect.
 * Do not build the demo program: `-DEV3DEVKIT_NO_DEMO=1`
 
 ## Documentation
-API docs are at http://www.ev3dev.org/ev3devKit/
+API docs are at http://www.ev3dev.org/ev3devKit/ev3devKit/index.htm
 
 [GLib]: https://developer.gnome.org/glib/2.40/
 [brickman]: https://github.com/ev3dev/brickman
