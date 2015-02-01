@@ -11,6 +11,7 @@ set (DEVICES_DEMO_EXEC_NAME "ev3devKit-devices-demo")
 set (UI_DEMO_EXEC_NAME "ev3devKit-ui-demo")
 set (VERSION "0.1")
 
+set (PACKAGE_NAME "EV3devKit")
 set (LIBRARY_NAME "ev3devKit")
 set (DESKTOP_LIBRARY_NAME "ev3devKit-desktop")
 set (TARGET_GLIB "2.40")
@@ -115,6 +116,7 @@ ensure_vala_version ("0.24" MINIMUM)
 include (ValaPrecompile)
 
 vala_precompile (LIBRARY_VALA_C ${LIBRARY_NAME}
+LIBRARY
     ${LIBRARY_SOURCE_FILES}
 PACKAGES
     ${COMMON_PACKAGES}
@@ -127,7 +129,12 @@ GENERATE_VAPI
     ${LIBRARY_NAME}.buggy
 GENERATE_HEADER
     ${LIBRARY_NAME}
+GENERATE_GIR TYPELIB
+    ${PACKAGE_NAME}-${VERSION}
 )
+
+add_library (${LIBRARY_NAME} SHARED ${LIBRARY_VALA_C})
+install (TARGETS ${LIBRARY_NAME} LIBRARY DESTINATION lib)
 
 # There is a bug in valac that causes an unowned compact class to lose
 # the "unowned" qualifier when generating a vapi. So, we are calling a
@@ -144,64 +151,49 @@ COMMENT
     Fixing ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}.buggy.vapi
 )
 
-if (EV3DEVKIT_DESKTOP)
-vala_precompile (DESKTOP_LIBRARY_VALA_C ${DESKTOP_LIBRARY_NAME}
-    ${DESKTOP_LIBRARY_SOURCE_FILES}
-PACKAGES
-    ${COMMON_PACKAGES}
-    ${DESKTOP_PACKAGES}
-CUSTOM_VAPIS
-    bindings/*.vapi
-    ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}.vapi
-OPTIONS
-    --target-glib=${TARGET_GLIB}
-    --thread
-GENERATE_VAPI
-    ${DESKTOP_LIBRARY_NAME}
-GENERATE_HEADER
-    ${DESKTOP_LIBRARY_NAME}
-)
-endif(EV3DEVKIT_DESKTOP)
-
-
-set (EXEC_PACKAGES ${COMMON_PACKAGES})
-set (EXEC_VAPI ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}.vapi)
-
-if (EV3DEVKIT_DESKTOP)
-    list (APPEND EXEC_PACKAGES ${DESKTOP_PACKAGES})
-    list (APPEND EXEC_VAPI ${CMAKE_CURRENT_BINARY_DIR}/${DESKTOP_LIBRARY_NAME}.vapi)
-endif (EV3DEVKIT_DESKTOP)
-
-add_library (${LIBRARY_NAME} ${LIBRARY_VALA_C})
-
-if (EV3DEVKIT_DESKTOP)
-    add_library (${DESKTOP_LIBRARY_NAME} ${DESKTOP_LIBRARY_VALA_C})
-    add_dependencies (${DESKTOP_LIBRARY_NAME} ${LIBRARY_NAME})
-endif (EV3DEVKIT_DESKTOP)
-
 # Workaround to make CMake 2.8 generate ev3devKit.vapi
 # apparently add_custom_command is ignored if nothing depends on its output.
 set (FIX_VAPI_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}.vapi)
-if (EV3DEVKIT_DESKTOP)
-    list (APPEND FIX_VAPI_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${DESKTOP_LIBRARY_NAME}.vapi)
-endif (EV3DEVKIT_DESKTOP)
 add_custom_target (fix-vapi DEPENDS ${FIX_VAPI_DEPENDS})
 add_dependencies (${LIBRARY_NAME} fix-vapi)
 
 if (EV3DEVKIT_DESKTOP)
+    vala_precompile (DESKTOP_LIBRARY_VALA_C ${DESKTOP_LIBRARY_NAME}
+    LIBRARY
+        ${DESKTOP_LIBRARY_SOURCE_FILES}
+    PACKAGES
+        ${COMMON_PACKAGES}
+        ${DESKTOP_PACKAGES}
+    CUSTOM_VAPIS
+        bindings/*.vapi
+        ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}.vapi
+    OPTIONS
+        --target-glib=${TARGET_GLIB}
+        --thread
+    GENERATE_VAPI
+        ${DESKTOP_LIBRARY_NAME}
+    GENERATE_HEADER
+        ${DESKTOP_LIBRARY_NAME}
+    )
+
+    add_library (${DESKTOP_LIBRARY_NAME} SHARED ${DESKTOP_LIBRARY_VALA_C})
+    add_dependencies (${DESKTOP_LIBRARY_NAME} ${LIBRARY_NAME})
+    install (TARGETS ${DESKTOP_LIBRARY_NAME} LIBRARY DESTINATION lib)
     configure_file (
         ${CMAKE_CURRENT_SOURCE_DIR}/src/desktop/main_window.glade
         ${CMAKE_CURRENT_BINARY_DIR}/main_window.glade COPYONLY
     )
 endif (EV3DEVKIT_DESKTOP)
 
-install (TARGETS ${LIBRARY_NAME} ARCHIVE DESTINATION lib)
-if (EV3DEVKIT_DESKTOP)
-    install (TARGETS ${DESKTOP_LIBRARY_NAME} ARCHIVE DESTINATION lib)
-endif (EV3DEVKIT_DESKTOP)
-
-
 if (NOT EV3DEVKIT_NO_DEMO)
+
+    set (EXEC_PACKAGES ${COMMON_PACKAGES})
+    set (EXEC_VAPI ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}.vapi)
+
+    if (EV3DEVKIT_DESKTOP)
+        list (APPEND EXEC_PACKAGES ${DESKTOP_PACKAGES})
+        list (APPEND EXEC_VAPI ${CMAKE_CURRENT_BINARY_DIR}/${DESKTOP_LIBRARY_NAME}.vapi)
+    endif (EV3DEVKIT_DESKTOP)
 
     set (EXEC_LIBRARY_DEPENDS ${LIBRARY_NAME})
     if (EV3DEVKIT_DESKTOP)
@@ -223,7 +215,6 @@ if (NOT EV3DEVKIT_NO_DEMO)
     )
 
     add_executable (${DEVICES_DEMO_EXEC_NAME} ${DEVICES_DEMO_EXEC_VALA_C})
-    add_dependencies (${DEVICES_DEMO_EXEC_NAME} ${EXEC_LIBRARY_DEPENDS})
     target_link_libraries (${DEVICES_DEMO_EXEC_NAME} ${EXEC_LIBRARY_DEPENDS})
 
     add_custom_target (run-${DEVICES_DEMO_EXEC_NAME}
@@ -254,7 +245,6 @@ if (NOT EV3DEVKIT_NO_DEMO)
     endif (EV3DEVKIT_DESKTOP)
 
     add_executable (${UI_DEMO_EXEC_NAME} ${UI_DEMO_EXEC_VALA_C})
-    add_dependencies (${UI_DEMO_EXEC_NAME} ${EXEC_LIBRARY_DEPENDS})
     target_link_libraries (${UI_DEMO_EXEC_NAME} ${EXEC_LIBRARY_DEPENDS})
 
     add_custom_target (run-${UI_DEMO_EXEC_NAME}

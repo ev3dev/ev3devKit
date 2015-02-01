@@ -18,7 +18,6 @@ interfaces require the latest ev3dev kernel (currently v3.16.7-ckt4-ev3dev1).
 
 ## Compiling
 
-Since this is unstable, it is currently setup to compile as a static library.
 To get something usable on the EV3 brick, you should compile using [brickstrap].
 
     # include install build depends
