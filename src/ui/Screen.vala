@@ -151,7 +151,9 @@ namespace EV3devKit.UI {
         public Screen.custom (int width, int height, char *context_mem_addr = null) {
             window_stack = new LinkedList<Window> ();
             key_queue = new LinkedList<uint?> ();
-            status_bar = new StatusBar ();
+            status_bar = new StatusBar () {
+                visible = false
+            };
             status_bar.screen = this;
             FrameMode mode = core_frame_mode ();
             if (mode == FrameMode.UNDEFINED)
