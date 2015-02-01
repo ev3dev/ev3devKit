@@ -145,6 +145,7 @@ namespace EV3devKit {
 
         void release_console () {
             GRX.set_driver ("memory"); // releases frame buffer
+            endwin ();
         }
 
         bool HandleSIGTERM () {
