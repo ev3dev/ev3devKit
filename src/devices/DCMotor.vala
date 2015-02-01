@@ -21,10 +21,26 @@
  */
 
 namespace EV3devKit.Devices {
+    /**
+     * The polarity of a motor. In other words, which direction of rotation is
+     * positive.
+     *
+     * The direction of rotation (clockwise or counter-clockwise) is determined
+     * by viewing the motor with the shaft end facing you.
+     */
     public enum DCMotorPolarity {
+        /**
+         * Clockwise is considered the positive direction.
+         */
         NORMAL,
+        /**
+         * Counter-clockwise is considered the positive direction.
+         */
         INVERTED;
 
+        /**
+         * Converts the polarity to the value for writing to sysfs attributes.
+         */
         internal string to_string () {
             switch (this) {
             case DCMotorPolarity.NORMAL:
@@ -37,6 +53,9 @@ namespace EV3devKit.Devices {
             }
         }
 
+        /**
+         * Converts the polarity from the value read from a sysfs attribute.
+         */
         internal static DCMotorPolarity from_string (string polarity) {
             switch (polarity) {
             case "normal":
@@ -50,6 +69,9 @@ namespace EV3devKit.Devices {
         }
     }
 
+    /**
+     * Represents a simple DC motor.
+     */
     public class DCMotor : EV3devKit.Devices.Device {
         /**
          * Get a list of supported commands.

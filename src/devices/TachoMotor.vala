@@ -21,6 +21,11 @@
  */
 
 namespace EV3devKit.Devices {
+    /**
+     * Represents a motor with tachometer feedback.
+     *
+     * The EV3 Large and Medium and NXT motors are this type of motor.
+     */
     public class TachoMotor : EV3devKit.Devices.Device {
         public int duty_cycle {
             get {

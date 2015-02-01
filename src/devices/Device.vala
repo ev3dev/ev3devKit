@@ -22,11 +22,30 @@
 
 using GUdev;
 
+/**
+ * Provides programming interface for working with ev3dev (and standard Linux)
+ * hardware drivers.
+ *
+ * This includes input ports (Sensor), output ports (TachoMotor), buttons (Input),
+ * lights (LED) and battery (PowerSupply) on the EV3 itself, WeDo sensors
+ * connected via the WeDo USB hub, and more.
+ *
+ * It uses udev to manage device states and events.
+ */
 namespace EV3devKit.Devices {
+    /**
+     * Errors specific to {@link Device}s.
+     */
     public errordomain DeviceError {
+        /**
+         * Indicates that a device is no longer connected.
+         */
         NOT_CONNECTED
     }
 
+    /**
+     * The base class for all types of devices.
+     */
     public abstract class Device : Object {
         const string connect_error = "You must connect to a device before you can read from it.";
         const string read_error = "There was an error reading from the file";
@@ -35,6 +54,9 @@ namespace EV3devKit.Devices {
         Gee.Map<string, DataInputStream> read_attr_map;
         Gee.Map<string, DataOutputStream> write_attr_map;
 
+        /**
+         * The udev object for this device.
+         */
         protected GUdev.Device udev_device;
 
         /**
@@ -44,12 +66,23 @@ namespace EV3devKit.Devices {
          */
         public bool connected { get; internal set; }
 
+        /**
+         * Gets the sysfs device node name for this device.
+         *
+         * Returns ``null`` if the device no longer exists (i.e. it was
+         * disconnected.)
+         */
         public string device_name {
             get {
                 return udev_device.get_name ();
             }
         }
 
+        /**
+         * Creates a new device object.
+         *
+         * @param udev_device The udev object that this device represents.
+         */
         protected Device (GUdev.Device udev_device) {
             read_attr_map = new Gee.HashMap<string, DataInputStream?> ();
             write_attr_map = new Gee.HashMap<string, DataOutputStream?> ();
@@ -63,7 +96,7 @@ namespace EV3devKit.Devices {
          * The udev_device object is replaced so that we get the new cached
          * property and attribute values from udev.
          *
-         * Overrideing methods must call the base () method.
+         * Overriding methods must call the base () method.
          */
         internal virtual void change (GUdev.Device udev_device) {
             this.udev_device = udev_device;

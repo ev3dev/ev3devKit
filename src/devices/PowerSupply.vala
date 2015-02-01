@@ -23,6 +23,9 @@
 using GLib;
 
 namespace EV3devKit.Devices {
+    /**
+     * Represents a power supply, like a battery.
+     */
     public class PowerSupply : Device {
         /**
          * Gets the maximum design voltage.

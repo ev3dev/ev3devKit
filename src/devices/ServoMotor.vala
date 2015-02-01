@@ -21,6 +21,9 @@
  */
 
 namespace EV3devKit.Devices {
+    /**
+     * Represents a hobby type servo motor.
+     */
     public class ServoMotor : EV3devKit.Devices.Device {
         /**
          * Gets the name of the driver that loaded this device.
