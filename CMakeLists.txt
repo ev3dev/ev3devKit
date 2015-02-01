@@ -36,7 +36,6 @@ set (COMMON_MODULES
     gee-0.8
     gudev-1.0
     ncurses
-    libpng12
 )
 set (DESKTOP_MODULES gtk+-3.0)
 set (DESKTOP_PACKAGES gtk+-3.0)
@@ -107,7 +106,7 @@ pkg_check_modules (DEPS REQUIRED
     ${DESKTOP_MODULES}
 )
 add_definitions (${DEPS_CFLAGS})
-link_libraries (${DEPS_LIBRARIES} grx20 jpeg png m)
+link_libraries (${DEPS_LIBRARIES} grx20 m)
 link_directories (${DEPS_LIBRARY_DIRS})
 
 find_package (Vala REQUIRED)

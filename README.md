@@ -23,7 +23,7 @@ To get something usable on the EV3 brick, you should compile using [brickstrap].
 
     # include install build depends
     $ sudo apt-get install cmake valac libgee-0.8-dev libgirepository1.0-dev \
-    libgudev-1.0-dev libncurses5-dev libjpeg62-turbo-dev libpng12-dev libgrx-dev
+    libgudev-1.0-dev libncurses5-dev libgrx-dev
     # if you are building for desktop (see below) you also need
     $ sudo apt-get install libgtk-3-dev
     # clone the git repo
