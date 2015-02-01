@@ -99,7 +99,7 @@ namespace EV3devKit.UI {
          *
          * @param screen The screen to show the window on.
          */
-        public void show (Screen screen = Screen.active_screen) {
+        public void show (Screen screen = Screen.get_active_screen ()) {
             if (screen == null) {
                 critical ("No active screen.");
                 return;

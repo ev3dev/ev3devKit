@@ -65,7 +65,7 @@ namespace EV3devKit.Desktop {
          *
          * This creates a GTK window that can be accessed using {@link main_window}
          * and an {@link EV3devKit.UI.Screen} that can be accessed using
-         * {@link EV3devKit.UI.Screen.active_screen}.
+         * {@link EV3devKit.UI.Screen.get_active_screen}.
          *
          * @param args The args from the programs main function.
          */
@@ -75,10 +75,10 @@ namespace EV3devKit.Desktop {
             GRX.set_mode (GRX.GraphicsMode.GRAPHICS_DEFAULT);
 
             var stock_lcd = new GtkFramebuffer ();
-            UI.Screen.active_screen = new GtkScreen (stock_lcd);
+            UI.Screen.set_active_screen (new GtkScreen (stock_lcd));
 
             var color_lcd = new GtkFramebuffer (GtkFramebuffer.DeviceType.ADAFRUIT_18);
-            color_screen = new GtkScreen (color_lcd, (GtkScreen)UI.Screen.active_screen);
+            color_screen = new GtkScreen (color_lcd, (GtkScreen)UI.Screen.get_active_screen ());
 
             var builder = new Gtk.Builder ();
             Gtk.Box screen1_box;
@@ -93,17 +93,17 @@ namespace EV3devKit.Desktop {
                 (builder.get_object ("screen2_copy_button") as Gtk.Button)
                     .clicked.connect (() => stock_lcd.copy_to_clipboard ());
                 (builder.get_object ("up_button") as Gtk.Button)
-                    .clicked.connect (() => UI.Screen.active_screen.queue_key_code (Key.UP));
+                    .clicked.connect (() => UI.Screen.get_active_screen ().queue_key_code (Key.UP));
                 (builder.get_object ("down_button") as Gtk.Button)
-                    .clicked.connect (() => UI.Screen.active_screen.queue_key_code (Key.DOWN));
+                    .clicked.connect (() => UI.Screen.get_active_screen ().queue_key_code (Key.DOWN));
                 (builder.get_object ("left_button") as Gtk.Button)
-                    .clicked.connect (() => UI.Screen.active_screen.queue_key_code (Key.LEFT));
+                    .clicked.connect (() => UI.Screen.get_active_screen ().queue_key_code (Key.LEFT));
                 (builder.get_object ("right_button") as Gtk.Button)
-                    .clicked.connect (() => UI.Screen.active_screen.queue_key_code (Key.RIGHT));
+                    .clicked.connect (() => UI.Screen.get_active_screen ().queue_key_code (Key.RIGHT));
                 (builder.get_object ("enter_button") as Gtk.Button)
-                    .clicked.connect (() => UI.Screen.active_screen.queue_key_code ('\n'));
+                    .clicked.connect (() => UI.Screen.get_active_screen ().queue_key_code ('\n'));
                 (builder.get_object ("back_button") as Gtk.Button)
-                    .clicked.connect (() => UI.Screen.active_screen.queue_key_code (Key.BACKSPACE));
+                    .clicked.connect (() => UI.Screen.get_active_screen ().queue_key_code (Key.BACKSPACE));
             } catch (Error err) {
                 error ("%s", err.message);
             }
@@ -141,7 +141,7 @@ namespace EV3devKit.Desktop {
                     }
                     return false;
                 }
-                UI.Screen.active_screen.queue_key_code (key_code);
+                UI.Screen.get_active_screen ().queue_key_code (key_code);
                 return true;
             });
             color_lcd.key_press_event.connect ((event) => stock_lcd.key_press_event (event));

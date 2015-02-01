@@ -32,12 +32,7 @@ namespace EV3devKit.UI {
      * queue that it passes to the top window to handle user input.
      */
     public class Screen : Object {
-        /**
-         * The currently active screen.
-         *
-         * Calling {@link Window.show} will display the window on this screen.
-         */
-        public static Screen? active_screen;
+        internal static Screen? active_screen;
 
         protected LinkedList<Window> window_stack;
         LinkedList<uint?> key_queue;
@@ -120,6 +115,30 @@ namespace EV3devKit.UI {
         public Screen () {
             this.custom (screen_x (), screen_y ());
         }
+
+        /**
+         * Gets the currently active screen.
+         *
+         * Calling {@link Window.show} will display the window on this screen.
+         *
+         * @return The currently active screen or ``null`` if that active screen
+         * has not been set.
+         */
+        public static Screen? get_active_screen () {
+            return active_screen;
+        }
+
+        /**
+         * Sets the currently active screen.
+         *
+         * Calling {@link Window.show} will display the window on this screen.
+         *
+         * @param screen The new active screen.
+         */
+        public static void set_active_screen (Screen? screen) {
+            active_screen = screen;
+        }
+
 
         /**
          * Creates a new screen with a custom size and optional memory location.
