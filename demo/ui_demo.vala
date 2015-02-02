@@ -24,15 +24,19 @@
 namespace EV3devKit.Demo {
 
     public static int main (string[] args) {
+        try {
+            ConsoleApp.init ();
 
-        ConsoleApp.init ();
+            var demo_window = new UIDemoWindow ();
+            demo_window.quit.connect (ConsoleApp.quit);
+            demo_window.show ();
 
-        var demo_window = new UIDemoWindow ();
-        demo_window.quit.connect (ConsoleApp.quit);
-        demo_window.show ();
+            ConsoleApp.run ();
 
-        ConsoleApp.run ();
-
-        return 0;
+            return 0;
+        } catch (Error err) {
+            critical ("%s", err.message);
+            return err.code;
+        }
     }
 }

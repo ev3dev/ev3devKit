@@ -48,7 +48,7 @@ if (EV3DEVKIT_DESKTOP)
     )
 else (EV3DEVKIT_DESKTOP)
     set (UI_DEMO_SOURCE_FILES
-        demo/DemoWindow.vala
+        demo/UIDemoWindow.vala
         demo/ui_demo.vala
     )
 endif (EV3DEVKIT_DESKTOP)
@@ -101,11 +101,13 @@ set (DESKTOP_LIBRARY_SOURCE_FILES
     src/desktop/GtkScreen.vala
 )
 
+set (MODULES ${COMMON_MODULES})
+if (EV3DEVKIT_DESKTOP)
+    list (APPEND MODULES ${DESKTOP_MODULES})
+endif (EV3DEVKIT_DESKTOP)
+
 find_package (PkgConfig REQUIRED)
-pkg_check_modules (DEPS REQUIRED
-    ${COMMON_MODULES}
-    ${DESKTOP_MODULES}
-)
+pkg_check_modules (DEPS REQUIRED ${MODULES})
 add_definitions (${DEPS_CFLAGS})
 link_libraries (${DEPS_LIBRARIES} grx20 m)
 link_directories (${DEPS_LIBRARY_DIRS})
