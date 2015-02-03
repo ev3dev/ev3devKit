@@ -1,4 +1,4 @@
-project ("ev3devKit")
+project ("ev3devkit")
 
 cmake_minimum_required (VERSION 2.6)
 
@@ -6,7 +6,7 @@ list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 set (DATADIR "${CMAKE_INSTALL_PREFIX}/share")
 
-set (PKGDATADIR "${DATADIR}/ev3devKit")
+set (PKGDATADIR "${DATADIR}/${CMAKE_PROJECT_NAME}")
 set (DEVICES_DEMO_EXEC_NAME "ev3devKit-devices-demo")
 set (UI_DEMO_EXEC_NAME "ev3devKit-ui-demo")
 set (VERSION "0.1")
@@ -15,6 +15,9 @@ set (PACKAGE_NAME "EV3devKit")
 set (LIBRARY_NAME "ev3devKit")
 set (DESKTOP_LIBRARY_NAME "ev3devKit-desktop")
 set (TARGET_GLIB "2.40")
+
+# Comment this out to enable C compiler warnings
+add_definitions (-w)
 
 set (COMMON_PACKAGES
     glib-2.0
