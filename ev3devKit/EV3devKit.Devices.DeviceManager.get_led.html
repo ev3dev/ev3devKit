@@ -33,6 +33,8 @@
         <ul class="navi_main">
           <li class="creation_method"><a href="EV3devKit.Devices.DeviceManager.DeviceManager.html">DeviceManager</a></li>
           <li class="method"><a href="EV3devKit.Devices.DeviceManager.get_dc_motors.html">get_dc_motors</a></li>
+          <li class="method"><a href="EV3devKit.Devices.DeviceManager.get_input_device.html">get_input_device</a></li>
+          <li class="method"><a href="EV3devKit.Devices.DeviceManager.get_input_devices.html">get_input_devices</a></li>
           <li class="method">get_led</li>
           <li class="method"><a href="EV3devKit.Devices.DeviceManager.get_leds.html">get_leds</a></li>
           <li class="method"><a href="EV3devKit.Devices.DeviceManager.get_nxt_analog_sensor_driver_names.html">get_nxt_analog_sensor_driver_names</a>
@@ -43,6 +45,7 @@
           <li class="method"><a href="EV3devKit.Devices.DeviceManager.get_servo_motors.html">get_servo_motors</a></li>
           <li class="method"><a href="EV3devKit.Devices.DeviceManager.get_tacho_motors.html">get_tacho_motors</a></li>
           <li class="signal"><a href="EV3devKit.Devices.DeviceManager.dc_motor_added.html">dc_motor_added</a></li>
+          <li class="signal"><a href="EV3devKit.Devices.DeviceManager.input_added.html">input_added</a></li>
           <li class="signal"><a href="EV3devKit.Devices.DeviceManager.led_added.html">led_added</a></li>
           <li class="signal"><a href="EV3devKit.Devices.DeviceManager.port_added.html">port_added</a></li>
           <li class="signal"><a href="EV3devKit.Devices.DeviceManager.power_supply_added.html">power_supply_added</a></li>
@@ -55,7 +58,7 @@
         <h1 class="main_title">get_led</h1>
         <hr class="main_hr"/>
         <h2 class="main_title">Description:</h2>
-        <div class="main_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="EV3devKit.Devices.LED.html" class="class">LED</a></span> <b><span class="method">get_led</span></b> (<span class="main_basic_type"><span class="class">string</span></span> name) <span class="main_keyword">throws</span> <span class="main_type"><span class="errordomain">IOError</span></span>
+        <div class="main_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="EV3devKit.Devices.LED.html" class="class">LED</a></span> <b><span class="method">get_led</span></b> (<span class="main_basic_type"><span class="class">string</span></span> name) <span class="main_keyword">throws</span> <span class="main_type"><a href="EV3devKit.Devices.DeviceError.html" class="errordomain">DeviceError</a></span>
         </div>
         <div class="description">
           <p>Get an LED device by name.</p>
@@ -79,9 +82,9 @@
           <h2 class="main_title">Exceptions:</h2>
           <table class="main_parameter_table">
             <tr>
-              <td class="main_parameter_table_name">IOError</td>
+              <td class="main_parameter_table_name">DeviceError.NOT_FOUND</td>
               <td>
-                <p>if LED is not found. </p>
+                <p>if a LED device with the specified name is not found. </p>
               </td>
             </tr>
           </table>

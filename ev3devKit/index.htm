@@ -25,7 +25,10 @@
           <li class="namespace"><a href="EV3devKit.Desktop.GtkApp.html">EV3devKit.Desktop.GtkApp</a></li>
           <li class="namespace"><a href="EV3devKit.Devices.html">EV3devKit.Devices</a></li>
           <li class="namespace"><a href="EV3devKit.UI.html">EV3devKit.UI</a></li>
+          <li class="namespace"><a href="GLib.html">GLib</a></li>
           <li class="namespace"><a href="GRX.html">GRX</a></li>
+          <li class="namespace"><a href="Linux.html">Linux</a></li>
+          <li class="namespace"><a href="Linux.Input.html">Linux.Input</a></li>
         </ul>
       </div>
       <div class="site_content">
@@ -57,6 +60,10 @@
             <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="EV3devKit.ConsoleApp.quit.html" class="method">quit</a></b> ()
               </span>
               <div class="leaf_brief_description"><span class="brief_description">Instructs the main loop to quit.</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="EV3devKit.ConsoleApp.ignore_next_key_press.html" class="method">ignore_next_key_press</a></b> ()
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Tell ConsoleApp to ignore the next key read by ncurses.</span>
               </div></li>
           </ul>
           <li class="namespace"><a href="EV3devKit.Desktop.html">Desktop</a> - <span class="brief_description">A framework for developing and testing 
@@ -92,29 +99,41 @@
                   <a href="EV3devKit.Desktop.GtkApp.init.html" class="method">init</a>.</span>
               </div></li>
           </ul>
-          <li class="namespace"><a href="EV3devKit.Devices.html">Devices</a> - </li>
+          <li class="namespace"><a href="EV3devKit.Devices.html">Devices</a> - <span class="brief_description">Provides programming interface for 
+              working with ev3dev (and standard Linux) hardware drivers.</span></li>
           <h3 class="main_title">Classes:</h3>
           <ul class="navi_inline">
-            <li class="class"><a href="EV3devKit.Devices.DCMotor.html">DCMotor</a> - </li>
-            <li class="abstract_class"><a href="EV3devKit.Devices.Device.html">Device</a> - </li>
+            <li class="class"><a href="EV3devKit.Devices.DCMotor.html">DCMotor</a> - <span class="brief_description">Represents a simple DC motor.
+              </span></li>
+            <li class="abstract_class"><a href="EV3devKit.Devices.Device.html">Device</a> - <span class="brief_description">The base class for all 
+                types of devices.</span></li>
             <li class="class"><a href="EV3devKit.Devices.DeviceManager.html">DeviceManager</a> - <span class="brief_description">Used to get instances
                 of Device objects.</span></li>
+            <li class="class"><a href="EV3devKit.Devices.Input.html">Input</a> - <span class="brief_description">Linux input devices. (keyboard, 
+                mouse, joystick, etc.)</span></li>
             <li class="class"><a href="EV3devKit.Devices.LED.html">LED</a> - <span class="brief_description">Represents an LED device.</span></li>
             <li class="class"><a href="EV3devKit.Devices.Port.html">Port</a> - <span class="brief_description">Represents a port that sensors and 
                 motors are plugged into.</span></li>
-            <li class="class"><a href="EV3devKit.Devices.PowerSupply.html">PowerSupply</a> - </li>
+            <li class="class"><a href="EV3devKit.Devices.PowerSupply.html">PowerSupply</a> - <span class="brief_description">Represents a power 
+                supply, like a battery.</span></li>
             <li class="class"><a href="EV3devKit.Devices.Sensor.html">Sensor</a> - <span class="brief_description">Represents a LEGO MINDSTORMS or 
                 LEGO WeDo sensor</span></li>
-            <li class="class"><a href="EV3devKit.Devices.ServoMotor.html">ServoMotor</a> - </li>
-            <li class="class"><a href="EV3devKit.Devices.TachoMotor.html">TachoMotor</a> - </li>
+            <li class="class"><a href="EV3devKit.Devices.ServoMotor.html">ServoMotor</a> - <span class="brief_description">Represents a hobby type 
+                servo motor.</span></li>
+            <li class="class"><a href="EV3devKit.Devices.TachoMotor.html">TachoMotor</a> - <span class="brief_description">Represents a motor with 
+                tachometer feedback.</span></li>
           </ul>
           <h3 class="main_title">Enums:</h3>
           <ul class="navi_inline">
-            <li class="enum"><a href="EV3devKit.Devices.DCMotorPolarity.html">DCMotorPolarity</a> - </li>
+            <li class="enum"><a href="EV3devKit.Devices.DCMotorPolarity.html">DCMotorPolarity</a> - <span class="brief_description">The polarity of a 
+                motor. In other words, which direction of rotation is positive.</span></li>
+            <li class="enum"><a href="EV3devKit.Devices.InputCapability.html">InputCapability</a> - <span class="brief_description">Capabilities of an
+                input device.</span></li>
           </ul>
           <h3 class="main_title">Error domains:</h3>
           <ul class="navi_inline">
-            <li class="errordomain"><a href="EV3devKit.Devices.DeviceError.html">DeviceError</a> - </li>
+            <li class="errordomain"><a href="EV3devKit.Devices.DeviceError.html">DeviceError</a> - <span class="brief_description">Errors specific to 
+                <a href="EV3devKit.Devices.Device.html" class="abstract_class">Device</a>s.</span></li>
           </ul>
           <li class="namespace"><a href="EV3devKit.UI.html">UI</a> - <span class="brief_description">Library for building user interfaces on small 
               screens (like the EV3 LCD).</span></li>
@@ -204,6 +223,18 @@
                   <a href="EV3devKit.UI.Widget.do_recursive_children.html" class="method">Widget.do_recursive_children</a> to traverse the widget 
                   tree.</span>
               </div></li>
+          </ul>
+          <li class="namespace"><a href="GLib.html">GLib</a> - <span class="brief_description">Fixes and extra bindings not included in the upstrem 
+              GLib bindings.</span></li>
+          <h3 class="main_title">Classes:</h3>
+          <ul class="navi_inline">
+            <li class="class"><a href="GLib.FlagsClass2.html">FlagsClass2</a> - <span class="brief_description">Workaround for buggy 
+                <span class="class">GLib.FlagsClass</span>.</span></li>
+          </ul>
+          <h3 class="main_title">Structs:</h3>
+          <ul class="navi_inline">
+            <li class="struct"><a href="GLib.FlagsValue2.html">FlagsValue2</a> - <span class="brief_description">Workaround for buggy 
+                <span class="class">GLib.FlagsClass</span>.</span></li>
           </ul>
           <li class="namespace"><a href="GRX.html">GRX</a> - </li>
           <h3 class="main_title">Classes:</h3>
@@ -1095,7 +1126,7 @@
               </span>
               <div class="leaf_brief_description">
               </div></li>
-            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="GRX.query_pnm.html" class="method">query_pnm</a></b> (<span class="main_basic_type"><span class="struct">char</span></span>* pnmfn, <span class="main_keyword">out</span> <span class="main_basic_type"><span class="struct">int</span></span> width, <span class="main_keyword">out</span> <span class="main_basic_type"><span class="struct">int</span></span> height, <span class="main_keyword">out</span> <span class="main_basic_type"><span class="struct">int</span></span> maxval)
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="GRX.query_pnm.html" class="method">query_pnm</a></b> (<span class="main_basic_type"><span class="class">string</span></span> file_name, <span class="main_keyword">out</span> <span class="main_basic_type"><span class="struct">int</span></span> width, <span class="main_keyword">out</span> <span class="main_basic_type"><span class="struct">int</span></span> height, <span class="main_keyword">out</span> <span class="main_basic_type"><span class="struct">int</span></span> maxval)
               </span>
               <div class="leaf_brief_description">
               </div></li>
@@ -1107,7 +1138,7 @@
               </span>
               <div class="leaf_brief_description">
               </div></li>
-            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="GRX.query_png.html" class="method">query_png</a></b> (<span class="main_basic_type"><span class="struct">char</span></span>* pngfn, <span class="main_keyword">out</span> <span class="main_basic_type"><span class="struct">int</span></span> width, <span class="main_keyword">out</span> <span class="main_basic_type"><span class="struct">int</span></span> height)
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="GRX.query_png.html" class="method">query_png</a></b> (<span class="main_basic_type"><span class="class">string</span></span> file_name, <span class="main_keyword">out</span> <span class="main_basic_type"><span class="struct">int</span></span> width, <span class="main_keyword">out</span> <span class="main_basic_type"><span class="struct">int</span></span> height)
               </span>
               <div class="leaf_brief_description">
               </div></li>
@@ -1115,7 +1146,7 @@
               </span>
               <div class="leaf_brief_description">
               </div></li>
-            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="GRX.query_jpeg.html" class="method">query_jpeg</a></b> (<span class="main_basic_type"><span class="struct">char</span></span>* jpegfn, <span class="main_basic_type"><span class="struct">int</span></span>* width, <span class="main_basic_type"><span class="struct">int</span></span>* height)
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="GRX.query_jpeg.html" class="method">query_jpeg</a></b> (<span class="main_basic_type"><span class="class">string</span></span> file_name, <span class="main_basic_type"><span class="struct">int</span></span>* width, <span class="main_basic_type"><span class="struct">int</span></span>* height)
               </span>
               <div class="leaf_brief_description">
               </div></li>
@@ -1155,6 +1186,16 @@
               <div class="leaf_brief_description">
               </div></li>
             <li class="field"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="GRX.ColorInfo.html" class="struct">ColorInfo</a></span> <b><a href="GRX.color_info.html" class="field">color_info</a></b>
+              </span>
+              <div class="leaf_brief_description">
+              </div></li>
+          </ul>
+          <li class="namespace"><a href="Linux.html">Linux</a> - <span class="brief_description">Fixes and extra bindings not included in the upstrem 
+              Linux bindings.</span></li>
+          <li class="namespace"><a href="Linux.Input.html">Input</a> - </li>
+          <h3 class="main_title">Constants:</h3>
+          <ul class="navi_inline">
+            <li class="constant"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">const</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="Linux.Input.SYN_DROPPED.html" class="constant">SYN_DROPPED</a></b>
               </span>
               <div class="leaf_brief_description">
               </div></li>
