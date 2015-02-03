@@ -153,10 +153,26 @@ namespace EV3devKit {
             return false;
         }
 
+        bool ignore_next_ch = false;
+
+        /**
+         * Tell ConsoleApp to ignore the next key read by ncurses.
+         *
+         * This is useful when a key press has been handled already by some
+         * other method (like {@link Devices.Input}).
+         */
+        public void ignore_next_key_press () {
+            ignore_next_ch = true;
+        }
+
         int read_input () {
             while (true) {
                 var ch = getch ();
                 if (ch != -1 && UI.Screen.active_screen != null) {
+                    if (ignore_next_ch) {
+                        ignore_next_ch = false;
+                        continue;
+                    }
                     Idle.add (() => {
                         UI.Screen.active_screen.queue_key_code (ch);
                         return false;

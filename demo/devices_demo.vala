@@ -56,6 +56,7 @@ namespace EV3devKit.Demo {
         DCMotor? selected_dc_motor;
         ServoMotor? selected_servo_motor;
         PowerSupply? selected_power_supply;
+        Input? selected_input;
 
         Demo () {
             // Application class does not support chaining to base(), so this
@@ -83,6 +84,8 @@ namespace EV3devKit.Demo {
             manager.get_servo_motors ().foreach (on_servo_motor_added);
             manager.power_supply_added.connect (on_power_supply_added);
             manager.get_power_supplies ().foreach (on_power_supply_added);
+            manager.input_added.connect (on_input_added);
+            manager.get_input_devices ().foreach (on_input_added);
         }
 
         /**
@@ -100,7 +103,7 @@ namespace EV3devKit.Demo {
         /**
          * Wait for user to type something and press [Enter].
          */
-        async int get_input (ApplicationCommandLine command_line,
+        async int get_user_input (ApplicationCommandLine command_line,
             DataInputStream stdin) throws IOError
         {
             command_line.print ("\nSelect an item: ");
@@ -112,7 +115,7 @@ namespace EV3devKit.Demo {
          *
          * @throws IOError.CANCELLED if device was disconnected.
          */
-        async string? get_input_cancel_on_remove (EV3devKit.Devices.Device device,
+        async string? get_user_input_cancel_on_remove (EV3devKit.Devices.Device device,
             DataInputStream stdin) throws IOError
         {
             var cancellable = new Cancellable ();
@@ -137,6 +140,7 @@ namespace EV3devKit.Demo {
             DC_MOTORS,
             SERVO_MOTORS,
             POWER_SUPPLIES,
+            INPUT,
             QUIT
         }
 
@@ -150,7 +154,7 @@ namespace EV3devKit.Demo {
             var done = false;
             while (!done) {
                 print_menu_items<MainMenu> (command_line);
-                switch (yield get_input (command_line, stdin)) {
+                switch (yield get_user_input (command_line, stdin)) {
                 case MainMenu.PORTS:
                     yield do_ports_menu (command_line, stdin);
                     break;
@@ -171,6 +175,9 @@ namespace EV3devKit.Demo {
                     break;
                 case MainMenu.POWER_SUPPLIES:
                     yield do_power_supply_menu (command_line, stdin);
+                    break;
+                case MainMenu.INPUT:
+                    yield do_input_menu (command_line, stdin);
                     break;
                 case MainMenu.QUIT:
                     done = true;
@@ -204,7 +211,7 @@ namespace EV3devKit.Demo {
             var done = false;
             while (!done) {
                 print_menu_items<PortsMenu> (command_line);
-                switch (yield get_input (command_line, stdin)) {
+                switch (yield get_user_input (command_line, stdin)) {
                 case PortsMenu.SELECT_PORT:
                     yield do_select_port (command_line, stdin);
                     break;
@@ -291,7 +298,7 @@ namespace EV3devKit.Demo {
             }
             command_line.print ("\nSelect Mode: ");
             try {
-                var input = int.parse (yield get_input_cancel_on_remove (
+                var input = int.parse (yield get_user_input_cancel_on_remove (
                     selected_port, stdin));
                 if (input <= 0 || input >= i) {
                     command_line.print ("Invalid Selection.\n");
@@ -326,7 +333,7 @@ namespace EV3devKit.Demo {
             }
             command_line.print ("\nEnter Device Name: ");
             try {
-                var input = yield get_input_cancel_on_remove (selected_port, stdin);
+                var input = yield get_user_input_cancel_on_remove (selected_port, stdin);
                 try {
                     selected_port.set_device (input);
                 } catch (Error err) {
@@ -365,7 +372,7 @@ namespace EV3devKit.Demo {
             var done = false;
             while (!done) {
                 print_menu_items<SensorsMenu> (command_line);
-                switch (yield get_input (command_line, stdin)) {
+                switch (yield get_user_input (command_line, stdin)) {
                 case SensorsMenu.SELECT_SENSOR:
                     yield do_select_sensor (command_line, stdin);
                     break;
@@ -479,7 +486,7 @@ namespace EV3devKit.Demo {
                 return Source.CONTINUE;
             });
             try {
-                yield get_input_cancel_on_remove (selected_sensor, stdin);
+                yield get_user_input_cancel_on_remove (selected_sensor, stdin);
             } catch (IOError err) {
                 if (err is IOError.CANCELLED) {
                     command_line.print ("Sensor was disconnected.\n");
@@ -512,7 +519,7 @@ namespace EV3devKit.Demo {
             }
             command_line.print ("\nSelect Mode: ");
             try {
-                var input = int.parse (yield get_input_cancel_on_remove (
+                var input = int.parse (yield get_user_input_cancel_on_remove (
                     selected_sensor, stdin));
                 if (input <= 0 || input >= i) {
                     command_line.print ("Invalid Selection.\n");
@@ -589,7 +596,7 @@ namespace EV3devKit.Demo {
             }
             command_line.print ("\nEnter polling period in milliseconds: ");
             try {
-                var input = int.parse (yield get_input_cancel_on_remove (
+                var input = int.parse (yield get_user_input_cancel_on_remove (
                     selected_sensor, stdin));
                 if (input < 0) {
                     command_line.print ("Invalid Selection.\n");
@@ -631,7 +638,7 @@ namespace EV3devKit.Demo {
             var done = false;
             while (!done) {
                 print_menu_items<LEDsMenu> (command_line);
-                switch (yield get_input (command_line, stdin)) {
+                switch (yield get_user_input (command_line, stdin)) {
                 case LEDsMenu.SELECT_LED:
                     yield do_select_led (command_line, stdin);
                     break;
@@ -716,7 +723,7 @@ namespace EV3devKit.Demo {
             }
             command_line.print ("\nSelect Trigger: ");
             try {
-                var input = int.parse (yield get_input_cancel_on_remove (
+                var input = int.parse (yield get_user_input_cancel_on_remove (
                     selected_led, stdin));
                 if (input <= 0 || input >= i) {
                     command_line.print ("Invalid Selection.\n");
@@ -751,7 +758,7 @@ namespace EV3devKit.Demo {
             }
             command_line.print ("\nEnter Device Name: ");
             try {
-                var input = int.parse (yield get_input_cancel_on_remove (
+                var input = int.parse (yield get_user_input_cancel_on_remove (
                     selected_led, stdin));
                 try {
                     selected_led.set_brightness (input);
@@ -787,7 +794,7 @@ namespace EV3devKit.Demo {
             var done = false;
             while (!done) {
                 print_menu_items<TachoMotorsMenu> (command_line);
-                switch (yield get_input (command_line, stdin)) {
+                switch (yield get_user_input (command_line, stdin)) {
                 case TachoMotorsMenu.SELECT_MOTOR:
                     yield do_select_tacho_motor (command_line, stdin);
                     break;
@@ -892,7 +899,7 @@ namespace EV3devKit.Demo {
             var done = false;
             while (!done) {
                 print_menu_items<DCMotorsMenu> (command_line);
-                switch (yield get_input (command_line, stdin)) {
+                switch (yield get_user_input (command_line, stdin)) {
                 case DCMotorsMenu.SELECT_MOTOR:
                     yield do_select_dc_motor (command_line, stdin);
                     break;
@@ -975,7 +982,7 @@ namespace EV3devKit.Demo {
             var done = false;
             while (!done) {
                 print_menu_items<ServoMotorsMenu> (command_line);
-                switch (yield get_input (command_line, stdin)) {
+                switch (yield get_user_input (command_line, stdin)) {
                 case ServoMotorsMenu.SELECT_MOTOR:
                     yield do_select_servo_motor (command_line, stdin);
                     break;
@@ -1059,7 +1066,7 @@ namespace EV3devKit.Demo {
             var done = false;
             while (!done) {
                 print_menu_items<PowerSuppliesMenu> (command_line);
-                switch (yield get_input (command_line, stdin)) {
+                switch (yield get_user_input (command_line, stdin)) {
                 case PowerSuppliesMenu.SELECT_POWER_SUPPLY:
                     yield do_select_power_supply (command_line, stdin);
                     break;
@@ -1121,6 +1128,90 @@ namespace EV3devKit.Demo {
             command_line.print ("technology: %s\n", selected_power_supply.technology);
             command_line.print ("scope: %s\n", selected_power_supply.scope);
             command_line.print ("capacity_level: %s\n", selected_power_supply.capacity_level);
+        }
+
+        /**
+         * List of items in the Input submenu.
+         */
+        enum InputMenu {
+            SELECT_INPUT = 1,
+            SHOW_INPUT_INFO,
+            MAIN_MENU
+        }
+
+        /**
+         * Print the Input menu and handle user input.
+         *
+         * Loops until user selects Main Menu
+         */
+        async void do_input_menu (ApplicationCommandLine command_line,
+            DataInputStream stdin) throws IOError
+        {
+            var done = false;
+            while (!done) {
+                print_menu_items<InputMenu> (command_line);
+                switch (yield get_user_input (command_line, stdin)) {
+                case InputMenu.SELECT_INPUT:
+                    yield do_select_input_device (command_line, stdin);
+                    break;
+                case InputMenu.SHOW_INPUT_INFO:
+                    do_show_input_device_info (command_line);
+                    break;
+                case InputMenu.MAIN_MENU:
+                    done = true;
+                    break;
+                default:
+                    command_line.print ("Invalid selection.\n");
+                    break;
+                }
+            }
+        }
+
+        /**
+         * Print a list of all input class devices and get user selection.
+         *
+         * DeviceManager.get_input_devices () is used to get a list of inputs.
+         *
+         * If the user selects a valid input, selected_input is set.
+         */
+        async void do_select_input_device (ApplicationCommandLine command_line,
+            DataInputStream stdin) throws IOError
+        {
+            var input_devices = manager.get_input_devices ();
+            int i = 1;
+            input_devices.foreach ((input_device) => {
+                command_line.print ("%d. %s\n", i, input_device.device_name);
+                i++;
+            });
+            command_line.print ("\nSelect Input: ");
+            var input = int.parse (yield stdin.read_line_async ());
+            if (input <= 0 || input >= i)
+                command_line.print ("Invalid Selection.\n");
+            else
+                selected_input = input_devices[input - 1];
+        }
+
+        /**
+         * Print all of the property values for selected_input.
+         */
+        void do_show_input_device_info (ApplicationCommandLine command_line) {
+            command_line.print ("\n");
+            if (selected_input == null) {
+                command_line.print ("No Input selected.\n");
+                return;
+            }
+            command_line.print ("device_name: %s\n", selected_input.device_name);
+            command_line.print ("connected: %s\n", selected_input.connected ? "true" : "false");
+            command_line.print ("name: %s\n", selected_input.name);
+            command_line.print ("event_device_name: %s\n", selected_input.event_device_name);
+            command_line.print ("capabilities:\n");
+            var capabilities = selected_input.capabilities;
+            var flags_class = (FlagsClass2) typeof (InputCapability).class_ref ();
+            foreach (var flags_value in (flags_class.values)) {
+                var yn = ((flags_value.@value & capabilities) == flags_value.@value)
+                    ? "yes" : "no";
+                command_line.print ("\t%s:\t%s\n", flags_value.value_nick, yn);
+            }
         }
 
         /**
@@ -1258,6 +1349,21 @@ namespace EV3devKit.Demo {
             handler_id = power_supply.notify["connected"].connect (() => {
                 message ("PowerSupply removed: %s", power_supply.device_name);
                 power_supply.disconnect (handler_id);
+            });
+        }
+
+        /**
+         * Display a message whenever an input device is connected.
+         *
+         * Adds handler so message is displayed when the input is
+         * disconnected.
+         */
+        void on_input_added (Input input) {
+            message ("Input added: %s", input.device_name);
+            ulong handler_id = 0;
+            handler_id = input.notify["connected"].connect (() => {
+                message ("Input removed: %s", input.device_name);
+                input.disconnect (handler_id);
             });
         }
     }

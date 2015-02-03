@@ -61,6 +61,7 @@ set (LIBRARY_SOURCE_FILES
     src/devices/DCMotor.vala
     src/devices/Device.vala
     src/devices/DeviceManager.vala
+    src/devices/Input.vala
     src/devices/LED.vala
     src/devices/Port.vala
     src/devices/PowerSupply.vala

@@ -37,6 +37,7 @@ namespace EV3devKit.Devices {
         const string SERVO_MOTOR_CLASS = "servo-motor";
         const string TACHO_MOTOR_CLASS = "tacho-motor";
         const string POWER_SUPPLY_CLASS = "power_supply";
+        const string INPUT_CLASS = "input";
 
         static string[] subsystems = {
             LEGO_PORT_CLASS,
@@ -45,7 +46,8 @@ namespace EV3devKit.Devices {
             DC_MOTOR_CLASS,
             SERVO_MOTOR_CLASS,
             TACHO_MOTOR_CLASS,
-            POWER_SUPPLY_CLASS
+            POWER_SUPPLY_CLASS,
+            INPUT_CLASS
         };
 
         Gee.Map<string, EV3devKit.Devices.Device> device_map;
@@ -101,6 +103,11 @@ namespace EV3devKit.Devices {
         public signal void power_supply_added (PowerSupply power_supply);
 
         /**
+         * Emitted when an Input device is connected.
+         */
+        public signal void input_added (Input input);
+
+        /**
          * Create new instance of DeviceManager.
          */
         public DeviceManager () {
@@ -150,15 +157,16 @@ namespace EV3devKit.Devices {
          *
          * @param name The sysfs device name.
          * @return The LED object for the device.
-         * @throws IOError if LED is not found.
+         * @throws DeviceError.NOT_FOUND if a LED device with the specified name
+         * is not found.
          */
-        public LED get_led (string name) throws IOError {
+        public LED get_led (string name) throws DeviceError {
             foreach (var device in device_map.values) {
                 var led = device as LED;
                 if (led != null && led.name == name)
                     return led;
             }
-            throw new IOError.NOT_FOUND ("Could not find LED '%s'", name);
+            throw new DeviceError.NOT_FOUND ("Could not find LED '%s'", name);
         }
 
         /**
@@ -237,6 +245,38 @@ namespace EV3devKit.Devices {
         }
 
         /**
+         * Gets the specified Input device.
+         *
+         * @param name The name of the input device. See {@link Input.name}.
+         * @return A the input device object.
+         * @throws DeviceError.NOT_FOUND if a device with the specified name was not
+         * found.
+         */
+        public Input get_input_device (string name) throws DeviceError {
+            foreach (var device in device_map.values) {
+                var input = device as Input;
+                if (input != null && input.name == name)
+                    return input;
+            }
+            throw new DeviceError.NOT_FOUND ("Could not find input device '%s'", name);
+        }
+
+        /**
+         * Get a list of all Input devices.
+         *
+         * @return A GenericArray containing all connected Input devices.
+         */
+        public GenericArray<Input> get_input_devices () {
+            var array = new GenericArray<Input> ();
+            foreach (var device in device_map.values) {
+                var input = device as Input;
+                if (input != null)
+                    array.add (input);
+            }
+            return array;
+        }
+
+        /**
          * Gets a list of driver names from the nxt-analog-sensor driver.
          *
          * Returns null if there was an error, such as the module is not loaded.
@@ -289,16 +329,31 @@ namespace EV3devKit.Devices {
                     device_map[sysfs_path] = power_supply;
                     power_supply_added (power_supply);
                     break;
+                case INPUT_CLASS:
+                    // Although it is not ideal, GUdev can only traverse the
+                    // parent device, so we just look for "event" devices.
+                    // The actual Input object will use both the "input" and
+                    // "event" sysfs device nodes.
+                    if (!udev_device.get_name ().has_prefix ("event"))
+                        break;
+                    try {
+                        var input = new Input (udev_device);
+                        device_map[sysfs_path] = input;
+                        input_added (input);
+                    } catch (Error err) {
+                        critical ("%s", err.message);
+                    }
+                    break;
                 }
                 break;
             case "remove":
-                var device = device_map[sysfs_path];
-                device_map.unset (sysfs_path);
-                device.connected = false;
+                Device device;
+                if (device_map.unset (sysfs_path, out device))
+                    device.connected = false;
                 break;
             case "change":
-                var device = device_map[sysfs_path];
-                device.change (udev_device);
+                if (device_map.has_key (sysfs_path))
+                    device_map[sysfs_path].change (udev_device);
                 break;
             }
         }

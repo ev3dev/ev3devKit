@@ -38,6 +38,11 @@ namespace EV3devKit.Devices {
      */
     public errordomain DeviceError {
         /**
+         * Indicates that the specified device could not be found.
+         */
+        NOT_FOUND,
+
+        /**
          * Indicates that a device is no longer connected.
          */
         NOT_CONNECTED
