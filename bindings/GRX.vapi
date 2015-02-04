@@ -21,6 +21,11 @@
 
 /* GRX.vapi - Bindings to the GRX graphics library */
 
+/**
+ * Old school (circa 1992-2000) 2-D graphics library.
+ *
+ * Find out more at [[http://grx.gnu.de]].
+ */
 [CCode (cheader_filename = "grx20.h", cprefix = "GR_", lower_case_cprefix = "Gr")]
 namespace GRX {
     [CCode (cname = "GrColor", has_destroy_function = false, has_copy_function = false, has_type_id = false)]
@@ -78,6 +83,8 @@ namespace GRX {
         public static Color alloc_rrggbb (long hcolor);        /* shared, read-only, 0xRRGGBB */
         [CCode (cname = "GrAllocColor2ID")]
         public static Color alloc_rrggbb_id (long hcolor);      /* potentially inlined version */
+        [CCode (cname = "GrAllocCell")]
+        public static Color alloc_cell ();                 /* unshared, read-write */
 
         [CCode (cname = "GrAllocEgaColors", array_length_cexpr = "16")]
         public static Color[] alloc_ega_colors ();           /* shared, read-only standard EGA colors */
@@ -86,6 +93,8 @@ namespace GRX {
         public void set (int r, int g, int b);
         [CCode (cname = "GrFreeColor")]
         public void free ();
+        [CCode (cname = "GrFreeCell")]
+        public void free_cell ();
 
         [CCode (cname = "GrQueryColor")]
         public void query (out int r, out int g, out int b);
@@ -104,15 +113,8 @@ namespace GRX {
         public static void restore_colors (void *buffer);
     }
 
-    [CCode (cname = "GrColor", destroy_function = "GrFreeCell", has_copy_function = false,  has_type_id = false)]
-    [SimpleType]
-    public struct Cell : uint32 {
-        [CCode (cname = "GrAllocCell")]
-        public Cell ();                 /* unshared, read-write */
-    }
-
     /**
-     * available video modes (for 'GrSetMode')
+     * Available video modes (for {@link set_mode})
      */
     [CCode (has_type_id = false)]
     public enum GraphicsMode {
@@ -186,20 +188,68 @@ namespace GRX {
     [CCode (cname = "enum _GR_frameModes", cprefix = "GR_frame", has_type_id = false)]
     public enum FrameMode {
         /* ====== video frame buffer modes ====== */
+
+        /**
+         * Undefined
+         */
         [CCode (cname = "GR_frameUndef")]
-        UNDEFINED,                      /* undefined */
+        UNDEFINED,
+
+        /**
+         * Text modes
+         */
         [CCode (cname = "GR_frameText")]
-        TEXT,                       /* text modes */
-        HERC1,                      /* Hercules mono */
-        EGAVGA1,                    /* EGA VGA mono */
-        EGA4,                       /* EGA 16 color */
-        SVGA4,                      /* (Super) VGA 16 color */
-        SVGA8,                      /* (Super) VGA 256 color */
-        SVGA8X,                      /* VGA 256 color mode X */
-        SVGA16,                     /* Super VGA 32768/65536 color */
-        SVGA24,                     /* Super VGA 16M color */
-        SVGA32L,                    /* Super VGA 16M color padded #1 */
-        SVGA32H,                    /* Super VGA 16M color padded #2 */
+        TEXT,
+
+        /**
+         * Hercules mono
+         */
+        HERC1,
+
+        /**
+         * EGA VGA mono
+         */
+        EGAVGA1,
+
+        /**
+         * EGA 16 color
+         */
+        EGA4,
+
+        /**
+         * (Super) VGA 16 color
+         */
+        SVGA4,
+
+        /**
+         * (Super) VGA 256 color
+         */
+        SVGA8,
+
+        /**
+         * VGA 256 color mode X
+         */
+        SVGA8X,
+
+        /**
+         * Super VGA 32768/65536 color
+         */
+        SVGA16,
+
+        /**
+         * Super VGA 16M color
+         */
+        SVGA24,
+
+        /**
+         * Super VGA 16M color padded #1
+         */
+        SVGA32L,
+
+        /**
+         * Super VGA 16M color padded #2
+         */
+        SVGA32H,
         /* ==== modes provided by the X11 driver ===== */
         XWIN1,
         XWIN4,
@@ -223,38 +273,93 @@ namespace GRX {
         SDL32L,
         SDL32H,
         /* ==== linear frame buffer modes  ====== */
-        MONO01_LFB,                 /* mono */
-        MONO10_LFB,                 /* mono */
-        SVGA8_LFB,                  /* (Super) VGA 256 color */
-        SVGA16_LFB,                 /* Super VGA 32768/65536 color */
-        SVGA24_LFB,                 /* Super VGA 16M color */
-        SVGA32L_LFB,                /* Super VGA 16M color padded #1 */
-        SVGA32H_LFB,                /* Super VGA 16M color padded #2 */
+
+        /**
+         * mono
+         */
+        MONO01_LFB,
+
+        /**
+         * mono
+         */
+        MONO10_LFB,
+
+        /**
+         * (Super) VGA 256 color
+         */
+        SVGA8_LFB,
+
+        /**
+         * Super VGA 32768/65536 color
+         */
+        SVGA16_LFB,
+
+        /**
+         * Super VGA 16M color
+         */
+        SVGA24_LFB,
+
+        /**
+         * Super VGA 16M color padded #1
+         */
+        SVGA32L_LFB,
+
+        /**
+         * Super VGA 16M color padded #2
+         */
+        SVGA32H_LFB,
         /* ====== system RAM frame buffer modes ====== */
-        RAM1_INV,                   /* mono */
-        RAM1,                       /* mono */
-        RAM4,                       /* 16 color planar */
-        RAM8,                       /* 256 color */
-        RAM16,                      /* 32768/65536 color */
-        RAM24,                      /* 16M color */
-        RAM32L,                     /* 16M color padded #1 */
-        RAM32H,                     /* 16M color padded #2 */
+
+        /**
+         * mono
+         */
+        RAM1,
+
+        /**
+         * 16 color planar
+         */
+        RAM4,
+
+        /**
+         * 256 color
+         */
+        RAM8,
+
+        /**
+         * 32768/65536 color
+         */
+        RAM16,
+
+        /**
+         * 16M color
+         */
+        RAM24,
+
+        /**
+         * 16M color padded #1
+         */
+        RAM32L,
+
+        /**
+         * 16M color padded #2
+         */
+        RAM32H,
         /* not compiled */
         //[CCode (cname = "GR_frameRAM3x8")]
         //RAM3X8,                     /* 16M color planar (image mode) */
         /* ====== markers for scanning modes ====== */
         [CCode (cname = "GR_firstTextFrameMode")]
-        FIRST_TEXT_FRAME,
+        FIRST_TEXT,
         [CCode (cname = "GR_lastTextFrameMode")]
-        LAST_TEXT_FRAME,
+        LAST_TEXT,
         [CCode (cname = "GR_firstGraphicsFrameMode")]
-        FIRST_GRAPHICS_FRAME,
+        FIRST_GRAPHICS,
         [CCode (cname = "GR_lastGraphicsFrameMode")]
-        LAST_GRAPHICS_FRAME,
+        LAST_GRAPHICS,
         [CCode (cname = "GR_firstRAMframeMode")]
-        FIRST_RAM_FRAME,
+        FIRST_RAM,
         [CCode (cname = "GR_lastRAMframeMode")]
-        LAST_RAM_FRAME;
+        LAST_RAM;
 
         [CCode (cname = "GrFrameNumPlanes")]
         public int num_planes ();
@@ -266,22 +371,66 @@ namespace GRX {
         public long context_size (int width, int height);
     }
 
-    /*
-     * supported video adapter types
+    /**
+     * Supported video adapter types.
      */
     [CCode (has_type_id = false)]
     public enum VideoAdapter {
-        UNKNOWN,                         /* not known (before driver set) */
-        VGA,                             /* VGA adapter */
-        EGA,                             /* EGA adapter */
-        HERC,                            /* Hercules mono adapter */
-        8514A,                           /* 8514A or compatible */
-        S3,                              /* S3 graphics accelerator */
-        XWIN,                            /* X11 driver */
-        WIN32,                           /* WIN32 driver */
-        LNXFB,                           /* Linux framebuffer */
-        SDL,                             /* SDL driver */
-        MEM                              /* memory only driver */
+
+        /**
+         * not known (before driver set)
+         */
+        UNKNOWN,
+
+        /**
+         * VGA adapter
+         */
+        VGA,
+
+        /**
+         * EGA adapter
+         */
+        EGA,
+
+        /**
+         * Hercules mono adapter
+         */
+        HERC,
+
+        /**
+         * 8514A or compatible
+         */
+        8514A,
+
+        /**
+         * S3 graphics accelerator
+         */
+        S3,
+
+        /**
+         * X11 driver
+         */
+        XWIN,
+
+        /**
+         * WIN32 driver
+         */
+        WIN32,
+
+        /**
+         * Linux framebuffer
+         */
+        LNXFB,
+
+        /**
+         * SDL driver
+         */
+        SDL,
+
+        /**
+         * memory only driver
+         */
+        MEM 
     }
 
     [CCode (cname = "struct _GR_videoDriver", free_function = "g_free", has_type_id = false)]
@@ -318,7 +467,7 @@ namespace GRX {
     public delegate VideoMode VideoDriverSelectMode (VideoDriver driver, int width, int height, int bpp, int text, ref uint ep);
 
     /*
-     * Video driver mode descriptor structure
+     * Video driver mode descriptor structure.
      */
     [CCode (cname = "struct _GR_videoMode", free_function = "g_free", has_type_id = false)]
     [Compact]
@@ -344,10 +493,11 @@ namespace GRX {
     }
 
     /**
-     * Video driver mode descriptor extension structure. This is a separate
-     * structure accessed via a pointer from the main mode descriptor. The
-     * reason for this is that frequently several modes can share the same
-     * extended info.
+     * Video driver mode descriptor extension structure.
+     *
+     * This is a separate structure accessed via a pointer from the main mode
+     * descriptor. The reason for this is that frequently several modes can
+     * share the same extended info.
      */
     [CCode (cname = "struct _GR_videoModeExt", free_function = "g_free", has_type_id = false)]
     [Compact]
@@ -395,7 +545,7 @@ namespace GRX {
     [CCode (has_target = false, has_type_id = false)]
     public delegate void VideoModeLoadColor (int color_index, int red, int green, int blue);
 
-    /*
+    /**
      * The frame driver descriptor structure.
      */
     [CCode (cname = "struct _GR_frameDriver", free_function = "g_free", has_type_id = false)]
@@ -633,10 +783,10 @@ namespace GRX {
             requires (size == sizeof(MallocStruct));
     }
 
-    [CCode (cname = "struct _GR_context", free_function = "GrDestroyContext", has_type_id = false)]
+    [CCode (cname = "GrContext", free_function = "GrDestroyContext", has_type_id = false)]
     [Compact]
     public class Context {
-        [CCode (cname = "struct _GR_context", destroy_function = "", has_type_id = false)]
+        [CCode (cname = "GrContext", destroy_function = "", has_type_id = false)]
         struct MallocStruct {}
 
         [CCode (cname = "gc_root")]
@@ -810,29 +960,91 @@ namespace GRX {
 
     [CCode (cname = "const struct _GR_colorInfo", has_type_id = false)]
     public struct ColorInfo {
-        public Color ncolors;              /* number of colors */
-        public Color nfree;                /* number of unallocated colors */
-        public Color black;                /* the black color */
-        public Color white;                /* the white color */
+
+        /**
+         * number of colors
+         */
+        public Color ncolors;
+
+        /**
+         * number of unallocated colors
+         */
+        public Color nfree;
+
+        /**
+         * the black color
+         */
+        public Color black;
+
+        /**
+         * the white color
+         */
+        public Color white;
+
+        /**
+         * set when RGB mode
+         */
         [CCode (cname = "RGBmode")]
-        public uint  rgb_mode;             /* set when RGB mode */
-        public uint  prec[3];              /* color field precisions */
-        public uint  pos[3];               /* color field positions */
-        public uint  mask[3];              /* masks for significant bits */
-        public uint  round[3];             /* add these for rounding */
-        public uint  shift[3];             /* shifts for (un)packing color */
-        public uint  norm;                 /* normalization for (un)packing */
+        public uint rgb_mode;
+
+        /**
+         * color field precisions
+         */
+        public uint prec[3];
+
+        /**
+         * color field positions
+         */
+        public uint pos[3];
+
+        /**
+         * masks for significant bits
+         */
+        public uint mask[3];
+
+        /**
+         * add these for rounding
+         */
+        public uint round[3];
+
+        /**
+         * shifts for (un)packing color
+         */
+        public uint shift[3];
+
+        /**
+         * normalization for (un)packing
+         */
+        public uint norm;
+
+        /**
+         * color table for non-RGB modes 
+         */
         [CCode (array_length_cexpr = "256")]
-        public ColorInfoTable[] ctable; /* color table for non-RGB modes */
+        public ColorInfoTable[] ctable;
     }
 
+    [CCode (has_type_id = false)]
     public struct ColorInfoTable {
-        public uchar r;            /* loaded components */
+        /* loaded components */
+        public uchar r;
         public uchar g;
         public uchar b;
-        public uint  defined;      /* r, g, b values are valid if set */
-        public uint  writable;     /* can be changed by 'GrSetColor' */
-        public ulong nused;        /* usage count */
+
+        /**
+         * r, g, b values are valid if set
+         */
+        public uint  defined;
+
+        /**
+         * can be changed by 'GrSetColor'
+         */
+        public uint  writable;
+
+        /**
+         * usage count
+         */
+        public ulong nused;
     }
 
     [CCode (cname = "GrColorInfo")]
@@ -870,10 +1082,11 @@ namespace GRX {
             requires (size == sizeof(MallocStruct));
     }
 
-    /*
-     * color table (for primitives using several colors):
-     *   it is an array of colors with the first element being
-     *   the number of colors in the table
+    /**
+     * Color table (for primitives using several colors).
+     *
+     * It is an array of colors with the first element being the number of
+     * colors in the table
      */
     [CCode (cname = "GrColor", free_function = "g_free", has_type_id = false)]
     [Compact]
@@ -1136,7 +1349,7 @@ namespace GRX {
         [CCode (cname = "h.ulheight")]
         public uint underline_height;
         [CCode (cname = "h.minchar")]
-        public uint minchar;
+        public uint min_char;
         [CCode (cname = "h.numchars")]
         public uint num_chars;
 
@@ -1154,9 +1367,9 @@ namespace GRX {
         [CCode (cname = "GrLoadFont")]
         public static Font? load (string name);
         [CCode (cname = "GrLoadConvertedFont")]
-        public static Font? load_converted (string name, FontConversionFlag flags, int w = 0, int h = 0, int minch = 0, int maxch = 0);
+        public static Font? load_converted (string name, FontConversionFlag flags, int w = 0, int h = 0, int min_ch = 0, int max_ch = 0);
         [CCode (cname = "GrBuildConvertedFont")]
-        public Font build_converted (FontConversionFlag flags, int w = 0, int h = 0, int minch = 0, int maxch = 0);
+        public Font build_converted (FontConversionFlag flags, int w = 0, int h = 0, int min_ch = 0, int max_ch = 0);
 
         [CCode (cname = "GrDumpFont")]
         public void dump (string c_symbol_name, string file_name);
@@ -1311,10 +1524,11 @@ namespace GRX {
     /*            THICK AND DASHED LINE DRAWING PRIMITIVES                */
     /* ================================================================== */
 
-    /*
-     * custom line option structure
-     *   zero or one dash pattern length means the line is continuous
-     *   the dash pattern always begins with a drawn section
+    /**
+     * Custom line option structure.
+     *
+     * Zero or one dash pattern length means the line is continuous.
+     * The dash pattern always begins with a drawn section.
      */
     [CCode (cname = "GrLineOption", free_function = "g_free", has_type_id = false)]
     [Compact]
@@ -1322,16 +1536,26 @@ namespace GRX {
         [CCode (cname = "GrLineOption", destroy_function = "", has_type_id = false)]
         struct MallocStruct {}
 
+        /**
+         * Color used to draw line.
+         */
         [CCode (cname = "lno_color")]
-        public Color lno_color;                  /* color used to draw line */
+        public Color color;
+
+        /**
+         * Width of the line.
+         */
         [CCode (cname = "lno_width")]
-        public int width;                  /* width of the line */
-        [CCode (cname = "lno_dashpat", array_length_cname = "lno_pattlen")]
-        public uchar[] dashpat;         /* draw/nodraw pattern */
+        public int width;
 
         [CCode (cname = "g_malloc0")]
         public LineOption (size_t size = sizeof(MallocStruct))
             requires (size == sizeof(MallocStruct));
+        /**
+         * Draw/no-draw pattern.
+         */
+        [CCode (cname = "lno_dashpat", array_length_cname = "lno_pattlen")]
+        public uchar[] dashpat;
     }
 
     [CCode (cname = "", destroy_function = "", has_type_id = false)]
@@ -1361,10 +1585,11 @@ namespace GRX {
     /*             PATTERNED DRAWING AND FILLING PRIMITIVES               */
     /* ================================================================== */
 
-    /*
-     * BITMAP: a mode independent way to specify a fill pattern of two
-     *   colors. It is always 8 pixels wide (1 byte per scan line), its
-     *   height is user-defined. SET THE TYPE FLAG TO ZERO!!!
+    /**
+     * A mode independent way to specify a fill pattern of two colors.
+     *
+     * It is always 8 pixels wide (1 byte per scan line), its height is
+     * user-defined. SET THE TYPE FLAG TO ZERO!!!
      */
     [CCode (cname = "struct _GR_bitmap", free_function = "g_free", has_type_id = false)]
     [Compact]
@@ -1372,29 +1597,53 @@ namespace GRX {
         [CCode (cname = "struct _GR_bitmap", destroy_function = "", has_type_id = false)]
         struct MallocStruct {}
 
+        /**
+         * Type flag for pattern union.
+         */
         [CCode (cname = "bmp_ispixmap")]
-        public bool is_pixmap;               /* type flag for pattern union */
+        public bool is_pixmap;
+
+        /**
+         * Bitmap height
+         */
         [CCode (cname = "bmp_height")]
-        public int height;                 /* bitmap height */
+        public int height;
+
+        /**
+         * Pointer to the bit pattern
+         */
         [CCode (cname = "bmp_data")]
-        public char *data;                   /* pointer to the bit pattern */
+        public char *data;
+
+        /**
+         * Foreground color for fill
+         */
         [CCode (cname = "bmp_fgcolor")]
-        public Color fg_color;                /* foreground color for fill */
+        public Color fg_color;
+
+        /**
+         * background color for fill
+         */
         [CCode (cname = "bmp_bgcolor")]
-        public Color bg_color;                /* background color for fill */
-        [CCode (cname = "bmp_memflags")]
-        public int flags;               /* set if dynamically allocated */
+        public Color bg_color;
 
         [CCode (cname = "g_malloc0")]
         public Bitmap (size_t size = sizeof(MallocStruct))
             requires (size == sizeof(MallocStruct));
+
+        /**
+         * Set if dynamically allocated
+         */
+        [CCode (cname = "bmp_memflags")]
+        public int flags;
     }
 
-    /*
-     * PIXMAP: a fill pattern stored in a layout identical to the video RAM
-     *   for filling using 'bitblt'-s. It is mode dependent, typically one
-     *   of the library functions is used to build it. KEEP THE TYPE FLAG
-     *   NONZERO!!!
+    /**
+     * A fill pattern stored in a layout identical to the video RAM for filling
+     * using 'bitblt'-s.
+     *
+     * It is mode dependent, typically one of the library functions is used to
+     * build it. KEEP THE TYPE FLAG NONZERO!!!
      */
     [CCode (cname = "struct _GR_pixmap", free_function = "g_free", has_type_id = false)]
     [Compact]
@@ -1418,7 +1667,7 @@ namespace GRX {
             requires (size == sizeof(MallocStruct));
     }
 
-    /*
+    /**
      * Fill pattern union -- can either be a bitmap or a pixmap
      */
     [CCode (cname = "GrPattern", free_function = "GrDestroyPattern", has_type_id = false)]
@@ -1428,15 +1677,17 @@ namespace GRX {
         public bool is_pixmap;               /* nonzero for pixmaps */
 
         [CCode (cname = "GrBuildPixmap")]
-        public Pattern buildPixmap ([CCode (array_length = false)]char *pixels, int w, int h, ColorTable colors);
+        public Pattern.buildPixmap ([CCode (array_length = false)]char *pixels, int w, int h, ColorTable colors);
         [CCode (cname = "GrBuildPixmapFromBits")]
-        public Pattern buildPixmapFromBits ([CCode (array_length = false)]char *bits, int w, int h, Color fgc, Color bgc);
+        public Pattern.buildPixmapFromBits ([CCode (array_length = false)]char *bits, int w, int h, Color fgc, Color bgc);
     }
 
-    /*
-     * Draw pattern for line drawings -- specifies both the:
-     *   (1) fill pattern, and the
-     *   (2) custom line drawing option
+    /**
+     * Draw pattern for line drawings.
+     *
+     * Specifies both the:
+     * 1. Fill pattern, and the
+     * 2. Custom line drawing option
      */
     [CCode (cname = "GrLinePattern", free_function = "g_free", has_type_id = false)]
     [Compact]
@@ -1444,10 +1695,16 @@ namespace GRX {
         [CCode (cname = "GrLinePattern", destroy_function = "", has_type_id = false)]
         struct MallocStruct {}
 
+        /**
+         * Fill pattern
+         */
         [CCode (cname = "lnp_pattern")]
-        Pattern pattern;         /* fill pattern */
+        Pattern pattern;
+        /**
+         * width + dash pattern
+         */
         [CCode (cname = "lnp_option")]
-        LineOption option;          /* width + dash pattern */
+        LineOption option;
 
         [CCode (cname = "g_malloc0")]
         public LinePattern (size_t size = sizeof(MallocStruct))
@@ -1510,7 +1767,9 @@ namespace GRX {
     /* ================================================================== */
 
 
-    /* Flags for GrImageInverse() */
+    /**
+     * Flags for {@link Image.inverse}.
+     */
     [CCode (cname = "int", has_type_id = false)]
     [Flags]
     public enum ImageInverseFlag {
@@ -1720,7 +1979,7 @@ namespace GRX {
     /*                           PNM FUNCTIONS                            */
     /* ================================================================== */
 
-    /*
+    /**
      *  The PNM formats, grx support load/save of
      *  binaries formats (4, 5, 6) only
      */
@@ -1765,14 +2024,14 @@ namespace GRX {
     [CCode (cname = "GrJpegSupport")]
     public bool jpeg_support ();
     [CCode (cname = "GrQueryJpeg")]
-    public int query_jpeg (string file_name, int *width, int *height);
+    public int query_jpeg (string file_name, out int width, out int height);
 
     /* ================================================================== */
     /*               MISCELLANEOUS UTILITIY FUNCTIONS                     */
     /* ================================================================== */
 
     [CCode (cname = "GrResizeGrayMap")]
-    public void resize_gray_map (uchar *map, int pitch, int ow, int oh, int nw, int nh);
+    public void resize_gray_map (uchar *map, int pitch, int old_width, int old_height, int new_width, int new_height);
     [CCode (cname = "GrMatchString")]
     public int match_string (string pattern, string str);
     [CCode (cname = "GrSetWindowTitle")]
