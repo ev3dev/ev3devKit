@@ -132,7 +132,7 @@ namespace EV3devKit.UI {
          * If the menu item is already in another menu, it will be removed from
          * that menu before being added to this menu.
          *
-         * @param item Them menu item to add.
+         * @param item The menu item to add.
          */
         public void add_menu_item (MenuItem item)
             requires (item.button.weak_represented_object == item)
@@ -142,6 +142,26 @@ namespace EV3devKit.UI {
             item.ref ();
             menu_vbox.add (item.button);
             item.menu = this;
+        }
+
+        /**
+         * Inserts a menu item before an existing menu item.
+         *
+         * If the new menu item is already in another menu, it will be removed
+         * from that menu before being added to this menu.
+         *
+         * @param new_item The menu item to add.
+         * @param existing_item The existing menu item that the new menu item
+         * will be inserted before.
+         */
+        public void insert_menu_item (MenuItem new_item, MenuItem existing_item)
+            requires (new_item.button.weak_represented_object == new_item)
+        {
+            if (new_item.menu != null)
+                new_item.menu.remove_menu_item (new_item);
+            new_item.ref ();
+            menu_vbox.insert_before (new_item.button, existing_item.button);
+            new_item.menu = this;
         }
 
         /**

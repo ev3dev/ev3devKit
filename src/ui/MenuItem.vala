@@ -63,8 +63,32 @@ namespace EV3devKit.UI {
             this.with_button (new Button () {
                 border = 0,
                 border_radius = 0
-            }, new Label (text));
+            }, new Label (text) {
+                text_horizontal_align = GRX.TextHorizAlign.LEFT
+            });
             button.add (label);
+        }
+
+        /**
+         * Creates a new menu item with an arrow pointing to the right.
+         *
+         * This should be used for menu items that open a new window.
+         *
+         * @param text The text for the menu item's label.
+         */
+        public MenuItem.with_right_arrow (string text) {
+            this.with_button (new Button () {
+                border = 0,
+                border_radius = 0
+            }, new Label (text) {
+                horizontal_align = WidgetAlign.START
+            });
+            var hbox = new Box.horizontal ();
+            button.add (hbox);
+            hbox.add (label);
+            hbox.add (new Spacer ());
+            var arrow_label = new Label (">");
+            hbox.add (arrow_label);
         }
 
         /**
