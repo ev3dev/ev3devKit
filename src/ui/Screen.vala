@@ -236,6 +236,7 @@ namespace EV3devKit.UI {
             if (window_stack.remove (window)) {
                 if (window.ref_count > 0) {
                     window.screen = null;
+                    window.on_screen = false;
                     window.closed ();
                 }
                 if (was_top_window && window_stack.size > 0)
