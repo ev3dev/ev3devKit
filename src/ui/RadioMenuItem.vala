@@ -29,7 +29,7 @@ namespace EV3devKit.UI {
         /**
          * Gets the radio button for the menu item.
          */
-        public CheckButton radio { get; construct set; }
+        public CheckButton radio { get; private set; }
 
         /**
          * Creates a new radio button menu item.

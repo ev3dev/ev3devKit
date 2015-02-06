@@ -71,7 +71,7 @@ namespace EV3devKit.UI {
         /**
          * Gets the layout direction of the Box.
          */
-        public BoxDirection direction { get; construct set; }
+        public BoxDirection direction { get; private set; }
 
         /**
          * Gets and sets the spacing in pixels between the widgets in the box.

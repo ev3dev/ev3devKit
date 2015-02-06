@@ -94,7 +94,7 @@ namespace EV3devKit.UI {
          * Gets the group that the CheckButton has been asigned to. Returns
          * ``null`` for checkboxes since they don't have groups.
          */
-        public CheckButtonGroup? group { get; construct set; }
+        public CheckButtonGroup? group { get; private set; }
 
         /**
          * Gets and sets the outer size (width and height) of the CheckButton

@@ -106,7 +106,7 @@ namespace EV3devKit.UI {
          * The type indicates if it can only have one child or if it can have
          * multiple children.
          */
-        public ContainerType container_type { get; construct set; }
+        public ContainerType container_type { get; private set; }
 
         /**
          * Emitted when a child is added to this Container.

@@ -42,12 +42,12 @@ namespace EV3devKit.UI {
         /**
          * Gets the Button that is the Container for the menu item.
          */
-        public Button button { get; construct set; }
+        public Button button { get; private set; }
 
         /**
          * Gets the Lable for the menu item.
          */
-        public Label label { get; construct set; }
+        public Label label { get; private set; }
 
         /**
          * Gets and sets a user-defined object that the menu item represents.

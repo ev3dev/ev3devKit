@@ -64,12 +64,12 @@ namespace EV3devKit.UI {
         /**
          * Gets the width of the screen.
          */
-        public int width { get; construct set; }
+        public int width { get; private set; }
 
         /**
          * Gets the height of the screen.
          */
-        public int height { get; construct set; }
+        public int height { get; private set; }
 
         /**
          * Gets the height of windows for the screen.

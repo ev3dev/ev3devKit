@@ -29,7 +29,7 @@ namespace EV3devKit.UI {
         /**
          * Gets the checkbox widget for this menu item.
          */
-        public CheckButton checkbox { get; construct set; }
+        public CheckButton checkbox { get; private set; }
 
         /**
          * Creates a new checkbox menu item.
