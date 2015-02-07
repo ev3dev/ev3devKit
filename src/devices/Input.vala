@@ -137,6 +137,7 @@ namespace EV3devKit.Devices {
         GUdev.Device input_udev_device;
         int event_fd;
         bool syn_error;
+        WeakNotify? weak_ref_func;
 
         /**
          * Gets the name of the input device.
@@ -214,7 +215,15 @@ namespace EV3devKit.Devices {
             channel.set_encoding (null);
             channel.set_close_on_unref (false);
             var channel_watch_id = channel.add_watch (IOCondition.IN, handle_event);
-            weak_ref (() => Source.remove (channel_watch_id));
+            weak_ref_func = () => Source.remove (channel_watch_id);
+            weak_ref (weak_ref_func);
+            notify["connected"].connect (() => {
+                if (!connected && weak_ref_func != null) {
+                    weak_unref (weak_ref_func);
+                    weak_ref_func (this);
+                    weak_ref_func = null;
+                }
+            });
         }
 
         /**
@@ -300,7 +309,12 @@ namespace EV3devKit.Devices {
                 // TODO: handle more types of events.
                 }
             } catch (Error err) {
+                // TODO: there is a race condition here that sometime will will
+                // get a "no such device" error when disconnecing. Not a big deal
+                // just prints an error message when there is not really a problem.
                 critical ("%s", err.message);
+                weak_unref (weak_ref_func);
+                weak_ref_func = null;
                 return false;
             }
             return true;
