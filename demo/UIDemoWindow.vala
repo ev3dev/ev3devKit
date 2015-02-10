@@ -42,8 +42,7 @@ namespace EV3devKit.Demo {
         public UIDemoWindow () {
             var menu = new UI.Menu () {
                 padding_left = 10,
-                padding_right = 10,
-                border = 0
+                padding_right = 10
             };
             add (menu);
             var message_dialog_menu_item = new UI.MenuItem ("MessageDialog...");
@@ -294,7 +293,9 @@ namespace EV3devKit.Demo {
                 margin = 10,
                 spacing = 5
             };
-            var vscroll = new Scroll.vertical ();
+            var vscroll = new Scroll.vertical () {
+                border = 1
+            };
             var vscroll_content = new Label ("This is a vertical scroll container."
                 + " It can be used when you have too much stuff to fit on the screen"
                 + " at one time. It is best to not have anything else that can_focus"
@@ -305,7 +306,9 @@ namespace EV3devKit.Demo {
             };
             vscroll.add (vscroll_content);
             vbox.add (vscroll);
-            var hscroll = new Scroll.horizontal ();
+            var hscroll = new Scroll.horizontal () {
+                border = 1
+            };
             var hscroll_content = new Label ("You can also scroll stuff horizontally.");
             hscroll.add (hscroll_content);
             vbox.add (hscroll);
@@ -424,8 +427,7 @@ namespace EV3devKit.Demo {
 
                 var window = new UI.Window ();
                 var vscroll = new Scroll.vertical () {
-                    scroll_amount = 64,
-                    border = 0
+                    scroll_amount = 64
                 };
                 window.add (vscroll);
                 var vbox = new Box.vertical ();
@@ -451,7 +453,6 @@ namespace EV3devKit.Demo {
                 var vbox = new Box.vertical ();
                 dialog.add (vbox);
                 var vscroll = new Scroll.vertical () {
-                    border = 0,
                     margin = 10,
                     // FIXME: focus does not work here
                     can_focus = false

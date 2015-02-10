@@ -99,7 +99,6 @@ namespace EV3devKit.UI {
             base (ContainerType.SINGLE);
             this.direction = direction;
             can_focus = true;
-            border = 1;
             padding = 2;
             notify["min-height"].connect (redraw);
             notify["min-width"].connect (redraw);

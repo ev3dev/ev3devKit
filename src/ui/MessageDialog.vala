@@ -50,7 +50,6 @@ namespace EV3devKit.UI {
             content_vbox.add (title_label);
             vscroll = new Scroll.vertical () {
                 can_focus = false,
-                border = 0,
                 margin_bottom = 9
             };
             content_vbox.add (vscroll);
