@@ -28,6 +28,14 @@
  */
 [CCode (cheader_filename = "grx20.h", cprefix = "GR_", lower_case_cprefix = "Gr")]
 namespace GRX {
+    [CCode (cname = "int", has_type_id = false)]
+    public enum Result {
+        [CCode (cname = "0")]
+        OK,
+        [CCode (cname = "-1")]
+        ERROR;
+    }
+
     [CCode (cname = "GrColor", has_destroy_function = false, has_copy_function = false, has_type_id = false)]
     [SimpleType]
     public struct Color : uint32 {
@@ -36,15 +44,15 @@ namespace GRX {
         [CCode (cname = "GrColorMode")] 
         public ColorMode mode ();
         [CCode (cname = "GrWriteModeColor")]
-        public Color to_write_mode ();
+        public ColorMode to_write_mode ();
         [CCode (cname = "GrXorModeColor")]
-        public Color to_xor_mode ();
+        public ColorMode to_xor_mode ();
         [CCode (cname = "GrOrModeColor")]
-        public Color to_or_mode ();
+        public ColorMode to_or_mode ();
         [CCode (cname = "GrAndModeColor")]
-        public Color to_and_mode ();
+        public ColorMode to_and_mode ();
         [CCode (cname = "GrImageModeColor")]
-        public Color to_image_mode ();
+        public ColorMode to_image_mode ();
 
         [CCode (cname = "GrResetColors")]
         public static void reset ();
@@ -879,29 +887,29 @@ namespace GRX {
         public Color user_pixel (int x, int y);
 
         [CCode (cname = "GrSaveContextToPbm")]
-        public int save_to_pbm (string file_name, string? comment = null);
+        public Result save_to_pbm (string file_name, string? comment = null);
         [CCode (cname = "GrSaveContextToPgm")]
-        public int save_to_pgm (string file_name, string? comment = null);
+        public Result save_to_pgm (string file_name, string? comment = null);
         [CCode (cname = "GrSaveContextToPpm")]
-        public int save_to_ppm (string file_name, string? comment = null);
+        public Result save_to_ppm (string file_name, string? comment = null);
         [CCode (cname = "GrLoadContextFromPnm")]
-        public int load_from_pnm (string file_name);
+        public Result load_from_pnm (string file_name);
 
         [CCode (cname = "GrLoadContextFromPnmBuffer")]
-        public int load_from_pnm_buffer (char *buffer);
+        public Result load_from_pnm_buffer (char *buffer);
 
         [CCode (cname = "GrSaveContextToPng")]
-        public int save_to_png (string file_name);
+        public Result save_to_png (string file_name);
         [CCode (cname = "GrLoadContextFromPng")]
-        public int load_from_png (string file_name, bool use_alpha = true);
+        public Result load_from_png (string file_name, bool use_alpha = true);
 
         [CCode (cname = "GrLoadContextFromJpeg")]
-        public int load_from_jpeg (string file_name, int scale);
+        public Result load_from_jpeg (string file_name, int scale);
 
         [CCode (cname = "GrSaveContextToJpeg")]
-        public int save_to_jpeg (string file_name, int quality = 90);
+        public Result save_to_jpeg (string file_name, int quality = 90);
         [CCode (cname = "GrSaveContextToGrayJpeg")]
-        public int save_to_gray_jpeg (string file_name, int quality = 90);
+        public Result save_to_gray_jpeg (string file_name, int quality = 90);
 
         //[CCode (cname = "SaveContextToTiff")]
         //public int to_tiff (string file_name, uint compr, string? comment = null);
@@ -942,13 +950,18 @@ namespace GRX {
     [CCode (cname = "GrHighY")]
     public int high_y ();
 
-    [CCode (cprefix = "Gr", has_type_id = false)]
+    [CCode (cname = "GrColor", has_type_id = false)]
     [Flags]
     public enum ColorMode {
+        [CCode (cname = "GrWRITE")]
         WRITE,
+        [CCode (cname = "GrXOR")]
         XOR,
+        [CCode (cname = "GrOR")]
         OR,
+        [CCode (cname = "GrAND")]
         AND,
+        [CCode (cname = "GrIMAGE")]
         IMAGE,
         [CCode (cname = "GrCVALUEMASK")]
         COLOR_VALUE_MASK,
@@ -2002,9 +2015,9 @@ namespace GRX {
     /* The PNM functions */
 
     [CCode (cname = "GrQueryPnm")]
-    public int query_pnm (string file_name, out int width, out int height, out int maxval);
+    public Result query_pnm (string file_name, out int width, out int height, out int maxval);
     [CCode (cname = "GrQueryPnmBuffer")]
-    public int query_pnm_buffer (char *buffer, out int width, out int height, out int maxval);
+    public Result query_pnm_buffer (char *buffer, out int width, out int height, out int maxval);
 
     /* ================================================================== */
     /*                           PNG FUNCTIONS                            */
@@ -2014,7 +2027,7 @@ namespace GRX {
     [CCode (cname = "GrPngSupport")]
     public bool png_support ();
     [CCode (cname = "GrQueryPng")]
-    public int query_png (string file_name, out int width, out int height);
+    public Result query_png (string file_name, out int width, out int height);
 
     /* ================================================================== */
     /*                          JPEG FUNCTIONS                            */
@@ -2024,7 +2037,7 @@ namespace GRX {
     [CCode (cname = "GrJpegSupport")]
     public bool jpeg_support ();
     [CCode (cname = "GrQueryJpeg")]
-    public int query_jpeg (string file_name, out int width, out int height);
+    public Result query_jpeg (string file_name, out int width, out int height);
 
     /* ================================================================== */
     /*               MISCELLANEOUS UTILITIY FUNCTIONS                     */

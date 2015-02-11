@@ -45,6 +45,9 @@ namespace EV3devKit.Demo {
                 padding_right = 10
             };
             add (menu);
+            var icon_menu_item = new UI.MenuItem ("Icon");
+            icon_menu_item.button.pressed.connect (on_icon_menu_item_button_pressed);
+            menu.add_menu_item (icon_menu_item);
             var message_dialog_menu_item = new UI.MenuItem ("MessageDialog...");
             message_dialog_menu_item.button.pressed.connect (on_message_dialog_menu_item_button_pressed);
             menu.add_menu_item (message_dialog_menu_item);
@@ -85,6 +88,24 @@ namespace EV3devKit.Demo {
             if (key_code == Key.BACKSPACE)
                 return false;
             return base.key_pressed (key_code);
+        }
+
+        void on_icon_menu_item_button_pressed () {
+            var window = new UI.Window ();
+            var vbox = new Box.vertical () {
+                margin = 6
+            };
+            window.add (vbox);
+            var enum_class = (EnumClass) typeof (StockIcon).class_ref ();
+            foreach (unowned EnumValue val in enum_class.values) {
+                try {
+                    var icon = new UI.Icon.from_stock ((StockIcon)val.@value);
+                    vbox.add (icon);
+                } catch (Error err) {
+                    critical ("%s", err.message);
+                }
+            }
+            window.show ();
         }
 
         void on_message_dialog_menu_item_button_pressed () {

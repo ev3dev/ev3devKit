@@ -16,6 +16,8 @@ set (LIBRARY_NAME "ev3devKit")
 set (DESKTOP_LIBRARY_NAME "ev3devKit-desktop")
 set (TARGET_GLIB "2.40")
 
+add_subdirectory (data)
+
 # Comment this out to enable C compiler warnings
 add_definitions (-w)
 
@@ -78,6 +80,7 @@ set (LIBRARY_SOURCE_FILES
     src/ui/Container.vala
     src/ui/Dialog.vala
     src/ui/Grid.vala
+    src/ui/Icon.vala
     src/ui/Label.vala
     src/ui/Menu.vala
     src/ui/MenuItem.vala
@@ -226,7 +229,7 @@ if (NOT EV3DEVKIT_NO_DEMO)
     add_custom_target (run-${DEVICES_DEMO_EXEC_NAME}
         COMMAND ${DEVICES_DEMO_EXEC_NAME}
         DEPENDS ${DEVICES_DEMO_EXEC_NAME}
-        WORKING_DIRECTORY ${CMAKE_PROJECT_DIR}
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     )
 
     install (TARGETS ${DEVICES_DEMO_EXEC_NAME} RUNTIME DESTINATION bin)
@@ -256,7 +259,7 @@ if (NOT EV3DEVKIT_NO_DEMO)
     add_custom_target (run-${UI_DEMO_EXEC_NAME}
         COMMAND ${UI_DEMO_EXEC_NAME}
         DEPENDS ${UI_DEMO_EXEC_NAME}
-        WORKING_DIRECTORY ${CMAKE_PROJECT_DIR}
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     )
 
     install (TARGETS ${UI_DEMO_EXEC_NAME} RUNTIME DESTINATION bin)
