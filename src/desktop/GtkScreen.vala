@@ -48,10 +48,8 @@ namespace EV3devKit.Desktop {
         public GtkScreen (GtkFramebuffer fb, GtkScreen? master = null) {
             base.custom (fb.info.width, fb.info.height, fb.pixbuf_data);
             this.fb = fb;
-            if (fb.info.use_custom_colors) {
-                fg_color = fb.info.fg_color;
-                bg_color = fb.info.bg_color;
-                mid_color = fb.info.mid_color;
+            if (fb.info.monochrome) {
+                mid_color = fg_color;
             }
             this.master = master;
             slaves = new ArrayList<GtkScreen> ();

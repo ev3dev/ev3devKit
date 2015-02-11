@@ -32,10 +32,7 @@ namespace EV3devKit.Desktop {
         public struct Info {
             public int width;
             public int height;
-            public bool use_custom_colors;
-            public Color fg_color;
-            public Color bg_color;
-            public Color mid_color;
+            public bool monochrome;
         }
 
         public enum DeviceType {
@@ -44,7 +41,7 @@ namespace EV3devKit.Desktop {
         }
 
         const Info[] devices = {
-            { 178, 128, true, 0, 0x78b5ad, 0 },
+            { 178, 128, true  },
             { 160, 128, false }
         };
 
@@ -63,12 +60,26 @@ namespace EV3devKit.Desktop {
             info = devices[(int)type];
             image = new Gtk.Image.from_pixbuf(new Gdk.Pixbuf (
                 Gdk.Colorspace.RGB, false, 8, info.width * 2, info.height * 2));
+            if (info.monochrome) {
+                // Set the background color to look like the LED on the EV3.
+                image.override_background_color (StateFlags.NORMAL, Gdk.RGBA () {
+                    red   = 173.0 / 256.0,
+                    green = 181.0 / 256.0,
+                    blue  = 120.0 / 256.0,
+                    alpha = 1.0
+                });
+            }
             add (image);
             pixbuf = new Gdk.Pixbuf (Gdk.Colorspace.RGB, false, 8, info.width, info.height);
         }
 
         public void refresh () {
-            image.set_from_pixbuf (pixbuf.scale_simple (info.width * 2,
+            Gdk.Pixbuf p = pixbuf;
+            if (info.monochrome) {
+                // make white transparent so that the "LCD color" will show through.
+                p = p.add_alpha (true, 255, 255, 255);
+            }
+            image.set_from_pixbuf (p.scale_simple (info.width * 2,
                 info.height * 2, Gdk.InterpType.TILES));
         }
 
