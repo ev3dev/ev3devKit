@@ -73,7 +73,7 @@ namespace EV3devKit.UI {
         static HashTable<string, Context> file_map;
 
         static construct {
-            file_map = new HashTable<string, Context> (null, null);
+            ensure_file_map ();
         }
 
         unowned Context context;
@@ -108,10 +108,28 @@ namespace EV3devKit.UI {
          * if there was a problem loading the data from the file.
          */
         public Icon.from_png (string file) throws IOError {
+            context = create_context_from_png (file);
+        }
+
+        /**
+         * Create a context from the specified file.
+         *
+         * The context is cached so that future calls do not have to reload the
+         * data from the file.
+         *
+         * This is intended for use when you need to load an image but don't
+         * need a Widget.
+         *
+         * @param file The name of the file where the icon is stored.
+         * @throws IOError.NOT_FOUND if the file does not exist or IOError.FAILED
+         * if there was a problem loading the data from the file.
+         */
+
+        public static unowned Context create_context_from_png (string file) throws IOError {
+            ensure_file_map ();
             // see if we have this file already cached.
             if (file_map.contains (file)) {
-                context = (Context)(void*)file_map[file];
-                return;
+                return (Context)(void*)file_map[file];
             }
             int width, height;
             if (!FileUtils.test (file, FileTest.EXISTS))
@@ -128,8 +146,9 @@ namespace EV3devKit.UI {
                 throw new IOError.FAILED ("Error allocating context.");
             if (new_context.load_from_png (file) == Result.ERROR)
                 throw new IOError.FAILED ("Error loading '%s'", file);
-            context = new_context;
+            unowned Context unowned_context = new_context;
             file_map[file] = (owned)new_context;
+            return unowned_context;
         }
 
         /**
@@ -161,6 +180,11 @@ namespace EV3devKit.UI {
                 bit_blt (Context.current, content_bounds.x1, content_bounds.y1,
                     context, 0, 0, context.x_max, context.y_max, Color.white.to_image_mode ());
             }
+        }
+
+        inline static void ensure_file_map () {
+            if (file_map == null)
+                file_map = new HashTable<string, Context> (null, null);
         }
     }
 }
