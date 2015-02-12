@@ -1136,6 +1136,8 @@ namespace EV3devKit.Demo {
         enum InputMenu {
             SELECT_INPUT = 1,
             SHOW_INPUT_INFO,
+            BELL,
+            TONE,
             MAIN_MENU
         }
 
@@ -1156,6 +1158,12 @@ namespace EV3devKit.Demo {
                     break;
                 case InputMenu.SHOW_INPUT_INFO:
                     do_show_input_device_info (command_line);
+                    break;
+                case InputMenu.BELL:
+                    do_input_device_bell (command_line);
+                    break;
+                case InputMenu.TONE:
+                    do_input_device_tone (command_line);
                     break;
                 case InputMenu.MAIN_MENU:
                     done = true;
@@ -1197,7 +1205,7 @@ namespace EV3devKit.Demo {
         void do_show_input_device_info (ApplicationCommandLine command_line) {
             command_line.print ("\n");
             if (selected_input == null) {
-                command_line.print ("No Input selected.\n");
+                command_line.print ("No Input device selected.\n");
                 return;
             }
             command_line.print ("device_name: %s\n", selected_input.device_name);
@@ -1211,6 +1219,52 @@ namespace EV3devKit.Demo {
                 var yn = ((flags_value.@value & capabilities) == flags_value.@value)
                     ? "yes" : "no";
                 command_line.print ("\t%s:\t%s\n", flags_value.value_nick, yn);
+            }
+        }
+
+        /**
+         * Makes selected_input beep if it supports the BEEP sound function.
+         */
+        void do_input_device_bell (ApplicationCommandLine command_line) {
+            command_line.print ("\n");
+            if (selected_input == null) {
+                command_line.print ("No Input device selected.\n");
+                return;
+            }
+            if (selected_input.has_sound_capability (EV3devKit.Devices.SoundCapability.BELL)) {
+                selected_input.do_bell (true);
+                Timeout.add (500, () => {
+                    selected_input.do_bell (false);
+                    return Source.REMOVE;
+                });
+            } else {
+                command_line.print ("Selected Input device does not support BELL.\n");
+            }
+        }
+
+        /**
+         * Makes selected_input play some tones if it supports the TONE sound function.
+         */
+        void do_input_device_tone (ApplicationCommandLine command_line) {
+            command_line.print ("\n");
+            if (selected_input == null) {
+                command_line.print ("No Input device selected.\n");
+                return;
+            }
+            if (selected_input.has_sound_capability (EV3devKit.Devices.SoundCapability.TONE)) {
+                var freq = 0;
+                var delta = 100;
+                Timeout.add (100, () => {
+                    freq += delta;
+                    if (freq >= 1000 && delta > 0)
+                        delta = -delta;
+                    if (freq < 0)
+                        freq = 0;
+                    selected_input.do_tone (freq);
+                    return freq > 0;
+                });
+            } else {
+                command_line.print ("Selected Input device does not support TONE.\n");
             }
         }
 

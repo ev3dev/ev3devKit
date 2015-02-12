@@ -103,6 +103,29 @@ namespace EV3devKit.Devices {
     }
 
     /**
+     * Specific capabilities of a sound capable input device.
+     */
+    [Flags]
+    public enum SoundCapability {
+// Ignoring click for now since almost nothing supports it.
+#if 0
+        /**
+         * The device supports the click event.
+         */
+        CLICK = 1 << SND_CLICK,
+#endif
+        /**
+         * The device supports the bell event.
+         */
+        BELL = 1 << SND_BELL,
+
+        /**
+         * The device supports the tone event.
+         */
+        TONE = 1 << SND_TONE
+    }
+
+    /**
      * Linux input devices. (keyboard, mouse, joystick, etc.)
      *
      * Note: This is a very low-level - there may be better, higher-level options.
@@ -210,7 +233,7 @@ namespace EV3devKit.Devices {
                 throw new DeviceError.NOT_FOUND ("Could not find parent input device for '%s'.",
                     event_device_name);
             }
-            var channel = new IOChannel.file (udev_device.get_device_file (), "r");
+            var channel = new IOChannel.file (udev_device.get_device_file (), "r+");
             event_fd = channel.unix_get_fd ();
             channel.set_encoding (null);
             channel.set_close_on_unref (false);
@@ -241,6 +264,16 @@ namespace EV3devKit.Devices {
             var bit_offset = offset % 8;
             var bit_mask = 1 << bit_offset;
             return (data[byte_offset] & bit_mask) == bit_mask;
+        }
+
+        /**
+         * Check if an input device has the specified capability.
+         *
+         * @param capability The capability flag(s) to check.
+         * @return ``true`` if this device has all of the specified capabilities.
+         */
+        public bool has_capability (InputCapability capability) {
+            return (capabilities & capability) == capability;
         }
 
         /**
@@ -275,6 +308,53 @@ namespace EV3devKit.Devices {
                 return false;
             }
             return !get_bit_at (key_code, buf);
+        }
+
+        /**
+         * Check if the device supports the specified sound capability.
+         *
+         * @param capability The sound capability(ies) to check.
+         * @return ``true`` if the device supports all of the specified sound
+         * capabilities.
+         */
+        public bool has_sound_capability (SoundCapability capability) {
+            var snd_capability = (SoundCapability)input_udev_device.get_property_as_int ("SND");
+            return (snd_capability & capability) == capability;
+        }
+        /**
+         * Turns the "bell" of a sound device on or off.
+         *
+         * Does nothing if input device does not have the {@link SoundCapability.BELL}
+         * sound capability.
+         *
+         * @param on If ``true``, the sound will turn on, otherwise the sound
+         * will turn off.
+         */
+        public void do_bell (bool on) {
+            var event = Event () {
+                type = EV_SND,
+                code = (uint16)SND_BELL,
+                value = on ? 1 : 0
+            };
+            Posix.write (event_fd, &event, sizeof (Event));
+        }
+
+        /**
+         * Sets the frequency of the a sound device.
+         *
+         * Does nothing if input device does not have the {@link SoundCapability.TONE}
+         * sound capability.
+         *
+         * @param frequency The frequency of the sound output or ``0`` to turn
+         * off sound output.
+         */
+        public void do_tone (int frequency) requires (frequency >= 0) {
+            var event = Event () {
+                type = EV_SND,
+                code = (uint16)SND_TONE,
+                value = frequency
+            };
+            Posix.write (event_fd, &event, sizeof (Event));
         }
 
         bool handle_event (IOChannel source, IOCondition condition) {
