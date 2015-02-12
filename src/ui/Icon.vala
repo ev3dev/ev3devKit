@@ -26,21 +26,36 @@ using GRX;
 
 namespace EV3devKit.UI {
     public enum StockIcon {
-        BLUETOOTH,
-        ETHERNET,
-        USB,
-        WIFI;
+        BLUETOOTH_CONNECTED_7X9,
+        BLUETOOTH_12X12,
+        BLUETOOTH_7X9,
+        ETHERNET_12X12,
+        USB_12X12,
+        USB_7X9,
+        WIFI_IDLE_12X9,
+        WIFI_12X12,
+        WIFI_12X9;
 
         public string to_file_name () {
             switch (this) {
-            case BLUETOOTH:
-                return "bluetooth.png";
-            case ETHERNET:
-                return "ethernet.png";
-            case USB:
-                return "usb.png";
-            case WIFI:
-                return "wifi.png";
+            case BLUETOOTH_CONNECTED_7X9:
+                return "bluetooth-connected7x9.png";
+            case BLUETOOTH_12X12:
+                return "bluetooth12x12.png";
+            case BLUETOOTH_7X9:
+                return "bluetooth7x9.png";
+            case ETHERNET_12X12:
+                return "ethernet12x12.png";
+            case USB_7X9:
+                return "usb7x9.png";
+            case USB_12X12:
+                return "usb12x12.png";
+            case WIFI_IDLE_12X9:
+                return "wifi-idle12x9.png";
+            case WIFI_12X12:
+                return "wifi12x12.png";
+            case WIFI_12X9:
+                return "wifi12x9.png";
             default:
                 critical ("Unknown StockIcon %d", this);
                 return "";

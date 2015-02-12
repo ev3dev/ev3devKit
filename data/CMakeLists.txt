@@ -1,8 +1,13 @@
 set (files
-    bluetooth
-    ethernet
-    usb
-    wifi)
+    bluetooth12x12
+    bluetooth7x9
+    bluetooth-connected7x9
+    ethernet12x12
+    usb12x12
+    usb7x9
+    wifi-idle12x9
+    wifi12x12
+    wifi12x9)
 
 set (generated_files "")
 foreach (file ${files})
