@@ -390,7 +390,7 @@ namespace EV3devKit.Devices {
                 }
             } catch (Error err) {
                 // TODO: there is a race condition here that sometime will will
-                // get a "no such device" error when disconnecing. Not a big deal
+                // get a "no such device" error when disconnecting. Not a big deal
                 // just prints an error message when there is not really a problem.
                 critical ("%s", err.message);
                 weak_unref (weak_ref_func);
