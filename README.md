@@ -37,9 +37,9 @@ You can add additional build option to the `cmake` command. Note: you need to
 delete *everything* in the build directory when changing `cmake` options to
 ensure that they take effect (you can use `nuke.sh` to do this).
 
-* Enable debugging: `-DCMAKE_BUILD_TYPE=Debug`
-* Build additional library for running on a desktop: `-DEV3DEVKIT_DESKTOP=1`
-* Do not build the demo programs: `-DEV3DEVKIT_NO_DEMO=1`
+* Enable debugging: `-DCMAKE_BUILD_TYPE=string:Debug`
+* Build additional library for running on a desktop: `-DEV3DEVKIT_DESKTOP=bool:Yes`
+* Do not build the demo programs: `-DEV3DEVKIT_NO_DEMO=bool:Yes`
 
 ## Documentation
 API docs are at http://www.ev3dev.org/ev3devKit/ev3devKit/EV3devKit.html
