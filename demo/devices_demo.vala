@@ -756,7 +756,7 @@ namespace EV3devKit.Demo {
                 command_line.print ("No LED selected.\n");
                 return;
             }
-            command_line.print ("\nEnter Device Name: ");
+            command_line.print ("\nEnter brightness (0-%d): ", selected_led.max_brightness);
             try {
                 var input = int.parse (yield get_user_input_cancel_on_remove (
                     selected_led, stdin));
