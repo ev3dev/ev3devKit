@@ -2,6 +2,10 @@ project ("ev3devkit")
 
 cmake_minimum_required (VERSION 2.6)
 
+option (EV3DEVKIT_DESKTOP "Build desktop library")
+option (EV3DEVKIT_NO_DEMO "Do not build the demo programs")
+option (BUILD_SHARED_LIBS "Build shared library instead of static")
+
 list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 set (DATADIR "${CMAKE_INSTALL_PREFIX}/share")
@@ -108,16 +112,21 @@ set (DESKTOP_LIBRARY_SOURCE_FILES
     src/desktop/GtkScreen.vala
 )
 
-set (MODULES ${COMMON_MODULES})
+find_package (PkgConfig REQUIRED)
+
+pkg_check_modules (DEPS REQUIRED ${COMMON_MODULES})
+add_definitions (${DEPS_CFLAGS})
+link_libraries (${DEPS_LIBRARIES})
+link_directories (${DEPS_LIBRARY_DIRS})
+
 if (EV3DEVKIT_DESKTOP)
-    list (APPEND MODULES ${DESKTOP_MODULES})
+    pkg_check_modules (DESKTOP_DEPS REQUIRED ${DESKTOP_MODULES})
+    add_definitions (${DESKTOP_DEPS_CFLAGS})
+    link_libraries (${DESKTOP_DEPS_LIBRARIES})
+    link_directories (${DESKTOP_DEPS_LIBRARY_DIRS})
 endif (EV3DEVKIT_DESKTOP)
 
-find_package (PkgConfig REQUIRED)
-pkg_check_modules (DEPS REQUIRED ${MODULES})
-add_definitions (${DEPS_CFLAGS})
-link_libraries (${DEPS_LIBRARIES} grx20 m)
-link_directories (${DEPS_LIBRARY_DIRS})
+link_libraries (grx20 m)
 
 find_package (Vala REQUIRED)
 include (ValaVersion)
