@@ -142,8 +142,8 @@ GENERATE_GIR TYPELIB
     ${PACKAGE_NAME}-${VERSION}
 )
 
-add_library (${LIBRARY_NAME} SHARED ${LIBRARY_VALA_C})
-install (TARGETS ${LIBRARY_NAME} LIBRARY DESTINATION lib)
+add_library (${LIBRARY_NAME} ${LIBRARY_VALA_C})
+install (TARGETS ${LIBRARY_NAME} LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
 
 # There is a bug in valac that causes an unowned compact class to lose
 # the "unowned" qualifier when generating a vapi. So, we are calling a
@@ -185,9 +185,9 @@ if (EV3DEVKIT_DESKTOP)
         ${DESKTOP_LIBRARY_NAME}
     )
 
-    add_library (${DESKTOP_LIBRARY_NAME} SHARED ${DESKTOP_LIBRARY_VALA_C})
+    add_library (${DESKTOP_LIBRARY_NAME} ${DESKTOP_LIBRARY_VALA_C})
     add_dependencies (${DESKTOP_LIBRARY_NAME} ${LIBRARY_NAME})
-    install (TARGETS ${DESKTOP_LIBRARY_NAME} LIBRARY DESTINATION lib)
+    install (TARGETS ${DESKTOP_LIBRARY_NAME} LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
     configure_file (
         ${CMAKE_CURRENT_SOURCE_DIR}/src/desktop/main_window.glade
         ${CMAKE_CURRENT_BINARY_DIR}/main_window.glade COPYONLY
