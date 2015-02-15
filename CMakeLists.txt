@@ -190,7 +190,7 @@ if (EV3DEVKIT_DESKTOP)
     install (TARGETS ${DESKTOP_LIBRARY_NAME} LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
     configure_file (
         ${CMAKE_CURRENT_SOURCE_DIR}/src/desktop/main_window.glade
-        ${CMAKE_CURRENT_BINARY_DIR}/main_window.glade COPYONLY
+        ${CMAKE_BINARY_DIR}/main_window.glade COPYONLY
     )
 endif (EV3DEVKIT_DESKTOP)
 
