@@ -25,8 +25,7 @@ foreach (file ${files})
             ${in_file})
 endforeach (file)
 
-add_custom_target (data
-    ALL
+add_custom_target (ev3devkit_data
     DEPENDS
         ${generated_files})
 

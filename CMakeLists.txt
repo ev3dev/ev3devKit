@@ -152,6 +152,7 @@ GENERATE_GIR TYPELIB
 )
 
 add_library (${LIBRARY_NAME} ${LIBRARY_VALA_C})
+add_dependencies(${LIBRARY_NAME} ev3devkit_data)
 install (TARGETS ${LIBRARY_NAME} LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
 
 # There is a bug in valac that causes an unowned compact class to lose
