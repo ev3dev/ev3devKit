@@ -10,15 +10,22 @@ list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 set (DATADIR "${CMAKE_INSTALL_PREFIX}/share")
 
-set (PKGDATADIR "${DATADIR}/${CMAKE_PROJECT_NAME}")
+set (PKGDATADIR "${DATADIR}/${PROJECT_NAME}")
 set (DEVICES_DEMO_EXEC_NAME "ev3devKit-devices-demo")
 set (UI_DEMO_EXEC_NAME "ev3devKit-ui-demo")
 set (VERSION "0.1")
 
-set (PACKAGE_NAME "EV3devKit")
+set (EV3DEVKIT_PACKAGE ${PROJECT_NAME}-${VERSION})
+set (EV3DEVKIT_DESKTOP_PACKAGE ${PROJECT_NAME}-desktop-${VERSION})
+set (GIR_NAME "EV3devKit")
 set (LIBRARY_NAME "ev3devKit")
 set (DESKTOP_LIBRARY_NAME "ev3devKit-desktop")
 set (TARGET_GLIB "2.40")
+
+set (${PROJECT_NAME}_PACKAGE ${EV3DEVKIT_PACKAGE} PARENT_SCOPE)
+set (${PROJECT_NAME}_VAPI ${EV3DEVKIT_PACKAGE}.vapi PARENT_SCOPE)
+set (${PROJECT_NAME}_DESKTOP_PACKAGE ${EV3DEVKIT_DESKTOP_PACKAGE} PARENT_SCOPE)
+set (${PROJECT_NAME}_DESKTOP_VAPI ${EV3DEVKIT_DESKTOP_PACKAGE}.vapi PARENT_SCOPE)
 
 add_subdirectory (data)
 
@@ -144,11 +151,11 @@ OPTIONS
     --target-glib=${TARGET_GLIB}
     --thread
 GENERATE_VAPI
-    ${LIBRARY_NAME}.buggy
+    ${EV3DEVKIT_PACKAGE}.buggy
 GENERATE_HEADER
-    ${LIBRARY_NAME}
+    ${EV3DEVKIT_PACKAGE}
 GENERATE_GIR TYPELIB
-    ${PACKAGE_NAME}-${VERSION}
+    ${GIR_NAME}-${VERSION}
 )
 
 add_library (${LIBRARY_NAME} ${LIBRARY_VALA_C})
@@ -159,20 +166,21 @@ install (TARGETS ${LIBRARY_NAME} LIBRARY DESTINATION lib ARCHIVE DESTINATION lib
 # the "unowned" qualifier when generating a vapi. So, we are calling a
 # script we wrote to fix it.
 add_custom_command (OUTPUT
-    ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}.vapi
+    ${CMAKE_CURRENT_BINARY_DIR}/${EV3DEVKIT_PACKAGE}.vapi
 COMMAND
     ${CMAKE_CURRENT_SOURCE_DIR}/fix-vapi.sh
-    ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}.buggy.vapi
-    ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}.vapi
+    ${CMAKE_CURRENT_BINARY_DIR}/${EV3DEVKIT_PACKAGE}.buggy.vapi
+    ${CMAKE_CURRENT_BINARY_DIR}/${EV3DEVKIT_PACKAGE}.vapi
 DEPENDS
-    ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}.buggy.vapi
+    ${CMAKE_CURRENT_SOURCE_DIR}/fix-vapi.sh
+    ${CMAKE_CURRENT_BINARY_DIR}/${EV3DEVKIT_PACKAGE}.buggy.vapi
 COMMENT
-    Fixing ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}.buggy.vapi
+    Fixing ${CMAKE_CURRENT_BINARY_DIR}/${EV3DEVKIT_PACKAGE}.buggy.vapi
 )
 
 # Workaround to make CMake 2.8 generate ev3devKit.vapi
 # apparently add_custom_command is ignored if nothing depends on its output.
-set (FIX_VAPI_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}.vapi)
+set (FIX_VAPI_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${EV3DEVKIT_PACKAGE}.vapi)
 add_custom_target (fix-vapi DEPENDS ${FIX_VAPI_DEPENDS})
 add_dependencies (${LIBRARY_NAME} fix-vapi)
 
@@ -185,17 +193,67 @@ if (EV3DEVKIT_DESKTOP)
         ${DESKTOP_PACKAGES}
     CUSTOM_VAPIS
         bindings/*.vapi
-        ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}.vapi
+        ${CMAKE_CURRENT_BINARY_DIR}/${EV3DEVKIT_PACKAGE}.vapi
     OPTIONS
         --target-glib=${TARGET_GLIB}
         --thread
     GENERATE_VAPI
-        ${DESKTOP_LIBRARY_NAME}
+        ${EV3DEVKIT_DESKTOP_PACKAGE}
     GENERATE_HEADER
         ${DESKTOP_LIBRARY_NAME}
+    GENERATE_GIR
+       ${GIR_NAME}Desktop-buggy-${VERSION}
     )
 
+    # Work around bug in valac where .gir is not correctly generated with nested
+    # namespaces. The EV3devKit .gir is only correctly generated if we leave out
+    # the gir_namespace and gir_version CCode attributes. However, this causes
+    # the EV3DevKitDesktop .gir to not add an include line for EV3devKit. So,
+    # this workaround just adds that line.
+
+    add_custom_command (
+        OUTPUT
+            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${VERSION}.gir"
+        COMMAND
+            "${CMAKE_CURRENT_SOURCE_DIR}/fix-desktop-gir.sh"
+        ARGS
+            ${GIR_NAME}
+            ${VERSION}
+            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-buggy-${VERSION}.gir"
+            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${VERSION}.gir"
+        DEPENDS
+            "${CMAKE_CURRENT_SOURCE_DIR}/fix-desktop-gir.sh"
+            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-buggy-${VERSION}.gir"
+        COMMENT
+            "Fixing ${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-buggy-${VERSION}.gir"
+    )
+
+    add_custom_command (
+        OUTPUT
+            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${VERSION}.typelib"
+        COMMAND
+            ${G_IR_COMPILER_EXECUTABLE}
+        ARGS
+            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${VERSION}.gir"
+            "--shared-library=lib${DESKTOP_LIBRARY_NAME}"
+            "--output=${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${VERSION}.typelib"
+            "--includedir=${CMAKE_CURRENT_BINARY_DIR}"
+        DEPENDS
+            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${VERSION}.gir"
+        COMMENT
+            "Genterating typelib."
+    )
+
+    add_custom_target ("${DESKTOP_LIBRARY_NAME}-typelib"
+        ALL
+        DEPENDS
+            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${VERSION}.typelib"
+    )
+
+    # end of workaround
+
     add_library (${DESKTOP_LIBRARY_NAME} ${DESKTOP_LIBRARY_VALA_C})
+    target_link_libraries (${DESKTOP_LIBRARY_NAME} ${LIBRARY_NAME})
     add_dependencies (${DESKTOP_LIBRARY_NAME} ${LIBRARY_NAME})
     install (TARGETS ${DESKTOP_LIBRARY_NAME} LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
     configure_file (
@@ -205,13 +263,9 @@ if (EV3DEVKIT_DESKTOP)
 endif (EV3DEVKIT_DESKTOP)
 
 if (NOT EV3DEVKIT_NO_DEMO)
-
-    set (EXEC_PACKAGES ${COMMON_PACKAGES})
-    set (EXEC_VAPI ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}.vapi)
-
+    set (EXEC_PACKAGES ${COMMON_PACKAGES} ${EV3DEVKIT_PACKAGE})
     if (EV3DEVKIT_DESKTOP)
-        list (APPEND EXEC_PACKAGES ${DESKTOP_PACKAGES})
-        list (APPEND EXEC_VAPI ${CMAKE_CURRENT_BINARY_DIR}/${DESKTOP_LIBRARY_NAME}.vapi)
+        list (APPEND EXEC_PACKAGES ${DESKTOP_PACKAGES} ${DESKTOP_LIBRARY_NAME})
     endif (EV3DEVKIT_DESKTOP)
 
     set (EXEC_LIBRARY_DEPENDS ${LIBRARY_NAME})
@@ -227,10 +281,10 @@ if (NOT EV3DEVKIT_NO_DEMO)
         ${EXEC_PACKAGES}
     CUSTOM_VAPIS
         bindings/*.vapi
-        ${EXEC_VAPI}
     OPTIONS
         --target-glib=${TARGET_GLIB}
         --thread
+        --vapidir=${CMAKE_CURRENT_BINARY_DIR}
     )
 
     add_executable (${DEVICES_DEMO_EXEC_NAME} ${DEVICES_DEMO_EXEC_VALA_C})
@@ -252,10 +306,10 @@ if (NOT EV3DEVKIT_NO_DEMO)
         ${EXEC_PACKAGES}
     CUSTOM_VAPIS
         bindings/*.vapi
-        ${EXEC_VAPI}
     OPTIONS
         --target-glib=${TARGET_GLIB}
         --thread
+        --vapidir=${CMAKE_CURRENT_BINARY_DIR}
     )
 
     set (EXEC_LIBRARY_DEPENDS ${LIBRARY_NAME})
@@ -283,7 +337,7 @@ if (VALADOC_FOUND)
         ${DESKTOP_LIBRARY_SOURCE_FILES}
         bindings/*.vapi
     PACKAGE_NAME
-        ${LIBRARY_NAME}
+        ${PROJECT_NAME}
     PACKAGE_VERSION
         ${VERSION}
     OPTIONS
