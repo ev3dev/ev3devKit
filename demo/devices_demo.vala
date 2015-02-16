@@ -27,10 +27,6 @@
 using EV3devKit.Devices;
 
 namespace EV3devKit.Demo {
-    // Not acutally used. This is a workaround for a bug that causes compiler error:
-    // "EV3devKit.UI.Window.key_pressed: no suitable method found to override"
-    public EV3devKit.UI.Window dummy;
-
     /**
      * Demo application
      *

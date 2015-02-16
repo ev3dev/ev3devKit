@@ -74,7 +74,7 @@ namespace EV3devKit.UI {
         /**
          * Default handler for the key_pressed signal.
          */
-        protected override bool key_pressed (uint key_code) {
+        internal override bool key_pressed (uint key_code) {
             switch (key_code) {
             case Key.UP:
             case Key.DOWN:

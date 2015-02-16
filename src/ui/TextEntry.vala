@@ -283,7 +283,7 @@ namespace EV3devKit.UI {
         /**
          * Default handler for the key_pressed signal.
          */
-        protected override bool key_pressed (uint key_code) {
+        internal override bool key_pressed (uint key_code) {
             if (_editing) {
                 if (key_code == Key.UP)
                     inc_char ();

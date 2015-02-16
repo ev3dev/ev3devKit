@@ -193,7 +193,7 @@ namespace EV3devKit.UI {
         /**
          * Default handler for the key_pressed signal.
          */
-        protected override bool key_pressed (uint key_code) {
+        internal override bool key_pressed (uint key_code) {
             if (key_code == '\n') {
                 if (check_button_type == CheckButtonType.CHECKBOX)
                     checked = !checked;

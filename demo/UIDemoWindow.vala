@@ -83,7 +83,7 @@ namespace EV3devKit.Demo {
             menu.add_menu_item (quit_menu_item);
         }
 
-        protected override bool key_pressed (uint key_code) {
+        internal override bool key_pressed (uint key_code) {
             // ignore back button otherwise we end up with no windows in the stack
             if (key_code == Key.BACKSPACE)
                 return false;

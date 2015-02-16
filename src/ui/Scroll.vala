@@ -239,7 +239,7 @@ namespace EV3devKit.UI {
         /**
          * Default handler for the key_pressed signal.
          */
-        protected override bool key_pressed (uint key_code) {
+        internal override bool key_pressed (uint key_code) {
             if (has_focus) {
                 if ((direction == ScrollDirection.VERTICAL && key_code == Key.UP)
                     || (direction == ScrollDirection.HORIZONTAL && key_code == Key.LEFT))

@@ -91,7 +91,7 @@ namespace EV3devKit.UI {
         /**
          * Default handler for the key_pressed signal.
          */
-        protected override bool key_pressed (uint key_code) {
+        internal override bool key_pressed (uint key_code) {
             if (key_code == '\n') {
                 pressed ();
                 Signal.stop_emission_by_name (this, "key-pressed");
