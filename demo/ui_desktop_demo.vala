@@ -21,7 +21,7 @@
 
 /* main.vala - main function for running UI demo on desktop */
 
-using EV3devKit.Desktop;
+using EV3devKitDesktop;
 
 namespace EV3devKit.Demo {
     public static int main (string[] args) {

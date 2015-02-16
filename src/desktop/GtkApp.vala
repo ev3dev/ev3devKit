@@ -22,19 +22,20 @@
 /* GtkApp.vala - Common code for building an ev3devKit desktop test app (GTK) */
 
 using Curses;
+using EV3devKit;
 
 /**
  * A framework for developing and testing {@link EV3devKit.UI} components in a
  * desktop environment.
  */
-namespace EV3devKit.Desktop {
+namespace EV3devKitDesktop {
     /**
      * Does all of the low level setting up of a desktop application so you
      * don't have to.
      *
      * To use it, your main function should look something like this:
      * {{{
-     * using EV3DevKit.Desktop;
+     * using EV3devKitDesktop;
      *
      * static int main (string[] args) {
      *     GtkApp.init (args);

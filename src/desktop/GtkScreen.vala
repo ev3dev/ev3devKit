@@ -21,10 +21,11 @@
 
 /* GtkScreen.vala - Screen implementation for desktop (Gtk) */
 
+using EV3devKit;
 using Gee;
 using GRX;
 
-namespace EV3devKit.Desktop {
+namespace EV3devKitDesktop {
     /**
      * A Screen that can be embedded in a Gtk application.
      *
