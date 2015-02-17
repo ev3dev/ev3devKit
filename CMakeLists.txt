@@ -3,7 +3,7 @@ project ("ev3devkit")
 cmake_minimum_required (VERSION 2.6)
 
 option (EV3DEVKIT_DESKTOP "Build desktop library")
-option (EV3DEVKIT_NO_DEMO "Do not build the demo programs")
+option (EV3DEVKIT_BUILD_DEMO "Do not build the demo programs" Yes)
 option (BUILD_SHARED_LIBS "Build shared library instead of static")
 
 list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
@@ -262,7 +262,7 @@ if (EV3DEVKIT_DESKTOP)
     )
 endif (EV3DEVKIT_DESKTOP)
 
-if (NOT EV3DEVKIT_NO_DEMO)
+if (EV3DEVKIT_BUILD_DEMO)
     set (EXEC_PACKAGES ${COMMON_PACKAGES} ${EV3DEVKIT_PACKAGE})
     if (EV3DEVKIT_DESKTOP)
         list (APPEND EXEC_PACKAGES ${DESKTOP_PACKAGES} ${DESKTOP_LIBRARY_NAME})
@@ -343,7 +343,7 @@ if (NOT EV3DEVKIT_NO_DEMO)
         WORKING_DIRECTORY
             ${CMAKE_BINARY_DIR}
     )
-endif (NOT EV3DEVKIT_NO_DEMO)
+endif (EV3DEVKIT_BUILD_DEMO)
 
 find_package (Valadoc)
 if (VALADOC_FOUND)
