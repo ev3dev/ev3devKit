@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <title>EV3devKit.Devices.Device &ndash; ev3devkit &ndash; Vala Binding Reference</title>
+    <link href="../style.css" rel="stylesheet" type="text/css"/><script src="../scripts.js" type="text/javascript">
+    </script>
+  </head>
+  <body>
+    <div class="site_header">EV3devKit.Devices.Device &ndash; ev3devkit Reference Manual</div>
+    <div class="site_body">
+      <div class="site_navigation">
+        <ul class="navi_main">
+          <li class="package_index"><a href="../index.html">Packages</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="package"><a href="index.htm">ev3devkit</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="namespace"><a href="EV3devKit.html">EV3devKit</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="namespace"><a href="EV3devKit.Devices.html">Devices</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="abstract_class">Device</li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="property"><a href="EV3devKit.Devices.Device.connected.html">connected</a></li>
+          <li class="property"><a href="EV3devKit.Devices.Device.device_name.html">device_name</a></li>
+          <li class="creation_method"><a href="EV3devKit.Devices.Device.Device.html">Device</a></li>
+          <li class="method"><a href="EV3devKit.Devices.Device.assert_connected.html">assert_connected</a></li>
+          <li class="method"><a href="EV3devKit.Devices.Device.read_int.html">read_int</a></li>
+          <li class="method"><a href="EV3devKit.Devices.Device.read_string.html">read_string</a></li>
+          <li class="method"><a href="EV3devKit.Devices.Device.try_read_int.html">try_read_int</a></li>
+          <li class="method"><a href="EV3devKit.Devices.Device.try_read_string.html">try_read_string</a></li>
+          <li class="method"><a href="EV3devKit.Devices.Device.try_write_int.html">try_write_int</a></li>
+          <li class="method"><a href="EV3devKit.Devices.Device.try_write_string.html">try_write_string</a></li>
+          <li class="method"><a href="EV3devKit.Devices.Device.write_int.html">write_int</a></li>
+          <li class="method"><a href="EV3devKit.Devices.Device.write_string.html">write_string</a></li>
+          <li class="field"><a href="EV3devKit.Devices.Device.udev_device.html">udev_device</a></li>
+        </ul>
+      </div>
+      <div class="site_content">
+        <h1 class="main_title">Device</h1>
+        <hr class="main_hr"/>
+        <h2 class="main_title">Object Hierarchy:</h2>
+        <img class="main_diagram" usemap="#EV3devKit.Devices.Device" alt="Object hierarchy for Device" src="img/EV3devKit.Devices.Device.png"/>
+
+      <map id="EV3devKit.Devices.Device" name="EV3devKit.Devices.Device">
+<area shape="rect" id="node1" href="EV3devKit.Devices.Device.html" title="EV3devKit.Devices.Device" alt="" coords="5,101,227,149"/>
+</map>
+
+        <h2 class="main_title">Description:</h2>
+        <div class="main_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">abstract</span> <span class="main_keyword">class</span> <b><span class="abstract_class">Device</span></b> : <span class="main_type"><span class="class">Object</span></span>
+        </div>
+        <div class="description">
+          <p>The base class for all types of devices.</p>
+        </div>
+        <div class="box">
+          <div class="headline">
+            <div class="text">All known sub-classes:</div>
+            <div class="toggle">
+              <img onclick="toggle_box  (this, 'box-content-3')" src="../coll_open.png">&nbsp;</div>
+            </div>
+            <div class="content" id="box-content-3">
+              <div class="column">
+                <ul class="navi_inline">
+                  <li class="class"><a href="EV3devKit.Devices.DCMotor.html">DCMotor</a></li>
+                  <li class="class"><a href="EV3devKit.Devices.Input.html">Input</a></li>
+                  <li class="class"><a href="EV3devKit.Devices.LED.html">LED</a></li>
+                </ul>
+              </div>
+              <div class="column">
+                <ul class="navi_inline">
+                  <li class="class"><a href="EV3devKit.Devices.Port.html">Port</a></li>
+                  <li class="class"><a href="EV3devKit.Devices.PowerSupply.html">PowerSupply</a></li>
+                  <li class="class"><a href="EV3devKit.Devices.Sensor.html">Sensor</a></li>
+                </ul>
+              </div>
+              <div class="column">
+                <ul class="navi_inline">
+                  <li class="class"><a href="EV3devKit.Devices.ServoMotor.html">ServoMotor</a></li>
+                  <li class="class"><a href="EV3devKit.Devices.TachoMotor.html">TachoMotor</a></li>
+                </ul>
+              </div>
+            </div>
+          </div><br/>
+          <div class="namespace_note"><b>Namespace:</b> <a href="EV3devKit.Devices.html">EV3devKit.Devices</a>
+          </div>
+          <div class="package_note"><b>Package:</b> <a href="index.htm">ev3devkit</a>
+          </div>
+          <h2 class="main_title">Content:</h2>
+          <h3 class="main_title">Properties:</h3>
+          <ul class="navi_inline">
+            <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">bool</span></span> <b><a href="EV3devKit.Devices.Device.connected.html" class="property">connected</a></b> { <span class="main_keyword">get</span>; }
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Gets the connection status of the device.</span>
+              </div></li>
+            <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="class">string</span></span> <b><a href="EV3devKit.Devices.Device.device_name.html" class="property">device_name</a></b> { <span class="main_keyword">get</span>; }
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Gets the sysfs device node name for this device.</span>
+              </div></li>
+          </ul>
+          <h3 class="main_title">Creation methods:</h3>
+          <ul class="navi_inline">
+            <li class="creation_method"><span class="leaf_code_definition"><span class="main_keyword">protected</span> <b><a href="EV3devKit.Devices.Device.Device.html" class="creation_method">Device</a></b> (<span class="main_type"><span class="class">Device</span></span> udev_device)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Creates a new device object.</span>
+              </div></li>
+          </ul>
+          <h3 class="main_title">Methods:</h3>
+          <ul class="navi_inline">
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="EV3devKit.Devices.Device.assert_connected.html" class="method">assert_connected</a></b> () <span class="main_keyword">throws</span> <span class="main_type"><a href="EV3devKit.Devices.DeviceError.html" class="errordomain">DeviceError</a></span>
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Test if device is still connected.</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">protected</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="EV3devKit.Devices.Device.read_int.html" class="method">read_int</a></b> (<span class="main_basic_type"><span class="class">string</span></span> property) <span class="main_keyword">throws</span> <span class="main_type"><span class="class">Error</span></span>
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Reads an attribute value as an int.</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">protected</span> <span class="main_basic_type"><span class="struct">int</span></span>? <b><a href="EV3devKit.Devices.Device.try_read_int.html" class="method">try_read_int</a></b> (<span class="main_basic_type"><span class="class">string</span></span> property)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Reads an attribute value as an int.</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">protected</span> <span class="main_basic_type"><span class="class">string</span></span> <b><a href="EV3devKit.Devices.Device.read_string.html" class="method">read_string</a></b> (<span class="main_basic_type"><span class="class">string</span></span> property) <span class="main_keyword">throws</span> <span class="main_type"><span class="class">Error</span></span>
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Reads an attribute value as a string.</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">protected</span> <span class="main_basic_type"><span class="class">string</span></span>? <b><a href="EV3devKit.Devices.Device.try_read_string.html" class="method">try_read_string</a></b> (<span class="main_basic_type"><span class="class">string</span></span> property)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Reads an attribute value as a string.</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">protected</span> <span class="main_keyword">void</span> <b><a href="EV3devKit.Devices.Device.write_int.html" class="method">write_int</a></b> (<span class="main_basic_type"><span class="class">string</span></span> property, <span class="main_basic_type"><span class="struct">int</span></span> value) <span class="main_keyword">throws</span> <span class="main_type"><span class="class">Error</span></span>
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Writes an int value to a sysfs attribute.</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">protected</span> <span class="main_basic_type"><span class="struct">bool</span></span> <b><a href="EV3devKit.Devices.Device.try_write_int.html" class="method">try_write_int</a></b> (<span class="main_basic_type"><span class="class">string</span></span> property, <span class="main_basic_type"><span class="struct">int</span></span> value)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Writes an int value to a sysfs attribute.</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">protected</span> <span class="main_keyword">void</span> <b><a href="EV3devKit.Devices.Device.write_string.html" class="method">write_string</a></b> (<span class="main_basic_type"><span class="class">string</span></span> property, <span class="main_basic_type"><span class="class">string</span></span> value) <span class="main_keyword">throws</span> <span class="main_type"><span class="class">Error</span></span>
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Writes a string value to a sysfs attribute.</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">protected</span> <span class="main_basic_type"><span class="struct">bool</span></span> <b><a href="EV3devKit.Devices.Device.try_write_string.html" class="method">try_write_string</a></b> (<span class="main_basic_type"><span class="class">string</span></span> property, <span class="main_basic_type"><span class="class">string</span></span> value)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Writes a string value to a sysfs attribute.</span>
+              </div></li>
+          </ul>
+          <h3 class="main_title">Fields:</h3>
+          <ul class="navi_inline">
+            <li class="field"><span class="leaf_code_definition"><span class="main_keyword">protected</span> <span class="main_type"><span class="class">Device</span></span> <b><a href="EV3devKit.Devices.Device.udev_device.html" class="field">udev_device</a></b>
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">The udev object for this device.</span>
+              </div></li>
+          </ul>
+          <h3 class="main_title">Inherited Members:</h3>
+          <div class="box">
+            <div class="headline">
+              <div class="text">All known members inherited from class GLib.Object</div>
+              <div class="toggle">
+                <img onclick="toggle_box  (this, 'box-content-4')" src="../coll_open.png">&nbsp;</div>
+              </div>
+              <div class="content" id="box-content-4">
+                <div class="column">
+                  <ul class="navi_inline">
+                    <li class="static_method">@new</li>
+                    <li class="static_method">newv</li>
+                    <li class="static_method">new_valist</li>
+                    <li class="method">get_type</li>
+                    <li class="method">get_class</li>
+                    <li class="method">@ref</li>
+                    <li class="method">unref</li>
+                    <li class="method">ref_sink</li>
+                    <li class="method">weak_ref</li>
+                    <li class="method">weak_unref</li>
+                    <li class="method">add_weak_pointer</li>
+                    <li class="method">remove_weak_pointer</li>
+                  </ul>
+                </div>
+                <div class="column">
+                  <ul class="navi_inline">
+                    <li class="method">@get</li>
+                    <li class="method">@set</li>
+                    <li class="method">get_property</li>
+                    <li class="method">set_property</li>
+                    <li class="method">get_data</li>
+                    <li class="method">set_data</li>
+                    <li class="method">set_data_full</li>
+                    <li class="method">steal_data</li>
+                    <li class="method">get_qdata</li>
+                    <li class="method">set_qdata</li>
+                    <li class="method">set_qdata_full</li>
+                    <li class="method">steal_qdata</li>
+                  </ul>
+                </div>
+                <div class="column">
+                  <ul class="navi_inline">
+                    <li class="method">freeze_notify</li>
+                    <li class="method">thaw_notify</li>
+                    <li class="virtual_method">dispose</li>
+                    <li class="virtual_method">constructed</li>
+                    <li class="method">notify_property</li>
+                    <li class="method">connect</li>
+                    <li class="method">disconnect</li>
+                    <li class="method">add_toggle_ref</li>
+                    <li class="method">remove_toggle_ref</li>
+                    <li class="method">bind_property</li>
+                    <li class="signal">notify</li>
+                    <li class="field">ref_count</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><br/>
+        <div class="site_footer">Generated by <a href="http://www.valadoc.org/">Valadoc</a>
+        </div>
+      </body>
+    </html>
