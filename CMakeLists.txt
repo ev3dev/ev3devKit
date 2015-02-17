@@ -327,6 +327,22 @@ if (NOT EV3DEVKIT_NO_DEMO)
     )
 
     install (TARGETS ${UI_DEMO_EXEC_NAME} RUNTIME DESTINATION bin)
+
+    # python user interface demo (requires shared library, i.e. BUILD_SHARED_LIBS is true)
+
+    add_custom_target (run-python-ui-desktop-demo
+        COMMAND
+            LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}
+            GI_TYPELIB_PATH=${CMAKE_CURRENT_BINARY_DIR}
+            ${CMAKE_CURRENT_SOURCE_DIR}/demo/python/ui_desktop_demo.py
+        DEPENDS
+            ${LIBRARY_NAME}
+            ${DESKTOP_LIBRARY_NAME}
+            ${CMAKE_CURRENT_SOURCE_DIR}/demo/python/ui_demo_window.py
+            ${CMAKE_CURRENT_SOURCE_DIR}/demo/python/ui_desktop_demo.py
+        WORKING_DIRECTORY
+            ${CMAKE_BINARY_DIR}
+    )
 endif (NOT EV3DEVKIT_NO_DEMO)
 
 find_package (Valadoc)
