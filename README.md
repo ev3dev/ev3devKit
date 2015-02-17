@@ -43,7 +43,7 @@ ensure that they take effect (you can use `nuke.sh` to do this).
 * Build as shared library instead of static library: `-DBUILD_SHARED_LIBS=bool:Yes`
 
 ## Documentation
-API docs are at http://www.ev3dev.org/ev3devKit/ev3devKit/EV3devKit.html
+API docs are at http://www.ev3dev.org/ev3devKit/ev3devkit/index.htm
 
 [GLib]: https://developer.gnome.org/glib/stable/index.html
 [GObject]: https://developer.gnome.org/gobject/stable/index.html
