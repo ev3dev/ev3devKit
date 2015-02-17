@@ -22,13 +22,14 @@ set (LIBRARY_NAME "ev3devKit")
 set (DESKTOP_LIBRARY_NAME "ev3devKit-desktop")
 set (TARGET_GLIB "2.40")
 
-if (PARENT_DIRECTORY)
+get_directory_property(PARENT_DIR PARENT_DIRECTORY)
+if (PARENT_DIR)
     # If this is included by a parent project, export some variables back to the parent
     set (${PROJECT_NAME}_PACKAGE ${EV3DEVKIT_PACKAGE} PARENT_SCOPE)
     set (${PROJECT_NAME}_VAPI ${EV3DEVKIT_PACKAGE}.vapi PARENT_SCOPE)
     set (${PROJECT_NAME}_DESKTOP_PACKAGE ${EV3DEVKIT_DESKTOP_PACKAGE} PARENT_SCOPE)
     set (${PROJECT_NAME}_DESKTOP_VAPI ${EV3DEVKIT_DESKTOP_PACKAGE}.vapi PARENT_SCOPE)
-endif (PARENT_DIRECTORY)
+endif (PARENT_DIR)
 
 add_subdirectory (data)
 
