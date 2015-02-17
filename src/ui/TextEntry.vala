@@ -132,13 +132,7 @@ namespace EV3devKit.UI {
          */
         public bool insert { get; set; default = false; }
 
-        /**
-         * Creates a new text entry.
-         *
-         * @param text The initial text.
-         */
-        public TextEntry (string text = "") {
-            this.text = text;
+        construct {
             label = new Label () {
                 text_horizontal_align = TextHorizAlign.LEFT,
                 text_vertical_align = TextVertAlign.TOP,
@@ -151,6 +145,15 @@ namespace EV3devKit.UI {
             notify["min-width"].connect (redraw);
             notify["editing"].connect (redraw);
             notify["parent"].connect (() => label.parent = this.parent);
+        }
+
+        /**
+         * Creates a new text entry.
+         *
+         * @param text The initial text.
+         */
+        public TextEntry (string text = "") {
+            this.text = text;
         }
 
         /**

@@ -33,13 +33,17 @@ namespace EV3devKit.UI {
      * visible behind it.
      */
     public class Dialog : EV3devKit.UI.Window {
+
+        construct {
+            margin = 20;
+            border = 1;
+            border_radius = 10;
+        }
+
         /**
          * Creates a new instance of a dialog window.
          */
         public Dialog () {
-            margin = 20;
-            border = 1;
-            border_radius = 10;
         }
 
         /**

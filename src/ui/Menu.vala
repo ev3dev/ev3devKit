@@ -47,11 +47,9 @@ namespace EV3devKit.UI {
          */
         public delegate bool FindFunc<T> (MenuItem menu_item, T value);
 
-        /**
-         * Creates a new menu widget.
-         */
-        public Menu () {
-            base.vertical ();
+        construct {
+            if (direction != ScrollDirection.VERTICAL)
+                critical ("Unexpected direction.");
             can_focus = false;
             menu_vbox = new Box.vertical () {
                 spacing = 0
@@ -78,6 +76,13 @@ namespace EV3devKit.UI {
             });
             add (menu_vbox);
             weak_ref (weak_notify);
+        }
+
+        /**
+         * Creates a new menu widget.
+         */
+        public Menu () {
+            Object (direction: ScrollDirection.VERTICAL);
         }
 
         static void weak_notify (Object obj) {

@@ -42,17 +42,25 @@ namespace EV3devKit.UI {
         /**
          * Gets the Button that is the Container for the menu item.
          */
-        public Button button { get; private set; }
+        public Button button { get; construct; default = new Button (); }
 
         /**
          * Gets the Lable for the menu item.
          */
-        public Label label { get; private set; }
+        public Label label { get; construct; default = new Label (); }
 
         /**
          * Gets and sets a user-defined object that the menu item represents.
          */
         public Object? represented_object { get; set; }
+
+        construct {
+            // using weak reference to prevent reference cycle.
+            button.weak_represented_object = this;
+            weak_ref (weak_notify);
+            menu_item_count++;
+            //debug ("Created MenuItem: %p", this);
+        }
 
         /**
          * Creates a new menu item with the specified text.
@@ -100,13 +108,7 @@ namespace EV3devKit.UI {
          * implementations must not set that property.
          */
         protected MenuItem.with_button (Button button, Label label) {
-            this.button = button;
-            this.label = label;
-            // using weak reference to prevent reference cycle.
-            button.weak_represented_object = this;
-            weak_ref (weak_notify);
-            menu_item_count++;
-            //debug ("Created MenuItem: %p", this);
+            Object (button: button, label: label);
         }
 
         static void weak_notify (Object obj) {

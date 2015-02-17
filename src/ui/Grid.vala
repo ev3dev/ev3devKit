@@ -42,6 +42,22 @@ namespace EV3devKit.UI {
         Map<weak Widget,Pair?> span_map;
 
         /**
+         * Gets the number of rows in the grid.
+         */
+        public int rows {
+            get { return size.row; }
+            construct { size.row = value; }
+        }
+
+        /**
+         * Gets the number of columns in the grid.
+         */
+        public int columns {
+            get { return size.col; }
+            construct { size.col = value; }
+        }
+
+        /**
          * Sets all border widths (top, bottom, left, right, row, column) for the widget.
          */
         public new int border {
@@ -67,16 +83,9 @@ namespace EV3devKit.UI {
          */
         public int border_column { get; set; }
 
-        /**
-         * Creates a new instance of a grid container.
-         *
-         * @param rows The number of rows in the grid. Must be > 0.
-         * @param columns The number of columns in the grid. Must be > 0.
-         */
-        public Grid (uint rows, uint columns) requires (rows > 0 && columns > 0) {
-            base (ContainerType.MULTIPLE);
-            size.row = (int)rows;
-            size.col = (int)columns;
+        construct {
+            if (container_type != ContainerType.MULTIPLE)
+                critical ("Requires container_type == ContainerType.MULTIPLE");
             grid = new Widget?[rows,columns];
             position_map = new Gee.HashMap<Widget,Pair?>();
             span_map = new Gee.HashMap<Widget,Pair?>();
@@ -84,6 +93,16 @@ namespace EV3devKit.UI {
             child_removed.connect (on_child_removed);
             notify["border-row"].connect (redraw);
             notify["border-column"].connect (redraw);
+        }
+
+        /**
+         * Creates a new instance of a grid container.
+         *
+         * @param rows The number of rows in the grid. Must be > 0.
+         * @param columns The number of columns in the grid. Must be > 0.
+         */
+        public Grid (int rows, int columns) requires (rows > 0 && columns > 0) {
+            Object (container_type: ContainerType.MULTIPLE, rows: rows, columns: columns);
         }
 
         ~Grid () {

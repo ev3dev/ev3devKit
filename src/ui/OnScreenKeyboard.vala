@@ -86,12 +86,7 @@ namespace EV3devKit.UI {
          */
         public signal void canceled ();
 
-        /**
-         * Creates a new on screen keyboard.
-         *
-         * @param inital_keyboard The type of keyboard to display first.
-         */
-        public OnScreenKeyboard (Keyboard inital_keyboard = Keyboard.UPPER_ALPHA) {
+        construct {
             signal_id_map = new HashMap<ulong, weak Object> ();
             vbox = new Box.vertical () {
                 spacing = 3
@@ -135,10 +130,18 @@ namespace EV3devKit.UI {
             nav_grid.add (create_change_keyboard_button ("!@#", Keyboard.SYMBOL));
             nav_grid.add (create_insert_button ());
             vbox.add (nav_grid);
-            set_keyboard (inital_keyboard);
             add (vbox);
             shown.connect_after (() => text_entry.focus_next (FocusDirection.UP));
             weak_ref (before_finalize);
+        }
+
+        /**
+         * Creates a new on screen keyboard.
+         *
+         * @param inital_keyboard The type of keyboard to display first.
+         */
+        public OnScreenKeyboard (Keyboard inital_keyboard = Keyboard.UPPER_ALPHA) {
+            set_keyboard (inital_keyboard);
         }
 
         static void before_finalize (Object obj) {

@@ -49,15 +49,14 @@ namespace EV3devKitDesktop {
         Gtk.Image image;
         internal char* pixbuf_data { get { return pixbuf.pixels; } }
 
-        public Info info { get; private set; }
+        public Info info { get; construct; default = devices[0]; }
 
-        public GtkFramebuffer (DeviceType type = DeviceType.STOCK) {
+        construct {
             can_focus = true;
             button_press_event.connect ((event) => {
                 grab_focus ();
                 return true;
             });
-            info = devices[(int)type];
             image = new Gtk.Image.from_pixbuf(new Gdk.Pixbuf (
                 Gdk.Colorspace.RGB, false, 8, info.width * 2, info.height * 2));
             if (info.monochrome) {
@@ -71,6 +70,12 @@ namespace EV3devKitDesktop {
             }
             add (image);
             pixbuf = new Gdk.Pixbuf (Gdk.Colorspace.RGB, false, 8, info.width, info.height);
+        }
+
+        public GtkFramebuffer (DeviceType type = DeviceType.STOCK) {
+            // have to use variable here to make valadoc happy.
+            int index = (int)type;
+            Object (info: devices[index]);
         }
 
         public void refresh () {

@@ -62,7 +62,10 @@ namespace EV3devKit.UI {
      * radio button.
      */
     public class CheckButton : EV3devKit.UI.Widget {
-        CheckButtonType check_button_type;
+        /**
+         * Gets the style of checkbutton.
+         */
+        public CheckButtonType check_button_type { get; construct; }
 
         bool _checked = false;
         /**
@@ -94,7 +97,7 @@ namespace EV3devKit.UI {
          * Gets the group that the CheckButton has been asigned to. Returns
          * ``null`` for checkboxes since they don't have groups.
          */
-        public CheckButtonGroup? group { get; private set; }
+        public CheckButtonGroup? group { get; construct; }
 
         /**
          * Gets and sets the outer size (width and height) of the CheckButton
@@ -111,10 +114,7 @@ namespace EV3devKit.UI {
          */
         public int inner_size { get; set; default = 5; }
 
-        CheckButton (CheckButtonType type, CheckButtonGroup? group = null)
-        {
-            check_button_type = type;
-            this.group = group;
+        construct {
             padding = 2;
             can_focus = true;
             horizontal_align = WidgetAlign.CENTER;
@@ -123,6 +123,10 @@ namespace EV3devKit.UI {
             notify["checked"].connect (redraw);
             notify["outer-size"].connect (redraw);
             notify["inner-size"].connect (redraw);
+        }
+
+        private CheckButton (CheckButtonType type, CheckButtonGroup? group = null) {
+            Object (check_button_type: type, group: group);
         }
 
         /**

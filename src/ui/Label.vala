@@ -48,7 +48,7 @@ namespace EV3devKit.UI {
         /**
          * Gets and sets the text displayed by this Label.
          */
-        public string? text { get; set; }
+        public string? text { get; set construct; }
 
         /**
          * Gets and sets the Font.
@@ -74,13 +74,7 @@ namespace EV3devKit.UI {
             set { text_option.y_align = value; }
         }
 
-        /**
-         * Creates a new instance of a Label widget.
-         *
-         * @param text The text displayed by this Label.
-         */
-        public Label (string? text = null) {
-            this.text = text;
+        construct {
             text_option = new TextOption () {
                 font = default_font,
                 direction = TextDirection.RIGHT,
@@ -92,6 +86,15 @@ namespace EV3devKit.UI {
             notify["font"].connect (redraw);
             notify["text-horizontal-align"].connect (redraw);
             notify["text-vertical-align"].connect (redraw);
+        }
+
+        /**
+         * Creates a new instance of a Label widget.
+         *
+         * @param text The text displayed by this Label.
+         */
+        public Label (string? text = null) {
+            Object (text: text);
         }
 
         /**

@@ -38,19 +38,24 @@ namespace EV3devKit.UI {
          */
         public signal void pressed ();
 
+        construct {
+            if (container_type != ContainerType.SINGLE)
+                critical ("Requires container_type == ContainerType.SINGLE");
+            border = 1;
+            border_radius = 3;
+            padding = 2;
+            can_focus = true;
+        }
+
         /**
          * Creates a new Button.
          *
          * @param child The child for the button {@link Container}.
          */
         public Button (Widget? child = null) {
-            base (ContainerType.SINGLE);
+            Object (container_type: ContainerType.SINGLE);
             if (child != null)
                 add (child);
-            border = 1;
-            border_radius = 3;
-            padding = 2;
-            can_focus = true;
         }
 
         /**

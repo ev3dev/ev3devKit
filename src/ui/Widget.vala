@@ -423,7 +423,7 @@ namespace EV3devKit.UI {
          */
         public Object? represented_object { get; set; }
 
-        protected Widget () {
+        construct {
             notify["margin-top"].connect (redraw);
             notify["margin-bottom"].connect (redraw);
             notify["margin-left"].connect (redraw);
@@ -448,6 +448,13 @@ namespace EV3devKit.UI {
             widget_count++;
             //debug ("Created %s widget: %p", get_type ().name (), this);
         }
+
+        /**
+         * Creates a new instance of a widget.
+         */
+        protected Widget () {
+        }
+
 /*
         ~Widget () {
             debug ("Finalized %s widget %p", get_type ().name (), this);

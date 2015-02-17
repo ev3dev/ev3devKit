@@ -106,7 +106,7 @@ namespace EV3devKit.UI {
          * The type indicates if it can only have one child or if it can have
          * multiple children.
          */
-        public ContainerType container_type { get; private set; }
+        public ContainerType container_type { get; construct; }
 
         /**
          * Emitted when a child is added to this Container.
@@ -122,15 +122,18 @@ namespace EV3devKit.UI {
          */
         public signal void child_removed (Widget child);
 
+        construct {
+            _children = new LinkedList<Widget> ();
+            weak_ref (weak_notify);
+        }
+
         /**
          * Creates a new instance of a Container.
          *
          * @param type The type of Container.
          */
         protected Container (ContainerType type) {
-            container_type = type;
-            _children = new LinkedList<Widget> ();
-            weak_ref (weak_notify);
+            Object (container_type: type);
         }
 
         void weak_notify (Object obj) {

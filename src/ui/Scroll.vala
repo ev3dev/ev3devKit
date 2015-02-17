@@ -66,11 +66,15 @@ namespace EV3devKit.UI {
     public class Scroll : EV3devKit.UI.Container {
         const int SCROLLBAR_SIZE = 7;
 
-        ScrollDirection direction;
         int scroll_offset;
         int scroll_indicator_size;
         int scroll_indicator_offset;
         bool draw_scrollbar;
+
+        /**
+         * Gets the direction of the scrollbar.
+         */
+        public ScrollDirection direction { get; construct; }
 
         /**
          * Gets and sets the maximum preferred width for the scroll area.
@@ -95,14 +99,18 @@ namespace EV3devKit.UI {
          */
         public int scroll_amount { get; set; default = 8; }
 
-        Scroll (ScrollDirection direction) {
-            base (ContainerType.SINGLE);
-            this.direction = direction;
+        construct {
+            if (container_type != ContainerType.SINGLE)
+                critical ("Requires container_type == ContainerType.SINGLE.");
             can_focus = true;
             padding = 2;
             notify["min-height"].connect (redraw);
             notify["min-width"].connect (redraw);
             notify["scrollbar-visible"].connect (redraw);
+        }
+
+        private Scroll (ScrollDirection direction) {
+            Object (container_type: ContainerType.SINGLE, direction: direction);
         }
 
         /**

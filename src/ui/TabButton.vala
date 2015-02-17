@@ -37,11 +37,7 @@ namespace EV3devKit.UI {
          */
         public bool active { get; internal set; }
 
-        /**
-         * Creates a new tab button.
-         */
-        public TabButton (string? text = null) {
-            base (new Label (text));
+        construct {
             border_radius = 3;
             notify["active"].connect_after (() => {
                 can_focus = !active;
@@ -49,6 +45,13 @@ namespace EV3devKit.UI {
                     focus_next (FocusDirection.RIGHT);
                 redraw ();
             });
+        }
+
+        /**
+         * Creates a new tab button.
+         */
+        public TabButton (string? text = null) {
+            base (new Label (text));
         }
 
         /**

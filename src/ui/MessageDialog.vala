@@ -32,17 +32,13 @@ namespace EV3devKit.UI {
      */
     public class MessageDialog : EV3devKit.UI.Dialog {
         Scroll vscroll;
+        Label title_label;
+        Label message_label;
 
-        /**
-         * Creates a new message dialog.
-         *
-         * @param title The title text.
-         * @param message The message text.
-         */
-        public MessageDialog (string title, string message) {
+        construct {
             var content_vbox = new Box.vertical ();
             add (content_vbox);
-            var title_label = new Label (title) {
+            title_label = new Label () {
                 vertical_align = WidgetAlign.START,
                 padding = 3,
                 border_bottom = 1
@@ -53,8 +49,19 @@ namespace EV3devKit.UI {
                 margin_bottom = 9
             };
             content_vbox.add (vscroll);
-            var message_label = new Label (message);
+            message_label = new Label ();
             vscroll.add (message_label);
+        }
+
+        /**
+         * Creates a new message dialog.
+         *
+         * @param title The title text.
+         * @param message The message text.
+         */
+        public MessageDialog (string title, string message) {
+            title_label.text = title;
+            message_label.text = message;
         }
 
         /**

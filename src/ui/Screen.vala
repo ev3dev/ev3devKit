@@ -64,12 +64,12 @@ namespace EV3devKit.UI {
         /**
          * Gets the width of the screen.
          */
-        public int width { get; private set; }
+        public int width { get; construct; }
 
         /**
          * Gets the height of the screen.
          */
-        public int height { get; private set; }
+        public int height { get; construct; }
 
         /**
          * Gets the height of windows for the screen.
@@ -110,13 +110,6 @@ namespace EV3devKit.UI {
         public StatusBar status_bar { get; internal set; }
 
         /**
-         * Creates a new screen using the current GRX screen information.
-         */
-        public Screen () {
-            this.custom (screen_x (), screen_y ());
-        }
-
-        /**
          * Gets the currently active screen.
          *
          * Calling {@link Window.show} will display the window on this screen.
@@ -139,6 +132,27 @@ namespace EV3devKit.UI {
             active_screen = screen;
         }
 
+        construct {
+            window_stack = new LinkedList<Window> ();
+            key_queue = new LinkedList<uint?> ();
+            status_bar = new StatusBar () {
+                visible = false
+            };
+            status_bar.screen = this;
+
+            fg_color = Color.black;
+            bg_color = Color.white;
+            mid_color = Color.alloc (0, 0, 255); // blue
+
+            Timeout.add (50, draw);
+        }
+
+        /**
+         * Creates a new screen using the current GRX screen information.
+         */
+        public Screen () {
+            this.custom (screen_x (), screen_y ());
+        }
 
         /**
          * Creates a new screen with a custom size and optional memory location.
@@ -149,12 +163,7 @@ namespace EV3devKit.UI {
          * If ``null`` memory will be automatically allocated for the context.
          */
         public Screen.custom (int width, int height, char *context_mem_addr = null) {
-            window_stack = new LinkedList<Window> ();
-            key_queue = new LinkedList<uint?> ();
-            status_bar = new StatusBar () {
-                visible = false
-            };
-            status_bar.screen = this;
+            Object (width: width, height: height);
             FrameMode mode = core_frame_mode ();
             if (mode == FrameMode.UNDEFINED)
                 mode = screen_frame_mode ();
@@ -165,15 +174,8 @@ namespace EV3devKit.UI {
                 addr[0] = context_mem_addr;
                 context = Context.create_with_mode (mode, width, height, addr);
             }
-            fg_color = Color.black;
-            bg_color = Color.white;
             if (context.driver.bits_per_pixel == 1)
                 mid_color = Color.black;
-            else
-                mid_color = Color.alloc (0, 0, 255);
-            this.width = width;
-            this.height = height;
-            Timeout.add (50, draw);
         }
 
         /**

@@ -107,10 +107,7 @@ namespace EV3devKit.Devices {
          */
         public signal void input_added (Input input);
 
-        /**
-         * Create new instance of DeviceManager.
-         */
-        public DeviceManager () {
+        construct {
             device_map = new Gee.HashMap<string, EV3devKit.Devices.Device> ();
             udev_client = new Client (subsystems);
             udev_client.uevent.connect (on_uevent);
@@ -120,6 +117,12 @@ namespace EV3devKit.Devices {
                     on_uevent("add", device);
                 }
             }
+        }
+
+        /**
+         * Create new instance of DeviceManager.
+         */
+        public DeviceManager () {
         }
 
         /**

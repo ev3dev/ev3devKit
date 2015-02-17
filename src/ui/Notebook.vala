@@ -56,11 +56,9 @@ namespace EV3devKit.UI {
             }
         }
 
-        /**
-         * Creates a new notebook.
-         */
-        public Notebook () {
-            base (ContainerType.SINGLE);
+        construct {
+            if (container_type != ContainerType.SINGLE)
+                critical ("Requires container_type == ContainerType.SINGLE");
             tabs = new LinkedList<NotebookTab> ();
             button_map = new Gee.HashMap<weak NotebookTab, weak Button> ();
 
@@ -76,6 +74,13 @@ namespace EV3devKit.UI {
             border = 1;
             add (notebook_vbox);
             notify["active_tab"].connect (redraw);
+        }
+
+        /**
+         * Creates a new notebook.
+         */
+        public Notebook () {
+            Object (container_type: ContainerType.SINGLE);
         }
 
         /**

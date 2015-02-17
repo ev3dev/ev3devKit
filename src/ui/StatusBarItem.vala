@@ -40,14 +40,17 @@ namespace EV3devKit.UI {
          */
         public bool visible { get; protected set; default = true; }
 
-        /**
-         * Creates a new status bar item.
-         */
-        protected StatusBarItem () {
+        construct {
             notify["visible"].connect (() => {
                 if (status_bar != null)
                     status_bar.redraw ();
             });
+        }
+
+        /**
+         * Creates a new status bar item.
+         */
+        protected StatusBarItem () {
         }
 
         /**

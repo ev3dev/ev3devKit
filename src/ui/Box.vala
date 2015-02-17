@@ -71,7 +71,7 @@ namespace EV3devKit.UI {
         /**
          * Gets the layout direction of the Box.
          */
-        public BoxDirection direction { get; private set; }
+        public BoxDirection direction { get; construct; }
 
         /**
          * Gets and sets the spacing in pixels between the widgets in the box.
@@ -82,13 +82,15 @@ namespace EV3devKit.UI {
 
         /**
          * Create a new instance of Box.
-         *
-         * @param direction The direction to layout widgets.
          */
-        Box (BoxDirection direction) {
-             base (ContainerType.MULTIPLE);
-             this.direction = direction;
+        construct {
+            if (container_type != ContainerType.MULTIPLE)
+                critical ("Requires container_type == ContainerType.MULTIPLE.");
              notify["spacing"].connect (redraw);
+        }
+
+        private Box (BoxDirection direction) {
+            Object (container_type: ContainerType.MULTIPLE, direction: direction);
         }
 
         /**

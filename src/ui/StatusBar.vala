@@ -96,12 +96,15 @@ namespace EV3devKit.UI {
             item.status_bar = this;
         }
 
+        construct {
+            left_items = new ArrayList<StatusBarItem> ();
+            right_items = new ArrayList<StatusBarItem> ();
+        }
+
         /**
          * Creates a new status bar.
          */
         public StatusBar () {
-            left_items = new ArrayList<StatusBarItem> ();
-            right_items = new ArrayList<StatusBarItem> ();
         }
 
         /**

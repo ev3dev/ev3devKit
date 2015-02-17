@@ -29,7 +29,21 @@ namespace EV3devKit.UI {
         /**
          * Gets the radio button for the menu item.
          */
-        public CheckButton radio { get; private set; }
+        public CheckButton radio { get; construct; }
+
+        construct {
+            var hbox = new Box.horizontal ();
+            button.add (hbox);
+            label.horizontal_align = WidgetAlign.START;
+            hbox.add (label);
+            hbox.add (new Spacer ());
+            if (radio == null) {
+                critical ("radio is null.");
+            } else {
+                hbox.add (radio);
+                button.pressed.connect (() => radio.checked = !radio.checked);
+            }
+        }
 
         /**
          * Creates a new radio button menu item.
@@ -38,21 +52,14 @@ namespace EV3devKit.UI {
          * @param group The CheckButtonGroup for the radio button.
          */
         public RadioMenuItem (string text, CheckButtonGroup group) {
-            base.with_button (new Button () {
+            Object (button: new Button () {
                 border = 0,
                 border_radius = 0
-            }, new Label (text));
-            var hbox = new Box.horizontal ();
-            button.add (hbox);
-            label.horizontal_align = WidgetAlign.START;
-            hbox.add (label);
-            hbox.add (new Spacer ());
-            radio = new CheckButton.radio (group) {
+            }, label: new Label (text),
+            radio: new CheckButton.radio (group) {
                 padding = 0,
                 can_focus = false
-            };
-            hbox.add (radio);
-            button.pressed.connect (() => radio.checked = !radio.checked);
+            });
         }
     }
 }

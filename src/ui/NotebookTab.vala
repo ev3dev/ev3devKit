@@ -35,15 +35,20 @@ namespace EV3devKit.UI {
         /**
          * Gets and sets the title displayed on the tab.
          */
-        public string title { get; set; }
+        public string title { get; set; default = "Tab"; }
+
+        construct {
+            if (container_type != ContainerType.SINGLE)
+                critical ("Requires container_type == ContainerType.SINGLE");
+            notify["title"].connect (redraw);
+        }
 
         /**
          * Creates a new notebook tab.
          */
         public NotebookTab (string title) {
-            base (ContainerType.SINGLE);
+            Object (container_type: ContainerType.SINGLE);
             this.title = title;
-            notify["title"].connect (redraw);
         }
     }
 }

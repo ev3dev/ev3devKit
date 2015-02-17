@@ -29,7 +29,21 @@ namespace EV3devKit.UI {
         /**
          * Gets the checkbox widget for this menu item.
          */
-        public CheckButton checkbox { get; private set; }
+        public CheckButton checkbox { get; construct; }
+
+        construct {
+            var hbox = new Box.horizontal ();
+            button.add (hbox);
+            label.horizontal_align = WidgetAlign.START;
+            hbox.add (label);
+            hbox.add (new Spacer ());
+            if (checkbox == null) {
+                critical ("checkbox is null");
+            } else {
+                hbox.add (checkbox);
+                button.pressed.connect (() => checkbox.checked = !checkbox.checked);
+            }
+        }
 
         /**
          * Creates a new checkbox menu item.
@@ -37,21 +51,14 @@ namespace EV3devKit.UI {
          * @param text The text for the label of the menu item.
          */
         public CheckboxMenuItem (string text) {
-            base.with_button (new Button () {
+            Object (button: new Button () {
                 border = 0,
                 border_radius = 0
-            }, new Label (text));
-            var hbox = new Box.horizontal ();
-            button.add (hbox);
-            label.horizontal_align = WidgetAlign.START;
-            hbox.add (label);
-            hbox.add (new Spacer ());
-            checkbox = new CheckButton.checkbox () {
+            }, label: new Label (text),
+            checkbox: new CheckButton.checkbox () {
                 padding = 0,
                 can_focus = false
-            };
-            hbox.add (checkbox);
-            button.pressed.connect (() => checkbox.checked = !checkbox.checked);
+            });
         }
     }
 }

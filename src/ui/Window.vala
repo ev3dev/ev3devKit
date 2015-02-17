@@ -64,11 +64,16 @@ namespace EV3devKit.UI {
         public virtual signal void closed () {
         }
 
+        construct {
+            if (container_type != ContainerType.SINGLE)
+                critical ("Requires container_type == ContainerType.SINGLE.");
+        }
+
         /**
          * Creates a new instance of a Window.
          */
         public Window () {
-            base (ContainerType.SINGLE);
+            Object (container_type: ContainerType.SINGLE);
         }
 
         /**
@@ -95,11 +100,19 @@ namespace EV3devKit.UI {
         }
 
         /**
+         * Make the window visible by putting it on top of the window stack of
+         * the active screen.
+         */
+        public void show () {
+            show_on_screen (Screen.get_active_screen ());
+        }
+
+        /**
          * Make the window visible by putting it on top of the window stack.
          *
          * @param screen The screen to show the window on.
          */
-        public void show (Screen screen = Screen.get_active_screen ()) {
+        public void show_on_screen (Screen screen) {
             if (screen == null) {
                 critical ("No active screen.");
                 return;
