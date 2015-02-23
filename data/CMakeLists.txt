@@ -3,6 +3,8 @@ set (files
     bluetooth7x9
     bluetooth-connected7x9
     ethernet12x12
+    lock5x6
+    lock7x9
     usb12x12
     usb7x9
     wifi-idle12x9

@@ -25,17 +25,27 @@ using Gee;
 using GRX;
 
 namespace EV3devKit.UI {
+    /**
+     * Represents available stock icons.
+     */
     public enum StockIcon {
         BLUETOOTH_CONNECTED_7X9,
         BLUETOOTH_12X12,
         BLUETOOTH_7X9,
         ETHERNET_12X12,
+        LOCK_5X6,
+        LOCK_7X9,
         USB_12X12,
         USB_7X9,
         WIFI_IDLE_12X9,
         WIFI_12X12,
         WIFI_12X9;
 
+        /**
+         * Converts StockIcon enum value to corresponding file name.
+         *
+         * @return The name of the file. Does not include full path.
+         */
         public string to_file_name () {
             switch (this) {
             case BLUETOOTH_CONNECTED_7X9:
@@ -46,6 +56,10 @@ namespace EV3devKit.UI {
                 return "bluetooth7x9.png";
             case ETHERNET_12X12:
                 return "ethernet12x12.png";
+            case LOCK_5X6:
+                return "lock5x6.png";
+            case LOCK_7X9:
+                return "lock7x9.png";
             case USB_7X9:
                 return "usb7x9.png";
             case USB_12X12:
