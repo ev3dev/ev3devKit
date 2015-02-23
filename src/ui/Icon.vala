@@ -39,7 +39,8 @@ namespace EV3devKit.UI {
         USB_7X9,
         WIFI_IDLE_12X9,
         WIFI_12X12,
-        WIFI_12X9;
+        WIFI_12X9,
+        WPS_9X9;
 
         /**
          * Converts StockIcon enum value to corresponding file name.
@@ -70,6 +71,8 @@ namespace EV3devKit.UI {
                 return "wifi12x12.png";
             case WIFI_12X9:
                 return "wifi12x9.png";
+            case WPS_9X9:
+                return "wps9x9.png";
             default:
                 critical ("Unknown StockIcon %d", this);
                 return "";

@@ -9,7 +9,9 @@ set (files
     usb7x9
     wifi-idle12x9
     wifi12x12
-    wifi12x9)
+    wifi12x9
+    wps9x9
+)
 
 set (generated_files "")
 foreach (file ${files})
