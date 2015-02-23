@@ -167,7 +167,7 @@ namespace EV3devKit.UI {
         {
             result = get_margin_border_padding_width ();
             if (child != null)
-                result += child.get_preferred_width_for_height (height - result);
+                result += child.get_preferred_width_for_height (height - get_margin_border_padding_height ());
             return int.max (1, result);
         }
 
@@ -179,7 +179,7 @@ namespace EV3devKit.UI {
         {
             result = get_margin_border_padding_height ();
             if (child != null)
-                result += child.get_preferred_height_for_width (width - result);
+                result += child.get_preferred_height_for_width (width - get_margin_border_padding_width ());
             return int.max (1, result);
         }
 

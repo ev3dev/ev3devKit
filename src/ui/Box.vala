@@ -148,11 +148,13 @@ namespace EV3devKit.UI {
             int width = 0;
             if (direction == BoxDirection.HORIZONTAL) {
                 foreach (var item in _children)
-                    width += item.get_preferred_width_for_height (height) + spacing;
+                    width += item.get_preferred_width_for_height (height - get_margin_border_padding_height ()) + spacing;
                 width -= spacing;
             } else {
+                var height_map = get_child_heights (get_preferred_width () - get_margin_border_padding_width (),
+                    height - get_margin_border_padding_height ());
                 foreach (var item in _children)
-                    width = int.max (width, item.get_preferred_width_for_height (height));
+                    width = int.max (width, item.get_preferred_width_for_height (height_map[item]));
             }
             return int.max (1, width + get_margin_border_padding_width ());
         }
@@ -166,13 +168,85 @@ namespace EV3devKit.UI {
             int height = 0;
             if (direction == BoxDirection.VERTICAL) {
                 foreach (var item in _children)
-                    height += item.get_preferred_height_for_width (width) + spacing;
+                    height += item.get_preferred_height_for_width (width - get_margin_border_padding_width ()) + spacing;
                 height -= spacing;
             } else {
+                var width_map = get_child_widths (width - get_margin_border_padding_width (),
+                    get_preferred_height () - get_margin_border_padding_height ());
                 foreach (var item in _children)
-                    height = int.max (height, item.get_preferred_height_for_width (width));
+                    height = int.max (height, item.get_preferred_height_for_width (width_map[item]));
             }
             return int.max (1, height + get_margin_border_padding_height ());
+        }
+
+        HashMap<Widget,int> get_child_widths (int container_width, int container_height) {
+            int total_width = 0;
+            int spacer_count = 0;
+            int fill_count = 0;
+            HashMap<Widget, int> width_map = new HashMap<Widget,int> ();
+            foreach (var child in _children) {
+                width_map[child] = child.get_preferred_width_for_height (container_height);
+                total_width += width_map[child];
+                total_width += spacing;
+                if (child is Spacer)
+                    spacer_count++;
+                else if (child.horizontal_align == WidgetAlign.FILL)
+                    fill_count++;
+            }
+            total_width -= spacing;
+            var extra_space = container_width - total_width;
+            foreach (var child in _children) {
+                if (spacer_count > 0 && extra_space > 0) {
+                    if (child is Spacer) {
+                        var spacer_width = extra_space / spacer_count;
+                        width_map[child] = spacer_width;
+                        extra_space -= spacer_width;
+                        spacer_count--;
+                    }
+                } else if (fill_count > 0 && child.horizontal_align == WidgetAlign.FILL) {
+                    var fill_width = extra_space / fill_count;
+                    width_map[child] = width_map[child] + fill_width; // += does not work!
+                    extra_space -= fill_width;
+                    fill_count--;
+                }
+                width_map[child] = int.max (width_map[child], 1);
+            }
+            return width_map;
+        }
+
+        HashMap<Widget, int> get_child_heights (int container_width, int container_height) {
+            int total_height = 0;
+            int spacer_count = 0;
+            int fill_count = 0;
+            HashMap<Widget, int> height_map = new HashMap<Widget, int> ();
+            foreach (var child in _children) {
+                height_map[child] = child.get_preferred_height_for_width (content_bounds.width);
+                total_height += height_map[child];
+                total_height += spacing;
+                if (child is Spacer)
+                    spacer_count++;
+                else if (child.vertical_align == WidgetAlign.FILL)
+                    fill_count++;
+            }
+            total_height -= spacing;
+            var extra_space = content_bounds.height - total_height;
+            foreach (var child in _children) {
+                if (spacer_count > 0 && extra_space > 0) {
+                    if (child is Spacer) {
+                        var spacer_height = extra_space / spacer_count;
+                        height_map[child] = spacer_height;
+                        extra_space -= spacer_height;
+                        spacer_count--;
+                    }
+                } else if (fill_count > 0 && child.vertical_align == WidgetAlign.FILL) {
+                    var fill_height = extra_space / fill_count;
+                    height_map[child] = height_map[child] + fill_height; // += does not work!
+                    extra_space -= fill_height;
+                    fill_count--;
+                }
+                height_map[child] = int.max (height_map[child], 1);
+            }
+            return height_map;
         }
 
         /**
@@ -180,73 +254,17 @@ namespace EV3devKit.UI {
          */
         protected override void do_layout () {
             if (direction == BoxDirection.HORIZONTAL) {
-                int total_width = 0;
-                int spacer_count = 0;
-                int fill_count = 0;
-                HashMap<Widget, int> width_map = new HashMap<Widget,int> ();
-                foreach (var child in _children) {
-                    width_map[child] = child.get_preferred_width_for_height (content_bounds.height);
-                    total_width += width_map[child];
-                    total_width += spacing;
-                    if (child is Spacer)
-                        spacer_count++;
-                    else if (child.horizontal_align == WidgetAlign.FILL)
-                        fill_count++;
-                }
-                total_width -= spacing;
                 var x = content_bounds.x1;
-                var extra_space = int.max (0, content_bounds.width - total_width);
+                var width_map = get_child_widths (content_bounds.width, content_bounds.height);
                 foreach (var child in _children) {
-                    if (spacer_count > 0) {
-                        if (child is Spacer) {
-                            var spacer_width = extra_space / spacer_count;
-                            width_map[child] = spacer_width;
-                            extra_space -= spacer_width;
-                            spacer_count--;
-                        }
-                    } else if (fill_count > 0 && child.horizontal_align == WidgetAlign.FILL) {
-                        var fill_width = extra_space / fill_count;
-                        width_map[child] = width_map[child] + fill_width; // += does not work!
-                        extra_space -= fill_width;
-                        fill_count--;
-                    }
-                    width_map[child] = int.max (width_map[child], 1);
                     set_child_bounds (child, x, content_bounds.y1,
                         x + width_map[child] - 1, content_bounds.y2);
                     x += width_map[child] + spacing;
                 }
             } else {
-                int total_height = 0;
-                int spacer_count = 0;
-                int fill_count = 0;
-                HashMap<Widget, int> height_map = new HashMap<Widget, int> ();
-                foreach (var child in _children) {
-                    height_map[child] = child.get_preferred_height_for_width (content_bounds.width);
-                    total_height += height_map[child];
-                    total_height += spacing;
-                    if (child is Spacer)
-                        spacer_count++;
-                    else if (child.vertical_align == WidgetAlign.FILL)
-                        fill_count++;
-                }
-                total_height -= spacing;
                 var y = content_bounds.y1;
-                var extra_space = int.max (0, content_bounds.height - total_height);
+                var height_map = get_child_heights (content_bounds.width, content_bounds.height);
                 foreach (var child in _children) {
-                    if (spacer_count > 0) {
-                        if (child is Spacer) {
-                            var spacer_height = extra_space / spacer_count;
-                            height_map[child] = spacer_height;
-                            extra_space -= spacer_height;
-                            spacer_count--;
-                        }
-                    } else if (fill_count > 0 && child.vertical_align == WidgetAlign.FILL) {
-                        var fill_height = extra_space / fill_count;
-                        height_map[child] = height_map[child] + fill_height; // += does not work!
-                        extra_space -= fill_height;
-                        fill_count--;
-                    }
-                    height_map[child] = int.max (height_map[child], 1);
                     set_child_bounds (child, content_bounds.x1, y,
                         content_bounds.x2, y + height_map[child] - 1);
                     y += height_map[child] + spacing;

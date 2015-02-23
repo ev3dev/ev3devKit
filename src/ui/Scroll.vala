@@ -188,9 +188,9 @@ namespace EV3devKit.UI {
          * {@inheritDoc}
          */
         protected override int get_preferred_width () ensures (result > 0) {
-            result =  base.get_preferred_width () + get_margin_border_padding_width ();
+            result =  base.get_preferred_width ();
             if (direction == ScrollDirection.VERTICAL && scrollbar_visible != ScrollbarVisibility.ALWAYS_HIDE)
-                result += SCROLLBAR_SIZE;
+                result += SCROLLBAR_SIZE + padding_right;
             else if (direction == ScrollDirection.HORIZONTAL)
                 result = int.min (result, _max_preferred_width);
             return result;
@@ -200,9 +200,9 @@ namespace EV3devKit.UI {
          * {@inheritDoc}
          */
         protected override int get_preferred_height () ensures (result > 0) {
-            result =  base.get_preferred_height () + get_margin_border_padding_height ();
+            result =  base.get_preferred_height ();
             if (direction == ScrollDirection.HORIZONTAL && scrollbar_visible != ScrollbarVisibility.ALWAYS_HIDE)
-                result += SCROLLBAR_SIZE;
+                result += SCROLLBAR_SIZE + padding_bottom;
             else if (direction == ScrollDirection.VERTICAL)
                 result = int.min (result, _max_preferred_height);
             return result;
@@ -214,13 +214,12 @@ namespace EV3devKit.UI {
         protected override int get_preferred_width_for_height (int height)
             requires (height > 0) ensures (result > 0)
         {
-            result =  get_margin_border_padding_width ();
             if (direction == ScrollDirection.VERTICAL)
-                result += base.get_preferred_width ();
+                result = base.get_preferred_width ();
             else
-                result += base.get_preferred_width_for_height (height);
-            if (direction == ScrollDirection.VERTICAL && scrollbar_visible == ScrollbarVisibility.ALWAYS_SHOW)
-                result += SCROLLBAR_SIZE;
+                result = base.get_preferred_width_for_height (height - SCROLLBAR_SIZE - padding_bottom);
+            if (direction == ScrollDirection.VERTICAL && scrollbar_visible != ScrollbarVisibility.ALWAYS_HIDE)
+                result += SCROLLBAR_SIZE + padding_right;
             else if (direction == ScrollDirection.HORIZONTAL)
                 result = int.min (result, _max_preferred_width);
             return result;
@@ -232,13 +231,12 @@ namespace EV3devKit.UI {
         protected override int get_preferred_height_for_width (int width)
             requires (width > 0) ensures (result > 0)
         {
-            result =  get_margin_border_padding_height ();
             if (direction == ScrollDirection.HORIZONTAL)
-                result += base.get_preferred_height ();
+                result = base.get_preferred_height ();
             else
-                result += base.get_preferred_height_for_width (width);
+                result = base.get_preferred_height_for_width (width - SCROLLBAR_SIZE - padding_right);
             if (direction == ScrollDirection.HORIZONTAL && scrollbar_visible != ScrollbarVisibility.ALWAYS_HIDE)
-                result += SCROLLBAR_SIZE;
+                result += SCROLLBAR_SIZE + padding_bottom;
             else if (direction == ScrollDirection.VERTICAL)
                 result = int.min (result, _max_preferred_height);
             return result;
@@ -279,7 +277,7 @@ namespace EV3devKit.UI {
                             && child_height > content_bounds.height))
                     {
                         child_height = child.get_preferred_height_for_width (
-                            content_bounds.width - SCROLLBAR_SIZE - padding_left);
+                            content_bounds.width - SCROLLBAR_SIZE - padding_right);
                         draw_scrollbar = true;
                     }
                     scroll_offset = int.min (scroll_offset, child_height - content_bounds.height);
