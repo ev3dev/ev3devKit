@@ -148,11 +148,22 @@ namespace EV3devKit.UI {
             if (file_map.contains (file)) {
                 return (Context)(void*)file_map[file];
             }
+            // First, check current working diectory for file (if it is not an
+            // absolute file name already) then check PKGDATADIR.
+            var full_path = file.dup ();
+            if (FileUtils.test (full_path, FileTest.EXISTS)) {
+                if (!Path.is_absolute (full_path))
+                    full_path = Path.build_filename (Environment.get_current_dir (), full_path);
+            } else {
+                if (Path.is_absolute (full_path)
+                        || !FileUtils.test ((full_path = Path.build_filename (PKGDATADIR, full_path)), FileTest.EXISTS))
+                {
+                    throw new IOError.NOT_FOUND ("Could not find '%s'", full_path);
+                }
+            }
             int width, height;
-            if (!FileUtils.test (file, FileTest.EXISTS))
-                throw new IOError.NOT_FOUND ("Could not find '%s'", file);
-            if (query_png (file, out width, out height) == Result.ERROR)
-                throw new IOError.FAILED ("Error querying '%s'", file);
+            if (query_png (full_path, out width, out height) == Result.ERROR)
+                throw new IOError.FAILED ("Error querying '%s'", full_path);
             Context new_context;
             // in desktop app, core fame mode is undefined so we have to specify a frame mode.
             if (core_frame_mode () == FrameMode.UNDEFINED)
@@ -161,8 +172,8 @@ namespace EV3devKit.UI {
                 new_context = Context.create (width, height);
             if (new_context == null)
                 throw new IOError.FAILED ("Error allocating context.");
-            if (new_context.load_from_png (file) == Result.ERROR)
-                throw new IOError.FAILED ("Error loading '%s'", file);
+            if (new_context.load_from_png (full_path) == Result.ERROR)
+                throw new IOError.FAILED ("Error loading '%s'", full_path);
             unowned Context unowned_context = new_context;
             file_map[file] = (owned)new_context;
             return unowned_context;

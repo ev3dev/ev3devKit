@@ -2,15 +2,25 @@ project ("ev3devkit")
 
 cmake_minimum_required (VERSION 2.6)
 
-option (EV3DEVKIT_DESKTOP "Build desktop library")
-option (EV3DEVKIT_BUILD_DEMO "Do not build the demo programs" Yes)
-option (BUILD_SHARED_LIBS "Build shared library instead of static")
+get_directory_property(PARENT_DIR PARENT_DIRECTORY)
+
+if (NOT PARENT_DIR)
+    option (EV3DEVKIT_DESKTOP "Build desktop library")
+    option (EV3DEVKIT_BUILD_DEMO "Do not build the demo programs" Yes)
+    option (BUILD_SHARED_LIBS "Build shared library instead of static")
+endif (NOT PARENT_DIR)
 
 list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 set (DATADIR "${CMAKE_INSTALL_PREFIX}/share")
 
-set (PKGDATADIR "${DATADIR}/${PROJECT_NAME}")
+# Use CMAKE_PROJECT_NAME if we are building a statically linked library.
+# This way, if there is a parent project, it uses that name instead.
+if (BUILD_SHARED_LIBS)
+    set (PKGDATADIR "${DATADIR}/${PROJECT_NAME}")
+else (BUILD_SHARED_LIBS)
+    set (PKGDATADIR "${DATADIR}/${CMAKE_PROJECT_NAME}")
+endif (BUILD_SHARED_LIBS)
 set (DEVICES_DEMO_EXEC_NAME "ev3devKit-devices-demo")
 set (UI_DEMO_EXEC_NAME "ev3devKit-ui-demo")
 set (VERSION "0.1")
@@ -22,7 +32,6 @@ set (LIBRARY_NAME "ev3devKit")
 set (DESKTOP_LIBRARY_NAME "ev3devKit-desktop")
 set (TARGET_GLIB "2.40")
 
-get_directory_property(PARENT_DIR PARENT_DIRECTORY)
 if (PARENT_DIR)
     # If this is included by a parent project, export some variables back to the parent
     set (${PROJECT_NAME}_PACKAGE ${EV3DEVKIT_PACKAGE} PARENT_SCOPE)
@@ -60,6 +69,8 @@ set (COMMON_MODULES
 )
 set (DESKTOP_MODULES gtk+-3.0)
 set (DESKTOP_PACKAGES gtk+-3.0)
+
+configure_file (src/Version.vala.in ${CMAKE_CURRENT_BINARY_DIR}/Version.vala)
 
 if (EV3DEVKIT_DESKTOP)
     set (UI_DEMO_SOURCE_FILES
@@ -115,6 +126,7 @@ set (LIBRARY_SOURCE_FILES
     src/ui/Widget.vala
     src/ui/Window.vala
     src/ConsoleApp.vala
+    ${CMAKE_CURRENT_BINARY_DIR}/Version.vala
 )
 
 set (DESKTOP_LIBRARY_SOURCE_FILES
@@ -164,7 +176,10 @@ GENERATE_GIR TYPELIB
 
 add_library (${LIBRARY_NAME} ${LIBRARY_VALA_C})
 add_dependencies(${LIBRARY_NAME} ev3devkit_data)
-install (TARGETS ${LIBRARY_NAME} LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
+# only install static library if this is not a subproject
+if (BUILD_SHARED_LIBS OR NOT PARENT_DIR)
+    install (TARGETS ${LIBRARY_NAME} LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
+endif (BUILD_SHARED_LIBS OR NOT PARENT_DIR)
 
 # There is a bug in valac that causes an unowned compact class to lose
 # the "unowned" qualifier when generating a vapi. So, we are calling a
@@ -259,7 +274,10 @@ if (EV3DEVKIT_DESKTOP)
     add_library (${DESKTOP_LIBRARY_NAME} ${DESKTOP_LIBRARY_VALA_C})
     target_link_libraries (${DESKTOP_LIBRARY_NAME} ${LIBRARY_NAME})
     add_dependencies (${DESKTOP_LIBRARY_NAME} ${LIBRARY_NAME})
-    install (TARGETS ${DESKTOP_LIBRARY_NAME} LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
+    # only install static library if this is not a subproject
+    if (BUILD_SHARED_LIBS OR NOT PARENT_DIR)
+        install (TARGETS ${DESKTOP_LIBRARY_NAME} LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
+    endif (BUILD_SHARED_LIBS OR NOT PARENT_DIR)
     configure_file (
         ${CMAKE_CURRENT_SOURCE_DIR}/src/desktop/main_window.glade
         ${CMAKE_BINARY_DIR}/main_window.glade COPYONLY
