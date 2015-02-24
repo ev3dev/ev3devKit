@@ -1,7 +1,7 @@
 /*
  * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
- * Copyright (C) 2014 David Lechner <david@lechnology.com>
+ * Copyright (C) 2014-2015 David Lechner <david@lechnology.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,25 +51,41 @@ namespace EV3devKitDesktop {
 
         public Info info { get; construct; default = devices[0]; }
 
+        int _scale;
+        public int scale {
+            get { return _scale; }
+            set {
+                if (image != null)
+                    image.destroy ();
+                _scale = value;
+                image = new Gtk.Image.from_pixbuf(new Gdk.Pixbuf (
+                    Gdk.Colorspace.RGB, false, 8, info.width * value, info.height * value));
+                if (info.monochrome) {
+                    // Set the background color to look like the LED on the EV3.
+                    image.override_background_color (StateFlags.NORMAL, Gdk.RGBA () {
+                        red   = 173.0 / 256.0,
+                        green = 181.0 / 256.0,
+                        blue  = 120.0 / 256.0,
+                        alpha = 1.0
+                    });
+                }
+                image.show ();
+                child = image;
+                var window = get_toplevel () as Window;
+                if (window != null)
+                    window.resize (1, 1);
+                refresh ();
+            }
+        }
+
         construct {
             can_focus = true;
             button_press_event.connect ((event) => {
                 grab_focus ();
                 return true;
             });
-            image = new Gtk.Image.from_pixbuf(new Gdk.Pixbuf (
-                Gdk.Colorspace.RGB, false, 8, info.width * 2, info.height * 2));
-            if (info.monochrome) {
-                // Set the background color to look like the LED on the EV3.
-                image.override_background_color (StateFlags.NORMAL, Gdk.RGBA () {
-                    red   = 173.0 / 256.0,
-                    green = 181.0 / 256.0,
-                    blue  = 120.0 / 256.0,
-                    alpha = 1.0
-                });
-            }
-            add (image);
             pixbuf = new Gdk.Pixbuf (Gdk.Colorspace.RGB, false, 8, info.width, info.height);
+            scale = 1; // initializes image
         }
 
         public GtkFramebuffer (DeviceType type = DeviceType.STOCK) {
@@ -84,15 +100,15 @@ namespace EV3devKitDesktop {
                 // make white transparent so that the "LCD color" will show through.
                 p = p.add_alpha (true, 255, 255, 255);
             }
-            image.set_from_pixbuf (p.scale_simple (info.width * 2,
-                info.height * 2, Gdk.InterpType.TILES));
+            image.set_from_pixbuf (p.scale_simple (info.width * scale,
+                info.height * scale, Gdk.InterpType.TILES));
         }
 
         public void copy_to_clipboard () {
             var display = get_display ();
             var clipboard = Gtk.Clipboard.get_for_display (display, Gdk.SELECTION_CLIPBOARD);
-            clipboard.set_image (pixbuf.scale_simple (info.width * 2,
-                info.height * 2, Gdk.InterpType.TILES));
+            clipboard.set_image (pixbuf.scale_simple (info.width * scale,
+                info.height * scale, Gdk.InterpType.TILES));
         }
     }
 }

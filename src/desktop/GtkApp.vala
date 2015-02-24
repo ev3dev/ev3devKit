@@ -1,7 +1,7 @@
 /*
  * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
- * Copyright 2014 David Lechner <david@lechnology.com>
+ * Copyright 2014-2015 David Lechner <david@lechnology.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -105,6 +105,10 @@ namespace EV3devKitDesktop {
                     .clicked.connect (() => UI.Screen.get_active_screen ().queue_key_code ('\n'));
                 (builder.get_object ("back_button") as Gtk.Button)
                     .clicked.connect (() => UI.Screen.get_active_screen ().queue_key_code (Key.BACKSPACE));
+                (builder.get_object ("scale-spinbutton") as Gtk.SpinButton)
+                    .bind_property ("value", stock_lcd, "scale", BindingFlags.SYNC_CREATE);
+                (builder.get_object ("scale-spinbutton") as Gtk.SpinButton)
+                    .bind_property ("value", color_lcd, "scale", BindingFlags.SYNC_CREATE);
             } catch (Error err) {
                 error ("%s", err.message);
             }
