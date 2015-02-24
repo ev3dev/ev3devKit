@@ -45,6 +45,11 @@ namespace EV3devKitDesktop {
             { 160, 128, false }
         };
 
+        const int LCD_BG_RED   = 173;
+        const int LCD_BG_GREEN = 181;
+        const int LCD_BG_BLUE  = 120;
+        const int LCD_BG_RGB   = (LCD_BG_RED << 16) + (LCD_BG_GREEN << 8) + LCD_BG_BLUE;
+
         Gdk.Pixbuf pixbuf;
         Gtk.Image image;
         internal char* pixbuf_data { get { return pixbuf.pixels; } }
@@ -63,9 +68,9 @@ namespace EV3devKitDesktop {
                 if (info.monochrome) {
                     // Set the background color to look like the LED on the EV3.
                     image.override_background_color (StateFlags.NORMAL, Gdk.RGBA () {
-                        red   = 173.0 / 256.0,
-                        green = 181.0 / 256.0,
-                        blue  = 120.0 / 256.0,
+                        red   = LCD_BG_RED   / 256.0,
+                        green = LCD_BG_GREEN / 256.0,
+                        blue  = LCD_BG_BLUE  / 256.0,
                         alpha = 1.0
                     });
                 }
@@ -105,9 +110,17 @@ namespace EV3devKitDesktop {
         }
 
         public void copy_to_clipboard () {
+            Gdk.Pixbuf p = pixbuf;
+            if (info.monochrome) {
+                // make white transparent so that the "LCD color" will show through.
+                p = p.add_alpha (true, 255, 255, 255);
+                // in this case, we have to supply the background ourselves
+                p = p.composite_color_simple (p.width, p.height, Gdk.InterpType.TILES,
+                    255, 4096, LCD_BG_RGB, LCD_BG_RGB);
+            }
             var display = get_display ();
             var clipboard = Gtk.Clipboard.get_for_display (display, Gdk.SELECTION_CLIPBOARD);
-            clipboard.set_image (pixbuf.scale_simple (info.width * scale,
+            clipboard.set_image (p.scale_simple (info.width * scale,
                 info.height * scale, Gdk.InterpType.TILES));
         }
     }
