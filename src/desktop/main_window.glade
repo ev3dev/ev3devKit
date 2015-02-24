@@ -2,27 +2,27 @@
 <!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
-  <object class="GtkImage" id="back_image">
+  <object class="GtkImage" id="back-image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="stock">gtk-clear</property>
   </object>
-  <object class="GtkImage" id="down_image">
+  <object class="GtkImage" id="down-image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="stock">gtk-go-down</property>
   </object>
-  <object class="GtkImage" id="enter_image">
+  <object class="GtkImage" id="enter-image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="stock">gtk-apply</property>
   </object>
-  <object class="GtkImage" id="left_image">
+  <object class="GtkImage" id="left-image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="stock">gtk-go-back</property>
   </object>
-  <object class="GtkImage" id="right_image">
+  <object class="GtkImage" id="right-image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="stock">gtk-go-forward</property>
@@ -34,19 +34,19 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkImage" id="up_image">
+  <object class="GtkImage" id="up-image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="stock">gtk-go-up</property>
   </object>
-  <object class="GtkWindow" id="main_window">
+  <object class="GtkWindow" id="main-window">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">ev3devKit demo</property>
     <property name="window_position">center</property>
     <property name="gravity">center</property>
     <signal name="destroy" handler="gtk_main_quit" swapped="no"/>
     <child>
-      <object class="GtkBox" id="main_box">
+      <object class="GtkBox" id="main-box">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="margin_left">10</property>
@@ -55,7 +55,7 @@
         <property name="margin_bottom">10</property>
         <property name="spacing">10</property>
         <child>
-          <object class="GtkBox" id="screen1_box">
+          <object class="GtkBox" id="screen1-box">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
@@ -64,7 +64,7 @@
               <placeholder/>
             </child>
             <child>
-              <object class="GtkButton" id="screen1_copy_button">
+              <object class="GtkButton" id="screen1-copy-button">
                 <property name="label" translatable="yes">Copy Image to Clipboard</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -91,17 +91,17 @@
             <property name="orientation">vertical</property>
             <property name="spacing">12</property>
             <child>
-              <object class="GtkGrid" id="keypad_grid">
+              <object class="GtkGrid" id="keypad-grid">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
                 <child>
-                  <object class="GtkButton" id="back_button">
+                  <object class="GtkButton" id="back-button">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
-                    <property name="image">back_image</property>
+                    <property name="image">back-image</property>
                     <property name="always_show_image">True</property>
                   </object>
                   <packing>
@@ -110,11 +110,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="left_button">
+                  <object class="GtkButton" id="left-button">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
-                    <property name="image">left_image</property>
+                    <property name="image">left-image</property>
                     <property name="always_show_image">True</property>
                   </object>
                   <packing>
@@ -123,11 +123,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="down_button">
+                  <object class="GtkButton" id="down-button">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
-                    <property name="image">down_image</property>
+                    <property name="image">down-image</property>
                     <property name="image_position">bottom</property>
                     <property name="always_show_image">True</property>
                   </object>
@@ -137,11 +137,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="up_button">
+                  <object class="GtkButton" id="up-button">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
-                    <property name="image">up_image</property>
+                    <property name="image">up-image</property>
                     <property name="image_position">right</property>
                     <property name="always_show_image">True</property>
                   </object>
@@ -151,11 +151,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="enter_button">
+                  <object class="GtkButton" id="enter-button">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
-                    <property name="image">enter_image</property>
+                    <property name="image">enter-image</property>
                     <property name="image_position">bottom</property>
                     <property name="always_show_image">True</property>
                   </object>
@@ -165,11 +165,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="right_button">
+                  <object class="GtkButton" id="right-button">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
-                    <property name="image">right_image</property>
+                    <property name="image">right-image</property>
                     <property name="image_position">right</property>
                     <property name="always_show_image">True</property>
                   </object>
@@ -239,7 +239,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="screen2_box">
+          <object class="GtkBox" id="screen2-box">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
@@ -248,7 +248,7 @@
               <placeholder/>
             </child>
             <child>
-              <object class="GtkButton" id="screen2_copy_button">
+              <object class="GtkButton" id="screen2-copy-button">
                 <property name="label" translatable="yes">Copy Image to Clipboard</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>

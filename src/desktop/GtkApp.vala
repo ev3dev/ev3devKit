@@ -86,24 +86,24 @@ namespace EV3devKitDesktop {
             Gtk.Box screen2_box;
             try {
                 builder.add_from_file (main_window_glade_file);
-                main_window = builder.get_object ("main_window") as Gtk.Window;
-                screen1_box = builder.get_object ("screen1_box") as Gtk.Box;
-                screen2_box = builder.get_object ("screen2_box") as Gtk.Box;
-                (builder.get_object ("screen1_copy_button") as Gtk.Button)
+                main_window = builder.get_object ("main-window") as Gtk.Window;
+                screen1_box = builder.get_object ("screen1-box") as Gtk.Box;
+                screen2_box = builder.get_object ("screen2-box") as Gtk.Box;
+                (builder.get_object ("screen1-copy-button") as Gtk.Button)
                     .clicked.connect (() => color_lcd.copy_to_clipboard ());
-                (builder.get_object ("screen2_copy_button") as Gtk.Button)
+                (builder.get_object ("screen2-copy-button") as Gtk.Button)
                     .clicked.connect (() => stock_lcd.copy_to_clipboard ());
-                (builder.get_object ("up_button") as Gtk.Button)
+                (builder.get_object ("up-button") as Gtk.Button)
                     .clicked.connect (() => UI.Screen.get_active_screen ().queue_key_code (Key.UP));
-                (builder.get_object ("down_button") as Gtk.Button)
+                (builder.get_object ("down-button") as Gtk.Button)
                     .clicked.connect (() => UI.Screen.get_active_screen ().queue_key_code (Key.DOWN));
-                (builder.get_object ("left_button") as Gtk.Button)
+                (builder.get_object ("left-button") as Gtk.Button)
                     .clicked.connect (() => UI.Screen.get_active_screen ().queue_key_code (Key.LEFT));
-                (builder.get_object ("right_button") as Gtk.Button)
+                (builder.get_object ("right-button") as Gtk.Button)
                     .clicked.connect (() => UI.Screen.get_active_screen ().queue_key_code (Key.RIGHT));
-                (builder.get_object ("enter_button") as Gtk.Button)
+                (builder.get_object ("enter-button") as Gtk.Button)
                     .clicked.connect (() => UI.Screen.get_active_screen ().queue_key_code ('\n'));
-                (builder.get_object ("back_button") as Gtk.Button)
+                (builder.get_object ("back-button") as Gtk.Button)
                     .clicked.connect (() => UI.Screen.get_active_screen ().queue_key_code (Key.BACKSPACE));
                 (builder.get_object ("scale-spinbutton") as Gtk.SpinButton)
                     .bind_property ("value", stock_lcd, "scale", BindingFlags.SYNC_CREATE);
