@@ -434,7 +434,6 @@ namespace EV3devKit.Demo {
             command_line.print ("driver_name: %s\n", selected_sensor.driver_name);
             command_line.print ("port_name: %s\n", selected_sensor.port_name);
             command_line.print ("connected: %s\n", selected_sensor.connected ? "true" : "false");
-            command_line.print ("address: %s\n", selected_sensor.address);
             command_line.print ("fw_version: %s\n", selected_sensor.fw_version);
             command_line.print ("poll_ms: %d\n", selected_sensor.poll_ms);
             command_line.print ("modes: %s\n", string.joinv (", ", selected_sensor.modes));
@@ -820,7 +819,7 @@ namespace EV3devKit.Demo {
             var motors = manager.get_tacho_motors ();
             int i = 1;
             motors.foreach ((motor) => {
-                command_line.print ("%d. %s on %s (%s)\n", i, motor.motor_type,
+                command_line.print ("%d. %s on %s (%s)\n", i, motor.driver_name,
                     motor.port_name, motor.device_name);
                 i++;
             });
@@ -842,36 +841,41 @@ namespace EV3devKit.Demo {
                 return;
             }
             command_line.print ("device_name: %s\n", selected_tacho_motor.device_name);
-            command_line.print ("motor_type: %s\n", selected_tacho_motor.motor_type);
+            command_line.print ("driver_name: %s\n", selected_tacho_motor.driver_name);
             command_line.print ("port_name: %s\n", selected_tacho_motor.port_name);
             command_line.print ("connected: %s\n", selected_tacho_motor.connected ? "true" : "false");
+            command_line.print ("commands: %s\n", string.joinv (", ", selected_tacho_motor.commands));
+            command_line.print ("count_per_rot: %d\n", selected_tacho_motor.count_per_rot);
             command_line.print ("duty_cycle: %d\n", selected_tacho_motor.duty_cycle);
             command_line.print ("duty_cycle_sp: %d\n", selected_tacho_motor.duty_cycle_sp);
-            command_line.print ("encoder_mode: %s\n", selected_tacho_motor.encoder_mode);
-            command_line.print ("encoder_modes: %s\n", string.joinv (", ", selected_tacho_motor.encoder_modes));
-            command_line.print ("emergency_stop: %s\n", selected_tacho_motor.emergency_stop);
-            command_line.print ("polarity_mode: %s\n", selected_tacho_motor.polarity_mode);
-            command_line.print ("polarity_modes: %s\n", string.joinv (", ", selected_tacho_motor.polarity_modes));
+            command_line.print ("encoder_polarity: %s\n", selected_tacho_motor.encoder_polarity == MotorPolarity.NORMAL
+                ? "normal" : "inverted");
+            command_line.print ("hold_position_p: %d\n", selected_tacho_motor.hold_position_p);
+            command_line.print ("hold_position_i: %d\n", selected_tacho_motor.hold_position_i);
+            command_line.print ("hold_position_d: %d\n", selected_tacho_motor.hold_position_d);
+            command_line.print ("polarity: %s\n", selected_tacho_motor.polarity == MotorPolarity.NORMAL
+                ? "normal" : "inverted");
             command_line.print ("position: %d\n", selected_tacho_motor.position);
-            command_line.print ("position_mode: %s\n", selected_tacho_motor.position_mode);
-            command_line.print ("position_modes: %s\n", string.joinv (", ", selected_tacho_motor.position_modes));
             command_line.print ("position_sp: %d\n", selected_tacho_motor.position_sp);
-            command_line.print ("pulses_per_second: %d\n", selected_tacho_motor.pulses_per_second);
-            command_line.print ("pulses_per_second_sp: %d\n", selected_tacho_motor.pulses_per_second_sp);
+            command_line.print ("speed: %d\n", selected_tacho_motor.speed);
+            command_line.print ("speed_sp: %d\n", selected_tacho_motor.speed_sp);
             command_line.print ("ramp_down_sp: %d\n", selected_tacho_motor.ramp_down_sp);
             command_line.print ("ramp_up_sp: %d\n", selected_tacho_motor.ramp_up_sp);
-            command_line.print ("regulation_mode: %s\n", selected_tacho_motor.regulation_mode);
-            command_line.print ("regulation_modes: %s\n", string.joinv (", ", selected_tacho_motor.regulation_modes));
-            command_line.print ("run: %d\n", selected_tacho_motor.run);
-            command_line.print ("run_mode: %s\n", selected_tacho_motor.run_mode);
-            command_line.print ("run_modes: %s\n", string.joinv (", ", selected_tacho_motor.run_modes));
+            command_line.print ("speed_regulation: %s\n", selected_tacho_motor.speed_regulation
+                ? "on" : "off");
             command_line.print ("speed_regulation_p: %d\n", selected_tacho_motor.speed_regulation_p);
             command_line.print ("speed_regulation_i: %d\n", selected_tacho_motor.speed_regulation_i);
             command_line.print ("speed_regulation_d: %d\n", selected_tacho_motor.speed_regulation_d);
-            command_line.print ("speed_regulation_k: %d\n", selected_tacho_motor.speed_regulation_k);
-            command_line.print ("state: %s\n", selected_tacho_motor.state);
-            command_line.print ("stop_mode: %s\n", selected_tacho_motor.stop_mode);
-            command_line.print ("stop_modes: %s\n", string.joinv (", ", selected_tacho_motor.stop_modes));
+            var state = selected_tacho_motor.state;
+            var flags_class = (FlagsClass2) typeof (MotorStateFlags).class_ref ();
+            command_line.print ("state:\n");
+            foreach (var flags_value in (flags_class.values)) {
+                var yn = ((flags_value.@value & state) == flags_value.@value)
+                    ? "yes" : "no";
+                command_line.print ("\t%s:\t%s\n", flags_value.value_nick, yn);
+            }
+            command_line.print ("stop_command: %s\n", selected_tacho_motor.stop_command);
+            command_line.print ("stop_commands: %s\n", string.joinv (", ", selected_tacho_motor.stop_commands));
             command_line.print ("time_sp: %d\n", selected_tacho_motor.time_sp);
         }
 
@@ -953,9 +957,19 @@ namespace EV3devKit.Demo {
             command_line.print ("commands: %s\n", string.joinv (", ", selected_dc_motor.commands));
             command_line.print ("duty_cycle: %d\n", selected_dc_motor.duty_cycle);
             command_line.print ("duty_cycle_sp: %d\n", selected_dc_motor.duty_cycle_sp);
-            command_line.print ("polarity: %s\n", selected_dc_motor.polarity.to_string ());
-            command_line.print ("ramp_down_ms: %d\n", selected_dc_motor.ramp_down_ms);
-            command_line.print ("ramp_up_ms: %d\n", selected_dc_motor.ramp_up_ms);
+            command_line.print ("polarity: %s\n", selected_dc_motor.polarity == MotorPolarity.NORMAL
+                ? "normal" : "inverted");
+            command_line.print ("ramp_down_sp: %d\n", selected_dc_motor.ramp_down_sp);
+            command_line.print ("ramp_up_sp: %d\n", selected_dc_motor.ramp_up_sp);
+            var state = selected_dc_motor.state;
+            var flags_class = (FlagsClass2) typeof (MotorStateFlags).class_ref ();
+            command_line.print ("state:\n");
+            foreach (var flags_value in (flags_class.values)) {
+                var yn = ((flags_value.@value & state) == flags_value.@value)
+                    ? "yes" : "no";
+                command_line.print ("\t%s:\t%s\n", flags_value.value_nick, yn);
+            }
+            command_line.print ("stop_commands: %s\n", string.joinv (", ", selected_dc_motor.stop_commands));
         }
 
         /**
@@ -1033,13 +1047,22 @@ namespace EV3devKit.Demo {
             command_line.print ("driver_name: %s\n", selected_servo_motor.driver_name);
             command_line.print ("port_name: %s\n", selected_servo_motor.port_name);
             command_line.print ("connected: %s\n", selected_servo_motor.connected ? "true" : "false");
-            command_line.print ("command: %s\n", selected_servo_motor.command);
-            command_line.print ("max_pulse_ms: %d\n", selected_servo_motor.max_pulse_ms);
-            command_line.print ("mid_pulse_ms: %d\n", selected_servo_motor.mid_pulse_ms);
-            command_line.print ("min_pulse_ms: %d\n", selected_servo_motor.min_pulse_ms);
-            command_line.print ("polarity: %s\n", selected_servo_motor.polarity);
-            command_line.print ("position: %d\n", selected_servo_motor.position);
-            command_line.print ("rate: %d\n", selected_servo_motor.rate);
+            command_line.print ("commands: %s\n", string.joinv (", ", selected_servo_motor.commands));
+            command_line.print ("max_pulse_sp: %d\n", selected_servo_motor.max_pulse_sp);
+            command_line.print ("mid_pulse_sp: %d\n", selected_servo_motor.mid_pulse_sp);
+            command_line.print ("min_pulse_sp: %d\n", selected_servo_motor.min_pulse_sp);
+            command_line.print ("polarity: %s\n", selected_servo_motor.polarity == MotorPolarity.NORMAL
+                ? "normal" : "inverted");
+            command_line.print ("position_sp: %d\n", selected_servo_motor.position_sp);
+            command_line.print ("rate_sp: %d\n", selected_servo_motor.rate_sp);
+            var state = selected_servo_motor.state;
+            var flags_class = (FlagsClass2) typeof (MotorStateFlags).class_ref ();
+            command_line.print ("state:\n");
+            foreach (var flags_value in (flags_class.values)) {
+                var yn = ((flags_value.@value & state) == flags_value.@value)
+                    ? "yes" : "no";
+                command_line.print ("\t%s:\t%s\n", flags_value.value_nick, yn);
+            }
         }
 
         /**
@@ -1343,11 +1366,11 @@ namespace EV3devKit.Demo {
          * disconnected.
          */
         void on_tacho_motor_added (TachoMotor motor) {
-            message ("TachoMotor added: %s on %s (%s)", motor.motor_type,
+            message ("TachoMotor added: %s on %s (%s)", motor.driver_name,
                 motor.port_name, motor.device_name);
             ulong handler_id = 0;
             handler_id = motor.notify["connected"].connect (() => {
-                message ("TachoMotor removed: %s on %s (%s)", motor.motor_type,
+                message ("TachoMotor removed: %s on %s (%s)", motor.driver_name,
                     motor.port_name, motor.device_name);
                 motor.disconnect (handler_id);
             });

@@ -26,18 +26,6 @@ namespace EV3devKit.Devices {
      */
     public class Sensor : EV3devKit.Devices.Device {
         /**
-         * Gets the address.
-         *
-         * Currently only I2C/NXT sensors use this property. Other sensors will
-         * return ``0x00``.
-         */
-        public string? address {
-            get {
-                return udev_device.get_sysfs_attr ("address");
-            }
-        }
-
-        /**
          * Gets the firmware version.
          *
          * Currently only I2C/NXT sensors use this property. Other sensors will

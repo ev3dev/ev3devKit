@@ -22,61 +22,13 @@
 
 namespace EV3devKit.Devices {
     /**
-     * The polarity of a motor. In other words, which direction of rotation is
-     * positive.
-     *
-     * The direction of rotation (clockwise or counter-clockwise) is determined
-     * by viewing the motor with the shaft end facing you.
-     */
-    public enum DCMotorPolarity {
-        /**
-         * Clockwise is considered the positive direction.
-         */
-        NORMAL,
-        /**
-         * Counter-clockwise is considered the positive direction.
-         */
-        INVERTED;
-
-        /**
-         * Converts the polarity to the value for writing to sysfs attributes.
-         */
-        internal string to_string () {
-            switch (this) {
-            case DCMotorPolarity.NORMAL:
-                return "normal";
-            case DCMotorPolarity.INVERTED:
-                return "inverted";
-            default:
-                critical ("Unknown DCMotorPolarity");
-                return "error";
-            }
-        }
-
-        /**
-         * Converts the polarity from the value read from a sysfs attribute.
-         */
-        internal static DCMotorPolarity from_string (string polarity) {
-            switch (polarity) {
-            case "normal":
-                return DCMotorPolarity.NORMAL;
-            case "inverted":
-                return DCMotorPolarity.INVERTED;
-            default:
-                critical ("Unknown DCMotorPolarity");
-                return (DCMotorPolarity)(-1);
-            }
-        }
-    }
-
-    /**
      * Represents a simple DC motor.
      */
     public class DCMotor : EV3devKit.Devices.Device {
         /**
          * Get a list of supported commands.
          *
-         * Possible commands are ``run``, ``coast`` and ``brake``.
+         * Possible commands are ``run-forever``, ``run-timed``, and ``stop``.
          */
         public string[]? commands {
             owned get {
@@ -96,7 +48,7 @@ namespace EV3devKit.Devices {
         }
 
         /**
-         * Gets the current duty cycle sepoint of the motor.
+         * Gets the current duty cycle setpoint of the motor.
          *
          * Values are -100 to 100. Units are percent(%).
          */
@@ -118,30 +70,56 @@ namespace EV3devKit.Devices {
             }
         }
 
-        public int ramp_down_ms {
+        public int ramp_down_sp {
             get {
-                return (int)(try_read_int ("ramp_down_ms") ?? 0);
+                return (int)(try_read_int ("ramp_down_sp") ?? 0);
             }
             set {
-                try_write_int ("ramp_down_ms", value);
+                try_write_int ("ramp_down_sp", value);
             }
         }
 
-        public int ramp_up_ms {
+        public int ramp_up_sp {
             get {
-                return (int)(try_read_int ("ramp_up_ms") ?? 0);
+                return (int)(try_read_int ("ramp_up_sp") ?? 0);
             }
             set {
-                try_write_int ("ramp_up_ms", value);
+                try_write_int ("ramp_up_sp", value);
             }
         }
 
-        public DCMotorPolarity polarity {
+        /**
+         * Gets and sets the polarity of the motor.
+         *
+         * This can be used to invert the positive and negative directions.
+         * For example, if you have two motors that are used for driving (left
+         * and right), you can invert the polarity of the left motor so
+         * that a positive position causes both servos to drive forwards.
+         */
+        public MotorPolarity polarity {
             get {
-                return DCMotorPolarity.from_string (try_read_string ("polarity"));
+                return MotorPolarity.from_string (try_read_string ("polarity"));
             }
             set {
                 try_write_string ("polarity", value.to_string ());
+            }
+        }
+
+        /**
+         * Gets flags that indicate the state of the motor.
+         *
+         * Supported flags are {@link MotorStateFlags.RUNNING} and
+         * {@link MotorStateFlags.RAMPING}.
+         */
+        public MotorStateFlags state {
+            get {
+                return MotorStateFlags.from_strv(try_read_string("state").split(" "));
+            }
+        }
+
+        public string[] stop_commands {
+            owned get {
+                return udev_device.get_sysfs_attr_as_strv ("stop_commands");
             }
         }
 
@@ -172,6 +150,33 @@ namespace EV3devKit.Devices {
          */
         public void set_duty_cycle_sp (int duty_cycle) throws Error {
             write_int ("duty_cycle_sp", duty_cycle);
+        }
+
+        /**
+         * Set the time setpoint in milliseconds for the motor.
+         *
+         * The time setpoint is used by the `run-timed` command.
+         *
+         * @param time The new time setpoint in milliseconds.
+         * @throws Error if time is out of range or there was an I/O error.
+         */
+        public void set_time_sp (int time) throws Error {
+            write_int ("time_sp", time);
+        }
+
+        /**
+         * Set the stop command for the motor.
+         *
+         * This command will be used when the motor is stopped. Check
+         * {@link stop_commands} to get a list of valid values. Changes to stop
+         * command will not take effect until a new command has been sent using
+         * {@link send_command}.
+         *
+         * @param command The new stop command.
+         * @throws Error is command is not a valid command.
+         */
+        public void set_stop_command (string command) throws Error {
+            write_string ("stop_command", command);
         }
     }
 }
