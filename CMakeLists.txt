@@ -6,7 +6,7 @@ get_directory_property(PARENT_DIR PARENT_DIRECTORY)
 
 if (NOT PARENT_DIR)
     option (EV3DEVKIT_DESKTOP "Build desktop library")
-    option (EV3DEVKIT_BUILD_DEMO "Do not build the demo programs" Yes)
+    option (EV3DEVKIT_BUILD_DEMO "Build the demo programs" Yes)
     option (BUILD_SHARED_LIBS "Build shared library instead of static")
 endif (NOT PARENT_DIR)
 
