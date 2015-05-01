@@ -58,13 +58,13 @@ namespace EV3devKit.Devices {
             }
         }
 
-        public string driver_name {
+        public string? driver_name {
             owned get {
                 return udev_device.get_sysfs_attr ("driver_name");
             }
         }
 
-        public string port_name {
+        public string? port_name {
             owned get {
                 return udev_device.get_sysfs_attr ("port_name");
             }
@@ -117,7 +117,7 @@ namespace EV3devKit.Devices {
             }
         }
 
-        public string[] stop_commands {
+        public string[]? stop_commands {
             owned get {
                 return udev_device.get_sysfs_attr_as_strv ("stop_commands");
             }
