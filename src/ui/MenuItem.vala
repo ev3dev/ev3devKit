@@ -89,13 +89,15 @@ namespace EV3devKit.UI {
                 border = 0,
                 border_radius = 0
             }, new Label (text) {
-                horizontal_align = WidgetAlign.START
+                text_horizontal_align = GRX.TextHorizAlign.LEFT
             });
             var hbox = new Box.horizontal ();
             button.add (hbox);
             hbox.add (label);
             hbox.add (new Spacer ());
-            var arrow_label = new Label (">");
+            var arrow_label = new Label (">") {
+                horizontal_align = WidgetAlign.END
+            };
             hbox.add (arrow_label);
         }
 
