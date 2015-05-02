@@ -31,15 +31,17 @@
         </ul>
         <hr class="navi_hr"/>
         <ul class="navi_main">
-          <li class="property"><a href="EV3devKit.Devices.ServoMotor.command.html">command</a></li>
+          <li class="property"><a href="EV3devKit.Devices.ServoMotor.commands.html">commands</a></li>
           <li class="property"><a href="EV3devKit.Devices.ServoMotor.driver_name.html">driver_name</a></li>
-          <li class="property"><a href="EV3devKit.Devices.ServoMotor.max_pulse_ms.html">max_pulse_ms</a></li>
-          <li class="property"><a href="EV3devKit.Devices.ServoMotor.mid_pulse_ms.html">mid_pulse_ms</a></li>
-          <li class="property"><a href="EV3devKit.Devices.ServoMotor.min_pulse_ms.html">min_pulse_ms</a></li>
+          <li class="property"><a href="EV3devKit.Devices.ServoMotor.max_pulse_sp.html">max_pulse_sp</a></li>
+          <li class="property"><a href="EV3devKit.Devices.ServoMotor.mid_pulse_sp.html">mid_pulse_sp</a></li>
+          <li class="property"><a href="EV3devKit.Devices.ServoMotor.min_pulse_sp.html">min_pulse_sp</a></li>
           <li class="property"><a href="EV3devKit.Devices.ServoMotor.polarity.html">polarity</a></li>
           <li class="property"><a href="EV3devKit.Devices.ServoMotor.port_name.html">port_name</a></li>
-          <li class="property"><a href="EV3devKit.Devices.ServoMotor.position.html">position</a></li>
-          <li class="property"><a href="EV3devKit.Devices.ServoMotor.rate.html">rate</a></li>
+          <li class="property"><a href="EV3devKit.Devices.ServoMotor.position_sp.html">position_sp</a></li>
+          <li class="property"><a href="EV3devKit.Devices.ServoMotor.rate_sp.html">rate_sp</a></li>
+          <li class="property"><a href="EV3devKit.Devices.ServoMotor.state.html">state</a></li>
+          <li class="method"><a href="EV3devKit.Devices.ServoMotor.send_command.html">send_command</a></li>
         </ul>
       </div>
       <div class="site_content">
@@ -68,41 +70,52 @@
         <h2 class="main_title">Content:</h2>
         <h3 class="main_title">Properties:</h3>
         <ul class="navi_inline">
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="class">string</span></span>[]? <b><a href="EV3devKit.Devices.ServoMotor.commands.html" class="property">commands</a></b> { <span class="main_keyword">owned</span> <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Get a list of supported commands.</span>
+            </div></li>
           <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="class">string</span></span>? <b><a href="EV3devKit.Devices.ServoMotor.driver_name.html" class="property">driver_name</a></b> { <span class="main_keyword">owned</span> <span class="main_keyword">get</span>; }
             </span>
             <div class="leaf_brief_description"><span class="brief_description">Gets the name of the driver that loaded this device.</span>
+            </div></li>
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="EV3devKit.Devices.ServoMotor.max_pulse_sp.html" class="property">max_pulse_sp</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Gets and sets the calibration value for the maximum value.</span>
+            </div></li>
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="EV3devKit.Devices.ServoMotor.mid_pulse_sp.html" class="property">mid_pulse_sp</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Gets and sets the calibration value for the center value.</span>
+            </div></li>
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="EV3devKit.Devices.ServoMotor.min_pulse_sp.html" class="property">min_pulse_sp</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Gets and sets the calibration value for the minimum value.</span>
+            </div></li>
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="EV3devKit.Devices.MotorPolarity.html" class="enum">MotorPolarity</a></span> <b><a href="EV3devKit.Devices.ServoMotor.polarity.html" class="property">polarity</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Gets and sets the polarity of the motor.</span>
+            </div></li>
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="EV3devKit.Devices.ServoMotor.position_sp.html" class="property">position_sp</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Gets and sets the current position setpoint.</span>
             </div></li>
           <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="class">string</span></span>? <b><a href="EV3devKit.Devices.ServoMotor.port_name.html" class="property">port_name</a></b> { <span class="main_keyword">owned</span> <span class="main_keyword">get</span>; }
             </span>
             <div class="leaf_brief_description"><span class="brief_description">Gets the name of the port this device is connected to.</span>
             </div></li>
-          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="class">string</span></span> <b><a href="EV3devKit.Devices.ServoMotor.command.html" class="property">command</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">owned</span> <span class="main_keyword">get</span>; }
-            </span>
-            <div class="leaf_brief_description"><span class="brief_description">Gets and sets the current command.</span>
-            </div></li>
-          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="EV3devKit.Devices.ServoMotor.max_pulse_ms.html" class="property">max_pulse_ms</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
-            </span>
-            <div class="leaf_brief_description"><span class="brief_description">Gets and sets the calibration value for the maximum value.</span>
-            </div></li>
-          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="EV3devKit.Devices.ServoMotor.mid_pulse_ms.html" class="property">mid_pulse_ms</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
-            </span>
-            <div class="leaf_brief_description"><span class="brief_description">Gets and sets the calibration value for the center value.</span>
-            </div></li>
-          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="EV3devKit.Devices.ServoMotor.min_pulse_ms.html" class="property">min_pulse_ms</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
-            </span>
-            <div class="leaf_brief_description"><span class="brief_description">Gets and sets the calibration value for the minimum value.</span>
-            </div></li>
-          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="class">string</span></span> <b><a href="EV3devKit.Devices.ServoMotor.polarity.html" class="property">polarity</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">owned</span> <span class="main_keyword">get</span>; }
-            </span>
-            <div class="leaf_brief_description"><span class="brief_description">Gets and sets the polarity of the motor.</span>
-            </div></li>
-          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="EV3devKit.Devices.ServoMotor.position.html" class="property">position</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
-            </span>
-            <div class="leaf_brief_description"><span class="brief_description">Gets and sets the current position setpoint.</span>
-            </div></li>
-          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="EV3devKit.Devices.ServoMotor.rate.html" class="property">rate</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="EV3devKit.Devices.ServoMotor.rate_sp.html" class="property">rate_sp</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
             </span>
             <div class="leaf_brief_description"><span class="brief_description">Gets and sets the current rate for the servo.</span>
+            </div></li>
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="EV3devKit.Devices.MotorStateFlags.html" class="enum">MotorStateFlags</a></span> <b><a href="EV3devKit.Devices.ServoMotor.state.html" class="property">state</a></b> { <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Gets the state of the servo.</span>
+            </div></li>
+        </ul>
+        <h3 class="main_title">Methods:</h3>
+        <ul class="navi_inline">
+          <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="EV3devKit.Devices.ServoMotor.send_command.html" class="method">send_command</a></b> (<span class="main_basic_type"><span class="class">string</span></span> command) <span class="main_keyword">throws</span> <span class="main_type"><span class="class">Error</span></span>
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Send a command to the controller.</span>
             </div></li>
         </ul>
         <h3 class="main_title">Inherited Members:</h3>

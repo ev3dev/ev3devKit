@@ -37,17 +37,26 @@
           <li class="property"><a href="EV3devKit.Devices.DCMotor.duty_cycle_sp.html">duty_cycle_sp</a></li>
           <li class="property">polarity</li>
           <li class="property"><a href="EV3devKit.Devices.DCMotor.port_name.html">port_name</a></li>
-          <li class="property"><a href="EV3devKit.Devices.DCMotor.ramp_down_ms.html">ramp_down_ms</a></li>
-          <li class="property"><a href="EV3devKit.Devices.DCMotor.ramp_up_ms.html">ramp_up_ms</a></li>
+          <li class="property"><a href="EV3devKit.Devices.DCMotor.ramp_down_sp.html">ramp_down_sp</a></li>
+          <li class="property"><a href="EV3devKit.Devices.DCMotor.ramp_up_sp.html">ramp_up_sp</a></li>
+          <li class="property"><a href="EV3devKit.Devices.DCMotor.state.html">state</a></li>
+          <li class="property"><a href="EV3devKit.Devices.DCMotor.stop_commands.html">stop_commands</a></li>
           <li class="method"><a href="EV3devKit.Devices.DCMotor.send_command.html">send_command</a></li>
           <li class="method"><a href="EV3devKit.Devices.DCMotor.set_duty_cycle_sp.html">set_duty_cycle_sp</a></li>
+          <li class="method"><a href="EV3devKit.Devices.DCMotor.set_stop_command.html">set_stop_command</a></li>
+          <li class="method"><a href="EV3devKit.Devices.DCMotor.set_time_sp.html">set_time_sp</a></li>
         </ul>
       </div>
       <div class="site_content">
         <h1 class="main_title">polarity</h1>
         <hr class="main_hr"/>
         <h2 class="main_title">Description:</h2>
-        <div class="main_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="EV3devKit.Devices.DCMotorPolarity.html" class="enum">DCMotorPolarity</a></span> <b><span class="property">polarity</span></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
+        <div class="main_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="EV3devKit.Devices.MotorPolarity.html" class="enum">MotorPolarity</a></span> <b><span class="property">polarity</span></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
+        </div>
+        <div class="description">
+          <p>Gets and sets the polarity of the motor.</p>
+          <p>This can be used to invert the positive and negative directions. For example, if you have two motors that are used for driving (left and 
+            right), you can invert the polarity of the left motor so that a positive position causes both servos to drive forwards.</p>
         </div>
       </div>
     </div><br/>

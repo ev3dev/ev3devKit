@@ -37,10 +37,14 @@
           <li class="property"><a href="EV3devKit.Devices.DCMotor.duty_cycle_sp.html">duty_cycle_sp</a></li>
           <li class="property"><a href="EV3devKit.Devices.DCMotor.polarity.html">polarity</a></li>
           <li class="property"><a href="EV3devKit.Devices.DCMotor.port_name.html">port_name</a></li>
-          <li class="property"><a href="EV3devKit.Devices.DCMotor.ramp_down_ms.html">ramp_down_ms</a></li>
-          <li class="property"><a href="EV3devKit.Devices.DCMotor.ramp_up_ms.html">ramp_up_ms</a></li>
+          <li class="property"><a href="EV3devKit.Devices.DCMotor.ramp_down_sp.html">ramp_down_sp</a></li>
+          <li class="property"><a href="EV3devKit.Devices.DCMotor.ramp_up_sp.html">ramp_up_sp</a></li>
+          <li class="property"><a href="EV3devKit.Devices.DCMotor.state.html">state</a></li>
+          <li class="property"><a href="EV3devKit.Devices.DCMotor.stop_commands.html">stop_commands</a></li>
           <li class="method"><a href="EV3devKit.Devices.DCMotor.send_command.html">send_command</a></li>
           <li class="method"><a href="EV3devKit.Devices.DCMotor.set_duty_cycle_sp.html">set_duty_cycle_sp</a></li>
+          <li class="method"><a href="EV3devKit.Devices.DCMotor.set_stop_command.html">set_stop_command</a></li>
+          <li class="method"><a href="EV3devKit.Devices.DCMotor.set_time_sp.html">set_time_sp</a></li>
         </ul>
       </div>
       <div class="site_content">
@@ -77,25 +81,33 @@
             </div></li>
           <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="EV3devKit.Devices.DCMotor.duty_cycle_sp.html" class="property">duty_cycle_sp</a></b> { <span class="main_keyword">get</span>; }
             </span>
-            <div class="leaf_brief_description"><span class="brief_description">Gets the current duty cycle sepoint of the motor.</span>
+            <div class="leaf_brief_description"><span class="brief_description">Gets the current duty cycle setpoint of the motor.</span>
             </div></li>
-          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="class">string</span></span> <b><a href="EV3devKit.Devices.DCMotor.driver_name.html" class="property">driver_name</a></b> { <span class="main_keyword">owned</span> <span class="main_keyword">get</span>; }
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="class">string</span></span>? <b><a href="EV3devKit.Devices.DCMotor.driver_name.html" class="property">driver_name</a></b> { <span class="main_keyword">owned</span> <span class="main_keyword">get</span>; }
             </span>
             <div class="leaf_brief_description">
             </div></li>
-          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="class">string</span></span> <b><a href="EV3devKit.Devices.DCMotor.port_name.html" class="property">port_name</a></b> { <span class="main_keyword">owned</span> <span class="main_keyword">get</span>; }
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="class">string</span></span>? <b><a href="EV3devKit.Devices.DCMotor.port_name.html" class="property">port_name</a></b> { <span class="main_keyword">owned</span> <span class="main_keyword">get</span>; }
             </span>
             <div class="leaf_brief_description">
             </div></li>
-          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="EV3devKit.Devices.DCMotor.ramp_down_ms.html" class="property">ramp_down_ms</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="EV3devKit.Devices.DCMotor.ramp_down_sp.html" class="property">ramp_down_sp</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
             </span>
             <div class="leaf_brief_description">
             </div></li>
-          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="EV3devKit.Devices.DCMotor.ramp_up_ms.html" class="property">ramp_up_ms</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="EV3devKit.Devices.DCMotor.ramp_up_sp.html" class="property">ramp_up_sp</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
             </span>
             <div class="leaf_brief_description">
             </div></li>
-          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="EV3devKit.Devices.DCMotorPolarity.html" class="enum">DCMotorPolarity</a></span> <b><a href="EV3devKit.Devices.DCMotor.polarity.html" class="property">polarity</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="EV3devKit.Devices.MotorPolarity.html" class="enum">MotorPolarity</a></span> <b><a href="EV3devKit.Devices.DCMotor.polarity.html" class="property">polarity</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Gets and sets the polarity of the motor.</span>
+            </div></li>
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="EV3devKit.Devices.MotorStateFlags.html" class="enum">MotorStateFlags</a></span> <b><a href="EV3devKit.Devices.DCMotor.state.html" class="property">state</a></b> { <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Gets flags that indicate the state of the motor.</span>
+            </div></li>
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="class">string</span></span>[]? <b><a href="EV3devKit.Devices.DCMotor.stop_commands.html" class="property">stop_commands</a></b> { <span class="main_keyword">owned</span> <span class="main_keyword">get</span>; }
             </span>
             <div class="leaf_brief_description">
             </div></li>
@@ -109,6 +121,14 @@
           <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="EV3devKit.Devices.DCMotor.set_duty_cycle_sp.html" class="method">set_duty_cycle_sp</a></b> (<span class="main_basic_type"><span class="struct">int</span></span> duty_cycle) <span class="main_keyword">throws</span> <span class="main_type"><span class="class">Error</span></span>
             </span>
             <div class="leaf_brief_description"><span class="brief_description">Set the duty cycle setpoint for the motor.</span>
+            </div></li>
+          <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="EV3devKit.Devices.DCMotor.set_time_sp.html" class="method">set_time_sp</a></b> (<span class="main_basic_type"><span class="struct">int</span></span> time) <span class="main_keyword">throws</span> <span class="main_type"><span class="class">Error</span></span>
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Set the time setpoint in milliseconds for the motor.</span>
+            </div></li>
+          <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="EV3devKit.Devices.DCMotor.set_stop_command.html" class="method">set_stop_command</a></b> (<span class="main_basic_type"><span class="class">string</span></span> command) <span class="main_keyword">throws</span> <span class="main_type"><span class="class">Error</span></span>
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Set the stop command for the motor.</span>
             </div></li>
         </ul>
         <h3 class="main_title">Inherited Members:</h3>
