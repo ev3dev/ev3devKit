@@ -16,6 +16,12 @@ For an example of how it is used, checkout [brickman].
 This is currently in the development stages and is unstable. The device driver
 interfaces require the latest ev3dev kernel (currently v3.16.7-ckt4-ev3dev1).
 
+## Dependencies
+
+Besides dependencies included in trusty, we need vala >= 0.24, which you can get
+from the [vala-team PPA](https://launchpad.net/~vala-team/+archive/ubuntu/ppa),
+and libgrx which is part of ev3dev repository.
+
 ## Compiling
 
 To get something usable on the EV3 brick, you should compile using [brickstrap].
@@ -26,7 +32,7 @@ To get something usable on the EV3 brick, you should compile using [brickstrap].
     # if you are building for desktop (see below) you also need
     $ sudo apt-get install libgtk-3-dev
     # clone the git repo
-    $ git clone git://github.com/ev3dev/ev3devKit
+    $ git clone --recursive git://github.com/ev3dev/ev3devKit
     # create a build directory (not in cloned ev3devKit directory).
     $ mkdir build
     $ cd build
