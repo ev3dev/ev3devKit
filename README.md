@@ -48,6 +48,13 @@ ensure that they take effect (you can use `nuke.sh` to do this).
 * Do not build the demo programs: `-DEV3DEVKIT_NO_DEMO=bool:Yes`
 * Build as shared library instead of static library: `-DBUILD_SHARED_LIBS=bool:Yes`
 
+## Running
+
+When building for the desktop, one can run the demos using `make run<tab>`. In
+order to run them on the device, copy the demos over or share the folder via NFS
+or sshfs with the EV3. When copying them to /home/user, the demos are runable
+from the file-browser.
+
 ## Documentation
 API docs are at http://www.ev3dev.org/ev3devKit/ev3devkit/index.htm
 
@@ -57,3 +64,4 @@ API docs are at http://www.ev3dev.org/ev3devKit/ev3devkit/index.htm
 [GObjectIntrospection]: https://wiki.gnome.org/Projects/GObjectIntrospection
 [brickman]: https://github.com/ev3dev/brickman
 [brickstrap]: https://github.com/ev3dev/ev3dev/wiki/Using-brickstrap-to-cross-compile-and-debug
+
