@@ -1,0 +1,20 @@
+Source: ev3devkit
+Section: embedded
+Priority: standard
+Maintainer: David Lechner <david@lechnology.com>
+Build-Depends: debhelper (>= 9), cmake, valac (>= 0.24),
+               libgee-0.8-dev, libgirepository1.0-dev, libgudev-1.0-dev,
+               libncurses5-dev, libgrx-dev, netpbm
+Standards-Version: 3.9.5
+Homepage: https://www.ev3dev.org
+Vcs-Git: git://github.com/ev3dev/ev3devKit.git
+Vcs-Browser: https://github.com/ev3dev/ev3devKit
+
+Package: ev3devkit
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, python3-gi gir1.2-gee-0.8 gir1.2-gudev-1.0
+Description: Programming toolkit for ev3dev
+ Provides a GLib/GObject based library that provides a number of programming
+ interfaces for ev3dev, including user interface and device driver interface.
+ It is written in vala, but since it uses GObjects, it can be used with many
+ languages via GObjectIntrospection.
