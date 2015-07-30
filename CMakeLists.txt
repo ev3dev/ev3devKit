@@ -70,7 +70,7 @@ set (COMMON_MODULES
 set (DESKTOP_MODULES gtk+-3.0)
 set (DESKTOP_PACKAGES gtk+-3.0)
 
-configure_file (src/Version.vala.in ${CMAKE_CURRENT_BINARY_DIR}/Version.vala)
+configure_file (src/Version.vala.in Version.vala)
 
 if (EV3DEVKIT_DESKTOP)
     set (UI_DEMO_SOURCE_FILES
