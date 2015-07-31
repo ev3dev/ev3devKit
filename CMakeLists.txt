@@ -23,13 +23,14 @@ else (BUILD_SHARED_LIBS)
 endif (BUILD_SHARED_LIBS)
 set (DEVICES_DEMO_EXEC_NAME "ev3devKit-devices-demo")
 set (UI_DEMO_EXEC_NAME "ev3devKit-ui-demo")
-set (VERSION "0.1")
-
-set (EV3DEVKIT_PACKAGE ${PROJECT_NAME}-${VERSION})
-set (EV3DEVKIT_DESKTOP_PACKAGE ${PROJECT_NAME}-desktop-${VERSION})
+set (SOVERSION 0)
+set (VERSION "0.1.0")
 set (GIR_NAME "EV3devKit")
-set (LIBRARY_NAME "ev3devKit")
-set (DESKTOP_LIBRARY_NAME "ev3devKit-desktop")
+set (GIR_VERSION "0.1")
+set (EV3DEVKIT_PACKAGE ${PROJECT_NAME}-${GIR_VERSION})
+set (EV3DEVKIT_DESKTOP_PACKAGE ${PROJECT_NAME}-desktop-${GIR_VERSION})
+set (LIBRARY_NAME "${EV3DEVKIT_PACKAGE}")
+set (DESKTOP_LIBRARY_NAME "${EV3DEVKIT_DESKTOP_PACKAGE}")
 set (TARGET_GLIB "2.40")
 
 if (PARENT_DIR)
@@ -158,6 +159,8 @@ include (ValaVersion)
 ensure_vala_version ("0.24" MINIMUM)
 include (ValaPrecompile)
 
+find_package(GirCompiler REQUIRED)
+
 vala_precompile (LIBRARY_VALA_C ${LIBRARY_NAME}
 LIBRARY
     ${LIBRARY_SOURCE_FILES}
@@ -172,16 +175,67 @@ GENERATE_VAPI
     ${EV3DEVKIT_PACKAGE}.buggy
 GENERATE_HEADER
     ${EV3DEVKIT_PACKAGE}
-GENERATE_GIR TYPELIB
-    ${GIR_NAME}-${VERSION}
+GENERATE_GIR
+    ${GIR_NAME}-buggy-${GIR_VERSION}
 )
 
+# Work around bug in valac where .gir is missing the "shared-library" attribute
+# in the namespace node. This is needed by dh_girepository to generate the
+# {shlibs:Depends} variable.
+
+add_custom_command (
+    OUTPUT
+        "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}-${GIR_VERSION}.gir"
+    COMMAND
+        "${CMAKE_CURRENT_SOURCE_DIR}/fix-gir.sh"
+    ARGS
+        "$<TARGET_SONAME_FILE_NAME:${LIBRARY_NAME}>"
+        "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}-buggy-${GIR_VERSION}.gir"
+        "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}-${GIR_VERSION}.gir"
+    DEPENDS
+        "${CMAKE_CURRENT_SOURCE_DIR}/fix-gir.sh"
+        "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}-buggy-${GIR_VERSION}.gir"
+    COMMENT
+        "Fixing ${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}-buggy-${GIR_VERSION}.gir"
+)
+
+add_custom_command (
+    OUTPUT
+        "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}-${GIR_VERSION}.typelib"
+    COMMAND
+        ${G_IR_COMPILER_EXECUTABLE}
+    ARGS
+        "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}-${GIR_VERSION}.gir"
+        "--shared-library=${LIBRARY_NAME}"
+        "--output=${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}-${GIR_VERSION}.typelib"
+        "--includedir=${CMAKE_CURRENT_BINARY_DIR}"
+    DEPENDS
+        "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}-${GIR_VERSION}.gir"
+    COMMENT
+        "Genterating typelib."
+)
+
+add_custom_target ("${LIBRARY_NAME}-typelib"
+    ALL
+    DEPENDS
+        "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}-${GIR_VERSION}.typelib"
+)
+
+# end of workaround
+
 add_library (${LIBRARY_NAME} ${LIBRARY_VALA_C})
+set_target_properties(${LIBRARY_NAME} PROPERTIES
+    VERSION "${VERSION}"
+    SOVERSION "${SOVERSION}")
 add_dependencies(${LIBRARY_NAME} ev3devkit_data)
 # only install static library if this is not a subproject
 if (BUILD_SHARED_LIBS OR NOT PARENT_DIR)
     install (TARGETS ${LIBRARY_NAME} LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
 endif (BUILD_SHARED_LIBS OR NOT PARENT_DIR)
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${EV3DEVKIT_PACKAGE}.vapi DESTINATION share/vala/vapi/)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}-${GIR_VERSION}.gir DESTINATION share/gir-1.0/)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}-${GIR_VERSION}.typelib DESTINATION lib/girepository-1.0/)
 
 # There is a bug in valac that causes an unowned compact class to lose
 # the "unowned" qualifier when generating a vapi. So, we are calling a
@@ -223,7 +277,7 @@ if (EV3DEVKIT_DESKTOP)
     GENERATE_HEADER
         ${DESKTOP_LIBRARY_NAME}
     GENERATE_GIR
-       ${GIR_NAME}Desktop-buggy-${VERSION}
+       ${GIR_NAME}Desktop-buggy-${GIR_VERSION}
     )
 
     # Work around bug in valac where .gir is not correctly generated with nested
@@ -234,33 +288,33 @@ if (EV3DEVKIT_DESKTOP)
 
     add_custom_command (
         OUTPUT
-            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${VERSION}.gir"
+            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${GIR_VERSION}.gir"
         COMMAND
             "${CMAKE_CURRENT_SOURCE_DIR}/fix-desktop-gir.sh"
         ARGS
             ${GIR_NAME}
-            ${VERSION}
-            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-buggy-${VERSION}.gir"
-            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${VERSION}.gir"
+            ${GIR_VERSION}
+            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-buggy-${GIR_VERSION}.gir"
+            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${GIR_VERSION}.gir"
         DEPENDS
             "${CMAKE_CURRENT_SOURCE_DIR}/fix-desktop-gir.sh"
-            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-buggy-${VERSION}.gir"
+            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-buggy-${GIR_VERSION}.gir"
         COMMENT
-            "Fixing ${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-buggy-${VERSION}.gir"
+            "Fixing ${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-buggy-${GIR_VERSION}.gir"
     )
 
     add_custom_command (
         OUTPUT
-            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${VERSION}.typelib"
+            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${GIR_VERSION}.typelib"
         COMMAND
             ${G_IR_COMPILER_EXECUTABLE}
         ARGS
-            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${VERSION}.gir"
-            "--shared-library=lib${DESKTOP_LIBRARY_NAME}"
-            "--output=${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${VERSION}.typelib"
+            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${GIR_VERSION}.gir"
+            "--shared-library=${DESKTOP_LIBRARY_NAME}"
+            "--output=${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${GIR_VERSION}.typelib"
             "--includedir=${CMAKE_CURRENT_BINARY_DIR}"
         DEPENDS
-            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${VERSION}.gir"
+            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${GIR_VERSION}.gir"
         COMMENT
             "Genterating typelib."
     )
@@ -268,7 +322,7 @@ if (EV3DEVKIT_DESKTOP)
     add_custom_target ("${DESKTOP_LIBRARY_NAME}-typelib"
         ALL
         DEPENDS
-            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${VERSION}.typelib"
+            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${GIR_VERSION}.typelib"
     )
 
     # end of workaround
@@ -284,6 +338,8 @@ if (EV3DEVKIT_DESKTOP)
         ${CMAKE_CURRENT_SOURCE_DIR}/src/desktop/main_window.glade
         ${CMAKE_BINARY_DIR}/main_window.glade COPYONLY
     )
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${GIR_VERSION}.gir DESTINATION share/gir-1.0/)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${GIR_VERSION}.typelib DESTINATION lib/girepository-1.0/)
 endif (EV3DEVKIT_DESKTOP)
 
 if (EV3DEVKIT_BUILD_DEMO)
@@ -379,7 +435,7 @@ if (VALADOC_FOUND)
     PACKAGE_NAME
         ${PROJECT_NAME}
     PACKAGE_VERSION
-        ${VERSION}
+        ${GIR_VERSION}
     OPTIONS
         --target-glib=${TARGET_GLIB}
     PACKAGES

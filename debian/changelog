@@ -1,5 +1,5 @@
-ev3devkit (0.1.0ubuntu1) UNRELEASED; urgency=medium
+ev3devkit (0.1.0~2) stable; urgency=medium
 
   * Initial Release
 
- -- Stefan Sauer <ensonic@google.com>  Thu, 30 Jul 2015 09:29:46 +0200
+ -- David Lechner <david@lechnology.com>  Thu, 30 Jul 2015 11:01:28 -0500

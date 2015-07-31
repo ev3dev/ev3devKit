@@ -2,7 +2,7 @@ Source: ev3devkit
 Section: embedded
 Priority: standard
 Maintainer: David Lechner <david@lechnology.com>
-Build-Depends: debhelper (>= 9), cmake, valac (>= 0.24),
+Build-Depends: debhelper (>= 9), cmake, valac (>= 0.24), gobject-introspection,
                libgee-0.8-dev, libgirepository1.0-dev, libgudev-1.0-dev,
                libncurses5-dev, libgrx-dev, netpbm
 Standards-Version: 3.9.5
@@ -10,11 +10,37 @@ Homepage: https://www.ev3dev.org
 Vcs-Git: git://github.com/ev3dev/ev3devKit.git
 Vcs-Browser: https://github.com/ev3dev/ev3devKit
 
-Package: ev3devkit
+Package: libev3devkit-0.1-0
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, python3-gi gir1.2-gee-0.8 gir1.2-gudev-1.0
+Depends: ${shlibs:Depends}, ${misc:Depends}, ev3devkit-data
 Description: Programming toolkit for ev3dev
  Provides a GLib/GObject based library that provides a number of programming
  interfaces for ev3dev, including user interface and device driver interface.
  It is written in vala, but since it uses GObjects, it can be used with many
  languages via GObjectIntrospection.
+
+Package: gir1.2-ev3devkit-0.1
+Section: introspection
+Architecture: any
+Depends: ${gir:Depends}, ${misc:Depends}
+Description: Programming toolkit for ev3dev
+ This package contains the GObject Introspection data for ev3devKit.
+
+Package: ev3devkit-data
+Architecture: all
+Depends: ${misc:Depends}
+Description: Programming toolkit for ev3dev
+ This package contains the architecture independent data for ev3devKit.
+
+Package: libev3devkit-dev
+Architecture: any
+Depends: ${misc:Depends}, libev3devkit-0.1-0 (= ${binary:Version}),
+         gir1.2-ev3devkit-0.1 (= ${binary:Version})
+Description: Programming toolkit for ev3dev
+ This package contains the development files for ev3devKit.
+
+Package: ev3devkit-demo
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Programming toolkit for ev3dev
+ This package includes several demo programs that use ev3devKit.
