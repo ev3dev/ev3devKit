@@ -46,7 +46,6 @@ ensure that they take effect (you can use `nuke.sh` to do this).
 * Enable debugging: `-DCMAKE_BUILD_TYPE=string:Debug`
 * Build additional library for running on a desktop: `-DEV3DEVKIT_DESKTOP=bool:Yes`
 * Do not build the demo programs: `-DEV3DEVKIT_NO_DEMO=bool:Yes`
-* Build as shared library instead of static library: `-DBUILD_SHARED_LIBS=bool:Yes`
 
 ## Running
 

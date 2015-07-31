@@ -7,20 +7,12 @@ get_directory_property(PARENT_DIR PARENT_DIRECTORY)
 if (NOT PARENT_DIR)
     option (EV3DEVKIT_DESKTOP "Build desktop library")
     option (EV3DEVKIT_BUILD_DEMO "Build the demo programs" Yes)
-    option (BUILD_SHARED_LIBS "Build shared library instead of static")
 endif (NOT PARENT_DIR)
 
 list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 set (DATADIR "${CMAKE_INSTALL_PREFIX}/share")
-
-# Use CMAKE_PROJECT_NAME if we are building a statically linked library.
-# This way, if there is a parent project, it uses that name instead.
-if (BUILD_SHARED_LIBS)
-    set (PKGDATADIR "${DATADIR}/${PROJECT_NAME}")
-else (BUILD_SHARED_LIBS)
-    set (PKGDATADIR "${DATADIR}/${CMAKE_PROJECT_NAME}")
-endif (BUILD_SHARED_LIBS)
+set (PKGDATADIR "${DATADIR}/${CMAKE_PROJECT_NAME}")
 set (DEVICES_DEMO_EXEC_NAME "ev3devKit-devices-demo")
 set (UI_DEMO_EXEC_NAME "ev3devKit-ui-demo")
 set (SOVERSION 0)
@@ -206,10 +198,11 @@ add_custom_command (
         ${G_IR_COMPILER_EXECUTABLE}
     ARGS
         "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}-${GIR_VERSION}.gir"
-        "--shared-library=${LIBRARY_NAME}"
+        "--shared-library=$<TARGET_SONAME_FILE_NAME:${LIBRARY_NAME}>"
         "--output=${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}-${GIR_VERSION}.typelib"
         "--includedir=${CMAKE_CURRENT_BINARY_DIR}"
     DEPENDS
+        "${LIBRARY_NAME}"
         "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}-${GIR_VERSION}.gir"
     COMMENT
         "Genterating typelib."
@@ -223,15 +216,16 @@ add_custom_target ("${LIBRARY_NAME}-typelib"
 
 # end of workaround
 
-add_library (${LIBRARY_NAME} ${LIBRARY_VALA_C})
+add_library(${LIBRARY_NAME} SHARED ${LIBRARY_VALA_C})
 set_target_properties(${LIBRARY_NAME} PROPERTIES
     VERSION "${VERSION}"
     SOVERSION "${SOVERSION}")
+add_library(${LIBRARY_NAME}-static STATIC ${LIBRARY_VALA_C})
+set_target_properties(${LIBRARY_NAME}-static PROPERTIES
+    OUTPUT_NAME ${LIBRARY_NAME})
 add_dependencies(${LIBRARY_NAME} ev3devkit_data)
-# only install static library if this is not a subproject
-if (BUILD_SHARED_LIBS OR NOT PARENT_DIR)
-    install (TARGETS ${LIBRARY_NAME} LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
-endif (BUILD_SHARED_LIBS OR NOT PARENT_DIR)
+install (TARGETS ${LIBRARY_NAME} LIBRARY DESTINATION lib)
+install (TARGETS ${LIBRARY_NAME}-static ARCHIVE DESTINATION lib)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${EV3DEVKIT_PACKAGE}.vapi DESTINATION share/vala/vapi/)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}-${GIR_VERSION}.gir DESTINATION share/gir-1.0/)
@@ -298,6 +292,7 @@ if (EV3DEVKIT_DESKTOP)
             "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${GIR_VERSION}.gir"
         DEPENDS
             "${CMAKE_CURRENT_SOURCE_DIR}/fix-desktop-gir.sh"
+            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}-${GIR_VERSION}.gir"
             "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-buggy-${GIR_VERSION}.gir"
         COMMENT
             "Fixing ${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-buggy-${GIR_VERSION}.gir"
@@ -310,10 +305,11 @@ if (EV3DEVKIT_DESKTOP)
             ${G_IR_COMPILER_EXECUTABLE}
         ARGS
             "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${GIR_VERSION}.gir"
-            "--shared-library=${DESKTOP_LIBRARY_NAME}"
+            "--shared-library=$<TARGET_SONAME_FILE_NAME:${DESKTOP_LIBRARY_NAME}>"
             "--output=${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${GIR_VERSION}.typelib"
             "--includedir=${CMAKE_CURRENT_BINARY_DIR}"
         DEPENDS
+            "${DESKTOP_LIBRARY_NAME}"
             "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${GIR_VERSION}.gir"
         COMMENT
             "Genterating typelib."
@@ -327,13 +323,17 @@ if (EV3DEVKIT_DESKTOP)
 
     # end of workaround
 
-    add_library (${DESKTOP_LIBRARY_NAME} ${DESKTOP_LIBRARY_VALA_C})
+    add_library (${DESKTOP_LIBRARY_NAME} SHARED ${DESKTOP_LIBRARY_VALA_C})
+    set_target_properties(${DESKTOP_LIBRARY_NAME} PROPERTIES
+        VERSION "${VERSION}"
+        SOVERSION "${SOVERSION}")
     target_link_libraries (${DESKTOP_LIBRARY_NAME} ${LIBRARY_NAME})
     add_dependencies (${DESKTOP_LIBRARY_NAME} ${LIBRARY_NAME})
-    # only install static library if this is not a subproject
-    if (BUILD_SHARED_LIBS OR NOT PARENT_DIR)
-        install (TARGETS ${DESKTOP_LIBRARY_NAME} LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
-    endif (BUILD_SHARED_LIBS OR NOT PARENT_DIR)
+    install (TARGETS ${DESKTOP_LIBRARY_NAME} LIBRARY DESTINATION lib)
+    add_library (${DESKTOP_LIBRARY_NAME}-static STATIC ${DESKTOP_LIBRARY_VALA_C})
+    set_target_properties(${DESKTOP_LIBRARY_NAME}-static PROPERTIES
+        OUTPUT_NAME ${DESKTOP_LIBRARY_NAME})
+    install (TARGETS ${DESKTOP_LIBRARY_NAME}-static ARCHIVE DESTINATION lib)
     configure_file (
         ${CMAKE_CURRENT_SOURCE_DIR}/src/desktop/main_window.glade
         ${CMAKE_BINARY_DIR}/main_window.glade COPYONLY
@@ -416,8 +416,8 @@ if (EV3DEVKIT_BUILD_DEMO)
             GI_TYPELIB_PATH=${CMAKE_CURRENT_BINARY_DIR}
             ${CMAKE_CURRENT_SOURCE_DIR}/demo/python/ui_desktop_demo.py
         DEPENDS
-            ${LIBRARY_NAME}
-            ${DESKTOP_LIBRARY_NAME}
+            ${LIBRARY_NAME}-typelib
+            ${DESKTOP_LIBRARY_NAME}-typelib
             ${CMAKE_CURRENT_SOURCE_DIR}/demo/python/ui_demo_window.py
             ${CMAKE_CURRENT_SOURCE_DIR}/demo/python/ui_desktop_demo.py
         WORKING_DIRECTORY

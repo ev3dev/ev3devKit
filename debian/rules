@@ -7,8 +7,5 @@
 %:
 	dh $@ --with gir
 
-override_dh_auto_configure:
-	dh_auto_configure -- -DBUILD_SHARED_LIBS=bool:Yes
-
 override_dh_install:
 	dh_install --list-missing
