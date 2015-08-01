@@ -1,5 +1,5 @@
-ev3devkit (0.1.0~3) stable; urgency=medium
+ev3devkit (0.1.0) stable; urgency=medium
 
   * Initial Release
 
- -- David Lechner <david@lechnology.com>  Thu, 30 Jul 2015 11:01:28 -0500
+ -- David Lechner <david@lechnology.com>  Fri, 31 Jul 2015 21:19:43 -0500
