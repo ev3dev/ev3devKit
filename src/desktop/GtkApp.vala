@@ -28,14 +28,14 @@ using Ev3devKit;
  * A framework for developing and testing {@link Ev3devKit.Ui} components in a
  * desktop environment.
  */
-namespace EV3devKitDesktop {
+namespace Ev3devKitDesktop {
     /**
      * Does all of the low level setting up of a desktop application so you
      * don't have to.
      *
      * To use it, your main function should look something like this:
      * {{{
-     * using EV3devKitDesktop;
+     * using Ev3devKitDesktop;
      *
      * static int main (string[] args) {
      *     GtkApp.init (args);

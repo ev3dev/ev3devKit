@@ -25,7 +25,7 @@ using Ev3devKit;
 using Gee;
 using Grx;
 
-namespace EV3devKitDesktop {
+namespace Ev3devKitDesktop {
     /**
      * A Screen that can be embedded in a Gtk application.
      *

@@ -23,20 +23,20 @@
 
 import sys
 
-from gi.repository import EV3devKitDesktop
+from gi.repository import Ev3devKitDesktop
 from ui_demo_window import UIDemoWindow
 
 def quit(window):
-    EV3devKitDesktop.gtk_app_quit()
+    Ev3devKitDesktop.gtk_app_quit()
 
 def main():
-    EV3devKitDesktop.gtk_app_init (sys.argv)
+    Ev3devKitDesktop.gtk_app_init (sys.argv)
 
     demo_window = UIDemoWindow()
     demo_window.connect("quit", quit)
     demo_window.show ()
 
-    EV3devKitDesktop.gtk_app_run ()
+    Ev3devKitDesktop.gtk_app_run ()
 
 if __name__ == "__main__":
     main()

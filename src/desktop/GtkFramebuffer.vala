@@ -27,7 +27,7 @@ using Gee;
 using Gtk;
 using Grx;
 
-namespace EV3devKitDesktop {
+namespace Ev3devKitDesktop {
     public class GtkFramebuffer : Gtk.EventBox {
         public struct Info {
             public int width;
