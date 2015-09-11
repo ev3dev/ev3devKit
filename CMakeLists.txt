@@ -87,7 +87,7 @@ set (DEVICES_DEMO_SOURCE_FILES
 )
 
 set (LIBRARY_SOURCE_FILES
-    src/devices/DCMotor.vala
+    src/devices/DcMotor.vala
     src/devices/Device.vala
     src/devices/DeviceManager.vala
     src/devices/Input.vala

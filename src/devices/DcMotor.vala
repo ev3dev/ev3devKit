@@ -24,7 +24,7 @@ namespace EV3devKit.Devices {
     /**
      * Represents a simple DC motor.
      */
-    public class DCMotor : EV3devKit.Devices.Device {
+    public class DcMotor : EV3devKit.Devices.Device {
         /**
          * Get a list of supported commands.
          *
@@ -123,7 +123,7 @@ namespace EV3devKit.Devices {
             }
         }
 
-        internal DCMotor (GUdev.Device udev_device) {
+        internal DcMotor (GUdev.Device udev_device) {
             base (udev_device);
         }
 

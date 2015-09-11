@@ -75,11 +75,11 @@ namespace EV3devKit.Devices {
         public signal void led_added (LED led);
 
         /**
-         * Emitted when a new DCMotor device is connected.
+         * Emitted when a new DcMotor device is connected.
          *
-         * @param motor The DCMotor that was added.
+         * @param motor The DcMotor that was added.
          */
-        public signal void dc_motor_added (DCMotor motor);
+        public signal void dc_motor_added (DcMotor motor);
 
         /**
          * Emitted when a new ServoMotor device is connected.
@@ -188,14 +188,14 @@ namespace EV3devKit.Devices {
         }
 
         /**
-         * Get a list of all DCMotor devices.
+         * Get a list of all DcMotor devices.
          *
-         * @return A GenericArray containing all connected DCMotor devices.
+         * @return A GenericArray containing all connected DcMotor devices.
          */
-        public GenericArray<DCMotor> get_dc_motors () {
-            var array = new GenericArray<DCMotor> ();
+        public GenericArray<DcMotor> get_dc_motors () {
+            var array = new GenericArray<DcMotor> ();
             foreach (var device in device_map.values) {
-                var motor = device as DCMotor;
+                var motor = device as DcMotor;
                 if (motor != null)
                     array.add (motor);
             }
@@ -313,7 +313,7 @@ namespace EV3devKit.Devices {
                     led_added (led);
                     break;
                 case DC_MOTOR_CLASS:
-                    var motor = new DCMotor (udev_device);
+                    var motor = new DcMotor (udev_device);
                     device_map[sysfs_path] = motor;
                     dc_motor_added (motor);
                     break;

@@ -23,7 +23,7 @@ namespace EV3devKit.Devices {
     /**
      * Flags indicating motor state.
      *
-     * These flags are used by {@link DCMotor}, {@link ServoMotor} and
+     * These flags are used by {@link DcMotor}, {@link ServoMotor} and
      * {@link TachoMotor}. Not all values are supported by each class.
      */
     [Flags]

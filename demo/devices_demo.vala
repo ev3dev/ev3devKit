@@ -49,7 +49,7 @@ namespace EV3devKit.Demo {
         Sensor? selected_sensor;
         LED? selected_led;
         TachoMotor? selected_tacho_motor;
-        DCMotor? selected_dc_motor;
+        DcMotor? selected_dc_motor;
         ServoMotor? selected_servo_motor;
         PowerSupply? selected_power_supply;
         Input? selected_input;
@@ -933,7 +933,7 @@ namespace EV3devKit.Demo {
                     motor.port_name, motor.device_name);
                 i++;
             });
-            command_line.print ("\nSelect DCMotor: ");
+            command_line.print ("\nSelect DcMotor: ");
             var input = int.parse (yield stdin.read_line_async ());
             if (input <= 0 || input >= i)
                 command_line.print ("Invalid Selection.\n");
@@ -947,7 +947,7 @@ namespace EV3devKit.Demo {
         void do_show_dc_motor_info (ApplicationCommandLine command_line) {
             command_line.print ("\n");
             if (selected_dc_motor == null) {
-                command_line.print ("No DCMotor selected.\n");
+                command_line.print ("No DcMotor selected.\n");
                 return;
             }
             command_line.print ("device_name: %s\n", selected_dc_motor.device_name);
@@ -1382,12 +1382,12 @@ namespace EV3devKit.Demo {
          * Adds handler so message is displayed when the dc motor is
          * disconnected.
          */
-        void on_dc_motor_added (DCMotor motor) {
-            message ("DCMotor added: %s on %s (%s)", motor.driver_name,
+        void on_dc_motor_added (DcMotor motor) {
+            message ("DcMotor added: %s on %s (%s)", motor.driver_name,
                 motor.port_name, motor.device_name);
             ulong handler_id = 0;
             handler_id = motor.notify["connected"].connect (() => {
-                message ("DCMotor removed: %s on %s (%s)", motor.driver_name,
+                message ("DcMotor removed: %s on %s (%s)", motor.driver_name,
                     motor.port_name, motor.device_name);
                 motor.disconnect (handler_id);
             });
