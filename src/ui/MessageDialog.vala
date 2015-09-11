@@ -24,13 +24,13 @@
 using Curses;
 using Grx;
 
-namespace EV3devKit.UI {
+namespace EV3devKit.Ui {
     /**
      * A dialog for displaying a message.
      *
      * The dialog contains a title and message separated by a horizontal line.
      */
-    public class MessageDialog : EV3devKit.UI.Dialog {
+    public class MessageDialog : EV3devKit.Ui.Dialog {
         Scroll vscroll;
         Label title_label;
         Label message_label;

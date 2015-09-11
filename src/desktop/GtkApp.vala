@@ -25,7 +25,7 @@ using Curses;
 using EV3devKit;
 
 /**
- * A framework for developing and testing {@link EV3devKit.UI} components in a
+ * A framework for developing and testing {@link EV3devKit.Ui} components in a
  * desktop environment.
  */
 namespace EV3devKitDesktop {
@@ -65,8 +65,8 @@ namespace EV3devKitDesktop {
          * Initialize a GTK application.
          *
          * This creates a GTK window that can be accessed using {@link main_window}
-         * and an {@link EV3devKit.UI.Screen} that can be accessed using
-         * {@link EV3devKit.UI.Screen.get_active_screen}.
+         * and an {@link EV3devKit.Ui.Screen} that can be accessed using
+         * {@link EV3devKit.Ui.Screen.get_active_screen}.
          *
          * @param args The args from the programs main function.
          */
@@ -76,10 +76,10 @@ namespace EV3devKitDesktop {
             Grx.set_mode (Grx.GraphicsMode.GRAPHICS_DEFAULT);
 
             var stock_lcd = new GtkFramebuffer ();
-            UI.Screen.set_active_screen (new GtkScreen (stock_lcd));
+            Ui.Screen.set_active_screen (new GtkScreen (stock_lcd));
 
             var color_lcd = new GtkFramebuffer (GtkFramebuffer.DeviceType.ADAFRUIT_18);
-            color_screen = new GtkScreen (color_lcd, (GtkScreen)UI.Screen.get_active_screen ());
+            color_screen = new GtkScreen (color_lcd, (GtkScreen)Ui.Screen.get_active_screen ());
 
             var builder = new Gtk.Builder ();
             Gtk.Box screen1_box;
@@ -94,17 +94,17 @@ namespace EV3devKitDesktop {
                 (builder.get_object ("screen2-copy-button") as Gtk.Button)
                     .clicked.connect (() => stock_lcd.copy_to_clipboard ());
                 (builder.get_object ("up-button") as Gtk.Button)
-                    .clicked.connect (() => UI.Screen.get_active_screen ().queue_key_code (Key.UP));
+                    .clicked.connect (() => Ui.Screen.get_active_screen ().queue_key_code (Key.UP));
                 (builder.get_object ("down-button") as Gtk.Button)
-                    .clicked.connect (() => UI.Screen.get_active_screen ().queue_key_code (Key.DOWN));
+                    .clicked.connect (() => Ui.Screen.get_active_screen ().queue_key_code (Key.DOWN));
                 (builder.get_object ("left-button") as Gtk.Button)
-                    .clicked.connect (() => UI.Screen.get_active_screen ().queue_key_code (Key.LEFT));
+                    .clicked.connect (() => Ui.Screen.get_active_screen ().queue_key_code (Key.LEFT));
                 (builder.get_object ("right-button") as Gtk.Button)
-                    .clicked.connect (() => UI.Screen.get_active_screen ().queue_key_code (Key.RIGHT));
+                    .clicked.connect (() => Ui.Screen.get_active_screen ().queue_key_code (Key.RIGHT));
                 (builder.get_object ("enter-button") as Gtk.Button)
-                    .clicked.connect (() => UI.Screen.get_active_screen ().queue_key_code ('\n'));
+                    .clicked.connect (() => Ui.Screen.get_active_screen ().queue_key_code ('\n'));
                 (builder.get_object ("back-button") as Gtk.Button)
-                    .clicked.connect (() => UI.Screen.get_active_screen ().queue_key_code (Key.BACKSPACE));
+                    .clicked.connect (() => Ui.Screen.get_active_screen ().queue_key_code (Key.BACKSPACE));
                 (builder.get_object ("scale-spinbutton") as Gtk.SpinButton)
                     .bind_property ("value", stock_lcd, "scale", BindingFlags.SYNC_CREATE);
                 (builder.get_object ("scale-spinbutton") as Gtk.SpinButton)
@@ -146,7 +146,7 @@ namespace EV3devKitDesktop {
                     }
                     return false;
                 }
-                UI.Screen.get_active_screen ().queue_key_code (key_code);
+                Ui.Screen.get_active_screen ().queue_key_code (key_code);
                 return true;
             });
             color_lcd.key_press_event.connect ((event) => stock_lcd.key_press_event (event));

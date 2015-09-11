@@ -34,7 +34,7 @@ using Grx;
  * the top-level Container and are displayed to the user using a {@link Screen}
  * that represents a physical screen.
  */
-namespace EV3devKit.UI {
+namespace EV3devKit.Ui {
     /**
      * Used by {@link Widget.do_recursive_parent} and {@link Widget.do_recursive_children}
      * to traverse the widget tree.

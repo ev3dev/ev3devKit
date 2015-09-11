@@ -21,7 +21,7 @@
 
 /* MenuItem.vala - Base class for menu items used by Menu widget */
 
-namespace EV3devKit.UI {
+namespace EV3devKit.Ui {
     /**
      * Object used by {@link Menu} to represent a menu item.
      *

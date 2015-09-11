@@ -25,11 +25,11 @@ using Curses;
 using Gee;
 using Grx;
 
-namespace EV3devKit.UI {
+namespace EV3devKit.Ui {
     /**
      * Button used for the tab of a {@link NotebookTab}.
      */
-    public class TabButton : EV3devKit.UI.Button {
+    public class TabButton : EV3devKit.Ui.Button {
         /**
          * Gets the active state of this tab.
          *

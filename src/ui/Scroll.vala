@@ -25,7 +25,7 @@ using Curses;
 using Gee;
 using Grx;
 
-namespace EV3devKit.UI {
+namespace EV3devKit.Ui {
     /**
      * Specifies the direction of scrolling.
      */
@@ -63,7 +63,7 @@ namespace EV3devKit.UI {
      * A scrollable container for displaying content that is too large to fit
      * on the screen.
      */
-    public class Scroll : EV3devKit.UI.Container {
+    public class Scroll : EV3devKit.Ui.Container {
         const int SCROLLBAR_SIZE = 7;
 
         int scroll_offset;

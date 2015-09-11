@@ -24,7 +24,7 @@
 using Curses;
 using Grx;
 
-namespace EV3devKit.UI {
+namespace EV3devKit.Ui {
     /**
      * A dialog window for displaying pop-up messages.
      *
@@ -32,7 +32,7 @@ namespace EV3devKit.UI {
      * Instead, it displays a smaller area with the previous window partially
      * visible behind it.
      */
-    public class Dialog : EV3devKit.UI.Window {
+    public class Dialog : EV3devKit.Ui.Window {
 
         construct {
             margin = 20;

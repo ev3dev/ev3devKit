@@ -23,7 +23,7 @@
 
 using Grx;
 
-namespace EV3devKit.UI {
+namespace EV3devKit.Ui {
     /**
      * An empty widget that is used to distribute left over space in a container.
      *
@@ -32,7 +32,7 @@ namespace EV3devKit.UI {
      * at the bottom of the box. The Spacer will take up the remaining space
      * between them.
      */
-    public class Spacer : EV3devKit.UI.Widget {
+    public class Spacer : EV3devKit.Ui.Widget {
         /**
          * Create a new spacer.
          */

@@ -25,11 +25,11 @@ using Curses;
 using Gee;
 using Grx;
 
-namespace EV3devKit.UI {
+namespace EV3devKit.Ui {
     /**
      * A wiget for getting user input.
      */
-    public class TextEntry : EV3devKit.UI.Widget {
+    public class TextEntry : EV3devKit.Ui.Widget {
         const string CONTINUE_RIGHT = "\xaf";
         const string CONTINUE_LEFT = "\xae";
 

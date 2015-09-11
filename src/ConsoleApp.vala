@@ -22,7 +22,7 @@
 /* ConsoleApp.vala - Graphic mode console application that uses ncurses for input */
 
 using Curses;
-using EV3devKit.UI;
+using EV3devKit.Ui;
 using Linux.VirtualTerminal;
 using Posix;
 
@@ -122,7 +122,7 @@ namespace EV3devKit {
                 throw e;
             }
             main_loop = new MainLoop ();
-            UI.Screen.active_screen = new UI.Screen ();
+            Ui.Screen.active_screen = new Ui.Screen ();
         }
 
         /**
@@ -168,13 +168,13 @@ namespace EV3devKit {
         int read_input () {
             while (true) {
                 var ch = getch ();
-                if (ch != -1 && UI.Screen.active_screen != null) {
+                if (ch != -1 && Ui.Screen.active_screen != null) {
                     if (ignore_next_ch) {
                         ignore_next_ch = false;
                         continue;
                     }
                     Idle.add (() => {
-                        UI.Screen.active_screen.queue_key_code (ch);
+                        Ui.Screen.active_screen.queue_key_code (ch);
                         return false;
                     });
                 }
