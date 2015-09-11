@@ -19,7 +19,7 @@
  * MA 02110-1301, USA.
  */
 
-namespace EV3devKit.Devices {
+namespace Ev3devKit.Devices {
     /**
      * The polarity of a motor. In other words, which direction of rotation is
      * positive.

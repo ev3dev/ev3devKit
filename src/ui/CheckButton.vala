@@ -25,7 +25,7 @@ using Curses;
 using Gee;
 using Grx;
 
-namespace EV3devKit.Ui {
+namespace Ev3devKit.Ui {
 
     /**
      * The style of a {@link CheckButton}.
@@ -61,7 +61,7 @@ namespace EV3devKit.Ui {
      * A checkable button widget. There are two variations, a checkbox and a
      * radio button.
      */
-    public class CheckButton : EV3devKit.Ui.Widget {
+    public class CheckButton : Ev3devKit.Ui.Widget {
         /**
          * Gets the style of checkbutton.
          */

@@ -25,11 +25,11 @@ using Curses;
 using Gee;
 using Grx;
 
-namespace EV3devKit.Ui {
+namespace Ev3devKit.Ui {
     /**
      * A container that lays out it children in a grid.
      */
-    public class Grid : EV3devKit.Ui.Container {
+    public class Grid : Ev3devKit.Ui.Container {
         struct Pair {
             int row;
             int col;

@@ -20,11 +20,11 @@
  * MA 02110-1301, USA.
  */
 
-namespace EV3devKit.Devices {
+namespace Ev3devKit.Devices {
     /**
      * Represents a hobby type servo motor.
      */
-    public class ServoMotor : EV3devKit.Devices.Device {
+    public class ServoMotor : Ev3devKit.Devices.Device {
         /**
          * Get a list of supported commands.
          *

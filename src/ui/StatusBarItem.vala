@@ -21,7 +21,7 @@
  * StatusBarItem.vala - Base class for items shown in StatusBar
  */
 
-namespace EV3devKit.Ui {
+namespace Ev3devKit.Ui {
     /**
      * Represents an item that is displayed in a {@link StatusBar}.
      */

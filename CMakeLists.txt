@@ -17,7 +17,7 @@ set (DEVICES_DEMO_EXEC_NAME "ev3devKit-devices-demo")
 set (UI_DEMO_EXEC_NAME "ev3devKit-ui-demo")
 set (SOVERSION 0)
 set (VERSION "0.1.0")
-set (GIR_NAME "EV3devKit")
+set (GIR_NAME "Ev3devKit")
 set (GIR_VERSION "0.1")
 set (EV3DEVKIT_PACKAGE ${PROJECT_NAME}-${GIR_VERSION})
 set (EV3DEVKIT_DESKTOP_PACKAGE ${PROJECT_NAME}-desktop-${GIR_VERSION})
@@ -282,9 +282,9 @@ if (EV3DEVKIT_DESKTOP)
     )
 
     # Work around bug in valac where .gir is not correctly generated with nested
-    # namespaces. The EV3devKit .gir is only correctly generated if we leave out
+    # namespaces. The Ev3devKit .gir is only correctly generated if we leave out
     # the gir_namespace and gir_version CCode attributes. However, this causes
-    # the EV3DevKitDesktop .gir to not add an include line for EV3devKit. So,
+    # the EV3DevKitDesktop .gir to not add an include line for Ev3devKit. So,
     # this workaround just adds that line.
 
     add_custom_command (

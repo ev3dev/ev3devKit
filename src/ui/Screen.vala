@@ -24,7 +24,7 @@
 using Gee;
 using Grx;
 
-namespace EV3devKit.Ui {
+namespace Ev3devKit.Ui {
     /**
      * Represents a screen that UI elements are displayed on.
      *

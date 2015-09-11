@@ -21,11 +21,11 @@
 
 /* RadioMenuItem.vala - Menu items used by Menu widget with radio button */
 
-namespace EV3devKit.Ui {
+namespace Ev3devKit.Ui {
     /**
      * A menu item that includes a radio button.
      */
-    public class RadioMenuItem : EV3devKit.Ui.MenuItem {
+    public class RadioMenuItem : Ev3devKit.Ui.MenuItem {
         /**
          * Gets the radio button for the menu item.
          */

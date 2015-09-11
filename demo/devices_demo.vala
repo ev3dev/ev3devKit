@@ -24,9 +24,9 @@
  * It is overly documented to make it easier to understand.
  */
 
-using EV3devKit.Devices;
+using Ev3devKit.Devices;
 
-namespace EV3devKit.Demo {
+namespace Ev3devKit.Demo {
     /**
      * Demo application
      *
@@ -111,7 +111,7 @@ namespace EV3devKit.Demo {
          *
          * @throws IOError.CANCELLED if device was disconnected.
          */
-        async string? get_user_input_cancel_on_remove (EV3devKit.Devices.Device device,
+        async string? get_user_input_cancel_on_remove (Ev3devKit.Devices.Device device,
             DataInputStream stdin) throws IOError
         {
             var cancellable = new Cancellable ();
@@ -1250,7 +1250,7 @@ namespace EV3devKit.Demo {
                 command_line.print ("No Input device selected.\n");
                 return;
             }
-            if (selected_input.has_sound_capability (EV3devKit.Devices.SoundCapability.BELL)) {
+            if (selected_input.has_sound_capability (Ev3devKit.Devices.SoundCapability.BELL)) {
                 selected_input.do_bell (true);
                 Timeout.add (500, () => {
                     selected_input.do_bell (false);
@@ -1270,7 +1270,7 @@ namespace EV3devKit.Demo {
                 command_line.print ("No Input device selected.\n");
                 return;
             }
-            if (selected_input.has_sound_capability (EV3devKit.Devices.SoundCapability.TONE)) {
+            if (selected_input.has_sound_capability (Ev3devKit.Devices.SoundCapability.TONE)) {
                 var freq = 0;
                 var delta = 100;
                 Timeout.add (100, () => {

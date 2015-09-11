@@ -21,7 +21,7 @@
 
 /* Menu.vala - Menu widget */
 
-namespace EV3devKit.Ui {
+namespace Ev3devKit.Ui {
     /**
      * A scrollable menu widget that displays a list of {@link MenuItem}s.
      *
@@ -29,7 +29,7 @@ namespace EV3devKit.Ui {
      * contains buttons. It automatically handles things like making sure the
      * focused {@link MenuItem} is visible on the screen.
      */
-    public class Menu : EV3devKit.Ui.Scroll {
+    public class Menu : Ev3devKit.Ui.Scroll {
         Box menu_vbox;
 
         /**

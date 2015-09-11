@@ -24,7 +24,7 @@
 using Gee;
 using Grx;
 
-namespace EV3devKit.Ui {
+namespace Ev3devKit.Ui {
 
     /**
      * Specifies the number of children a container can have.
@@ -43,7 +43,7 @@ namespace EV3devKit.Ui {
     /**
      * A {@link Widget} that can contain other Widgets.
      */
-    public abstract class Container : EV3devKit.Ui.Widget {
+    public abstract class Container : Ev3devKit.Ui.Widget {
         protected LinkedList<Widget> _children;
 
         /**

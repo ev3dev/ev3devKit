@@ -22,14 +22,14 @@
 
 using GUdev;
 
-namespace EV3devKit.Devices {
+namespace Ev3devKit.Devices {
     /**
      * Represents a port that sensors and motors are plugged into.
      *
      * Ports can be Input Ports and Output Ports on the EV3 itself or on sensor
      * or motor multiplexers or even the ports on the WeDo USB hub.
      */
-    public class Port : EV3devKit.Devices.Device {
+    public class Port : Ev3devKit.Devices.Device {
         /**
          * The value returned by port_name for Input Port 1 on the EV3 itself.
          */

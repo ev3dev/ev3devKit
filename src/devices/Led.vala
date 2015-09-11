@@ -20,7 +20,7 @@
  * MA 02110-1301, USA.
  */
 
-namespace EV3devKit.Devices {
+namespace Ev3devKit.Devices {
     /**
      * Represents an LED device.
      */

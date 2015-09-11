@@ -22,7 +22,7 @@
 /* ConsoleApp.vala - Graphic mode console application that uses ncurses for input */
 
 using Curses;
-using EV3devKit.Ui;
+using Ev3devKit.Ui;
 using Linux.VirtualTerminal;
 using Posix;
 
@@ -40,14 +40,14 @@ using Posix;
  *
  * Find out more about ev3dev at [[http://www.ev3dev.org]].
  */
-namespace EV3devKit {
+namespace Ev3devKit {
     /**
      * Does all of the low level setting up of a virtual console so you don't
      * have to.
      *
      * To use it, your main function should look something like this:
      * {{{
-     * using EV3devKit;
+     * using Ev3devKit;
      *
      * static int main (string[] args) {
      *     try {

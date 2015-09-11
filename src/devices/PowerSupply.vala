@@ -22,7 +22,7 @@
 
 using GLib;
 
-namespace EV3devKit.Devices {
+namespace Ev3devKit.Devices {
     /**
      * Represents a power supply, like a battery.
      */

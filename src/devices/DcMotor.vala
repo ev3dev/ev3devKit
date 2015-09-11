@@ -20,11 +20,11 @@
  * MA 02110-1301, USA.
  */
 
-namespace EV3devKit.Devices {
+namespace Ev3devKit.Devices {
     /**
      * Represents a simple DC motor.
      */
-    public class DcMotor : EV3devKit.Devices.Device {
+    public class DcMotor : Ev3devKit.Devices.Device {
         /**
          * Get a list of supported commands.
          *

@@ -21,7 +21,7 @@
 
 /* GtkScreen.vala - Screen implementation for desktop (Gtk) */
 
-using EV3devKit;
+using Ev3devKit;
 using Gee;
 using Grx;
 
@@ -34,7 +34,7 @@ namespace EV3devKitDesktop {
      * This lets you view your UI on multiple resolutions and color depths at
      * the same time.
      */
-    public class GtkScreen : EV3devKit.Ui.Screen {
+    public class GtkScreen : Ev3devKit.Ui.Screen {
         GtkFramebuffer fb;
         weak GtkScreen? master;
         Gee.List<weak GtkScreen> slaves;

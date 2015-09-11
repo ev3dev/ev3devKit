@@ -24,7 +24,7 @@
 using Gee;
 using Grx;
 
-namespace EV3devKit.Ui {
+namespace Ev3devKit.Ui {
     /**
      * Represents available stock icons.
      */
@@ -86,7 +86,7 @@ namespace EV3devKit.Ui {
      * The text will be automatically wrapped if the parent Container is not
      * wide enough to fit the entire text value.
      */
-    public class Icon : EV3devKit.Ui.Widget {
+    public class Icon : Ev3devKit.Ui.Widget {
         static HashTable<string, Context> file_map;
 
         static construct {

@@ -25,7 +25,7 @@ using Curses;
 using Gee;
 using Grx;
 
-namespace EV3devKit.Ui {
+namespace Ev3devKit.Ui {
     /**
      * Specifies the type of keyboard.
      */
@@ -51,7 +51,7 @@ namespace EV3devKit.Ui {
     /**
      * An on screen keyboard for getting user input.
      */
-    public class OnScreenKeyboard : EV3devKit.Ui.Window {
+    public class OnScreenKeyboard : Ev3devKit.Ui.Window {
         const int KEYBOARD_ROWS = 4;
         const int KEYBOARD_COLS = 10;
 

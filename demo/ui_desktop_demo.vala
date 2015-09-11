@@ -23,7 +23,7 @@
 
 using EV3devKitDesktop;
 
-namespace EV3devKit.Demo {
+namespace Ev3devKit.Demo {
     public static int main (string[] args) {
         GtkApp.init (args);
 

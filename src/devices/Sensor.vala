@@ -20,11 +20,11 @@
  * MA 02110-1301, USA.
  */
 
-namespace EV3devKit.Devices {
+namespace Ev3devKit.Devices {
     /**
      * Represents a LEGO MINDSTORMS or LEGO WeDo sensor
      */
-    public class Sensor : EV3devKit.Devices.Device {
+    public class Sensor : Ev3devKit.Devices.Device {
         /**
          * Gets the firmware version.
          *

@@ -32,7 +32,7 @@ using GUdev;
  *
  * It uses udev to manage device states and events.
  */
-namespace EV3devKit.Devices {
+namespace Ev3devKit.Devices {
     /**
      * Errors specific to {@link Device}s.
      */

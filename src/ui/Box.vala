@@ -24,7 +24,7 @@
 using Gee;
 using Grx;
 
-namespace EV3devKit.Ui {
+namespace Ev3devKit.Ui {
 
     /**
      * Specifies the number of children a container can have.
@@ -67,7 +67,7 @@ namespace EV3devKit.Ui {
      * Vertical boxes work similarly except the vertical and horizontal properties
      * are swapped.
      */
-    public class Box : EV3devKit.Ui.Container {
+    public class Box : Ev3devKit.Ui.Container {
         /**
          * Gets the layout direction of the Box.
          */

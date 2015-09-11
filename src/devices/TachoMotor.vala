@@ -20,13 +20,13 @@
  * MA 02110-1301, USA.
  */
 
-namespace EV3devKit.Devices {
+namespace Ev3devKit.Devices {
     /**
      * Represents a motor with tachometer feedback.
      *
      * The EV3 Large and Medium and NXT motors are this type of motor.
      */
-    public class TachoMotor : EV3devKit.Devices.Device {
+    public class TachoMotor : Ev3devKit.Devices.Device {
 
         /**
          * Get a list of supported commands.

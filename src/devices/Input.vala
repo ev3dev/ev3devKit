@@ -22,7 +22,7 @@
 using Linux;
 using Linux.Input;
 
-namespace EV3devKit.Devices {
+namespace Ev3devKit.Devices {
     /**
      * Capabilities of an input device.
      */
@@ -130,7 +130,7 @@ namespace EV3devKit.Devices {
      *
      * Note: This is a very low-level - there may be better, higher-level options.
      */
-    public class Input : EV3devKit.Devices.Device {
+    public class Input : Ev3devKit.Devices.Device {
         /**
          * The name of the input device associated with the buttons on the EV3
          * brick itself.

@@ -24,14 +24,14 @@
 using Gee;
 using Grx;
 
-namespace EV3devKit.Ui {
+namespace Ev3devKit.Ui {
     /**
      * Widget to display text.
      *
      * The text will be automatically wrapped if the parent Container is not
      * wide enough to fit the entire text value.
      */
-    public class Label : EV3devKit.Ui.Widget {
+    public class Label : Ev3devKit.Ui.Widget {
         internal static Font _default_font;
         internal static weak Font default_font;
 

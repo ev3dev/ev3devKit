@@ -24,7 +24,7 @@
 using Curses;
 using Grx;
 
-namespace EV3devKit.Ui {
+namespace Ev3devKit.Ui {
     /**
      * Top level widget for displaying other widgets on the {@link Screen}.
      *
@@ -34,7 +34,7 @@ namespace EV3devKit.Ui {
      * by calling {@link close}. Only the top-most Window is visible to the user
      * and only that Window receives user input.
      */
-    public class Window : EV3devKit.Ui.Container {
+    public class Window : Ev3devKit.Ui.Container {
         /**
          * Gets the Screen that this Window is attached to.
          *

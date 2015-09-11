@@ -25,14 +25,14 @@ using Curses;
 using Gee;
 using Grx;
 
-namespace EV3devKit.Ui {
+namespace Ev3devKit.Ui {
     /**
      * Button shaped {@link Container} to get user input.
      *
      * The colors of a button (except for the border) are inverted when it has
      * focus. Pressing ``ENTER`` will trigger the {@link pressed} signal.
      */
-    public class Button : EV3devKit.Ui.Container {
+    public class Button : Ev3devKit.Ui.Container {
         /**
          * Emitted when the Button has been pressed by the user.
          */

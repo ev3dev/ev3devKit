@@ -22,10 +22,10 @@
 /* UIDemoWindow.vala - Main window for widget demos */
 
 using Curses;
-using EV3devKit.Ui;
+using Ev3devKit.Ui;
 using Grx;
 
-namespace EV3devKit.Demo {
+namespace Ev3devKit.Demo {
     /**
      * Used to demonstrate most of the UI components in ev3devKit.
      */

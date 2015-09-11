@@ -25,20 +25,20 @@
 import sys
 import time
 
-from gi.repository import EV3devKit
+from gi.repository import Ev3devKit
 from ui_demo_window import UIDemoWindow
 
 def quit(window):
-    EV3devKit.console_app_quit()
+    Ev3devKit.console_app_quit()
 
 def main():
-    EV3devKit.console_app_init()
+    Ev3devKit.console_app_init()
 
     demo_window = UIDemoWindow()
     demo_window.connect("quit", quit)
     demo_window.show()
 
-    EV3devKit.console_app_run()
+    Ev3devKit.console_app_run()
 
 if __name__ == "__main__":
     main()

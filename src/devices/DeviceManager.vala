@@ -21,7 +21,7 @@
 
 using GUdev;
 
-namespace EV3devKit.Devices {
+namespace Ev3devKit.Devices {
     /**
      * Used to get instances of Device objects.
      */
@@ -50,7 +50,7 @@ namespace EV3devKit.Devices {
             INPUT_CLASS
         };
 
-        Gee.Map<string, EV3devKit.Devices.Device> device_map;
+        Gee.Map<string, Ev3devKit.Devices.Device> device_map;
         Client udev_client;
 
         /**
@@ -108,7 +108,7 @@ namespace EV3devKit.Devices {
         public signal void input_added (Input input);
 
         construct {
-            device_map = new Gee.HashMap<string, EV3devKit.Devices.Device> ();
+            device_map = new Gee.HashMap<string, Ev3devKit.Devices.Device> ();
             udev_client = new Client (subsystems);
             udev_client.uevent.connect (on_uevent);
             foreach (var subsystem in subsystems) {

@@ -21,7 +21,7 @@
 
 /* Rectangle.vala - Struct for rectangles */
 
-namespace EV3devKit.Ui {
+namespace Ev3devKit.Ui {
     /**
      * The bounds of a rectangle.
      */

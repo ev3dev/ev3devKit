@@ -25,11 +25,11 @@ using Curses;
 using Gee;
 using Grx;
 
-namespace EV3devKit.Ui {
+namespace Ev3devKit.Ui {
     /**
      * Container for a single tab of a {@link Notebook}.
      */
-    public class NotebookTab : EV3devKit.Ui.Container {
+    public class NotebookTab : Ev3devKit.Ui.Container {
         internal weak Notebook? notebook;
 
         /**

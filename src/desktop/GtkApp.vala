@@ -22,10 +22,10 @@
 /* GtkApp.vala - Common code for building an ev3devKit desktop test app (GTK) */
 
 using Curses;
-using EV3devKit;
+using Ev3devKit;
 
 /**
- * A framework for developing and testing {@link EV3devKit.Ui} components in a
+ * A framework for developing and testing {@link Ev3devKit.Ui} components in a
  * desktop environment.
  */
 namespace EV3devKitDesktop {
@@ -65,8 +65,8 @@ namespace EV3devKitDesktop {
          * Initialize a GTK application.
          *
          * This creates a GTK window that can be accessed using {@link main_window}
-         * and an {@link EV3devKit.Ui.Screen} that can be accessed using
-         * {@link EV3devKit.Ui.Screen.get_active_screen}.
+         * and an {@link Ev3devKit.Ui.Screen} that can be accessed using
+         * {@link Ev3devKit.Ui.Screen.get_active_screen}.
          *
          * @param args The args from the programs main function.
          */

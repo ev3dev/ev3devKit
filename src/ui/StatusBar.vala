@@ -24,7 +24,7 @@
 using Gee;
 using Grx;
 
-namespace EV3devKit.Ui {
+namespace Ev3devKit.Ui {
     /**
      * A status bar that displays at the top of a {@link Screen}.
      */

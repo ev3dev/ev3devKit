@@ -25,7 +25,7 @@ using Curses;
 using Gee;
 using Grx;
 
-namespace EV3devKit.Ui {
+namespace Ev3devKit.Ui {
     /**
      * A tabbed widget for displaying multiple "pages".
      *
@@ -33,7 +33,7 @@ namespace EV3devKit.Ui {
      * Notebook will result in unexpected behavior. Use {@link add_tab} and
      * {@link remove_tab} instead.
      */
-    public class Notebook : EV3devKit.Ui.Container {
+    public class Notebook : Ev3devKit.Ui.Container {
         Box notebook_vbox;
         Box tab_hbox;
         Gee.List<NotebookTab> tabs;
