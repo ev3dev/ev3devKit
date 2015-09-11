@@ -66,6 +66,9 @@ set (DESKTOP_MODULES gtk+-3.0)
 set (DESKTOP_PACKAGES gtk+-3.0)
 
 configure_file (src/Version.vala.in Version.vala)
+# convert CMake list to space separated string for pkgconfig file
+string(REPLACE ";" " " COMMON_MODULES "${COMMON_MODULES}")
+configure_file (${PROJECT_NAME}.pc.in ${PROJECT_NAME}.pc)
 
 if (EV3DEVKIT_DESKTOP)
     set (UI_DEMO_SOURCE_FILES
@@ -229,6 +232,8 @@ add_dependencies(${LIBRARY_NAME} ev3devkit_data)
 install (TARGETS ${LIBRARY_NAME} LIBRARY DESTINATION lib)
 install (TARGETS ${LIBRARY_NAME}-static ARCHIVE DESTINATION lib)
 
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${EV3DEVKIT_PACKAGE}.h DESTINATION include/)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc DESTINATION lib/pkgconfig/)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${EV3DEVKIT_PACKAGE}.vapi DESTINATION share/vala/vapi/)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}-${GIR_VERSION}.gir DESTINATION share/gir-1.0/)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}-${GIR_VERSION}.typelib DESTINATION lib/girepository-1.0/)
