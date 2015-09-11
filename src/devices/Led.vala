@@ -24,7 +24,7 @@ namespace EV3devKit.Devices {
     /**
      * Represents an LED device.
      */
-    public class LED : Device {
+    public class Led : Device {
         /**
          * Device name of the left green LED on the EV3 brick.
          */
@@ -103,7 +103,7 @@ namespace EV3devKit.Devices {
             }
         }
 
-        internal LED (GUdev.Device udev_device) {
+        internal Led (GUdev.Device udev_device) {
             base (udev_device);
         }
 

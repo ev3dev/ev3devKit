@@ -91,7 +91,7 @@ set (LIBRARY_SOURCE_FILES
     src/devices/Device.vala
     src/devices/DeviceManager.vala
     src/devices/Input.vala
-    src/devices/LED.vala
+    src/devices/Led.vala
     src/devices/MotorPolarity.vala
     src/devices/MotorStateFlags.vala
     src/devices/Port.vala

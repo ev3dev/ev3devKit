@@ -27,7 +27,7 @@ using GUdev;
  * hardware drivers.
  *
  * This includes input ports (Sensor), output ports (TachoMotor), buttons (Input),
- * lights (LED) and battery (PowerSupply) on the EV3 itself, WeDo sensors
+ * lights (Led) and battery (PowerSupply) on the EV3 itself, WeDo sensors
  * connected via the WeDo USB hub, and more.
  *
  * It uses udev to manage device states and events.

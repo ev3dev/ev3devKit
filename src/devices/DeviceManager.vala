@@ -68,11 +68,11 @@ namespace EV3devKit.Devices {
         public signal void sensor_added (Sensor sensor);
 
         /**
-         * Emitted when a new LED device is connected.
+         * Emitted when a new Led device is connected.
          *
-         * @param led The LED that was added.
+         * @param led The Led that was added.
          */
-        public signal void led_added (LED led);
+        public signal void led_added (Led led);
 
         /**
          * Emitted when a new DcMotor device is connected.
@@ -156,31 +156,31 @@ namespace EV3devKit.Devices {
         }
 
         /**
-         * Get an LED device by name.
+         * Get an Led device by name.
          *
          * @param name The sysfs device name.
-         * @return The LED object for the device.
-         * @throws DeviceError.NOT_FOUND if a LED device with the specified name
+         * @return The Led object for the device.
+         * @throws DeviceError.NOT_FOUND if a Led device with the specified name
          * is not found.
          */
-        public LED get_led (string name) throws DeviceError {
+        public Led get_led (string name) throws DeviceError {
             foreach (var device in device_map.values) {
-                var led = device as LED;
+                var led = device as Led;
                 if (led != null && led.name == name)
                     return led;
             }
-            throw new DeviceError.NOT_FOUND ("Could not find LED '%s'", name);
+            throw new DeviceError.NOT_FOUND ("Could not find Led '%s'", name);
         }
 
         /**
-         * Get a list of all LED devices.
+         * Get a list of all Led devices.
          *
-         * @return A GenericArray containing all connected LED devices.
+         * @return A GenericArray containing all connected Led devices.
          */
-        public GenericArray<LED> get_leds () {
-            var array = new GenericArray<LED> ();
+        public GenericArray<Led> get_leds () {
+            var array = new GenericArray<Led> ();
             foreach (var device in device_map.values) {
-                var led = device as LED;
+                var led = device as Led;
                 if (led != null)
                     array.add (led);
             }
@@ -308,7 +308,7 @@ namespace EV3devKit.Devices {
                     sensor_added (sensor);
                     break;
                 case LEDS_CLASS:
-                    var led = new LED (udev_device);
+                    var led = new Led (udev_device);
                     device_map[sysfs_path] = led;
                     led_added (led);
                     break;

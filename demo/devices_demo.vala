@@ -47,7 +47,7 @@ namespace EV3devKit.Demo {
         // reference to the currently selected device.
         Port? selected_port;
         Sensor? selected_sensor;
-        LED? selected_led;
+        Led? selected_led;
         TachoMotor? selected_tacho_motor;
         DcMotor? selected_dc_motor;
         ServoMotor? selected_servo_motor;
@@ -661,7 +661,7 @@ namespace EV3devKit.Demo {
          *
          * DeviceManager.get_leds () is used to get a list of LEDs.
          *
-         * If the user selects a valid LED, selected_led is set.
+         * If the user selects a valid Led, selected_led is set.
          */
         async void do_select_led (ApplicationCommandLine command_line,
             DataInputStream stdin) throws IOError
@@ -700,8 +700,8 @@ namespace EV3devKit.Demo {
         /**
          * Print a list of the available triggers and get user input.
          *
-         * The trigger is set using LED.set_trigger (). Prints an error if
-         * setting the trigger fails. The operation is canceled if the LED is
+         * The trigger is set using Led.set_trigger (). Prints an error if
+         * setting the trigger fails. The operation is canceled if the Led is
          * removed before the user presses [Enter].
          */
         async void do_set_led_trigger (ApplicationCommandLine command_line,
@@ -739,10 +739,10 @@ namespace EV3devKit.Demo {
         }
 
         /**
-         * Gets user input and calls LED.set_brightness ().
+         * Gets user input and calls Led.set_brightness ().
          *
          * Prints error if setting the brightness fails. The operation is
-         * canceled if the LED is removed before the user presses [Enter].
+         * canceled if the Led is removed before the user presses [Enter].
          */
         async void do_set_led_brightness (ApplicationCommandLine command_line,
             DataInputStream stdin) throws IOError
@@ -1346,11 +1346,11 @@ namespace EV3devKit.Demo {
         }
 
         /**
-         * Display a message whenever a LED is connected.
+         * Display a message whenever a Led is connected.
          *
-         * Adds handler so message is displayed when the LED is disconnected.
+         * Adds handler so message is displayed when the Led is disconnected.
          */
-        void on_led_added (LED led) {
+        void on_led_added (Led led) {
             message ("LED added: %s", led.name);
             ulong handler_id = 0;
             handler_id = led.notify["connected"].connect (() => {
