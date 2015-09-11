@@ -1,3 +1,18 @@
+ev3devkit (0.2.0) stable; urgency=medium
+
+  * Move grx vapi to grx package
+  * Library should depend on specific version of data
+  * Fix lintian warning about package section
+  * Add pkgconfig file to -dev package
+  * Rename GRX namespace to Grx
+  * Rename UI namespace to Ui
+  * Rename DCMotor class to DcMotor
+  * Rename LED class to Led
+  * Rename EV3devKit namespace to Ev3devKit
+  * Rename EV3devKitDesktop namespace to Ev3devKitDesktop
+
+ -- David Lechner <david@lechnology.com>  Fri, 11 Sep 2015 17:45:05 -0500
+
 ev3devkit (0.1.0) stable; urgency=medium
 
   * Initial Release
