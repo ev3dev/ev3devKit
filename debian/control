@@ -34,6 +34,7 @@ Description: Programming toolkit for ev3dev
 
 Package: libev3devkit-dev
 Architecture: any
+Section: libdevel
 Depends: ${misc:Depends}, libev3devkit-0.1-0 (= ${binary:Version}),
          gir1.2-ev3devkit-0.1 (= ${binary:Version})
 Description: Programming toolkit for ev3dev
