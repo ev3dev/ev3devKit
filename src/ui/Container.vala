@@ -22,7 +22,7 @@
 /* Container.vala - Base class widgets that contain other widgets*/
 
 using Gee;
-using GRX;
+using Grx;
 
 namespace EV3devKit.UI {
 

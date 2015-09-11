@@ -72,8 +72,8 @@ namespace EV3devKitDesktop {
          */
         public static void init (string[] args) {
             Gtk.init (ref args);
-            GRX.set_driver ("memory nc 16M");
-            GRX.set_mode (GRX.GraphicsMode.GRAPHICS_DEFAULT);
+            Grx.set_driver ("memory nc 16M");
+            Grx.set_mode (Grx.GraphicsMode.GRAPHICS_DEFAULT);
 
             var stock_lcd = new GtkFramebuffer ();
             UI.Screen.set_active_screen (new GtkScreen (stock_lcd));

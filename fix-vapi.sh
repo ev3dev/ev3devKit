@@ -5,6 +5,6 @@
 
 [ $# != 2 ] && echo "Usage: ./fix-vapi.sh <in.vapi> <out.vapi>" && exit 1
 
-sed "s/public GRX.Font/public unowned GRX.Font/" $1 > $2
+sed "s/public Grx.Font/public unowned Grx.Font/" $1 > $2
 
 exit 0

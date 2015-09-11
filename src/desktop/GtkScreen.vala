@@ -23,7 +23,7 @@
 
 using EV3devKit;
 using Gee;
-using GRX;
+using Grx;
 
 namespace EV3devKitDesktop {
     /**

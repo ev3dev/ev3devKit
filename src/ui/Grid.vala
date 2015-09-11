@@ -23,7 +23,7 @@
 
 using Curses;
 using Gee;
-using GRX;
+using Grx;
 
 namespace EV3devKit.UI {
     /**
@@ -317,7 +317,7 @@ namespace EV3devKit.UI {
         /**
          * {@inheritDoc}
          */
-        protected override void draw_border (GRX.Color color) {
+        protected override void draw_border (Grx.Color color) {
             base.draw_border (color);
             // draw the vertical grid lines between each column
             if (border_column > 0) {

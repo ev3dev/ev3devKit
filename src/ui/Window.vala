@@ -22,7 +22,7 @@
 /* Window.vala - Top level widget */
 
 using Curses;
-using GRX;
+using Grx;
 
 namespace EV3devKit.UI {
     /**

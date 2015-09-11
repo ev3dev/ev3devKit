@@ -22,7 +22,7 @@
 /* Icon.vala - Widget to display an icon */
 
 using Gee;
-using GRX;
+using Grx;
 
 namespace EV3devKit.UI {
     /**

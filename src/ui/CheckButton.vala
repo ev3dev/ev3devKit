@@ -23,7 +23,7 @@
 
 using Curses;
 using Gee;
-using GRX;
+using Grx;
 
 namespace EV3devKit.UI {
 
@@ -167,7 +167,7 @@ namespace EV3devKit.UI {
          * {@inheritDoc}
          */
         protected override void draw_content () {
-            unowned GRX.Color color;
+            unowned Grx.Color color;
             if (has_focus || parent.draw_children_as_focused) {
                 color = window.screen.mid_color;
                 filled_box (border_bounds.x1, border_bounds.y1, border_bounds.x2,

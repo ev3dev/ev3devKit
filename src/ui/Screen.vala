@@ -22,7 +22,7 @@
 /* Screen.vala - Screen object contains all other widgets */
 
 using Gee;
-using GRX;
+using Grx;
 
 namespace EV3devKit.UI {
     /**
@@ -188,7 +188,7 @@ namespace EV3devKit.UI {
         /**
          * Refresh the screen.
          *
-         * Everything is drawn on a {@link GRX.Context} in memory. Refreshing
+         * Everything is drawn on a {@link Grx.Context} in memory. Refreshing
          * copies this to the actual screen so that it is displayed to the user.
          */
         protected virtual void refresh () {

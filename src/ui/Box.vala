@@ -22,7 +22,7 @@
 /* Box.vala - {@link Container} for displaying widgets horizontally or vertically */
 
 using Gee;
-using GRX;
+using Grx;
 
 namespace EV3devKit.UI {
 

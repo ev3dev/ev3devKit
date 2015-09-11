@@ -72,7 +72,7 @@ namespace EV3devKit.UI {
                 border = 0,
                 border_radius = 0
             }, new Label (text) {
-                text_horizontal_align = GRX.TextHorizAlign.LEFT
+                text_horizontal_align = Grx.TextHorizAlign.LEFT
             });
             button.add (label);
         }
@@ -89,7 +89,7 @@ namespace EV3devKit.UI {
                 border = 0,
                 border_radius = 0
             }, new Label (text) {
-                text_horizontal_align = GRX.TextHorizAlign.LEFT
+                text_horizontal_align = Grx.TextHorizAlign.LEFT
             });
             var hbox = new Box.horizontal ();
             button.add (hbox);

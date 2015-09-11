@@ -22,7 +22,7 @@
 /* MessageDialog.vala - Dialog that displays message to user */
 
 using Curses;
-using GRX;
+using Grx;
 
 namespace EV3devKit.UI {
     /**

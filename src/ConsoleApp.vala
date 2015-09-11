@@ -110,9 +110,9 @@ namespace EV3devKit {
             stdscr.keypad (true);
 
             try {
-                if (!GRX.set_driver ("linuxfb"))
+                if (!Grx.set_driver ("linuxfb"))
                     throw new ConsoleAppError.MODE ("Error setting driver");
-                if (!GRX.set_mode (GRX.GraphicsMode.GRAPHICS_DEFAULT))
+                if (!Grx.set_mode (Grx.GraphicsMode.GRAPHICS_DEFAULT))
                     throw new ConsoleAppError.MODE ("Error setting mode");
                 Unix.signal_add (SIGHUP, HandleSIGTERM);
                 Unix.signal_add (SIGTERM, HandleSIGTERM);
@@ -144,7 +144,7 @@ namespace EV3devKit {
         }
 
         void release_console () {
-            GRX.set_driver ("memory"); // releases frame buffer
+            Grx.set_driver ("memory"); // releases frame buffer
             endwin ();
         }
 

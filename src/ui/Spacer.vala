@@ -21,7 +21,7 @@
 
 /* Spacer.vala - Widget to take up space */
 
-using GRX;
+using Grx;
 
 namespace EV3devKit.UI {
     /**

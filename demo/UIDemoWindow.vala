@@ -23,7 +23,7 @@
 
 using Curses;
 using EV3devKit.UI;
-using GRX;
+using Grx;
 
 namespace EV3devKit.Demo {
     /**

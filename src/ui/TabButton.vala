@@ -23,7 +23,7 @@
 
 using Curses;
 using Gee;
-using GRX;
+using Grx;
 
 namespace EV3devKit.UI {
     /**
@@ -69,7 +69,7 @@ namespace EV3devKit.UI {
         /**
          * {@inheritDoc}
          */
-        protected override void draw_border (GRX.Color color = window.screen.fg_color) {
+        protected override void draw_border (Grx.Color color = window.screen.fg_color) {
             if (border_top != 0)
                 filled_box (border_bounds.x1 + border_radius, border_bounds.y1,
                     border_bounds.x2 - border_radius,

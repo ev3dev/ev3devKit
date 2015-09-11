@@ -23,7 +23,7 @@
 
 using Curses;
 using Gee;
-using GRX;
+using Grx;
 
 /**
  * Library for building user interfaces on small screens (like the EV3 LCD).
@@ -822,7 +822,7 @@ namespace EV3devKit.UI {
          *
          * For example Grid also draws a border between rows and columns.
          */
-        protected virtual void draw_border (GRX.Color color = window.screen.fg_color) {
+        protected virtual void draw_border (Grx.Color color = window.screen.fg_color) {
             if (border_top != 0)
                 filled_box (border_bounds.x1 + border_radius, border_bounds.y1,
                     border_bounds.x2 - border_radius,

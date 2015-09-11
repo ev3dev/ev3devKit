@@ -22,7 +22,7 @@
 /* Label.vala - Widget to display text */
 
 using Gee;
-using GRX;
+using Grx;
 
 namespace EV3devKit.UI {
     /**
@@ -197,7 +197,7 @@ namespace EV3devKit.UI {
                 text_option.fg_color = (TextColor)window.screen.bg_color;
             else
                 text_option.fg_color = (TextColor)window.screen.fg_color;
-            text_option.bg_color = (TextColor)GRX.Color.no_color;
+            text_option.bg_color = (TextColor)Grx.Color.no_color;
             int x = 0;
             switch (text_horizontal_align) {
             case TextHorizAlign.LEFT:

@@ -25,7 +25,7 @@
 
 using Gee;
 using Gtk;
-using GRX;
+using Grx;
 
 namespace EV3devKitDesktop {
     public class GtkFramebuffer : Gtk.EventBox {
