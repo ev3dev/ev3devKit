@@ -45,6 +45,7 @@ set (COMMON_PACKAGES
     gio-2.0
     gio-unix-2.0
     gee-0.8
+    grx20
     gudev-1.0
     curses
     posix
@@ -57,6 +58,7 @@ set (COMMON_MODULES
     gio-2.0
     gio-unix-2.0
     gee-0.8
+    grx20
     gudev-1.0
     ncurses
 )
@@ -144,7 +146,7 @@ if (EV3DEVKIT_DESKTOP)
     link_directories (${DESKTOP_DEPS_LIBRARY_DIRS})
 endif (EV3DEVKIT_DESKTOP)
 
-link_libraries (grx20 m)
+link_libraries (m)
 
 find_package (Vala REQUIRED)
 include (ValaVersion)
