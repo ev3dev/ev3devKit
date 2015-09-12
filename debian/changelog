@@ -1,3 +1,9 @@
+ev3devkit (0.2.1) stable; urgency=medium
+
+  * Add desktop packages.
+
+ -- David Lechner <david@lechnology.com>  Fri, 11 Sep 2015 23:47:38 -0500
+
 ev3devkit (0.2.0) stable; urgency=medium
 
   * Move grx vapi to grx package
