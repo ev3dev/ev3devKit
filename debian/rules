@@ -2,10 +2,22 @@
 # -*- makefile -*-
 
 # Uncomment this to turn on verbose mode.
-#export DH_VERBOSE=1
+export DH_VERBOSE=1
 
 %:
 	dh $@ --with gir
+
+# only build desktop library packages on i386/amd64
+ifeq ("${DEB_BUILD_ARCH}", "i386")
+desktop = 1
+endif
+ifeq ("${DEB_BUILD_ARCH}", "amd64")
+desktop = 1
+endif
+ifdef desktop
+override_dh_auto_configure:
+	dh_auto_configure -- -DEV3DEVKIT_DESKTOP=bool:Yes
+endif
 
 override_dh_install:
 	dh_install --list-missing

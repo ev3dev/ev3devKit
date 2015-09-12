@@ -1,0 +1,5 @@
+Name: ev3devKit Desktop
+Description: Programming toolkit for ev3dev
+Version: @VERSION@
+Requires: @DESKTOP_PKGCONFIG_DEPS@
+Libs: -l@DESKTOP_LIBRARY_NAME@

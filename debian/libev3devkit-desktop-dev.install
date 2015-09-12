@@ -1,0 +1,6 @@
+usr/include/ev3devkit-desktop-0.1.h
+usr/lib/libev3devkit-desktop-0.1.so
+usr/lib/libev3devkit-desktop-0.1.a
+usr/lib/pkgconfig/ev3devkit-desktop.pc
+usr/share/gir-1.0/Ev3devKitDesktop-0.1.gir
+usr/share/vala/vapi/ev3devkit-desktop-0.1.vapi

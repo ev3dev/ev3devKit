@@ -52,8 +52,6 @@ namespace Ev3devKitDesktop {
      * }}}
      */
     namespace GtkApp {
-        const string main_window_glade_file = "main_window.glade";
-
         GtkScreen color_screen;
 
         /**
@@ -85,7 +83,7 @@ namespace Ev3devKitDesktop {
             Gtk.Box screen1_box;
             Gtk.Box screen2_box;
             try {
-                builder.add_from_file (main_window_glade_file);
+                builder.add_from_string (main_window_glade, -1);
                 main_window = builder.get_object ("main-window") as Gtk.Window;
                 screen1_box = builder.get_object ("screen1-box") as Gtk.Box;
                 screen2_box = builder.get_object ("screen2-box") as Gtk.Box;

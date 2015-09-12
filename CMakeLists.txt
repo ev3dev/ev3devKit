@@ -15,6 +15,7 @@ set (DATADIR "${CMAKE_INSTALL_PREFIX}/share")
 set (PKGDATADIR "${DATADIR}/${CMAKE_PROJECT_NAME}")
 set (DEVICES_DEMO_EXEC_NAME "ev3devKit-devices-demo")
 set (UI_DEMO_EXEC_NAME "ev3devKit-ui-demo")
+set (UI_DESKTOP_DEMO_EXEC_NAME "ev3devKit-ui-desktop-demo")
 set (SOVERSION 0)
 set (VERSION "0.2.0")
 set (GIR_NAME "Ev3devKit")
@@ -67,24 +68,11 @@ set (DESKTOP_PACKAGES gtk+-3.0)
 
 configure_file (src/Version.vala.in Version.vala)
 # convert CMake list to space separated string for pkgconfig file
-string(REPLACE ";" " " COMMON_MODULES "${COMMON_MODULES}")
+string(REPLACE ";" " " PKGCONFIG_DEPS "${COMMON_MODULES}")
 configure_file (${PROJECT_NAME}.pc.in ${PROJECT_NAME}.pc)
-
-if (EV3DEVKIT_DESKTOP)
-    set (UI_DEMO_SOURCE_FILES
-        demo/UIDemoWindow.vala
-        demo/ui_desktop_demo.vala
-    )
-else (EV3DEVKIT_DESKTOP)
-    set (UI_DEMO_SOURCE_FILES
-        demo/UIDemoWindow.vala
-        demo/ui_demo.vala
-    )
-endif (EV3DEVKIT_DESKTOP)
-
-set (DEVICES_DEMO_SOURCE_FILES
-    demo/devices_demo.vala
-)
+# convert CMake list to space separated string for pkgconfig file
+string(REPLACE ";" " " DESKTOP_PKGCONFIG_DEPS "${PROJECT_NAME};${DESKTOP_MODULES}")
+configure_file (${PROJECT_NAME}-desktop.pc.in ${PROJECT_NAME}-desktop.pc)
 
 set (LIBRARY_SOURCE_FILES
     src/devices/DcMotor.vala
@@ -133,6 +121,25 @@ set (DESKTOP_LIBRARY_SOURCE_FILES
     src/desktop/GtkApp.vala
     src/desktop/GtkFramebuffer.vala
     src/desktop/GtkScreen.vala
+    ${CMAKE_CURRENT_BINARY_DIR}/main_window_glade.vala
+)
+
+set (DEVICES_DEMO_SOURCE_FILES
+    demo/devices_demo.vala
+)
+
+set (UI_DEMO_COMMON_SOURCE_FILES
+    demo/UiDemoWindow.vala
+)
+
+set (UI_DEMO_SOURCE_FILES
+    demo/ui_demo.vala
+    ${UI_DEMO_COMMON_SOURCE_FILES}
+)
+
+set (UI_DESKTOP_DEMO_SOURCE_FILES
+    demo/ui_desktop_demo.vala
+    ${UI_DEMO_COMMON_SOURCE_FILES}
 )
 
 find_package (PkgConfig REQUIRED)
@@ -341,24 +348,21 @@ if (EV3DEVKIT_DESKTOP)
     set_target_properties(${DESKTOP_LIBRARY_NAME}-static PROPERTIES
         OUTPUT_NAME ${DESKTOP_LIBRARY_NAME})
     install (TARGETS ${DESKTOP_LIBRARY_NAME}-static ARCHIVE DESTINATION lib)
+    file (READ ${CMAKE_CURRENT_SOURCE_DIR}/src/desktop/main_window.glade MAIN_WINDOW_GLADE)
     configure_file (
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/desktop/main_window.glade
-        ${CMAKE_BINARY_DIR}/main_window.glade COPYONLY
+        src/desktop/main_window_glade.vala.in
+        ${CMAKE_BINARY_DIR}/main_window_glade.vala
     )
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${EV3DEVKIT_DESKTOP_PACKAGE}.h DESTINATION include/)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-desktop.pc DESTINATION lib/pkgconfig/)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${EV3DEVKIT_DESKTOP_PACKAGE}.vapi DESTINATION share/vala/vapi/)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${GIR_VERSION}.gir DESTINATION share/gir-1.0/)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${GIR_VERSION}.typelib DESTINATION lib/girepository-1.0/)
 endif (EV3DEVKIT_DESKTOP)
 
 if (EV3DEVKIT_BUILD_DEMO)
     set (EXEC_PACKAGES ${COMMON_PACKAGES} ${EV3DEVKIT_PACKAGE})
-    if (EV3DEVKIT_DESKTOP)
-        list (APPEND EXEC_PACKAGES ${DESKTOP_PACKAGES} ${EV3DEVKIT_DESKTOP_PACKAGE})
-    endif (EV3DEVKIT_DESKTOP)
-
     set (EXEC_LIBRARY_DEPENDS ${LIBRARY_NAME})
-    if (EV3DEVKIT_DESKTOP)
-        list (APPEND EXEC_LIBRARY_DEPENDS ${DESKTOP_LIBRARY_NAME})
-    endif (EV3DEVKIT_DESKTOP)
 
     # Device driver demo program
 
@@ -399,11 +403,6 @@ if (EV3DEVKIT_BUILD_DEMO)
         --vapidir=${CMAKE_CURRENT_BINARY_DIR}
     )
 
-    set (EXEC_LIBRARY_DEPENDS ${LIBRARY_NAME})
-    if (EV3DEVKIT_DESKTOP)
-        list (APPEND EXEC_LIBRARY_DEPENDS ${DESKTOP_LIBRARY_NAME})
-    endif (EV3DEVKIT_DESKTOP)
-
     add_executable (${UI_DEMO_EXEC_NAME} ${UI_DEMO_EXEC_VALA_C})
     target_link_libraries (${UI_DEMO_EXEC_NAME} ${EXEC_LIBRARY_DEPENDS})
 
@@ -415,21 +414,52 @@ if (EV3DEVKIT_BUILD_DEMO)
 
     install (TARGETS ${UI_DEMO_EXEC_NAME} RUNTIME DESTINATION bin)
 
-    # python user interface demo (requires shared library, i.e. BUILD_SHARED_LIBS is true)
+    if (EV3DEVKIT_DESKTOP)
+        set (DESKTOP_EXEC_PACKAGES ${EXEC_PACKAGES})
+        list (APPEND DESKTOP_EXEC_PACKAGES ${DESKTOP_PACKAGES} ${EV3DEVKIT_DESKTOP_PACKAGE})
+        set (DESKTOP_EXEC_LIBRARY_DEPENDS ${EXEC_LIBRARY_DEPENDS})
+        list (APPEND DESKTOP_EXEC_LIBRARY_DEPENDS ${DESKTOP_LIBRARY_NAME})
 
-    add_custom_target (run-python-ui-desktop-demo
-        COMMAND
-            LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}
-            GI_TYPELIB_PATH=${CMAKE_CURRENT_BINARY_DIR}
-            ${CMAKE_CURRENT_SOURCE_DIR}/demo/python/ui_desktop_demo.py
-        DEPENDS
-            ${LIBRARY_NAME}-typelib
-            ${DESKTOP_LIBRARY_NAME}-typelib
-            ${CMAKE_CURRENT_SOURCE_DIR}/demo/python/ui_demo_window.py
-            ${CMAKE_CURRENT_SOURCE_DIR}/demo/python/ui_desktop_demo.py
-        WORKING_DIRECTORY
-            ${CMAKE_BINARY_DIR}
-    )
+        # User interface demo program
+
+        vala_precompile(UI_DESKTOP_DEMO_EXEC_VALA_C ${UI_DESKTOP_DEMO_EXEC_NAME}
+            ${UI_DESKTOP_DEMO_SOURCE_FILES}
+        PACKAGES
+            ${DESKTOP_EXEC_PACKAGES}
+        CUSTOM_VAPIS
+            bindings/*.vapi
+        OPTIONS
+            --target-glib=${TARGET_GLIB}
+            --thread
+            --vapidir=${CMAKE_CURRENT_BINARY_DIR}
+        )
+
+        add_executable (${UI_DESKTOP_DEMO_EXEC_NAME} ${UI_DESKTOP_DEMO_EXEC_VALA_C})
+        target_link_libraries (${UI_DESKTOP_DEMO_EXEC_NAME} ${DESKTOP_EXEC_LIBRARY_DEPENDS})
+
+        add_custom_target (run-${UI_DESKTOP_DEMO_EXEC_NAME}
+            COMMAND ${UI_DESKTOP_DEMO_EXEC_NAME}
+            DEPENDS ${UI_DESKTOP_DEMO_EXEC_NAME}
+            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        )
+
+        install (TARGETS ${UI_DESKTOP_DEMO_EXEC_NAME} RUNTIME DESTINATION bin)
+
+        add_custom_target (run-python-ui-desktop-demo
+            COMMAND
+                LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}
+                GI_TYPELIB_PATH=${CMAKE_CURRENT_BINARY_DIR}
+                ${CMAKE_CURRENT_SOURCE_DIR}/demo/python/ui_desktop_demo.py
+            DEPENDS
+                ${LIBRARY_NAME}-typelib
+                ${DESKTOP_LIBRARY_NAME}-typelib
+                ${CMAKE_CURRENT_SOURCE_DIR}/demo/python/ui_demo_window.py
+                ${CMAKE_CURRENT_SOURCE_DIR}/demo/python/ui_desktop_demo.py
+            WORKING_DIRECTORY
+                ${CMAKE_BINARY_DIR}
+        )
+    endif (EV3DEVKIT_DESKTOP)
+
 endif (EV3DEVKIT_BUILD_DEMO)
 
 find_package (Valadoc)

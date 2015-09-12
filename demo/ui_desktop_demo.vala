@@ -27,7 +27,7 @@ namespace Ev3devKit.Demo {
     public static int main (string[] args) {
         GtkApp.init (args);
 
-        var demo_window = new UIDemoWindow ();
+        var demo_window = new UiDemoWindow ();
         demo_window.quit.connect (GtkApp.quit);
         demo_window.show ();
 

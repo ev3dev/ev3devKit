@@ -1,5 +1,5 @@
 Name: ev3devKit
 Description: Programming toolkit for ev3dev
 Version: @VERSION@
-Requires: @COMMON_MODULES@
+Requires: @PKGCONFIG_DEPS@
 Libs: -l@LIBRARY_NAME@

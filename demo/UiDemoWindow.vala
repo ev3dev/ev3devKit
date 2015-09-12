@@ -19,7 +19,7 @@
  * MA 02110-1301, USA.
  */
 
-/* UIDemoWindow.vala - Main window for widget demos */
+/* UiDemoWindow.vala - Main window for widget demos */
 
 using Curses;
 using Ev3devKit.Ui;
@@ -29,7 +29,7 @@ namespace Ev3devKit.Demo {
     /**
      * Used to demonstrate most of the UI components in ev3devKit.
      */
-    public class UIDemoWindow : Ui.Window {
+    public class UiDemoWindow : Ui.Window {
 
         /**
          * Emitted when the use selects the Quit menu item.
@@ -39,7 +39,7 @@ namespace Ev3devKit.Demo {
         /**
          * Creates a new instance of a demo window.
          */
-        public UIDemoWindow () {
+        public UiDemoWindow () {
             var menu = new Ui.Menu () {
                 padding_left = 10,
                 padding_right = 10

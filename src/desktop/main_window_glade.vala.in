@@ -1,7 +1,7 @@
 /*
  * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
- * Copyright 2014 David Lechner <david@lechnology.com>
+ * Copyright 2015 David Lechner <david@lechnology.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,24 +19,10 @@
  * MA 02110-1301, USA.
  */
 
-/* main.vala - main function for running UI demo */
+/* main_window_glade.vala */
 
-namespace Ev3devKit.Demo {
-
-    public static int main (string[] args) {
-        try {
-            ConsoleApp.init ();
-
-            var demo_window = new UiDemoWindow ();
-            demo_window.quit.connect (ConsoleApp.quit);
-            demo_window.show ();
-
-            ConsoleApp.run ();
-
-            return 0;
-        } catch (Error err) {
-            critical ("%s", err.message);
-            return err.code;
-        }
+namespace Ev3devKitDesktop {
+    namespace GtkApp {
+        const string main_window_glade = """@MAIN_WINDOW_GLADE@""";
     }
 }

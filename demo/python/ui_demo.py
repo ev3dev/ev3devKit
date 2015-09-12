@@ -26,7 +26,7 @@ import sys
 import time
 
 from gi.repository import Ev3devKit
-from ui_demo_window import UIDemoWindow
+from ui_demo_window import UiDemoWindow
 
 def quit(window):
     Ev3devKit.console_app_quit()
@@ -34,7 +34,7 @@ def quit(window):
 def main():
     Ev3devKit.console_app_init()
 
-    demo_window = UIDemoWindow()
+    demo_window = UiDemoWindow()
     demo_window.connect("quit", quit)
     demo_window.show()
 

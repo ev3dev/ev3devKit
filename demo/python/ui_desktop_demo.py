@@ -24,7 +24,7 @@
 import sys
 
 from gi.repository import Ev3devKitDesktop
-from ui_demo_window import UIDemoWindow
+from ui_demo_window import UiDemoWindow
 
 def quit(window):
     Ev3devKitDesktop.gtk_app_quit()
@@ -32,7 +32,7 @@ def quit(window):
 def main():
     Ev3devKitDesktop.gtk_app_init (sys.argv)
 
-    demo_window = UIDemoWindow()
+    demo_window = UiDemoWindow()
     demo_window.connect("quit", quit)
     demo_window.show ()
 
