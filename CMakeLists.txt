@@ -95,6 +95,7 @@ set (LIBRARY_SOURCE_FILES
     src/ui/Dialog.vala
     src/ui/Grid.vala
     src/ui/Icon.vala
+    src/ui/InputDialog.vala
     src/ui/Label.vala
     src/ui/Menu.vala
     src/ui/MenuItem.vala
