@@ -48,6 +48,9 @@ namespace Ev3devKit.Demo {
             var icon_menu_item = new Ui.MenuItem ("Icon");
             icon_menu_item.button.pressed.connect (on_icon_menu_item_button_pressed);
             menu.add_menu_item (icon_menu_item);
+            var input_dialog_menu_item = new Ui.MenuItem ("InputDialog...");
+            input_dialog_menu_item.button.pressed.connect (on_input_dialog_menu_item_button_pressed);
+            menu.add_menu_item (input_dialog_menu_item);
             var message_dialog_menu_item = new Ui.MenuItem ("MessageDialog...");
             message_dialog_menu_item.button.pressed.connect (on_message_dialog_menu_item_button_pressed);
             menu.add_menu_item (message_dialog_menu_item);
@@ -106,6 +109,25 @@ namespace Ev3devKit.Demo {
                 }
             }
             window.show ();
+        }
+
+        void on_input_dialog_menu_item_button_pressed () {
+            var dialog = new InputDialog ("How much is 1+1?", "3");
+            weak InputDialog weak_dialog = dialog;
+            dialog.responded.connect ((accepted) => {
+                if (!accepted) {
+                    return;
+                }
+                var text = weak_dialog.text_value;
+                MessageDialog response;
+                if (text == "2") {
+                    response = new MessageDialog ("Correct!", "yes, 1+1 == 2.");
+                } else {
+                    response = new MessageDialog ("Seriously?", "nope, 1+1 == 2.");
+                }
+                response.show ();
+            });
+            dialog.show ();
         }
 
         void on_message_dialog_menu_item_button_pressed () {

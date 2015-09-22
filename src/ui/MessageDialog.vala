@@ -33,7 +33,6 @@ namespace Ev3devKit.Ui {
     public class MessageDialog : Ev3devKit.Ui.Dialog {
         Scroll vscroll;
         Label title_label;
-        Label message_label;
 
         construct {
             var content_vbox = new Box.vertical ();
@@ -49,8 +48,6 @@ namespace Ev3devKit.Ui {
                 margin_bottom = 9
             };
             content_vbox.add (vscroll);
-            message_label = new Label ();
-            vscroll.add (message_label);
         }
 
         /**
@@ -60,8 +57,19 @@ namespace Ev3devKit.Ui {
          * @param message The message text.
          */
         public MessageDialog (string title, string message) {
+            vscroll.add (new Label (message));
             title_label.text = title;
-            message_label.text = message;
+        }
+
+        /**
+         * Creates a new message dialog with the given widget as content.
+         *
+         * @param title The title text.
+         * @param content The content widget.
+         */
+        public MessageDialog.with_content (string title, Widget content) {
+            vscroll.add (content);
+            title_label.text = title;
         }
 
         /**
