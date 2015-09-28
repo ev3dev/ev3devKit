@@ -47,6 +47,10 @@ class UiDemoWindow(Ev3devKit.UiWindow):
         icon_menu_item.get_button().connect('pressed', self.on_icon_menu_item_pressed)
         menu.add_menu_item(icon_menu_item)
 
+        input_dialog_menu_item = Ev3devKit.UiMenuItem.new("InputDialog...")
+        input_dialog_menu_item.get_button().connect('pressed', self.on_input_dialog_menu_item_pressed)
+        menu.add_menu_item(input_dialog_menu_item)
+
         message_dialog_menu_item = Ev3devKit.UiMenuItem.new("MessageDialog...")
         message_dialog_menu_item.get_button().connect('pressed', self.on_message_dialog_menu_item_pressed)
         menu.add_menu_item(message_dialog_menu_item)
@@ -99,6 +103,20 @@ class UiDemoWindow(Ev3devKit.UiWindow):
                 print(e)
 
         window.show()
+
+    def on_input_dialog_menu_item_pressed(self, button):
+        input_dialog = Ev3devKit.UiInputDialog.new("How much is 1+1?", "3")
+        def on_input_dialog_responded(dialog, accepted):
+            if not accepted:
+                return
+            if dialog.get_text_value() == '2':
+                response_dialog = Ev3devKit.UiMessageDialog.new("Correct!", "yes, 1+1 == 2.")
+            else:
+                response_dialog = Ev3devKit.UiMessageDialog.new("Seriously?", "nope, 1+1 == 2.")
+            response_dialog.show()
+        input_dialog.connect('responded', on_input_dialog_responded)
+
+        input_dialog.show()
 
     def on_message_dialog_menu_item_pressed(self, button):
         dialog = Ev3devKit.UiMessageDialog.new("Message!", "This is the message text." \
