@@ -69,7 +69,7 @@ configure_file (src/Version.vala.in Version.vala)
 string(REPLACE ";" " " PKGCONFIG_DEPS "${COMMON_MODULES}")
 configure_file (${PROJECT_NAME}.pc.in ${PROJECT_NAME}-${GIR_VERSION}.pc)
 # convert CMake list to space separated string for pkgconfig file
-string(REPLACE ";" " " DESKTOP_PKGCONFIG_DEPS "${PROJECT_NAME};${DESKTOP_MODULES}")
+string(REPLACE ";" " " DESKTOP_PKGCONFIG_DEPS "${PROJECT_NAME}-${GIR_VERSION};${DESKTOP_MODULES}")
 configure_file (${PROJECT_NAME}-desktop.pc.in ${PROJECT_NAME}-desktop-${GIR_VERSION}.pc)
 
 set (LIBRARY_SOURCE_FILES
