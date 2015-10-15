@@ -11,7 +11,7 @@ Homepage: https://www.ev3dev.org
 Vcs-Git: git://github.com/ev3dev/ev3devKit.git
 Vcs-Browser: https://github.com/ev3dev/ev3devKit
 
-Package: libev3devkit-0.1-0
+Package: libev3devkit-0.3-0
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, ev3devkit-data (= ${source:Version})
 Description: Programming toolkit for ev3dev
@@ -20,7 +20,7 @@ Description: Programming toolkit for ev3dev
  It is written in vala, but since it uses GObjects, it can be used with many
  languages via GObjectIntrospection.
 
-Package: gir1.2-ev3devkit-0.1
+Package: gir1.2-ev3devkit-0.3
 Section: introspection
 Architecture: any
 Depends: ${gir:Depends}, ${misc:Depends}
@@ -36,8 +36,8 @@ Description: Programming toolkit for ev3dev
 Package: libev3devkit-dev
 Architecture: any
 Section: libdevel
-Depends: ${misc:Depends}, libev3devkit-0.1-0 (= ${binary:Version}),
-         gir1.2-ev3devkit-0.1 (= ${binary:Version})
+Depends: ${misc:Depends}, libev3devkit-0.3-0 (= ${binary:Version}),
+         gir1.2-ev3devkit-0.3 (= ${binary:Version})
 Description: Programming toolkit for ev3dev
  This package contains the development files for ev3devKit.
 
@@ -47,13 +47,13 @@ Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Programming toolkit for ev3dev
  This package includes several demo programs that use ev3devKit.
 
-Package: libev3devkit-desktop-0.1-0
+Package: libev3devkit-desktop-0.3-0
 Architecture: i386 amd64
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Programming toolkit for ev3dev
  Provides GTK+ integration for ev3devKit.
 
-Package: gir1.2-ev3devkit-desktop-0.1
+Package: gir1.2-ev3devkit-desktop-0.3
 Section: introspection
 Architecture: i386 amd64
 Depends: ${gir:Depends}, ${misc:Depends}
@@ -63,8 +63,8 @@ Description: Programming toolkit for ev3dev
 Package: libev3devkit-desktop-dev
 Architecture: i386 amd64
 Section: libdevel
-Depends: ${misc:Depends}, libev3devkit-desktop-0.1-0 (= ${binary:Version}),
-         gir1.2-ev3devkit-desktop-0.1 (= ${binary:Version})
+Depends: ${misc:Depends}, libev3devkit-desktop-0.3-0 (= ${binary:Version}),
+         gir1.2-ev3devkit-desktop-0.3 (= ${binary:Version})
 Description: Programming toolkit for ev3dev
  This package contains the development files for ev3devKit-desktop.
 
