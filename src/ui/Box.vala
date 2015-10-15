@@ -1,7 +1,7 @@
 /*
  * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
- * Copyright 2014 David Lechner <david@lechnology.com>
+ * Copyright 2014-2015 David Lechner <david@lechnology.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@
 
 /* Box.vala - {@link Container} for displaying widgets horizontally or vertically */
 
-using Gee;
 using Grx;
 
 namespace Ev3devKit.Ui {
@@ -68,6 +67,9 @@ namespace Ev3devKit.Ui {
      * are swapped.
      */
     public class Box : Ev3devKit.Ui.Container {
+        HashTable<weak Widget, int> _width_map = new HashTable<weak Widget, int> (null, null);
+        HashTable<weak Widget, int> _height_map = new HashTable<weak Widget, int> (null, null);
+
         /**
          * Gets the layout direction of the Box.
          */
@@ -179,14 +181,14 @@ namespace Ev3devKit.Ui {
             return int.max (1, height + get_margin_border_padding_height ());
         }
 
-        HashMap<Widget,int> get_child_widths (int container_width, int container_height) {
+        HashTable<weak Widget,int> get_child_widths (int container_width, int container_height) {
             int total_width = 0;
             int spacer_count = 0;
             int fill_count = 0;
-            HashMap<Widget, int> width_map = new HashMap<Widget,int> ();
+            _width_map.remove_all ();
             foreach (var child in _children) {
-                width_map[child] = child.get_preferred_width_for_height (container_height);
-                total_width += width_map[child];
+                _width_map[child] = child.get_preferred_width_for_height (container_height);
+                total_width += _width_map[child];
                 total_width += spacing;
                 if (child is Spacer)
                     spacer_count++;
@@ -199,29 +201,29 @@ namespace Ev3devKit.Ui {
                 if (spacer_count > 0 && extra_space > 0) {
                     if (child is Spacer) {
                         var spacer_width = extra_space / spacer_count;
-                        width_map[child] = spacer_width;
+                        _width_map[child] = spacer_width;
                         extra_space -= spacer_width;
                         spacer_count--;
                     }
                 } else if (fill_count > 0 && child.horizontal_align == WidgetAlign.FILL) {
                     var fill_width = extra_space / fill_count;
-                    width_map[child] = width_map[child] + fill_width; // += does not work!
+                    _width_map[child] = _width_map[child] + fill_width; // += does not work!
                     extra_space -= fill_width;
                     fill_count--;
                 }
-                width_map[child] = int.max (width_map[child], 1);
+                _width_map[child] = int.max (_width_map[child], 1);
             }
-            return width_map;
+            return _width_map;
         }
 
-        HashMap<Widget, int> get_child_heights (int container_width, int container_height) {
+        HashTable<weak Widget, int> get_child_heights (int container_width, int container_height) {
             int total_height = 0;
             int spacer_count = 0;
             int fill_count = 0;
-            HashMap<Widget, int> height_map = new HashMap<Widget, int> ();
+            _height_map.remove_all ();
             foreach (var child in _children) {
-                height_map[child] = child.get_preferred_height_for_width (content_bounds.width);
-                total_height += height_map[child];
+                _height_map[child] = child.get_preferred_height_for_width (content_bounds.width);
+                total_height += _height_map[child];
                 total_height += spacing;
                 if (child is Spacer)
                     spacer_count++;
@@ -234,19 +236,19 @@ namespace Ev3devKit.Ui {
                 if (spacer_count > 0 && extra_space > 0) {
                     if (child is Spacer) {
                         var spacer_height = extra_space / spacer_count;
-                        height_map[child] = spacer_height;
+                        _height_map[child] = spacer_height;
                         extra_space -= spacer_height;
                         spacer_count--;
                     }
                 } else if (fill_count > 0 && child.vertical_align == WidgetAlign.FILL) {
                     var fill_height = extra_space / fill_count;
-                    height_map[child] = height_map[child] + fill_height; // += does not work!
+                    _height_map[child] = _height_map[child] + fill_height; // += does not work!
                     extra_space -= fill_height;
                     fill_count--;
                 }
-                height_map[child] = int.max (height_map[child], 1);
+                _height_map[child] = int.max (_height_map[child], 1);
             }
-            return height_map;
+            return _height_map;
         }
 
         /**

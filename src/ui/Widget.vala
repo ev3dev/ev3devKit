@@ -1,7 +1,7 @@
 /*
  * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
- * Copyright 2014 David Lechner <david@lechnology.com>
+ * Copyright 2014-2015 David Lechner <david@lechnology.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@
 /* Widget.vala - Base class for all widgets */
 
 using Curses;
-using Gee;
 using Grx;
 
 /**
@@ -454,7 +453,6 @@ namespace Ev3devKit.Ui {
          */
         protected Widget () {
         }
-
 /*
         ~Widget () {
             debug ("Finalized %s widget %p", get_type ().name (), this);
@@ -732,22 +730,22 @@ namespace Ev3devKit.Ui {
             if (result != null)
                 return result;
             var container = widget as Container;
-            if (container != null && container.children.size > 0) {
-                var iter = container.children.bidir_list_iterator ();
+            if (container != null && container.children.first () != null) {
+                unowned List<Widget> iter;
                 if (reverse) {
-                    iter.last ();
+                    iter = container.children.last ();
                     do {
-                        result = do_recursive_children_internal (iter.get (), func, reverse);
+                        result = do_recursive_children_internal (iter.data, func, reverse);
                         if (result != null)
                             return result;
-                    } while (iter.previous ());
+                    } while ((iter = iter.prev) != null);
                 } else {
-                    iter.first ();
+                    iter = container.children.first ();
                     do {
-                        result = do_recursive_children_internal (iter.get (), func, reverse);
+                        result = do_recursive_children_internal (iter.data, func, reverse);
                         if (result != null)
                             return result;
-                    } while (iter.next ());
+                    } while ((iter = iter.next) != null);
                 }
             }
             return null;

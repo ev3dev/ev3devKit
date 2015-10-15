@@ -22,7 +22,6 @@
 /* Button.vala - Widget that represents a selectable button */
 
 using Curses;
-using Gee;
 using Grx;
 
 namespace Ev3devKit.Ui {

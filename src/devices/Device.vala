@@ -56,8 +56,8 @@ namespace Ev3devKit.Devices {
         const string read_error = "There was an error reading from the file";
         const string write_error = "There was an error writing to the file";
 
-        Gee.Map<string, DataInputStream> read_attr_map;
-        Gee.Map<string, DataOutputStream> write_attr_map;
+        HashTable<string, DataInputStream> read_attr_map;
+        HashTable<string, DataOutputStream> write_attr_map;
 
         /**
          * The udev object for this device.
@@ -89,8 +89,8 @@ namespace Ev3devKit.Devices {
          * @param udev_device The udev object that this device represents.
          */
         protected Device (GUdev.Device udev_device) {
-            read_attr_map = new Gee.HashMap<string, DataInputStream?> ();
-            write_attr_map = new Gee.HashMap<string, DataOutputStream?> ();
+            read_attr_map = new HashTable<string, DataInputStream?> (str_hash, str_equal);
+            write_attr_map = new HashTable<string, DataOutputStream?> (str_hash, str_equal);
             this.udev_device = udev_device;
             connected = true;
         }
@@ -168,7 +168,7 @@ namespace Ev3devKit.Devices {
         protected string read_string (string property) throws Error {
             assert_connected ();
             DataInputStream stream;
-            if (read_attr_map.has_key (property)) {
+            if (read_attr_map.contains (property)) {
                 stream = read_attr_map[property];
                 stream.seek (0, SeekType.SET);
             } else {

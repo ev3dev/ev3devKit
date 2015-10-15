@@ -1,7 +1,7 @@
 /*
  * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
- * Copyright 2014 David Lechner <david@lechnology.com>
+ * Copyright 2014-2015 David Lechner <david@lechnology.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@
 
 /* Screen.vala - Screen object contains all other widgets */
 
-using Gee;
 using Grx;
 
 namespace Ev3devKit.Ui {
@@ -34,8 +33,8 @@ namespace Ev3devKit.Ui {
     public class Screen : Object {
         internal static Screen? active_screen;
 
-        protected LinkedList<Window> window_stack;
-        LinkedList<uint?> key_queue;
+        protected Queue<Window> window_stack;
+        Queue<uint?> key_queue;
         Context context;
 
         /**
@@ -101,7 +100,7 @@ namespace Ev3devKit.Ui {
          * Returns ``null`` if there are no windows in the stack.
          */
         public Window? top_window {
-            owned get { return window_stack.peek_tail (); }
+            owned get { return window_stack.peek_head (); }
         }
 
         /**
@@ -133,8 +132,8 @@ namespace Ev3devKit.Ui {
         }
 
         construct {
-            window_stack = new LinkedList<Window> ();
-            key_queue = new LinkedList<uint?> ();
+            window_stack = new Queue<Window> ();
+            key_queue = new Queue<uint?> ();
             status_bar = new StatusBar () {
                 visible = false
             };
@@ -182,7 +181,7 @@ namespace Ev3devKit.Ui {
          * Add a key code to the queue.
          */
         public void queue_key_code (uint key_code) {
-            key_queue.offer_tail (key_code);
+            key_queue.push_tail (key_code);
         }
 
         /**
@@ -196,7 +195,7 @@ namespace Ev3devKit.Ui {
         }
 
         void handle_input () {
-            var key_code = key_queue.poll_head ();
+            var key_code = key_queue.pop_head ();
             if (key_code == null || top_window == null)
                 return;
             // get the currently focused widget or top_window if none
@@ -222,7 +221,7 @@ namespace Ev3devKit.Ui {
             if (window.screen != null)
                 window.screen.close_window (window);
             window.screen = this;
-            window_stack.offer_tail (window);
+            window_stack.push_head (window);
             dirty = true;
             window.shown ();
         }
@@ -234,15 +233,18 @@ namespace Ev3devKit.Ui {
          * @return True if the window was removed.
          */
         internal bool close_window (Window window) {
-            var was_top_window = window_stack.peek_tail () == window;
-            if (window_stack.remove (window)) {
+            var was_top_window = window_stack.peek_head () == window;
+            var index = window_stack.index (window);
+            if (index >= 0) {
+                window_stack.pop_nth (index);
                 if (window.ref_count > 0) {
                     window.screen = null;
                     window.on_screen = false;
                     window.closed ();
                 }
-                if (was_top_window && window_stack.size > 0)
-                    window_stack.peek_tail ().shown ();
+                if (was_top_window && !window_stack.is_empty ()) {
+                    window_stack.peek_head ().shown ();
+                }
                 dirty = true;
                 return true;
             }
@@ -258,7 +260,9 @@ namespace Ev3devKit.Ui {
                 context.set ();
                 Window? top_window = null;
                 Window? top_dialog = null;
-                foreach (var window in window_stack) {
+                unowned List<Window> iter = window_stack.tail;
+                while (iter != null) {
+                    var window = iter.data;
                     if (window is Dialog) {
                         if (top_dialog != null && top_dialog.on_screen)
                             top_dialog.on_screen = false;
@@ -273,6 +277,7 @@ namespace Ev3devKit.Ui {
                             top_dialog = null;
                         }
                     }
+                    iter = iter.prev;
                 }
                 if (top_window != null) {
                     top_window.on_screen = true;

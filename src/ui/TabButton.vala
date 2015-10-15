@@ -22,7 +22,6 @@
 /* TabButton.vala - Button used for notebook tabs */
 
 using Curses;
-using Gee;
 using Grx;
 
 namespace Ev3devKit.Ui {

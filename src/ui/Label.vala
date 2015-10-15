@@ -1,7 +1,7 @@
 /*
  * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
- * Copyright 2014 David Lechner <david@lechnology.com>
+ * Copyright 2014-2015 David Lechner <david@lechnology.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@
 
 /* Label.vala - Widget to display text */
 
-using Gee;
 using Grx;
 
 namespace Ev3devKit.Ui {
@@ -42,7 +41,7 @@ namespace Ev3devKit.Ui {
         }
 
         TextOption text_option;
-        Gee.List<string>? cached_lines;
+        SList<string>? cached_lines;
         int last_width = 0;
 
         /**
@@ -128,29 +127,29 @@ namespace Ev3devKit.Ui {
         protected override int get_preferred_height_for_width (int width)
             requires (width > 0) ensures (result > 0)
         {
-            var lines = get_lines_for_width (width);
-            return int.max(1, (int)font.height * lines.size)
+            unowned SList<string> lines = get_lines_for_width (width);
+            return int.max(1, (int)font.height * (int)lines.length ())
                 + get_margin_border_padding_height ();
         }
 
-        Gee.List<string> get_lines_for_width (int width) requires (width > 0) {
+        unowned SList<string> get_lines_for_width (int width) requires (width > 0) {
             if (cached_lines != null && width == last_width)
                 return cached_lines;
-            cached_lines = new LinkedList<string> ();
+            cached_lines = new SList<string> ();
             if (text == null)
                 return cached_lines;
             var hard_lines = text.split ("\n");
             foreach (var line in hard_lines)
-                cached_lines.add_all (get_substring_lines_for_width (line, width));
+                cached_lines.concat (get_substring_lines_for_width (line, width));
 
             return cached_lines;
         }
 
-        Gee.List<string> get_substring_lines_for_width (string substring, int width) {
-            var lines = new LinkedList<string> ();
+        SList<string> get_substring_lines_for_width (string substring, int width) {
+            var lines = new SList<string> ();
             // if everything fits on one line...
             if (font.vala_string_width (substring) <= width) {
-                lines.add (substring);
+                lines.append (substring);
                 return lines;
             }
             // otherwise we have to spilt it into multiple lines
@@ -173,7 +172,7 @@ namespace Ev3devKit.Ui {
                         i--;
                     }
                 }
-                lines.add (builder.str);
+                lines.append (builder.str);
                 builder.truncate ();
             }
             return lines;
@@ -210,7 +209,7 @@ namespace Ev3devKit.Ui {
                 x = content_bounds.x2;
                 break;
             }
-            var lines = get_lines_for_width (content_bounds.width);
+            unowned SList<string> lines = get_lines_for_width (content_bounds.width);
             int y = 0;
             switch (text_vertical_align) {
             case TextVertAlign.TOP:
@@ -218,7 +217,7 @@ namespace Ev3devKit.Ui {
                 break;
             case TextVertAlign.MIDDLE:
                 y = content_bounds.y1 + (content_bounds.height + 1) / 2
-                    - (int)font.height * (lines.size - 1) / 2;
+                    - (int)font.height * ((int)lines.length () - 1) / 2;
                 break;
             case TextVertAlign.BOTTOM:
                 y = content_bounds.y2;

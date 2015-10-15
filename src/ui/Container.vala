@@ -1,7 +1,7 @@
 /*
  * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
- * Copyright 2014 David Lechner <david@lechnology.com>
+ * Copyright 2014-2015 David Lechner <david@lechnology.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@
 
 /* Container.vala - Base class widgets that contain other widgets*/
 
-using Gee;
 using Grx;
 
 namespace Ev3devKit.Ui {
@@ -44,26 +43,30 @@ namespace Ev3devKit.Ui {
      * A {@link Widget} that can contain other Widgets.
      */
     public abstract class Container : Ev3devKit.Ui.Widget {
-        protected LinkedList<Widget> _children;
+        protected List<Widget> _children;
 
         /**
-         * Gets the first child of the Container.
+         * Gets the first child of the Container or ``null`` if there are no
+         * children.
          *
          * Useful when ``container_type == ContainerType.SINGLE``
          */
         public Widget? child {
             owned get {
-                if (_children.size == 0)
+                if (_children.first () == null)
                     return null;
-                return _children.first ();
+                return _children.first ().data;
             }
         }
 
         /**
-         * Gets a read-only list of children of the Container.
+         * Gets a list of children of the Container. Must be used as read-only.
+         *
+         * This is a convenience accessor to iterate children. To add or remove
+         * children, use {@link add}, {@link insert_before} and {@link remove}.
          */
-        public Gee.BidirList<Widget> children {
-            owned get { return _children.read_only_view; }
+        public unowned List<Widget> children {
+            get { return _children.first (); }
         }
 
         /**
@@ -72,7 +75,7 @@ namespace Ev3devKit.Ui {
          */
         public bool descendant_has_focus {
             get {
-                foreach (var item in _children) {
+                foreach (var item in children) {
                     var focused = item.do_recursive_children ((widget) => {
                         if (widget.has_focus)
                             return widget;
@@ -123,7 +126,7 @@ namespace Ev3devKit.Ui {
         public signal void child_removed (Widget child);
 
         construct {
-            _children = new LinkedList<Widget> ();
+            _children = new List<Widget> ();
             weak_ref (weak_notify);
         }
 
@@ -137,8 +140,7 @@ namespace Ev3devKit.Ui {
         }
 
         void weak_notify (Object obj) {
-            while (_children.size > 0) {
-                var child = _children.last ();
+            while (child != null) {
                 remove (child);
             }
         }
@@ -206,11 +208,12 @@ namespace Ev3devKit.Ui {
             if (widget.parent != null)
                 widget.parent.remove (widget);
             if (container_type == ContainerType.SINGLE) {
-                if (_children.size > 0)
-                    remove (_children.first ());
-                _children.offer_head (widget);
+                if (_children != null) {
+                    remove (_children.data);
+                }
+                _children.prepend (widget);
             } else
-                _children.add (widget);
+                _children.append (widget);
             widget.parent = this;
             redraw ();
             child_added (widget);
@@ -233,19 +236,19 @@ namespace Ev3devKit.Ui {
         public void insert_before (Widget new_widget, Widget existing_widget)
             requires (!(new_widget is Window) && container_type != ContainerType.SINGLE)
         {
-            var new_index = _children.index_of (existing_widget);
+            var new_index = _children.index (existing_widget);
             if (new_index == -1) {
                 critical ("existing_widget is not child of container.");
                 return;
             }
             // Check to see if the widget is already a child of this container
-            var old_index = _children.index_of (new_widget);
+            var old_index = _children.index (new_widget);
             // If it is and it is before the new insertion point, we need to adjust
             if (old_index >= 0 && old_index < new_index)
                 new_index -= 1;
             if (new_widget.parent != null)
                 new_widget.parent.remove (new_widget);
-            _children.insert (new_index, new_widget);
+            _children.insert (new_widget, new_index);
             new_widget.parent = this;
             redraw ();
             child_added (new_widget);
@@ -257,7 +260,9 @@ namespace Ev3devKit.Ui {
          * @param widget The widget to remove.
          */
         public void remove (Widget widget) requires (!(widget is Window)) {
-            if (_children.remove (widget)) {
+            if (_children.index (widget) >= 0) {
+                _children.remove (widget);
+                widget.unref (); // List<G>.remove () does not unref :-/
                 widget.parent = null;
                 widget.has_focus = false;
                 redraw ();
@@ -270,8 +275,8 @@ namespace Ev3devKit.Ui {
          *
          * @param func A function that compares two widgets.
          */
-        public void sort (owned CompareDataFunc<Widget> func) {
-            _children.sort ((owned)func);
+        public void sort (CompareDataFunc<Widget> func) {
+            _children.sort_with_data (func);
             redraw ();
         }
 
@@ -342,7 +347,7 @@ namespace Ev3devKit.Ui {
          * {@inheritDoc}
          */
         protected override void do_layout () {
-            foreach (var child in _children)
+            foreach (var child in children)
                 set_child_bounds (child, content_bounds.x1, content_bounds.y1,
                     content_bounds.x2, content_bounds.y2);
         }
@@ -351,7 +356,7 @@ namespace Ev3devKit.Ui {
          * {@inheritDoc}
          */
         protected override void draw_content () {
-            foreach (var child in _children)
+            foreach (var child in children)
                 child.draw ();
         }
     }

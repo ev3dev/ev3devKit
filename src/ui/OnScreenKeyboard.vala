@@ -1,7 +1,7 @@
 /*
  * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
- * Copyright 2014 David Lechner <david@lechnology.com>
+ * Copyright 2014-2015 David Lechner <david@lechnology.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@
 /* OnScreenKeyboard.vala - Window that provides an on-screen keyboard for user intput. */
 
 using Curses;
-using Gee;
 using Grx;
 
 namespace Ev3devKit.Ui {
@@ -61,7 +60,7 @@ namespace Ev3devKit.Ui {
         Grid numeric_grid;
         Grid symbol_grid;
         Box vbox;
-        Map<ulong, weak Object> signal_id_map;
+        HashTable<ulong, weak Object> signal_id_map;
 
         /**
          * Gets and sets the user text.
@@ -87,7 +86,7 @@ namespace Ev3devKit.Ui {
         public signal void canceled ();
 
         construct {
-            signal_id_map = new HashMap<ulong, weak Object> ();
+            signal_id_map = new HashTable<ulong, weak Object> (null, null);
             vbox = new Box.vertical () {
                 spacing = 3
             };
@@ -152,7 +151,7 @@ namespace Ev3devKit.Ui {
             // back before the signals are disconnected to prevent problems.
             // We also have to manually disconnect the signals here or the
             // finalization will be canceled because ref_count is no longer 0.
-            foreach (var id in instance.signal_id_map.keys) {
+            foreach (var id in instance.signal_id_map.get_keys ()) {
                 instance.ref ();
                 SignalHandler.disconnect (instance.signal_id_map[id], id);
             }
@@ -187,7 +186,7 @@ namespace Ev3devKit.Ui {
                 critical ("Bad keyboard type.");
                 return;
             }
-            current_keyboard = (Grid)vbox._children.last ();
+            current_keyboard = (Grid)vbox.children.last ().data;
         }
 
         void init_upper_alpha_grid () {

@@ -87,13 +87,12 @@ namespace Ev3devKit.Ui {
 
         static void weak_notify (Object obj) {
             var menu = obj as Menu;
-            while (menu.menu_vbox._children.size > 0) {
-                var child = menu.menu_vbox._children.last ();
+            while (menu.menu_vbox.child != null) {
                 // if we still have children at this point, the child_removed handler
                 // is no longer connected, so we have to restore the missing reference
                 // here as well to prevent crashes.
                 menu.ref ();
-                menu.remove_menu_item (child.weak_represented_object as MenuItem);
+                menu.remove_menu_item (menu.menu_vbox.child.weak_represented_object as MenuItem);
             }
         }
 
@@ -106,7 +105,7 @@ namespace Ev3devKit.Ui {
          * @return The MenuItem if a match was found, otherwise ``null``.
          */
         public MenuItem? find_menu_item<T> (T value, FindFunc<T> func) {
-            foreach (var widget in menu_vbox._children) {
+            foreach (var widget in menu_vbox.children) {
                 var menu_item = widget.weak_represented_object as MenuItem;
                 if (menu_item != null && func (menu_item, value)) {
                     return menu_item;
@@ -122,7 +121,7 @@ namespace Ev3devKit.Ui {
          * @return ``true`` if the menu item was found.
          */
         public bool has_menu_item (MenuItem item) {
-            foreach (var widget in menu_vbox._children) {
+            foreach (var widget in menu_vbox.children) {
                 var obj = widget.weak_represented_object as MenuItem;
                 if (obj == item) {
                     return true;
@@ -177,12 +176,13 @@ namespace Ev3devKit.Ui {
          * menu item was not found in this menu.
          */
         public bool remove_menu_item (MenuItem item) {
-            foreach (var child in menu_vbox._children) {
+            foreach (var child in menu_vbox.children) {
                 var obj = child.weak_represented_object as MenuItem;
                 if (obj == item) {
-                    if (child.has_focus)
-                        child.focus_next (child == menu_vbox._children.last ()
+                    if (child.has_focus) {
+                        child.focus_next (child == menu_vbox.children.last ().data
                             ? FocusDirection.UP : FocusDirection.DOWN);
+                    }
                     item.menu = null;
                     menu_vbox.remove (child);
                     item.unref ();
@@ -234,7 +234,7 @@ namespace Ev3devKit.Ui {
             /**
              * Gets the number of items in the Menu.
              */
-            public int size { get { return menu.menu_vbox.children.size; } }
+            public uint size { get { return menu.menu_vbox.children.length (); } }
 
             /**
              * Gets the item at the specified index.
@@ -243,7 +243,7 @@ namespace Ev3devKit.Ui {
              * @return The item at the specified index.
              */
             public MenuItem get (int index) {
-                return menu.menu_vbox.children[index].weak_represented_object as MenuItem;
+                return menu.menu_vbox.children.nth_data (index).weak_represented_object as MenuItem;
             }
         }
     }

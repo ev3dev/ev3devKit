@@ -1,7 +1,7 @@
 /*
  * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
- * Copyright (C) 2014 David Lechner <david@lechnology.com>
+ * Copyright (C) 2014-2015 David Lechner <david@lechnology.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@
  * StatusBar.vala - status bar that can be displayed at the top of a screen
  */
 
-using Gee;
 using Grx;
 
 namespace Ev3devKit.Ui {
@@ -35,8 +34,8 @@ namespace Ev3devKit.Ui {
         public const int HEIGHT = 12;
         const int PADDING = 2;
 
-        ArrayList<StatusBarItem> left_items;
-        ArrayList<StatusBarItem> right_items;
+        SList<StatusBarItem> left_items;
+        SList<StatusBarItem> right_items;
 
         /**
          * Gets the screen the status bar is assigned to.
@@ -82,7 +81,7 @@ namespace Ev3devKit.Ui {
          * @param item The status bar item to add.
          */
         public void add_left (StatusBarItem item) {
-            left_items.add (item);
+            left_items.append (item);
             item.status_bar = this;
         }
 
@@ -92,13 +91,13 @@ namespace Ev3devKit.Ui {
          * @param item The status bar item to add.
          */
         public void add_right (StatusBarItem item) {
-            right_items.add (item);
+            right_items.append (item);
             item.status_bar = this;
         }
 
         construct {
-            left_items = new ArrayList<StatusBarItem> ();
-            right_items = new ArrayList<StatusBarItem> ();
+            left_items = new SList<StatusBarItem> ();
+            right_items = new SList<StatusBarItem> ();
         }
 
         /**

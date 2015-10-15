@@ -22,7 +22,6 @@
 /* TextEntry.vala - Widget for getting text from user */
 
 using Curses;
-using Gee;
 using Grx;
 
 namespace Ev3devKit.Ui {

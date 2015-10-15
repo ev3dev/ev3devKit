@@ -22,7 +22,6 @@
 /* CheckButton.vala - Widget that represents a checkbox or radio button */
 
 using Curses;
-using Gee;
 using Grx;
 
 namespace Ev3devKit.Ui {

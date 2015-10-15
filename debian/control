@@ -3,7 +3,7 @@ Section: embedded
 Priority: standard
 Maintainer: David Lechner <david@lechnology.com>
 Build-Depends: debhelper (>= 9), cmake, valac (>= 0.24), gobject-introspection,
-               libgee-0.8-dev, libgirepository1.0-dev, libgudev-1.0-dev,
+               libgirepository1.0-dev, libgudev-1.0-dev,
                libncurses5-dev, libgrx-dev (>= 2.4.9-0ev3dev7), netpbm,
                libgtk-3-dev [i386 amd64]
 Standards-Version: 3.9.5

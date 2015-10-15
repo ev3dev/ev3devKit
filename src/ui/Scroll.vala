@@ -1,7 +1,7 @@
 /*
  * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
- * Copyright 2014 David Lechner <david@lechnology.com>
+ * Copyright 2014-2015 David Lechner <david@lechnology.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@
 /* Scroll.vala - Container that can scroll */
 
 using Curses;
-using Gee;
 using Grx;
 
 namespace Ev3devKit.Ui {
@@ -166,7 +165,7 @@ namespace Ev3devKit.Ui {
                 return;
 
             // make sure layout is up to date.
-            _children[0].do_layout ();
+            child.do_layout ();
 
             // Make sure that the whole widget is visible. If the widget is
             // larger than the visible area, prefer showing the top and left.

@@ -23,7 +23,6 @@
  * Simulates a framebuffer device using a Gtk.Image in a Gtk.EventBox.
  */
 
-using Gee;
 using Gtk;
 using Grx;
 

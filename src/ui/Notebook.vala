@@ -1,7 +1,7 @@
 /*
  * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
- * Copyright 2014 David Lechner <david@lechnology.com>
+ * Copyright 2014-2015 David Lechner <david@lechnology.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@
 /* Notebook.vala - Container with tabs used to display multiple pages */
 
 using Curses;
-using Gee;
 using Grx;
 
 namespace Ev3devKit.Ui {
@@ -36,8 +35,8 @@ namespace Ev3devKit.Ui {
     public class Notebook : Ev3devKit.Ui.Container {
         Box notebook_vbox;
         Box tab_hbox;
-        Gee.List<NotebookTab> tabs;
-        Gee.Map<weak NotebookTab, weak TabButton> button_map;
+        SList<NotebookTab> tabs;
+        HashTable<weak NotebookTab, weak TabButton> button_map;
 
         weak NotebookTab _active_tab;
         /**
@@ -59,8 +58,8 @@ namespace Ev3devKit.Ui {
         construct {
             if (container_type != ContainerType.SINGLE)
                 critical ("Requires container_type == ContainerType.SINGLE");
-            tabs = new LinkedList<NotebookTab> ();
-            button_map = new Gee.HashMap<weak NotebookTab, weak Button> ();
+            tabs = new SList<NotebookTab> ();
+            button_map = new HashTable<weak NotebookTab, weak TabButton> (null, null);
 
             notebook_vbox = new Box.vertical ();
             tab_hbox = new Box.horizontal () {
@@ -94,7 +93,7 @@ namespace Ev3devKit.Ui {
         public void add_tab (NotebookTab tab) {
             if (tab.notebook != null)
                 tab.notebook.remove (tab);
-            tabs.add (tab);
+            tabs.append (tab);
             tab.notebook = this;
             var button = new TabButton (tab.title);
             var id = button.pressed.connect (() => active_tab = tab);
@@ -117,9 +116,10 @@ namespace Ev3devKit.Ui {
          */
         public void remove_tab (NotebookTab tab) {
             tabs.remove (tab);
+            tab.unref (); // SList<G>.remove () does not call unref for us.
             var button = button_map[tab];
             button.parent.remove (button);
-            button_map.unset (tab);
+            button_map.remove (tab);
         }
 
         /**

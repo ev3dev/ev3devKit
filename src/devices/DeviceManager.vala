@@ -50,7 +50,7 @@ namespace Ev3devKit.Devices {
             INPUT_CLASS
         };
 
-        Gee.Map<string, Ev3devKit.Devices.Device> device_map;
+        HashTable<string, Ev3devKit.Devices.Device> device_map;
         Client udev_client;
 
         /**
@@ -108,7 +108,7 @@ namespace Ev3devKit.Devices {
         public signal void input_added (Input input);
 
         construct {
-            device_map = new Gee.HashMap<string, Ev3devKit.Devices.Device> ();
+            device_map = new HashTable<string, Ev3devKit.Devices.Device> (str_hash, str_equal);
             udev_client = new Client (subsystems);
             udev_client.uevent.connect (on_uevent);
             foreach (var subsystem in subsystems) {
@@ -132,7 +132,7 @@ namespace Ev3devKit.Devices {
          */
         public GenericArray<Port> get_ports () {
             var array = new GenericArray<Port> ();
-            foreach (var device in device_map.values) {
+            foreach (var device in device_map.get_values ()) {
                 var port = device as Port;
                 if (port != null)
                     array.add (port);
@@ -147,7 +147,7 @@ namespace Ev3devKit.Devices {
          */
         public GenericArray<Sensor> get_sensors () {
             var array = new GenericArray<Sensor> ();
-            foreach (var device in device_map.values) {
+            foreach (var device in device_map.get_values ()) {
                 var sensor = device as Sensor;
                 if (sensor != null)
                     array.add (sensor);
@@ -164,7 +164,7 @@ namespace Ev3devKit.Devices {
          * is not found.
          */
         public Led get_led (string name) throws DeviceError {
-            foreach (var device in device_map.values) {
+            foreach (var device in device_map.get_values ()) {
                 var led = device as Led;
                 if (led != null && led.name == name)
                     return led;
@@ -179,7 +179,7 @@ namespace Ev3devKit.Devices {
          */
         public GenericArray<Led> get_leds () {
             var array = new GenericArray<Led> ();
-            foreach (var device in device_map.values) {
+            foreach (var device in device_map.get_values ()) {
                 var led = device as Led;
                 if (led != null)
                     array.add (led);
@@ -194,7 +194,7 @@ namespace Ev3devKit.Devices {
          */
         public GenericArray<DcMotor> get_dc_motors () {
             var array = new GenericArray<DcMotor> ();
-            foreach (var device in device_map.values) {
+            foreach (var device in device_map.get_values ()) {
                 var motor = device as DcMotor;
                 if (motor != null)
                     array.add (motor);
@@ -209,7 +209,7 @@ namespace Ev3devKit.Devices {
          */
         public GenericArray<ServoMotor> get_servo_motors () {
             var array = new GenericArray<ServoMotor> ();
-            foreach (var device in device_map.values) {
+            foreach (var device in device_map.get_values ()) {
                 var motor = device as ServoMotor;
                 if (motor != null)
                     array.add (motor);
@@ -224,7 +224,7 @@ namespace Ev3devKit.Devices {
          */
         public GenericArray<TachoMotor> get_tacho_motors () {
             var array = new GenericArray<TachoMotor> ();
-            foreach (var device in device_map.values) {
+            foreach (var device in device_map.get_values ()) {
                 var motor = device as TachoMotor;
                 if (motor != null)
                     array.add (motor);
@@ -239,7 +239,7 @@ namespace Ev3devKit.Devices {
          */
         public GenericArray<PowerSupply> get_power_supplies () {
             var array = new GenericArray<PowerSupply> ();
-            foreach (var device in device_map.values) {
+            foreach (var device in device_map.get_values ()) {
                 var power_supply = device as PowerSupply;
                 if (power_supply != null)
                     array.add (power_supply);
@@ -256,7 +256,7 @@ namespace Ev3devKit.Devices {
          * found.
          */
         public Input get_input_device (string name) throws DeviceError {
-            foreach (var device in device_map.values) {
+            foreach (var device in device_map.get_values ()) {
                 var input = device as Input;
                 if (input != null && input.name == name)
                     return input;
@@ -271,7 +271,7 @@ namespace Ev3devKit.Devices {
          */
         public GenericArray<Input> get_input_devices () {
             var array = new GenericArray<Input> ();
-            foreach (var device in device_map.values) {
+            foreach (var device in device_map.get_values ()) {
                 var input = device as Input;
                 if (input != null)
                     array.add (input);
@@ -350,12 +350,13 @@ namespace Ev3devKit.Devices {
                 }
                 break;
             case "remove":
-                Device device;
-                if (device_map.unset (sysfs_path, out device))
+                var device = device_map.take (sysfs_path);
+                if (device != null) {
                     device.connected = false;
+                }
                 break;
             case "change":
-                if (device_map.has_key (sysfs_path))
+                if (device_map.contains (sysfs_path))
                     device_map[sysfs_path].change (udev_device);
                 break;
             }

@@ -22,7 +22,6 @@
 /* NotebookTab.vala - Container for a tab of a Notebook */
 
 using Curses;
-using Gee;
 using Grx;
 
 namespace Ev3devKit.Ui {

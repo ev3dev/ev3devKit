@@ -1,7 +1,7 @@
 /*
  * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
- * Copyright 2014 David Lechner <david@lechnology.com>
+ * Copyright 2014-2015 David Lechner <david@lechnology.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -466,7 +466,7 @@ namespace Ev3devKit.Demo {
             try {
                 var font_dir = Dir.open (font_dir_path);
                 string? file_name = null;
-                var font_list = new Gee.LinkedList<string> ();
+                var font_list = new Sequence<string> ();
 
                 var window = new Ui.Window ();
                 var vscroll = new Scroll.vertical () {
@@ -475,21 +475,22 @@ namespace Ev3devKit.Demo {
                 window.add (vscroll);
                 var vbox = new Box.vertical ();
                 vscroll.add (vbox);
-                while ((file_name = font_dir.read_name ()) != null)
-                    font_list.add (file_name);
-                font_list.sort ();
-                font_storage = new Font[font_list.size];
+                while ((file_name = font_dir.read_name ()) != null) {
+                    font_list.insert_sorted (file_name, (a,b) => strcmp (a,b));
+                }
+                font_storage = new Font[font_list.get_length ()];
                 var index = 0;
-                foreach (var font_name in font_list) {
+                font_list.foreach ((font_name) => {
                     var font = Font.load (font_name);
-                    if (font == null)
-                        continue;
+                    if (font == null) {
+                        return; // continue foreach
+                    }
                     var label = new Label (font.name.replace (".fnt", "")) {
                         font = font
                     };
                     vbox.add (label);
                     font_storage[index++] = (owned)font;
-                }
+                });
                 window.show ();
             } catch (Error err) {
                 var dialog = new Dialog ();

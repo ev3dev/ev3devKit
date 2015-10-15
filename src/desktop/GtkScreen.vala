@@ -1,7 +1,7 @@
 /*
  * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
- * Copyright 2014 David Lechner <david@lechnology.com>
+ * Copyright 2014-2015 David Lechner <david@lechnology.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@
 /* GtkScreen.vala - Screen implementation for desktop (Gtk) */
 
 using Ev3devKit;
-using Gee;
 using Grx;
 
 namespace Ev3devKitDesktop {
@@ -37,7 +36,7 @@ namespace Ev3devKitDesktop {
     public class GtkScreen : Ev3devKit.Ui.Screen {
         GtkFramebuffer fb;
         weak GtkScreen? master;
-        Gee.List<weak GtkScreen> slaves;
+        SList<weak GtkScreen> slaves;
 
         /**
          * Creates a new screen.
@@ -53,9 +52,9 @@ namespace Ev3devKitDesktop {
                 mid_color = fg_color;
             }
             this.master = master;
-            slaves = new ArrayList<GtkScreen> ();
+            slaves = new SList<weak GtkScreen> ();
             if (master != null) {
-                master.slaves.add (this);
+                master.slaves.append (this);
             }
         }
 
@@ -76,12 +75,13 @@ namespace Ev3devKitDesktop {
                 var save_slave_status_bar = slave.status_bar;
                 slave.status_bar = status_bar;
                 set_screen_for_each_window (slave);
-                var save_slave_window_stack = slave.window_stack;
-                slave.window_stack = window_stack;
+                var save_slave_window_stack = (owned)slave.window_stack;
+                slave.window_stack = (owned)window_stack;
                 slave.dirty = true;
                 slave.draw ();
                 slave.status_bar = save_slave_status_bar;
-                slave.window_stack = save_slave_window_stack;
+                window_stack = (owned)slave.window_stack;
+                slave.window_stack = (owned)save_slave_window_stack;
                 slave.dirty = false;
             }
             status_bar.screen = this;
@@ -89,7 +89,9 @@ namespace Ev3devKitDesktop {
         }
 
         void set_screen_for_each_window (Ui.Screen screen) {
-            foreach (var window in window_stack) {
+            unowned List<Ev3devKit.Ui.Window> iter = window_stack.tail;
+            while (iter != null) {
+                var window = iter.data;
                 window.screen = screen;
                     if (master != null) {
                     window.do_recursive_children ((child) => {
@@ -97,6 +99,7 @@ namespace Ev3devKitDesktop {
                         return null;
                     });
                 }
+                iter = iter.prev;
             }
         }
     }

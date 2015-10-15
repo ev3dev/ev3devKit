@@ -1,7 +1,7 @@
 /*
  * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
- * Copyright 2014 David Lechner <david@lechnology.com>
+ * Copyright 2014-2015 David Lechner <david@lechnology.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@
 /* Grid.vala - Container for laying out widgets in a grid */
 
 using Curses;
-using Gee;
 using Grx;
 
 namespace Ev3devKit.Ui {
@@ -38,8 +37,8 @@ namespace Ev3devKit.Ui {
         Pair size;
         Widget?[,] grid;
         Rectangle[,] cells;
-        Map<weak Widget,Pair?> position_map;
-        Map<weak Widget,Pair?> span_map;
+        HashTable<weak Widget,Pair?> position_map;
+        HashTable<weak Widget,Pair?> span_map;
 
         /**
          * Gets the number of rows in the grid.
@@ -87,8 +86,8 @@ namespace Ev3devKit.Ui {
             if (container_type != ContainerType.MULTIPLE)
                 critical ("Requires container_type == ContainerType.MULTIPLE");
             grid = new Widget?[rows,columns];
-            position_map = new Gee.HashMap<Widget,Pair?>();
-            span_map = new Gee.HashMap<Widget,Pair?>();
+            position_map = new HashTable<weak Widget,Pair?> (null, null);
+            span_map = new HashTable<weak Widget,Pair?> (null, null);
             child_added.connect (on_child_added);
             child_removed.connect (on_child_removed);
             notify["border-row"].connect (redraw);
@@ -176,7 +175,7 @@ namespace Ev3devKit.Ui {
          * @return true if the child was found.
          */
         public bool get_position_for_child (Widget child, out int row, out int column) {
-            if (!(_children.contains (child))) {
+            if (_children.index (child) < 0) {
                 row = -1;
                 column = -1;
                 return false;
@@ -258,8 +257,8 @@ namespace Ev3devKit.Ui {
                 for (uint row = 0; row < size.row; row++) {
                     if (grid[row,col] == child) {
                         grid[row,col] = null;
-                        position_map.unset (child);
-                        span_map.unset (child);
+                        position_map.remove (child);
+                        span_map.remove (child);
                     }
                 }
             }
