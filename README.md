@@ -20,7 +20,7 @@ interfaces require the latest ev3dev kernel (currently v3.16.7-ckt4-ev3dev1).
 
 Besides dependencies included in trusty, we need vala >= 0.24, which you can get
 from the [vala-team PPA](https://launchpad.net/~vala-team/+archive/ubuntu/ppa),
-and libgrx which is part of ev3dev repository.
+and libgrx which is part of the ev3dev package repository.
 
 ## Compiling
 
@@ -45,7 +45,7 @@ ensure that they take effect (you can use `nuke.sh` to do this).
 
 * Enable debugging: `-DCMAKE_BUILD_TYPE=string:Debug`
 * Build additional library for running on a desktop: `-DEV3DEVKIT_DESKTOP=bool:Yes`
-* Do not build the demo programs: `-DEV3DEVKIT_NO_DEMO=bool:Yes`
+* Do not build the demo programs: `-EV3DEVKIT_BUILD_DEMO=bool:No`
 
 ## Running
 
