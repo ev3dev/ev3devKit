@@ -251,12 +251,39 @@ namespace Ev3devKit.Ui {
             return false;
         }
 
+#if TIME_DRAW_LOOP
+        internal Timer? draw_timer_init() {
+          return new Timer ();
+        }
+
+        internal void draw_timer_start(Timer t) {
+          t.reset ();
+        }
+
+        internal void draw_timer_stop(Timer t, Object? o, string msg) {
+          t.stop ();
+          if (o != null) {
+            debug ("%s: %s: %7.4lf\n", msg, Type.from_instance (o).name (),
+                t.elapsed (null));
+          } else {
+            debug ("%s: %7.4lf\n", msg, t.elapsed (null));
+          }
+        }
+#else
+        internal Timer? draw_timer_init() { return null; }
+        internal void draw_timer_start(Timer? t) { }
+        internal void draw_timer_stop(Timer? t, Object? o, string msg) { }
+#endif
+
         /**
          * Draws the topmost window and dialog on the screen.
          */
         protected bool draw () {
             handle_input ();
             if (dirty) {
+                Timer t0 = draw_timer_init ();
+                Timer t1 = draw_timer_init ();
+
                 context.set ();
                 Window? top_window = null;
                 Window? top_dialog = null;
@@ -280,17 +307,27 @@ namespace Ev3devKit.Ui {
                     iter = iter.prev;
                 }
                 if (top_window != null) {
+                    draw_timer_start (t1);
                     top_window.on_screen = true;
                     top_window.draw ();
+                    draw_timer_stop (t1, top_window, "window.draw");
                 }
                 if (top_dialog != null) {
+                    draw_timer_start (t1);
                     top_dialog.on_screen = true;
                     top_dialog.draw ();
+                    draw_timer_stop (t1, top_dialog, "dialog.draw");
                 }
-                if (_status_bar.visible)
+                if (_status_bar.visible) {
+                    draw_timer_start (t1);
                     _status_bar.draw ();
+                    draw_timer_stop (t1, null, "statusbar.draw");
+                }
                 dirty = false;
+                draw_timer_start (t1);
                 refresh ();
+                draw_timer_stop (t1, null, "screen.blt");
+                draw_timer_stop (t0, null, "draw");
             }
             return true;
         }

@@ -163,6 +163,11 @@ include (ValaPrecompile)
 
 find_package(GirCompiler REQUIRED)
 
+option(TIME_DRAW_LOOP "Add instrumentation to the redraw loop.")
+if (TIME_DRAW_LOOP)
+  set(CMAKE_VALA_FLAGS "${CMAKE_VALA_FLAGS}" "-D" "TIME_DRAW_LOOP")
+endif (TIME_DRAW_LOOP)
+
 vala_precompile (LIBRARY_VALA_C ${LIBRARY_NAME}
 LIBRARY
     ${LIBRARY_SOURCE_FILES}
@@ -173,6 +178,7 @@ CUSTOM_VAPIS
 OPTIONS
     --target-glib=${TARGET_GLIB}
     --thread
+    ${CMAKE_VALA_FLAGS}
 GENERATE_VAPI
     ${EV3DEVKIT_PACKAGE}.buggy
 GENERATE_HEADER
