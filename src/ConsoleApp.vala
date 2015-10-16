@@ -211,7 +211,7 @@ namespace Ev3devKit {
                         ignore_next_ch = false;
                         continue;
                     }
-                    Idle.add (() => {
+                    Idle.add_full (Priority.HIGH_IDLE, () => {
                         Ui.Screen.active_screen.queue_key_code (ch);
                         return false;
                     });
