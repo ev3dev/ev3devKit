@@ -74,37 +74,55 @@ namespace Ev3devKit {
          */
         public errordomain ConsoleAppError {
             /**
+             * Indicates that the application is not running on a virtual console.
+             */
+            NOT_A_TTY,
+            /**
              * Indicates that an error occurred while setting the graphics mode.
              */
             MODE
         }
 
-        FileStream? vtIn;
-        FileStream? vtOut;
+        FileStream? tty_in;
+        FileStream? tty_out;
+        int tty_num;
         Curses.Screen term;
         MainLoop main_loop;
 
         /**
          * Initialize a console application.
          *
-         * This puts the specified virtual terminal into graphics mode and sets
-         * up ncurses for keyboard input. This must be run before calling anything
+         * This puts the current virtual terminal into graphics mode and sets up
+         * ncurses for keyboard input. This must be run before calling anything
          * else using the GRX graphics library.
          *
-         * @param vtfd File descriptor for virtual terminal to use or ``null`` to
-         * use the current virtual terminal.
          * @throws ConsoleAppError if initialization failed.
          */
-        public void init (int? vtfd = null) throws ConsoleAppError {
+        public void init () throws ConsoleAppError {
+
+            var tty = ttyname (STDIN_FILENO);
+            Regex tty_regex;
+            try {
+                tty_regex = new Regex ("^/dev/tty([0-9]+)$");
+            } catch (RegexError err) {
+                // bad regex is a programming error since it does not come from
+                // user input.
+                error ("%s", err.message);
+            }
+            MatchInfo match_info;
+            if (!tty_regex.match (tty, 0, out match_info)) {
+                throw new ConsoleAppError.NOT_A_TTY ("Not running on a virtual console.");
+            }
+            tty_num = int.parse (match_info.fetch (1));
+
             /* ncurses setup */
 
-            if (vtfd != null) {
-                vtIn = FileStream.fdopen (vtfd, "r");
-                vtOut = FileStream.fdopen (vtfd, "w");
-                term = new Curses.Screen ("linux", vtIn, vtOut);
-            } else {
-                initscr ();
-            }
+            // If stdout is redirected, curses won't work correctly, so we get
+            // file descriptors for the tty and call newterm() instead of
+            // initscr(). Note: Curses.Screen() is vala wrapper for newterm().
+            tty_in = FileStream.open (tty, "r");
+            tty_out = FileStream.open (tty, "w");
+            term = new Curses.Screen ("linux", tty_out, tty_in);
             cbreak ();
             noecho ();
             stdscr.keypad (true);
