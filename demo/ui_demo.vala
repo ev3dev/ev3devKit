@@ -36,7 +36,7 @@ namespace Ev3devKit.Demo {
             return 0;
         } catch (Error err) {
             critical ("%s", err.message);
-            return err.code;
+            return 1;
         }
     }
 }
