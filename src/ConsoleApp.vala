@@ -53,18 +53,18 @@ namespace Ev3devKit {
      *     try {
      *         ConsoleApp.init ();
      *
-     *         // Program-specific initialization which includes something
+     *         // Program-specific initialization goes here. It must include something
      *         // that calls ConsoleApp.quit () when the program is finished.
      *
      *         ConsoleApp.run ();
      *
-     *         // any additional cleanup if needed before application exits.
+     *         // Any additional cleanup needed before application exits goes here.
      *
      *         return 0;
      *     } catch (ConsoleAppError err) {
      *         critical ("%s", err.message);
+     *         return 1;
      *     }
-     *     return 1;
      * }
      * }}}
      */
@@ -93,8 +93,8 @@ namespace Ev3devKit {
          * Initialize a console application.
          *
          * This puts the current virtual terminal into graphics mode and sets up
-         * ncurses for keyboard input. This must be run before calling anything
-         * else using the GRX graphics library.
+         * ncurses for keyboard input. This must be run before calling any other
+         * {@link ConsoleApp} method or using the GRX graphics library.
          *
          * @throws ConsoleAppError if initialization failed.
          */
@@ -146,7 +146,7 @@ namespace Ev3devKit {
         /**
          * Starts the main loop for the application.
          *
-         * Does not return until ConsoleApplication.quit () is called.
+         * Does not return until {@link quit} is called.
          */
         public void run () {
             new Thread<int> ("input", read_input);
