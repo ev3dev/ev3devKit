@@ -161,6 +161,26 @@ namespace Ev3devKit {
             main_loop.quit ();
         }
 
+        /**
+         * Gets the number of the tty that this application is running on.
+         *
+         * @return The number of the tty.
+         */
+        public int get_tty_num () {
+            return tty_num;
+        }
+
+        /**
+         * Checks to see if the virtual console this application is running on is active.
+         *
+         * @return ``true`` if this is running on the active virtual console.
+         */
+        public bool is_active () {
+            Linux.VirtualTerminal.Stat vtstat;
+            ioctl (tty_in.fileno (), VT_GETSTATE, out vtstat);
+            return tty_num == vtstat.v_active;
+        }
+
         void release_console () {
             Grx.set_driver ("memory"); // releases frame buffer
             endwin ();
