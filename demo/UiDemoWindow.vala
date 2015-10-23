@@ -54,6 +54,9 @@ namespace Ev3devKit.Demo {
             var message_dialog_menu_item = new Ui.MenuItem ("MessageDialog...");
             message_dialog_menu_item.button.pressed.connect (on_message_dialog_menu_item_button_pressed);
             menu.add_menu_item (message_dialog_menu_item);
+            var stack_menu_item = new Ui.MenuItem.with_right_arrow ("Stack");
+            stack_menu_item.button.pressed.connect (on_stack_menu_item_button_pressed);
+            menu.add_menu_item (stack_menu_item);
             var notebook_menu_item = new Ui.MenuItem.with_right_arrow ("Notebook");
             notebook_menu_item.button.pressed.connect (on_notebook_menu_item_button_pressed);
             menu.add_menu_item (notebook_menu_item);
@@ -136,6 +139,80 @@ namespace Ev3devKit.Demo {
                 + " of the MessageDialog. I really don't know what else to say"
                 + " about it.");
             dialog.show ();
+        }
+
+        void on_stack_menu_item_button_pressed () {
+            var window = new Ui.Window ();
+            var stack  = new Stack ();
+            window.add (stack);
+
+            var child1_box = new Box.vertical () { can_focus = true };
+            stack.add (child1_box);
+            var child1_label = new Label ("First Child");
+            child1_box.add (child1_label);
+            var child1_message = new Label ("Use < > arrow keys.");
+            child1_box.add (child1_message);
+
+            var child2_box = new Box.vertical () { can_focus = true };
+            stack.add (child2_box);
+            var child2_label = new Label ("Second Child");
+            child2_box.add (child2_label);
+            var child2_message = new Label ("Use < > arrow keys.");
+            child2_box.add (child2_message);
+
+            var child3_box = new Box.vertical () { can_focus = true };
+            stack.add (child3_box);
+            var child3_label = new Label ("Last Child");
+            child3_box.add (child3_label);
+            var child3_message = new Label ("Use < > arrow keys.");
+            child3_box.add (child3_message);
+
+            var child1_handler_id = child1_box.key_pressed.connect ((key_code) => {
+                if (key_code == Key.LEFT) {
+                    stack.active_child = child3_box;
+                } else if (key_code == Key.RIGHT) {
+                    stack.active_child = child2_box;
+                } else {
+                    return false;
+                }
+                stack.focus_first ();
+                Signal.stop_emission_by_name (child1_box, "key-pressed");
+                return true;
+            });
+            var child2_handler_id = child2_box.key_pressed.connect ((key_code) => {
+                if (key_code == Key.LEFT) {
+                    stack.active_child = child1_box;
+                } else if (key_code == Key.RIGHT) {
+                    stack.active_child = child3_box;
+                } else {
+                    return false;
+                }
+                stack.focus_first ();
+                Signal.stop_emission_by_name (child2_box, "key-pressed");
+                return true;
+            });
+            var child3_handler_id = child3_box.key_pressed.connect ((key_code) => {
+                if (key_code == Key.LEFT) {
+                    stack.active_child = child2_box;
+                } else if (key_code == Key.RIGHT) {
+                    stack.active_child = child1_box;
+                } else {
+                    return false;
+                }
+                stack.focus_first ();
+                Signal.stop_emission_by_name (child3_box, "key-pressed");
+                return true;
+            });
+            // have to manually disconnect because of reference cycles.
+            ulong window_handler_id = 0;
+            window_handler_id = window.closed.connect (() => {
+                SignalHandler.disconnect (child1_box, child1_handler_id);
+                SignalHandler.disconnect (child2_box, child2_handler_id);
+                SignalHandler.disconnect (child3_box, child3_handler_id);
+                SignalHandler.disconnect (window, window_handler_id);
+            });
+
+            window.show ();
         }
 
         void on_notebook_menu_item_button_pressed () {

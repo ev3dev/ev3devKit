@@ -55,6 +55,10 @@ class UiDemoWindow(Ev3devKit.UiWindow):
         message_dialog_menu_item.get_button().connect('pressed', self.on_message_dialog_menu_item_pressed)
         menu.add_menu_item(message_dialog_menu_item)
 
+        stack_menu_item = Ev3devKit.UiMenuItem.with_right_arrow("Stack")
+        stack_menu_item.get_button().connect('pressed', self.on_stack_menu_item_pressed)
+        menu.add_menu_item(stack_menu_item)
+
         notebook_menu_item = Ev3devKit.UiMenuItem.with_right_arrow("Notebook")
         notebook_menu_item.get_button().connect('pressed', self.on_notebook_menu_item_pressed)
         menu.add_menu_item(notebook_menu_item)
@@ -124,6 +128,91 @@ class UiDemoWindow(Ev3devKit.UiWindow):
             + " of the MessageDialog. I really don't know what else to say" \
             + " about it.")
         dialog.show()
+
+    def on_stack_menu_item_pressed(self, button):
+        window = Ev3devKit.UiWindow.new()
+
+        stack = Ev3devKit.UiStack.new()
+        window.add(stack)
+
+        child1_box = Ev3devKit.UiBox.vertical()
+        child1_box.set_can_focus(True)
+        stack.add(child1_box)
+        child1_label = Ev3devKit.UiLabel.new("First Child")
+        child1_box.add(child1_label)
+        child1_message = Ev3devKit.UiLabel.new("Use < > arrow keys.")
+        child1_box.add(child1_message)
+
+        child2_box = Ev3devKit.UiBox.vertical()
+        child2_box.set_can_focus(True)
+        stack.add(child2_box)
+        child2_label = Ev3devKit.UiLabel.new("Second Child")
+        child2_box.add(child2_label)
+        child2_message = Ev3devKit.UiLabel.new("Use < > arrow keys.")
+        child2_box.add(child2_message)
+
+        child3_box = Ev3devKit.UiBox.vertical()
+        child3_box.set_can_focus(True)
+        stack.add(child3_box)
+        child3_label = Ev3devKit.UiLabel.new("Last Child")
+        child3_box.add(child3_label)
+        child3_message = Ev3devKit.UiLabel.new("Use < > arrow keys.")
+        child3_box.add(child3_message)
+
+        def child1_key_pressed_handler(widget, key_code):
+            if key_code == curses.KEY_LEFT:
+                stack.set_active_child(child3_box)
+            elif key_code == curses.KEY_RIGHT:
+                stack.set_active_child(child2_box)
+            else:
+                return False
+
+            stack.focus_first()
+            GObject.signal_stop_emission_by_name(child1_box, "key-pressed")
+            return True
+
+        child1_handler_id = child1_box.connect("key-pressed",
+            child1_key_pressed_handler)
+
+        def child2_key_pressed_handler(widget, key_code):
+            if key_code == curses.KEY_LEFT:
+                stack.set_active_child(child1_box)
+            elif key_code == curses.KEY_RIGHT:
+                stack.set_active_child(child3_box)
+            else:
+                return False
+
+            stack.focus_first()
+            GObject.signal_stop_emission_by_name(child2_box, "key-pressed")
+            return True
+
+        child2_handler_id = child2_box.connect("key-pressed",
+            child2_key_pressed_handler)
+
+        def child3_key_pressed_handler(widget, key_code):
+            if key_code == curses.KEY_LEFT:
+                stack.set_active_child(child2_box)
+            elif key_code == curses.KEY_RIGHT:
+                stack.set_active_child(child1_box)
+            else:
+                return False
+
+            stack.focus_first()
+            GObject.signal_stop_emission_by_name(child3_box, "key-pressed")
+            return True
+
+        child3_handler_id = child3_box.connect("key-pressed",
+            child3_key_pressed_handler)
+
+        def window_closed_handler(window):
+            child1_box.disconnect(child1_handler_id)
+            child2_box.disconnect(child2_handler_id)
+            child3_box.disconnect(child3_handler_id)
+            window.disconnect(window_handler_id)
+
+        window_handler_id = window.connect("closed", window_closed_handler)
+
+        window.show()
 
     def on_notebook_menu_item_pressed(self, button):
         window = Ev3devKit.UiWindow.new()

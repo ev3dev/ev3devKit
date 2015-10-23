@@ -106,6 +106,7 @@ set (LIBRARY_SOURCE_FILES
     src/ui/Screen.vala
     src/ui/Scroll.vala
     src/ui/Spacer.vala
+    src/ui/Stack.vala
     src/ui/StatusBar.vala
     src/ui/StatusBarItem.vala
     src/ui/TabButton.vala
