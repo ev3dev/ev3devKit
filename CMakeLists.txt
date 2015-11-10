@@ -348,10 +348,19 @@ if (EV3DEVKIT_DESKTOP)
     set_target_properties(${DESKTOP_LIBRARY_NAME}-static PROPERTIES
         OUTPUT_NAME ${DESKTOP_LIBRARY_NAME})
     install (TARGETS ${DESKTOP_LIBRARY_NAME}-static ARCHIVE DESTINATION lib)
-    file (READ ${CMAKE_CURRENT_SOURCE_DIR}/src/desktop/main_window.glade MAIN_WINDOW_GLADE)
-    configure_file (
-        src/desktop/main_window_glade.vala.in
-        ${CMAKE_BINARY_DIR}/main_window_glade.vala
+    add_custom_command (
+        OUTPUT
+            ${CMAKE_BINARY_DIR}/main_window_glade.vala
+        DEPENDS
+            ${CMAKE_CURRENT_SOURCE_DIR}/src/desktop/main_window.glade
+            ${CMAKE_CURRENT_SOURCE_DIR}/src/desktop/main_window_glade.vala.in
+            ${CMAKE_CURRENT_SOURCE_DIR}/main_window_glade.cmake
+        COMMAND
+            ${CMAKE_COMMAND}
+        ARGS
+            -D SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}
+            -D BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}
+            -P ${CMAKE_CURRENT_SOURCE_DIR}/main_window_glade.cmake
     )
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${EV3DEVKIT_DESKTOP_PACKAGE}.h DESTINATION include/)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-desktop-${GIR_VERSION}.pc DESTINATION lib/pkgconfig/)
