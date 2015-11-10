@@ -52,7 +52,9 @@ namespace Ev3devKitDesktop {
      * }}}
      */
     namespace GtkApp {
-        GtkScreen color_screen;
+        GtkScreen adafruit18_screen;
+        GtkScreen adafruit24_screen;
+        GtkScreen evb_screen;
 
         /**
          * The GTK window created by {@link init}.
@@ -73,24 +75,37 @@ namespace Ev3devKitDesktop {
             Grx.set_driver ("memory nc 16M");
             Grx.set_mode (Grx.GraphicsMode.GRAPHICS_DEFAULT);
 
-            var stock_lcd = new GtkFramebuffer ();
-            Ui.Screen.set_active_screen (new GtkScreen (stock_lcd));
+            var ev3_lcd = new GtkFramebuffer ();
+            Ui.Screen.set_active_screen (new GtkScreen (ev3_lcd));
 
-            var color_lcd = new GtkFramebuffer (GtkFramebuffer.DeviceType.ADAFRUIT_18);
-            color_screen = new GtkScreen (color_lcd, (GtkScreen)Ui.Screen.get_active_screen ());
+            var adafruit18_lcd = new GtkFramebuffer (GtkFramebuffer.DeviceType.ADAFRUIT_18);
+            adafruit18_screen = new GtkScreen (adafruit18_lcd, (GtkScreen)Ui.Screen.get_active_screen ());
+            var adafruit24_lcd = new GtkFramebuffer (GtkFramebuffer.DeviceType.ADAFRUIT_24);
+            adafruit24_screen = new GtkScreen (adafruit24_lcd, (GtkScreen)Ui.Screen.get_active_screen ());
+            var evb_lcd = new GtkFramebuffer (GtkFramebuffer.DeviceType.EVB);
+            evb_screen = new GtkScreen (evb_lcd, (GtkScreen)Ui.Screen.get_active_screen ());
+
+            Gtk.Box ev3_screen_box;
+            Gtk.Box adafruit18_screen_box;
+            Gtk.Box adafruit24_screen_box;
+            Gtk.Box evb_screen_box;
 
             var builder = new Gtk.Builder ();
-            Gtk.Box screen1_box;
-            Gtk.Box screen2_box;
             try {
                 builder.add_from_string (main_window_glade, -1);
                 main_window = builder.get_object ("main-window") as Gtk.Window;
-                screen1_box = builder.get_object ("screen1-box") as Gtk.Box;
-                screen2_box = builder.get_object ("screen2-box") as Gtk.Box;
-                (builder.get_object ("screen1-copy-button") as Gtk.Button)
-                    .clicked.connect (() => color_lcd.copy_to_clipboard ());
-                (builder.get_object ("screen2-copy-button") as Gtk.Button)
-                    .clicked.connect (() => stock_lcd.copy_to_clipboard ());
+                ev3_screen_box = builder.get_object ("ev3-screen-box") as Gtk.Box;
+                adafruit18_screen_box = builder.get_object ("adafruit18-screen-box") as Gtk.Box;
+                adafruit24_screen_box = builder.get_object ("adafruit24-screen-box") as Gtk.Box;
+                evb_screen_box = builder.get_object ("evb-screen-box") as Gtk.Box;
+                (builder.get_object ("ev3-screen-copy-button") as Gtk.Button)
+                    .clicked.connect (() => ev3_lcd.copy_to_clipboard ());
+                (builder.get_object ("adafruit18-screen-copy-button") as Gtk.Button)
+                    .clicked.connect (() => adafruit18_lcd.copy_to_clipboard ());
+                (builder.get_object ("adafruit24-screen-copy-button") as Gtk.Button)
+                    .clicked.connect (() => adafruit24_lcd.copy_to_clipboard ());
+                (builder.get_object ("evb-screen-copy-button") as Gtk.Button)
+                    .clicked.connect (() => evb_lcd.copy_to_clipboard ());
                 (builder.get_object ("up-button") as Gtk.Button)
                     .clicked.connect (() => Ui.Screen.get_active_screen ().queue_key_code (Key.UP));
                 (builder.get_object ("down-button") as Gtk.Button)
@@ -104,16 +119,20 @@ namespace Ev3devKitDesktop {
                 (builder.get_object ("back-button") as Gtk.Button)
                     .clicked.connect (() => Ui.Screen.get_active_screen ().queue_key_code (Key.BACKSPACE));
                 (builder.get_object ("scale-spinbutton") as Gtk.SpinButton)
-                    .bind_property ("value", stock_lcd, "scale", BindingFlags.SYNC_CREATE);
+                    .bind_property ("value", ev3_lcd, "scale", BindingFlags.SYNC_CREATE);
                 (builder.get_object ("scale-spinbutton") as Gtk.SpinButton)
-                    .bind_property ("value", color_lcd, "scale", BindingFlags.SYNC_CREATE);
+                    .bind_property ("value", adafruit18_lcd, "scale", BindingFlags.SYNC_CREATE);
+                (builder.get_object ("scale-spinbutton") as Gtk.SpinButton)
+                    .bind_property ("value", adafruit24_lcd, "scale", BindingFlags.SYNC_CREATE);
+                (builder.get_object ("scale-spinbutton") as Gtk.SpinButton)
+                    .bind_property ("value", evb_lcd, "scale", BindingFlags.SYNC_CREATE);
             } catch (Error err) {
                 error ("%s", err.message);
             }
 
             builder.connect_signals (null);
 
-            stock_lcd.key_press_event.connect ((event) => {
+            ev3_lcd.key_press_event.connect ((event) => {
                 uint key_code = 0;
                 switch (event.keyval) {
                 case Gdk.Key.Up:
@@ -147,10 +166,15 @@ namespace Ev3devKitDesktop {
                 Ui.Screen.get_active_screen ().queue_key_code (key_code);
                 return true;
             });
-            color_lcd.key_press_event.connect ((event) => stock_lcd.key_press_event (event));
+            adafruit18_lcd.key_press_event.connect ((event) => ev3_lcd.key_press_event (event));
+            adafruit24_lcd.key_press_event.connect ((event) => ev3_lcd.key_press_event (event));
+            evb_lcd.key_press_event.connect ((event) => ev3_lcd.key_press_event (event));
 
-            screen1_box.pack_start (color_lcd);
-            screen2_box.pack_start (stock_lcd);
+            ev3_screen_box.pack_start (ev3_lcd);
+            adafruit18_screen_box.pack_start (adafruit18_lcd);
+            adafruit24_screen_box.pack_start (adafruit24_lcd);
+            evb_screen_box.pack_start (evb_lcd);
+
             main_window.show_all ();
         }
 

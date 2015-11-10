@@ -35,13 +35,17 @@ namespace Ev3devKitDesktop {
         }
 
         public enum DeviceType {
-            STOCK,
-            ADAFRUIT_18
+            EV3,
+            ADAFRUIT_18,
+            ADAFRUIT_24,
+            EVB
         }
 
         const Info[] devices = {
-            { 178, 128, true  },
-            { 160, 128, false }
+            { 178, 128, true  }, /* EV3 LCD 178x128, 1bpp MONO01 */
+            { 160, 128, false }, /* Adafruit 1.8" LCD 160x128, 16bpp RGB565 */
+            { 320, 240, false }, /* Adafruit 2.4" LCD 320x240, 16bpp RGB565 (PiStorms) */
+            { 220, 176, false }  /* EVB LCD 220x176, 16bpp RGB565 */
         };
 
         const int LCD_BG_RED   = 173;
@@ -92,7 +96,7 @@ namespace Ev3devKitDesktop {
             scale = 1; // initializes image
         }
 
-        public GtkFramebuffer (DeviceType type = DeviceType.STOCK) {
+        public GtkFramebuffer (DeviceType type = DeviceType.EV3) {
             // have to use variable here to make valadoc happy.
             int index = (int)type;
             Object (info: devices[index]);
