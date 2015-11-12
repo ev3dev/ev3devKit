@@ -91,6 +91,7 @@ set (LIBRARY_SOURCE_FILES
     src/ui/CheckButton.vala
     src/ui/Container.vala
     src/ui/Dialog.vala
+    src/ui/Fonts.vala
     src/ui/Grid.vala
     src/ui/Icon.vala
     src/ui/InputDialog.vala

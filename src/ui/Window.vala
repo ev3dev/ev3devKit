@@ -142,18 +142,27 @@ namespace Ev3devKit.Ui {
                 _screen.dirty = true;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         protected override void do_layout () {
             set_bounds (0, _screen.window_y, _screen.width - 1,
                 _screen.window_y + _screen.window_height - 1);
             base.do_layout ();
         }
 
+        /**
+         * {@inheritDoc}
+         */
         protected override void draw_background () {
             var color = screen.bg_color;
             filled_box (border_bounds.x1, border_bounds.y1, border_bounds.x2,
                 border_bounds.y2, color);
         }
 
+        /**
+         * {@inheritDoc}
+         */
         protected override void draw_content () {
             base.draw_content ();
         }

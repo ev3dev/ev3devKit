@@ -272,19 +272,9 @@ class UiDemoWindow(Ev3devKit.UiWindow):
     def on_dialog_menu_item_pressed(self, button):
         dialog = Ev3devKit.UiDialog.new()
 
-        # make us a nice little title bar
-        title_label = Ev3devKit.UiLabel.new("Dialog")
-        title_label.set_padding_bottom(2)
-        title_label.set_border_bottom(1)
-        message_spacer = Ev3devKit.UiSpacer.new()
-        message_label = Ev3devKit.UiLabel.new(
-            "You pressed the dialog_menu_item. "
-            + "This is what a dialog looks like.")
+        message_label = Ev3devKit.UiLabel.new("This is a dialog.")
         message_label.set_margin(4)
 
-        # a little trick to have twice as much space below the message as above the message.
-        button_spacer1 = Ev3devKit.UiSpacer.new()
-        button_spacer2 = Ev3devKit.UiSpacer.new()
         ok_button = Ev3devKit.UiButton.new()
         ok_button.set_horizontal_align(Ev3devKit.UiWidgetAlign.CENTER)
         ok_button.set_vertical_align(Ev3devKit.UiWidgetAlign.END)
@@ -294,6 +284,7 @@ class UiDemoWindow(Ev3devKit.UiWindow):
         # pressing the button closes the dialog
         def on_button_pressed(button):
             dialog.close()
+
         handler_id = ok_button.connect('pressed', on_button_pressed)
         # have to disconnect this signal when the dialog is closed to break
         # the reference cycle on the dialog object.
@@ -302,14 +293,10 @@ class UiDemoWindow(Ev3devKit.UiWindow):
         dialog.connect('closed', on_dialog_closed)
         vbox = Ev3devKit.UiBox.vertical()
         vbox.set_padding_top(2)
-        vbox.set_padding_bottom(2)
+        vbox.set_padding_bottom(6)
         vbox.set_spacing(2)
 
-        vbox.add(title_label)
-        vbox.add(message_spacer)
         vbox.add(message_label)
-        vbox.add(button_spacer1)
-        vbox.add(button_spacer2)
         vbox.add(ok_button)
         dialog.add(vbox)
 

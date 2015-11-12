@@ -268,20 +268,9 @@ namespace Ev3devKit.Demo {
 
         void on_dialog_menu_item_pressed () {
             var dialog = new Dialog ();
-            // make us a nice little title bar
-            var title_label = new Label ("Dialog") {
-                padding_bottom = 2,
-                border_bottom = 1
+            var message_label = new Label ("This is a dialog.") {
+                margin = 2
             };
-            var message_spacer = new Spacer ();
-            var message_label = new Label (
-                "You pressed the dialog_menu_item. "
-                + "This is what a dialog looks like.") {
-                margin = 4
-            };
-            // a little trick to have twice as much space below the message as above the message.
-            var button_spacer1 = new Spacer ();
-            var button_spacer2 = new Spacer ();
             var ok_button = new Ui.Button.with_label ("OK") {
                 horizontal_align = WidgetAlign.CENTER,
                 vertical_align = WidgetAlign.END
@@ -291,14 +280,10 @@ namespace Ev3devKit.Demo {
             ok_button.pressed.connect (() => weak_dialog.close ());
             var vbox = new Box.vertical () {
                 padding_top = 2,
-                padding_bottom = 2,
+                padding_bottom = 6,
                 spacing = 2
             };
-            vbox.add (title_label);
-            vbox.add (message_spacer);
             vbox.add (message_label);
-            vbox.add (button_spacer1);
-            vbox.add (button_spacer2);
             vbox.add (ok_button);
             dialog.add (vbox);
             dialog.show ();

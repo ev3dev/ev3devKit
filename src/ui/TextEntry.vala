@@ -29,8 +29,8 @@ namespace Ev3devKit.Ui {
      * A wiget for getting user input.
      */
     public class TextEntry : Ev3devKit.Ui.Widget {
-        const string CONTINUE_RIGHT = "\xaf";
-        const string CONTINUE_LEFT = "\xae";
+        const string CONTINUE_RIGHT = "\xbb";
+        const string CONTINUE_LEFT = "\xab";
 
         /**
          * String containing all numeric characters (``0-9``).
@@ -135,11 +135,12 @@ namespace Ev3devKit.Ui {
             label = new Label () {
                 text_horizontal_align = TextHorizAlign.LEFT,
                 text_vertical_align = TextVertAlign.TOP,
-                font = Font.pc6x8
+                font = Fonts.get_default ()
             };
             can_focus = true;
             border = 1;
             padding = 2;
+            vertical_align = WidgetAlign.CENTER;
             notify["text"].connect (redraw);
             notify["min-width"].connect (redraw);
             notify["editing"].connect (redraw);

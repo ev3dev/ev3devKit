@@ -31,15 +31,6 @@ namespace Ev3devKit.Ui {
      * wide enough to fit the entire text value.
      */
     public class Label : Ev3devKit.Ui.Widget {
-        internal static Font _default_font;
-        internal static weak Font default_font;
-
-        // TODO: This is a problem if we try to use default_font before creating an instance of Label
-        static construct {
-            _default_font = Font.load ("xm6x8");
-            default_font = _default_font ??  Font.pc6x8;
-        }
-
         TextOption text_option;
         SList<string>? cached_lines;
         int last_width = 0;
@@ -75,7 +66,7 @@ namespace Ev3devKit.Ui {
 
         construct {
             text_option = new TextOption () {
-                font = default_font,
+                font = Fonts.get_default (),
                 direction = TextDirection.RIGHT,
                 chr_type = ChrType.BYTE,
                 x_align = TextHorizAlign.CENTER,

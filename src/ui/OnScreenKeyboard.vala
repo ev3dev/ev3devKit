@@ -94,7 +94,7 @@ namespace Ev3devKit.Ui {
                 use_on_screen_keyboard = false,
                 editing = true,
                 insert = true,
-                margin_top = 12,
+                margin_top = 9,
                 margin_bottom = 6,
                 padding = 3
             };
@@ -121,7 +121,8 @@ namespace Ev3devKit.Ui {
             });
             vbox.add (text_entry);
             var nav_grid = new Grid (1, 5) {
-                border = 2
+                border = 2,
+                vertical_align = WidgetAlign.CENTER
             };
             nav_grid.add (create_change_keyboard_button ("ABC", Keyboard.UPPER_ALPHA));
             nav_grid.add (create_change_keyboard_button ("abc", Keyboard.LOWER_ALPHA));
@@ -141,6 +142,13 @@ namespace Ev3devKit.Ui {
          */
         public OnScreenKeyboard (Keyboard inital_keyboard = Keyboard.UPPER_ALPHA) {
             set_keyboard (inital_keyboard);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        protected override void do_layout () {
+            base.do_layout ();
         }
 
         static void before_finalize (Object obj) {
@@ -299,7 +307,9 @@ namespace Ev3devKit.Ui {
                 border = 0,
                 border_radius = 0,
                 padding_left = 0,
-                padding_right = 0
+                padding_right = 0,
+                padding_top = 4,
+                padding_bottom = 4
             };
             var id = button.pressed.connect (() => {
                 set_keyboard (keyboard);
