@@ -37,15 +37,15 @@ namespace Ev3devKitDesktop {
         public enum DeviceType {
             EV3,
             ADAFRUIT_18,
+            ADAFRUIT_22,
             ADAFRUIT_24,
-            EVB
         }
 
         const Info[] devices = {
             { 178, 128, true  }, /* EV3 LCD 178x128, 1bpp MONO01 */
             { 160, 128, false }, /* Adafruit 1.8" LCD 160x128, 16bpp RGB565 */
+            { 220, 176, false }, /* Adafruit 2.2" LCD 220x176, 16bpp RGB565 (EVB)*/
             { 320, 240, false }, /* Adafruit 2.4" LCD 320x240, 16bpp RGB565 (PiStorms) */
-            { 220, 176, false }  /* EVB LCD 220x176, 16bpp RGB565 */
         };
 
         const int LCD_BG_RED   = 173;
@@ -84,6 +84,11 @@ namespace Ev3devKitDesktop {
                     window.resize (1, 1);
                 refresh ();
             }
+        }
+
+        static construct {
+            Grx.set_driver ("memory nc 16M");
+            Grx.set_mode (Grx.GraphicsMode.GRAPHICS_DEFAULT);
         }
 
         construct {

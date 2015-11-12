@@ -35,33 +35,17 @@ namespace Ev3devKitDesktop {
      */
     public class GtkScreen : Ev3devKit.Ui.Screen {
         GtkFramebuffer fb;
-        weak GtkScreen? master;
-        SList<weak GtkScreen> slaves;
 
         /**
          * Creates a new screen.
          *
          * @param fb The frambuffer that the screen will be displayed on.
-         * @param master If specified, this screen will used the window stack
-         * and status bar from the master screen.
          */
-        public GtkScreen (GtkFramebuffer fb, GtkScreen? master = null) {
+        public GtkScreen (GtkFramebuffer fb) {
             base.custom (fb.info.width, fb.info.height, fb.pixbuf_data);
             this.fb = fb;
             if (fb.info.monochrome) {
                 mid_color = fg_color;
-            }
-            this.master = master;
-            slaves = new SList<weak GtkScreen> ();
-            if (master != null) {
-                master.slaves.append (this);
-            }
-        }
-
-        ~GtkScreen () {
-            master.slaves.remove (this);
-            foreach (var slave in slaves) {
-                slave.master = null;
             }
         }
 
@@ -70,37 +54,6 @@ namespace Ev3devKitDesktop {
          */
         protected override void refresh () {
             fb.refresh ();
-            foreach (var slave in slaves) {
-                status_bar.screen = slave;
-                var save_slave_status_bar = slave.status_bar;
-                slave.status_bar = status_bar;
-                set_screen_for_each_window (slave);
-                var save_slave_window_stack = (owned)slave.window_stack;
-                slave.window_stack = (owned)window_stack;
-                slave.dirty = true;
-                slave.draw ();
-                slave.status_bar = save_slave_status_bar;
-                window_stack = (owned)slave.window_stack;
-                slave.window_stack = (owned)save_slave_window_stack;
-                slave.dirty = false;
-            }
-            status_bar.screen = this;
-            set_screen_for_each_window (this);
-        }
-
-        void set_screen_for_each_window (Ui.Screen screen) {
-            unowned List<Ev3devKit.Ui.Window> iter = window_stack.tail;
-            while (iter != null) {
-                var window = iter.data;
-                window.screen = screen;
-                    if (master != null) {
-                    window.do_recursive_children ((child) => {
-                        child.redraw ();
-                        return null;
-                    });
-                }
-                iter = iter.prev;
-            }
         }
     }
 }
