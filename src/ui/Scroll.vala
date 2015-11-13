@@ -96,7 +96,7 @@ namespace Ev3devKit.Ui {
          * Gets and sets the default scroll distance in pixels used by
          * {@link scroll_forward} and {@link scroll_backward}.
          */
-        public int scroll_amount { get; set; default = 8; }
+        public int scroll_amount { get; set; default = 16; }
 
         construct {
             if (container_type != ContainerType.SINGLE)
