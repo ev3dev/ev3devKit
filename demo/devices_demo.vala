@@ -137,6 +137,7 @@ namespace Ev3devKit.Demo {
             SERVO_MOTORS,
             POWER_SUPPLIES,
             INPUT,
+            CPU,
             QUIT
         }
 
@@ -174,6 +175,9 @@ namespace Ev3devKit.Demo {
                     break;
                 case MainMenu.INPUT:
                     yield do_input_menu (command_line, stdin);
+                    break;
+                case MainMenu.CPU:
+                    yield do_machine_menu (command_line, stdin);
                     break;
                 case MainMenu.QUIT:
                     done = true;
@@ -1285,6 +1289,45 @@ namespace Ev3devKit.Demo {
             } else {
                 command_line.print ("Selected Input device does not support TONE.\n");
             }
+        }
+
+        /**
+         * List of items in the CPU submenu.
+         */
+        enum CpuMenu {
+            SHOW_INFO = 1,
+            MAIN_MENU
+        }
+
+        /**
+         * Print the CPU menu and handle user input.
+         *
+         * Loops until user selects Main Menu
+         */
+        async void do_machine_menu (ApplicationCommandLine command_line,
+            DataInputStream stdin) throws IOError
+        {
+            var done = false;
+            while (!done) {
+                print_menu_items<CpuMenu> (command_line);
+                switch (yield get_user_input (command_line, stdin)) {
+                case CpuMenu.SHOW_INFO:
+                    do_show_cpu_info (command_line);
+                    break;
+                case CpuMenu.MAIN_MENU:
+                    done = true;
+                    break;
+                default:
+                    command_line.print ("Invalid selection.\n");
+                    break;
+                }
+            }
+        }
+
+        void do_show_cpu_info (ApplicationCommandLine command_line) {
+            command_line.print ("Model: %s\n", Cpu.get_model ());
+            command_line.print ("Revision: %s\n", Cpu.get_revision ());
+            command_line.print ("Serial No.: %s\n", Cpu.get_serial_number ());
         }
 
         /**

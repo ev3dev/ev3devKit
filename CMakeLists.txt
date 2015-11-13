@@ -73,6 +73,7 @@ string(REPLACE ";" " " DESKTOP_PKGCONFIG_DEPS "${PROJECT_NAME}-${GIR_VERSION};${
 configure_file (${PROJECT_NAME}-desktop.pc.in ${PROJECT_NAME}-desktop-${GIR_VERSION}.pc)
 
 set (LIBRARY_SOURCE_FILES
+    src/devices/Cpu.vala
     src/devices/DcMotor.vala
     src/devices/Device.vala
     src/devices/DeviceManager.vala
