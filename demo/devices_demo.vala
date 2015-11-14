@@ -1142,15 +1142,18 @@ namespace Ev3devKit.Demo {
             }
             command_line.print ("device_name: %s\n", selected_power_supply.device_name);
             command_line.print ("connected: %s\n", selected_power_supply.connected ? "true" : "false");
+            command_line.print ("has_voltage: %s\n", selected_power_supply.has_voltage ? "true" : "false");
             command_line.print ("voltage: %f\n", selected_power_supply.voltage);
+            command_line.print ("has_current: %s\n", selected_power_supply.has_current ? "true" : "false");
             command_line.print ("current: %f\n", selected_power_supply.current);
+            command_line.print ("has_power: %s\n", selected_power_supply.has_power ? "true" : "false");
             command_line.print ("power: %f\n", selected_power_supply.power);
-            command_line.print ("voltage_max_design: %f\n", selected_power_supply.voltage_max_design);
-            command_line.print ("voltage_min_design: %f\n", selected_power_supply.voltage_min_design);
-            command_line.print ("supply_type: %s\n", selected_power_supply.supply_type);
-            command_line.print ("technology: %s\n", selected_power_supply.technology);
-            command_line.print ("scope: %s\n", selected_power_supply.scope);
-            command_line.print ("capacity_level: %s\n", selected_power_supply.capacity_level);
+            command_line.print ("voltage_max: %f\n", selected_power_supply.voltage_max);
+            command_line.print ("voltage_min: %f\n", selected_power_supply.voltage_min);
+            command_line.print ("supply_type: %s\n", selected_power_supply.supply_type.to_string ());
+            command_line.print ("technology: %s\n", selected_power_supply.technology.to_string ());
+            command_line.print ("scope: %s\n", selected_power_supply.scope.to_string ());
+            command_line.print ("capacity_level: %s\n", selected_power_supply.capacity_level.to_string ());
         }
 
         /**
