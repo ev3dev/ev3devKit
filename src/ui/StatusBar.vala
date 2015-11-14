@@ -31,7 +31,7 @@ namespace Ev3devKit.Ui {
         /**
          * The height of the status bar.
          */
-        public const int HEIGHT = 12;
+        public const int HEIGHT = 19;
         const int PADDING = 2;
 
         SList<StatusBarItem> left_items;

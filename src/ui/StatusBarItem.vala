@@ -26,7 +26,7 @@ namespace Ev3devKit.Ui {
      * Represents an item that is displayed in a {@link StatusBar}.
      */
     public abstract class StatusBarItem : Object {
-        public const int HEIGHT = 9;
+        public const int HEIGHT = StatusBar.HEIGHT - 3;
 
         /**
          * Gets the status bar this item has been assigned to.
