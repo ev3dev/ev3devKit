@@ -38,7 +38,7 @@ namespace Ev3devKit.Ui {
         /**
          * Gets and sets the visibility of this item.
          */
-        public bool visible { get; protected set; default = true; }
+        public bool visible { get; set; default = true; }
 
         construct {
             notify["visible"].connect (() => {
