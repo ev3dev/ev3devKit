@@ -248,6 +248,24 @@ namespace Ev3devKit.Devices {
         }
 
         /**
+         * Gets the system power supply.
+         *
+         * If there is more than one system power supply, it just returns the
+         * first one.
+         *
+         * @return The power supply or ``null`` if none were found.
+         */
+         public PowerSupply? get_system_power_supply () {
+            var supplies = get_power_supplies ();
+            for (int i = 0; i < supplies.length; i++) {
+                if (supplies[i].scope == PowerSupply.Scope.SYSTEM) {
+                    return supplies[i];
+                }
+            }
+            return null;
+         }
+
+        /**
          * Gets the specified Input device.
          *
          * @param name The name of the input device. See {@link Input.name}.
