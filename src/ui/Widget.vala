@@ -619,7 +619,7 @@ namespace Ev3devKit.Ui {
             // are no other inline widgets. If the widget being testing is in
             // the opposite direction of the currently focused widget, we add
             // uint.MAX / 4 to the distance. This allows focus to wrap around.
-            // In other words, if a widget is the bottom-most an focus direction
+            // In other words, if a widget is the bottom-most and focus direction
             // is down, the next focused widget will be the top-most. Since we
             // are using uint.MAX / 4 here, that means the total height or width
             // including scroll areas cannot exceed that number or unexpected
