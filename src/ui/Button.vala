@@ -66,6 +66,8 @@ namespace Ev3devKit.Ui {
          */
         public Button.with_label (string? text = null, Font? font = null) {
             this (new Label (text) {
+                margin_left = 3,
+                margin_right = 3,
                 font = font ?? Fonts.get_default ()
             });
         }
