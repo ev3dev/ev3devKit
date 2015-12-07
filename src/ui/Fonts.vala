@@ -53,4 +53,15 @@ namespace Ev3devKit.Ui.Fonts {
         }
         return small_font;
     }
+
+    /**
+     * Gets the big font.
+     */
+    public unowned Font get_big () {
+        if (small_font == null) {
+            _small_font = Font.load ("lucs21");
+            small_font = _small_font ?? Font.pc8x14;
+        }
+        return small_font;
+    }
 }
