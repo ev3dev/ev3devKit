@@ -558,8 +558,19 @@ namespace Ev3devKit.Ui {
          * or ``false`` if this widget can't be focused.
          */
         public bool focus () {
-            if (!can_focus || !visible)
+            if (!can_focus)
                 return false;
+
+            // if this widget or any ancestor is not visible, then it can't be focused.
+            var not_visible = do_recursive_parent ((widget) => {
+                return widget.visible ? null : widget;
+            });
+            if (not_visible != null) {
+                return false;
+            }
+
+            // at this point, we know we can focus this widget, so unfocus all
+            // other wigets.
             if (window != null) {
                 window.do_recursive_children ((widget) => {
                     widget.has_focus = false;
@@ -568,6 +579,7 @@ namespace Ev3devKit.Ui {
             }
             has_focus = true;
             redraw ();
+
             return true;
         }
 
@@ -626,8 +638,15 @@ namespace Ev3devKit.Ui {
             // behavior will occur.
             uint best_distance = uint.MAX;
             window.do_recursive_children ((widget) => {
-                if (widget == this || !widget.can_focus || !widget.visible)
+                if (widget == this || !widget.can_focus) {
                     return null;
+                }
+                var not_visible = widget.do_recursive_parent ((w) => {
+                    return w.visible ? null : w;
+                });
+                if (not_visible != null) {
+                    return null;
+                }
                 uint widget_distance_x = 0;
                 if (widget.border_bounds.x1 > border_bounds.x1 || widget.border_bounds.x2 < border_bounds.x2)
                     widget_distance_x = ((widget.border_bounds.x1 + widget.border_bounds.x2)
