@@ -51,10 +51,15 @@ namespace Ev3devKit.Ui {
                 horizontal_align = WidgetAlign.CENTER
             };
             content_vbox.add (button_hbox);
+
             accept_button = new Button.with_label ("OK");
             accept_button.pressed.connect (on_accept_button_pressed);
             button_hbox.add (accept_button);
             value_entry.next_focus_widget_down = accept_button;
+            // next_focus_widget_down holds a weak ref, so we need to unset it
+            // before value_entry is finalized or we get a critical assertation
+            value_entry.weak_ref (() => value_entry.next_focus_widget_down = null);
+
             cancel_button = new Button.with_label ("Cancel");
             cancel_button.pressed.connect (on_cancel_button_pressed);
             button_hbox.add (cancel_button);
