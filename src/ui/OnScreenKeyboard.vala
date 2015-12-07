@@ -91,11 +91,11 @@ namespace Ev3devKit.Ui {
                 spacing = 3
             };
             text_entry = new TextEntry (" ") {
+                vertical_align = WidgetAlign.START,
                 use_on_screen_keyboard = false,
                 editing = true,
                 insert = true,
-                margin_top = 9,
-                margin_bottom = 6,
+                margin_top = 3,
                 padding = 3
             };
             text_entry.notify["has-focus"].connect (() => {
@@ -121,8 +121,8 @@ namespace Ev3devKit.Ui {
             });
             vbox.add (text_entry);
             var nav_grid = new Grid (1, 5) {
-                border = 2,
-                vertical_align = WidgetAlign.CENTER
+                vertical_align = WidgetAlign.START,
+                border = 2
             };
             nav_grid.add (create_change_keyboard_button ("ABC", Keyboard.UPPER_ALPHA));
             nav_grid.add (create_change_keyboard_button ("abc", Keyboard.LOWER_ALPHA));
@@ -306,11 +306,10 @@ namespace Ev3devKit.Ui {
             var button = new Button.with_label (label) {
                 border = 0,
                 border_radius = 0,
-                padding_left = 0,
-                padding_right = 0,
-                padding_top = 4,
-                padding_bottom = 4
+                padding = 0,
+                padding_bottom = 2
             };
+            (button.child as Label).font = Fonts.get_small ();
             var id = button.pressed.connect (() => {
                 set_keyboard (keyboard);
             });
@@ -325,6 +324,7 @@ namespace Ev3devKit.Ui {
                 border = 0,
                 border_radius = 0
             };
+            (button.child as Label).font = Fonts.get_small ();
             var id = button.pressed.connect (() => {
                 text_entry.insert = !text_entry.insert;
                 (button.child as Label).text = text_entry.insert ? "INS" : "OVR";
@@ -336,9 +336,10 @@ namespace Ev3devKit.Ui {
         }
 
         Button create_accept_button () {
-            var button = new Button.with_label ("Accept") {
+            var button = new Button.with_label ("OK") {
                 border_radius = 0
             };
+            (button.child as Label).font = Fonts.get_small ();
             button.pressed.connect (() => {
                 // trim trailing space
                 if (text[text.length - 1] == ' ')
@@ -353,6 +354,7 @@ namespace Ev3devKit.Ui {
             var button = new Button.with_label ("Cancel") {
                 border_radius = 0
             };
+            (button.child as Label).font = Fonts.get_small ();
             button.pressed.connect (() => {
                 canceled ();
                 close ();
