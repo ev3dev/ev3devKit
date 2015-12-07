@@ -46,17 +46,18 @@ namespace Ev3devKit.Ui {
             content_vbox.add (message_label);
             value_entry = new TextEntry ();
             content_vbox.add (value_entry);
+            content_vbox.add (new Spacer ());
             var button_hbox = new Box.horizontal () {
-                vertical_align = WidgetAlign.END,
                 horizontal_align = WidgetAlign.CENTER
             };
             content_vbox.add (button_hbox);
+            accept_button = new Button.with_label ("OK");
+            accept_button.pressed.connect (on_accept_button_pressed);
+            button_hbox.add (accept_button);
+            value_entry.next_focus_widget_down = accept_button;
             cancel_button = new Button.with_label ("Cancel");
             cancel_button.pressed.connect (on_cancel_button_pressed);
             button_hbox.add (cancel_button);
-            accept_button = new Button.with_label ("Accept");
-            accept_button.pressed.connect (on_accept_button_pressed);
-            button_hbox.add (accept_button);
             add (content_vbox);
         }
 
