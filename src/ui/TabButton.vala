@@ -50,7 +50,7 @@ namespace Ev3devKit.Ui {
          * Creates a new tab button.
          */
         public TabButton (string? text = null) {
-            base (new Label (text));
+            base (new Label (text) { font = Fonts.get_small () });
         }
 
         /**
