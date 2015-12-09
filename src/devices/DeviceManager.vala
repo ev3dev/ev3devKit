@@ -326,6 +326,10 @@ namespace Ev3devKit.Devices {
                     sensor_added (sensor);
                     break;
                 case LEDS_CLASS:
+                    // only handle ":ev3dev" LEDs
+                    if (!udev_device.get_name ().has_suffix (":ev3dev")) {
+                        break;
+                    }
                     var led = new Led (udev_device);
                     device_map[sysfs_path] = led;
                     led_added (led);
