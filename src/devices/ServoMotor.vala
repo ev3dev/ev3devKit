@@ -128,13 +128,14 @@ namespace Ev3devKit.Devices {
         }
 
         /**
-         * Gets the name of the port this device is connected to.
+         * Gets the address of this device.
          *
-         * The port name may or may not correspond to an actual Port object.
+         * The address generally includes the port name. It also includes the
+         * the I2C address for NXT/I2C sensors.
          */
-        public string? port_name {
+        public string? address {
             owned get {
-                return udev_device.get_sysfs_attr ("port_name");
+                return udev_device.get_sysfs_attr ("address");
             }
         }
 

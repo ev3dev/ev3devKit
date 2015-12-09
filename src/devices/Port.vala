@@ -31,36 +31,36 @@ namespace Ev3devKit.Devices {
      */
     public class Port : Ev3devKit.Devices.Device {
         /**
-         * The value returned by port_name for Input Port 1 on the EV3 itself.
+         * The value returned by address for Input Port 1 on the EV3 itself.
          */
         public const string INPUT_1 = "in1";
         /**
-         * The value returned by port_name for Input Port 2 on the EV3 itself.
+         * The value returned by address for Input Port 2 on the EV3 itself.
          */
         public const string INPUT_2 = "in2";
         /**
-         * The value returned by port_name for Input Port 3 on the EV3 itself.
+         * The value returned by address for Input Port 3 on the EV3 itself.
          */
         public const string INPUT_3 = "in3";
         /**
-         * The value returned by port_name for Input Port 4 on the EV3 itself.
+         * The value returned by address for Input Port 4 on the EV3 itself.
          */
         public const string INPUT_4 = "in4";
 
         /**
-         * The value returned by port_name for Output Port A on the EV3 itself.
+         * The value returned by address for Output Port A on the EV3 itself.
          */
         public const string OUTPUT_A = "outA";
         /**
-         * The value returned by port_name for Output Port B on the EV3 itself.
+         * The value returned by address for Output Port B on the EV3 itself.
          */
         public const string OUTPUT_B = "outB";
         /**
-         * The value returned by port_name for Output Port C on the EV3 itself.
+         * The value returned by address for Output Port C on the EV3 itself.
          */
         public const string OUTPUT_C = "outC";
         /**
-         * The value returned by port_name for Output Port D on the EV3 itself.
+         * The value returned by address for Output Port D on the EV3 itself.
          */
         public const string OUTPUT_D = "outD";
 
@@ -78,9 +78,9 @@ namespace Ev3devKit.Devices {
          *
          * This can be used to match a port to a sensor or motor.
          */
-        public string port_name {
+        public string address {
             owned get {
-                return udev_device.get_property ("LEGO_PORT_NAME");
+                return udev_device.get_property ("LEGO_address");
             }
         }
 

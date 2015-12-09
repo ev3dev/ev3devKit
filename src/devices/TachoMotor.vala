@@ -206,9 +206,9 @@ namespace Ev3devKit.Devices {
          * For example, a motor connected to output port A on the EV3 will
          * return ``outA``.
          */
-        public string? port_name {
+        public string? address {
             owned get {
-                return udev_device.get_sysfs_attr ("port_name");
+                return udev_device.get_sysfs_attr ("address");
             }
         }
 

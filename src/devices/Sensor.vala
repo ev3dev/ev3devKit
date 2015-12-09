@@ -108,9 +108,9 @@ namespace Ev3devKit.Devices {
          * The port may or may not have a corresponding {@link Port} object
          * depending on how the driver was implemented.
          */
-        public string port_name {
+        public string address {
             owned get {
-                return udev_device.get_sysfs_attr ("port_name");
+                return udev_device.get_sysfs_attr ("address");
             }
         }
 

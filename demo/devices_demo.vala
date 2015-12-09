@@ -247,7 +247,7 @@ namespace Ev3devKit.Demo {
             var ports = manager.get_ports ();
             int i = 1;
             ports.foreach ((port) => {
-                command_line.print ("%d. %s (%s)\n", i, port.port_name,
+                command_line.print ("%d. %s (%s)\n", i, port.address,
                     port.device_name);
                 i++;
             });
@@ -268,9 +268,9 @@ namespace Ev3devKit.Demo {
                 command_line.print ("No port selected.\n");
                 return;
             }
-            command_line.print ("device name: %s\n", selected_port.device_name);
-            command_line.print ("driver name: %s\n", selected_port.driver_name);
-            command_line.print ("port name: %s\n", selected_port.port_name);
+            command_line.print ("device_name: %s\n", selected_port.device_name);
+            command_line.print ("driver_name: %s\n", selected_port.driver_name);
+            command_line.print ("address: %s\n", selected_port.address);
             command_line.print ("connected: %s\n", selected_port.connected ? "true" : "false");
             command_line.print ("modes: %s\n",string.joinv (", ", selected_port.modes));
             command_line.print ("mode: %s\n", selected_port.mode);
@@ -415,7 +415,7 @@ namespace Ev3devKit.Demo {
             int i = 1;
             sensors.foreach ((sensor) => {
                 command_line.print ("%d. %s on %s (%s)\n", i, sensor.driver_name,
-                    sensor.port_name, sensor.device_name);
+                    sensor.address, sensor.device_name);
                 i++;
             });
             command_line.print ("\nSelect Sensor: ");
@@ -436,7 +436,7 @@ namespace Ev3devKit.Demo {
             }
             command_line.print ("device_name: %s\n", selected_sensor.device_name);
             command_line.print ("driver_name: %s\n", selected_sensor.driver_name);
-            command_line.print ("port_name: %s\n", selected_sensor.port_name);
+            command_line.print ("address: %s\n", selected_sensor.address);
             command_line.print ("connected: %s\n", selected_sensor.connected ? "true" : "false");
             command_line.print ("fw_version: %s\n", selected_sensor.fw_version);
             command_line.print ("poll_ms: %d\n", selected_sensor.poll_ms);
@@ -824,7 +824,7 @@ namespace Ev3devKit.Demo {
             int i = 1;
             motors.foreach ((motor) => {
                 command_line.print ("%d. %s on %s (%s)\n", i, motor.driver_name,
-                    motor.port_name, motor.device_name);
+                    motor.address, motor.device_name);
                 i++;
             });
             command_line.print ("\nSelect Tacho Motor: ");
@@ -846,7 +846,7 @@ namespace Ev3devKit.Demo {
             }
             command_line.print ("device_name: %s\n", selected_tacho_motor.device_name);
             command_line.print ("driver_name: %s\n", selected_tacho_motor.driver_name);
-            command_line.print ("port_name: %s\n", selected_tacho_motor.port_name);
+            command_line.print ("address: %s\n", selected_tacho_motor.address);
             command_line.print ("connected: %s\n", selected_tacho_motor.connected ? "true" : "false");
             command_line.print ("commands: %s\n", string.joinv (", ", selected_tacho_motor.commands));
             command_line.print ("count_per_rot: %d\n", selected_tacho_motor.count_per_rot);
@@ -934,7 +934,7 @@ namespace Ev3devKit.Demo {
             int i = 1;
             motors.foreach ((motor) => {
                 command_line.print ("%d. %s on %s (%s)\n", i, motor.driver_name,
-                    motor.port_name, motor.device_name);
+                    motor.address, motor.device_name);
                 i++;
             });
             command_line.print ("\nSelect DcMotor: ");
@@ -956,7 +956,7 @@ namespace Ev3devKit.Demo {
             }
             command_line.print ("device_name: %s\n", selected_dc_motor.device_name);
             command_line.print ("driver_name: %s\n", selected_dc_motor.driver_name);
-            command_line.print ("port_name: %s\n", selected_dc_motor.port_name);
+            command_line.print ("address: %s\n", selected_dc_motor.address);
             command_line.print ("connected: %s\n", selected_dc_motor.connected ? "true" : "false");
             command_line.print ("commands: %s\n", string.joinv (", ", selected_dc_motor.commands));
             command_line.print ("duty_cycle: %d\n", selected_dc_motor.duty_cycle);
@@ -1027,7 +1027,7 @@ namespace Ev3devKit.Demo {
             int i = 1;
             motors.foreach ((motor) => {
                 command_line.print ("%d. %s on %s (%s)\n", i, motor.driver_name,
-                    motor.port_name, motor.device_name);
+                    motor.address, motor.device_name);
                 i++;
             });
             command_line.print ("\nSelect ServoMotor: ");
@@ -1049,7 +1049,7 @@ namespace Ev3devKit.Demo {
             }
             command_line.print ("device_name: %s\n", selected_servo_motor.device_name);
             command_line.print ("driver_name: %s\n", selected_servo_motor.driver_name);
-            command_line.print ("port_name: %s\n", selected_servo_motor.port_name);
+            command_line.print ("address: %s\n", selected_servo_motor.address);
             command_line.print ("connected: %s\n", selected_servo_motor.connected ? "true" : "false");
             command_line.print ("commands: %s\n", string.joinv (", ", selected_servo_motor.commands));
             command_line.print ("max_pulse_sp: %d\n", selected_servo_motor.max_pulse_sp);
@@ -1367,10 +1367,10 @@ namespace Ev3devKit.Demo {
          * Adds handler so message is displayed when the port is disconnected.
          */
         void on_port_added (Port port) {
-            message ("Port added: %s (%s)", port.port_name, port.device_name);
+            message ("Port added: %s (%s)", port.address, port.device_name);
             ulong handler_id = 0;
             handler_id = port.notify["connected"].connect (() => {
-                message ("Port removed: %s (%s)", port.port_name, port.device_name);
+                message ("Port removed: %s (%s)", port.address, port.device_name);
                 port.disconnect (handler_id);
             });
         }
@@ -1382,11 +1382,11 @@ namespace Ev3devKit.Demo {
          */
         void on_sensor_added (Sensor sensor) {
             message ("Sensor added: %s on %s (%s)", sensor.driver_name,
-                sensor.port_name, sensor.device_name);
+                sensor.address, sensor.device_name);
             ulong handler_id = 0;
             handler_id = sensor.notify["connected"].connect (() => {
                 message ("Sensor removed: %s on %s (%s)", sensor.driver_name,
-                    sensor.port_name, sensor.device_name);
+                    sensor.address, sensor.device_name);
                 sensor.disconnect (handler_id);
             });
         }
@@ -1413,11 +1413,11 @@ namespace Ev3devKit.Demo {
          */
         void on_tacho_motor_added (TachoMotor motor) {
             message ("TachoMotor added: %s on %s (%s)", motor.driver_name,
-                motor.port_name, motor.device_name);
+                motor.address, motor.device_name);
             ulong handler_id = 0;
             handler_id = motor.notify["connected"].connect (() => {
                 message ("TachoMotor removed: %s on %s (%s)", motor.driver_name,
-                    motor.port_name, motor.device_name);
+                    motor.address, motor.device_name);
                 motor.disconnect (handler_id);
             });
         }
@@ -1430,11 +1430,11 @@ namespace Ev3devKit.Demo {
          */
         void on_dc_motor_added (DcMotor motor) {
             message ("DcMotor added: %s on %s (%s)", motor.driver_name,
-                motor.port_name, motor.device_name);
+                motor.address, motor.device_name);
             ulong handler_id = 0;
             handler_id = motor.notify["connected"].connect (() => {
                 message ("DcMotor removed: %s on %s (%s)", motor.driver_name,
-                    motor.port_name, motor.device_name);
+                    motor.address, motor.device_name);
                 motor.disconnect (handler_id);
             });
         }
@@ -1447,11 +1447,11 @@ namespace Ev3devKit.Demo {
          */
         void on_servo_motor_added (ServoMotor motor) {
             message ("ServoMotor added: %s on %s (%s)", motor.driver_name,
-                motor.port_name, motor.device_name);
+                motor.address, motor.device_name);
             ulong handler_id = 0;
             handler_id = motor.notify["connected"].connect (() => {
                 message ("ServoMotor removed: %s on %s (%s)", motor.driver_name,
-                    motor.port_name, motor.device_name);
+                    motor.address, motor.device_name);
                 motor.disconnect (handler_id);
             });
         }
