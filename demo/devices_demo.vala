@@ -673,7 +673,11 @@ namespace Ev3devKit.Demo {
             var leds = manager.get_leds ();
             int i = 1;
             leds.foreach ((led) => {
-                command_line.print ("%d. %s\n", i, led.name);
+                command_line.print ("%d. %s", i, led.name);
+                if (led.color != "") {
+                    command_line.print (" (%s)", led.color);
+                }
+                command_line.print ("\n");
                 i++;
             });
             command_line.print ("\nSelect LED: ");
@@ -695,6 +699,7 @@ namespace Ev3devKit.Demo {
             }
             command_line.print ("connected: %s\n", selected_led.connected ? "true" : "false");
             command_line.print ("name: %s\n", selected_led.name);
+            command_line.print ("color: %s\n", selected_led.color);
             command_line.print ("brightness: %d\n", selected_led.brightness);
             command_line.print ("max_brightness: %d\n", selected_led.max_brightness);
             command_line.print ("triggers: %s\n",string.joinv (", ", selected_led.triggers));

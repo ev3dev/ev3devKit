@@ -45,12 +45,39 @@ namespace Ev3devKit.Devices {
          */
         public const string EV3_RIGHT_RED = "ev3:right:red:ev3dev";
 
+        string _name;
         /**
          * Gets the name of the LED.
          */
         public string name {
             get {
-                return udev_device.get_name ();
+                if (_name == null) {
+                    _name = udev_device.get_name ();
+                    // strip off the ":ev3dev" suffix
+                    _name = _name[0:_name.last_index_of (":")];
+                    // strip off the color
+                    _name = _name[0:_name.last_index_of (":")];
+                }
+                return _name;
+            }
+        }
+
+        string _color;
+        /**
+         * Gets the color of the LED.
+         *
+         * Returns an empty string if the color is unknown.
+         */
+        public string color {
+            get {
+                if (_color == null) {
+                    _color = udev_device.get_name ();
+                    // strip off the ":ev3dev" suffix
+                    _color = _color[0:_color.last_index_of (":")];
+                    // strip off the name
+                    _color = _color.substring (_color.last_index_of (":") + 1);
+                }
+                return _color;
             }
         }
 
