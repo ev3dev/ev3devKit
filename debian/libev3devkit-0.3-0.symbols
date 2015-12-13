@@ -334,18 +334,6 @@ libev3devkit-0.3.so.0 libev3devkit-0.3-0 #MINVER#
  ev3dev_kit_ui_message_dialog_construct@Base 0.3.0
  ev3dev_kit_ui_message_dialog_get_type@Base 0.3.0
  ev3dev_kit_ui_message_dialog_new@Base 0.3.0
- ev3dev_kit_ui_notebook_add_tab@Base 0.3.0
- ev3dev_kit_ui_notebook_construct@Base 0.3.0
- ev3dev_kit_ui_notebook_get_active_tab@Base 0.3.0
- ev3dev_kit_ui_notebook_get_type@Base 0.3.0
- ev3dev_kit_ui_notebook_new@Base 0.3.0
- ev3dev_kit_ui_notebook_remove_tab@Base 0.3.0
- ev3dev_kit_ui_notebook_set_active_tab@Base 0.3.0
- ev3dev_kit_ui_notebook_tab_construct@Base 0.3.0
- ev3dev_kit_ui_notebook_tab_get_title@Base 0.3.0
- ev3dev_kit_ui_notebook_tab_get_type@Base 0.3.0
- ev3dev_kit_ui_notebook_tab_new@Base 0.3.0
- ev3dev_kit_ui_notebook_tab_set_title@Base 0.3.0
  ev3dev_kit_ui_on_screen_keyboard_construct@Base 0.3.0
  ev3dev_kit_ui_on_screen_keyboard_get_text@Base 0.3.0
  ev3dev_kit_ui_on_screen_keyboard_get_type@Base 0.3.0
@@ -432,11 +420,6 @@ libev3devkit-0.3.so.0 libev3devkit-0.3-0 #MINVER#
  ev3dev_kit_ui_status_bar_set_visible@Base 0.3.0
  ev3dev_kit_ui_stock_icon_get_type@Base 0.3.0
  ev3dev_kit_ui_stock_icon_to_file_name@Base 0.3.0
- ev3dev_kit_ui_tab_button_construct@Base 0.3.0
- ev3dev_kit_ui_tab_button_get_active@Base 0.3.0
- ev3dev_kit_ui_tab_button_get_type@Base 0.3.0
- ev3dev_kit_ui_tab_button_new@Base 0.3.0
- ev3dev_kit_ui_tab_button_set_active@Base 0.3.0
  ev3dev_kit_ui_text_entry_cancel_editing@Base 0.3.0
  ev3dev_kit_ui_text_entry_commit_editing@Base 0.3.0
  ev3dev_kit_ui_text_entry_construct@Base 0.3.0

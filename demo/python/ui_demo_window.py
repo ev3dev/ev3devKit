@@ -59,10 +59,6 @@ class UiDemoWindow(Ev3devKit.UiWindow):
         stack_menu_item.get_button().connect('pressed', self.on_stack_menu_item_pressed)
         menu.add_menu_item(stack_menu_item)
 
-        notebook_menu_item = Ev3devKit.UiMenuItem.with_right_arrow("Notebook")
-        notebook_menu_item.get_button().connect('pressed', self.on_notebook_menu_item_pressed)
-        menu.add_menu_item(notebook_menu_item)
-
         status_bar_menu_item = Ev3devKit.UiMenuItem.with_right_arrow("StatusBar")
         status_bar_menu_item.get_button().connect('pressed', self.on_status_bar_menu_item_pressed)
         menu.add_menu_item(status_bar_menu_item)
@@ -211,38 +207,6 @@ class UiDemoWindow(Ev3devKit.UiWindow):
             window.disconnect(window_handler_id)
 
         window_handler_id = window.connect("closed", window_closed_handler)
-
-        window.show()
-
-    def on_notebook_menu_item_pressed(self, button):
-        window = Ev3devKit.UiWindow.new()
-
-        notebook = Ev3devKit.UiNotebook.new()
-        window.add(notebook)
-
-        tab1 = Ev3devKit.UiNotebookTab.new("Tab 1")
-        notebook.add_tab(tab1)
-        tab1_label = Ev3devKit.UiLabel.new("This is Tab 1.")
-        tab1_label.set_margin(10)
-        tab1.add(tab1_label)
-
-        tab2 = Ev3devKit.UiNotebookTab.new("Tab 2")
-        notebook.add_tab(tab2)
-        tab2_label = Ev3devKit.UiLabel.new("This is Tab 2.")
-        tab2_label.set_margin(10)
-        tab2.add(tab2_label)
-
-        tab3 = Ev3devKit.UiNotebookTab.new("Tab 3")
-        notebook.add_tab(tab3)
-        tab3_vbox = Ev3devKit.UiBox.vertical()
-        tab3_vbox.set_margin(10)
-        tab3.add(tab3_vbox)
-        tab3_label = Ev3devKit.UiLabel.new("This is Tab 3.")
-        tab3_vbox.add(tab3_label)
-        tab3_button = Ev3devKit.UiButton.new()
-        tab3_vbox.add(tab3_button)
-        tab3_button_label = Ev3devKit.UiLabel.new("Do Nothing")
-        tab3_button.add(tab3_button_label)
 
         window.show()
 

@@ -100,8 +100,6 @@ set (LIBRARY_SOURCE_FILES
     src/ui/Menu.vala
     src/ui/MenuItem.vala
     src/ui/MessageDialog.vala
-    src/ui/Notebook.vala
-    src/ui/NotebookTab.vala
     src/ui/OnScreenKeyboard.vala
     src/ui/RadioMenuItem.vala
     src/ui/Rectangle.vala
@@ -111,7 +109,6 @@ set (LIBRARY_SOURCE_FILES
     src/ui/Stack.vala
     src/ui/StatusBar.vala
     src/ui/StatusBarItem.vala
-    src/ui/TabButton.vala
     src/ui/TextEntry.vala
     src/ui/Widget.vala
     src/ui/Window.vala

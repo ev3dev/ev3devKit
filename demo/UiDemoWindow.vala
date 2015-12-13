@@ -57,9 +57,6 @@ namespace Ev3devKit.Demo {
             var stack_menu_item = new Ui.MenuItem.with_right_arrow ("Stack");
             stack_menu_item.button.pressed.connect (on_stack_menu_item_button_pressed);
             menu.add_menu_item (stack_menu_item);
-            var notebook_menu_item = new Ui.MenuItem.with_right_arrow ("Notebook");
-            notebook_menu_item.button.pressed.connect (on_notebook_menu_item_button_pressed);
-            menu.add_menu_item (notebook_menu_item);
             var status_bar_menu_item = new Ui.MenuItem.with_right_arrow ("StatusBar");
             status_bar_menu_item.button.pressed.connect (on_status_bar_menu_item_button_pressed);
             menu.add_menu_item (status_bar_menu_item);
@@ -212,35 +209,6 @@ namespace Ev3devKit.Demo {
                 SignalHandler.disconnect (window, window_handler_id);
             });
 
-            window.show ();
-        }
-
-        void on_notebook_menu_item_button_pressed () {
-            var window = new Ui.Window ();
-            var notebook = new Notebook ();
-            window.add (notebook);
-            var tab1 = new NotebookTab ("Tab 1");
-            notebook.add_tab (tab1);
-            var tab1_label = new Label ("This is Tab 1.") {
-                margin = 10
-            };
-            tab1.add (tab1_label);
-            var tab2 = new NotebookTab ("Tab 2");
-            notebook.add_tab (tab2);
-            var tab2_label = new Label ("This is Tab 2.") {
-                margin = 10
-            };
-            tab2.add (tab2_label);
-            var tab3 = new NotebookTab ("Tab 3");
-            notebook.add_tab (tab3);
-            var tab3_vbox = new Box.vertical () {
-                margin = 10
-            };
-            tab3.add (tab3_vbox);
-            var tab3_label = new Label ("This is Tab 3.");
-            tab3_vbox.add (tab3_label);
-            var tab3_button = new Ui.Button.with_label ("Do Nothing");
-            tab3_vbox.add (tab3_button);
             window.show ();
         }
 
