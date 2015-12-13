@@ -158,18 +158,21 @@ namespace Ev3devKit.Devices {
         /**
          * Get an Led device by name.
          *
-         * @param name The sysfs device name.
+         * @param name The name of the LED.
+         * @param color The color of the LED.
          * @return The Led object for the device.
          * @throws DeviceError.NOT_FOUND if a Led device with the specified name
-         * is not found.
+         * and color is not found.
          */
-        public Led get_led (string name) throws DeviceError {
+        public Led get_led (string name, string color) throws DeviceError {
             foreach (var device in device_map.get_values ()) {
                 var led = device as Led;
-                if (led != null && led.name == name)
+                if (led != null && led.name == name && led.color == color) {
                     return led;
+                }
             }
-            throw new DeviceError.NOT_FOUND ("Could not find Led '%s'", name);
+            throw new DeviceError.NOT_FOUND ("Could not find Led '%s:%s:ev3dev'",
+                name, color);
         }
 
         /**
