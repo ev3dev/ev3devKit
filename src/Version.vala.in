@@ -22,7 +22,12 @@
 /* Version.vala - Version info from CMakeLists.txt (automatically generated) */
 
 namespace Ev3devKit {
-    const string PROJECT_NAME = "@PROJECT_NAME@";
     const string VERSION = "@VERSION@";
-    const string PKGDATADIR = "@PKGDATADIR@";
+
+    /**
+     * The data directory for this library.
+     *
+     * The path is relative and can be found in one of ``XDG_DATA_DIRS``.
+     */
+    public const string DATA_DIR = "@PROJECT_NAME@";
 }

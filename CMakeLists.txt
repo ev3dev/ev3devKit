@@ -11,8 +11,6 @@ endif (NOT PARENT_DIR)
 
 list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
-set (DATADIR "${CMAKE_INSTALL_PREFIX}/share")
-set (PKGDATADIR "${DATADIR}/${CMAKE_PROJECT_NAME}")
 set (DEVICES_DEMO_EXEC_NAME "ev3devKit-devices-demo")
 set (UI_DEMO_EXEC_NAME "ev3devKit-ui-demo")
 set (UI_DESKTOP_DEMO_EXEC_NAME "ev3devKit-ui-desktop-demo")
@@ -35,6 +33,7 @@ if (PARENT_DIR)
 endif (PARENT_DIR)
 
 add_subdirectory (data)
+set (XDG_DATA_DIR data)
 
 # Comment this out to enable C compiler warnings
 add_definitions (-w)
@@ -390,7 +389,9 @@ if (EV3DEVKIT_BUILD_DEMO)
     target_link_libraries (${DEVICES_DEMO_EXEC_NAME} ${EXEC_LIBRARY_DEPENDS})
 
     add_custom_target (run-${DEVICES_DEMO_EXEC_NAME}
-        COMMAND ${DEVICES_DEMO_EXEC_NAME}
+        COMMAND
+            XDG_DATA_DIRS=${XDG_DATA_DIR}:/usr/local/share:/usr/share
+            ${DEVICES_DEMO_EXEC_NAME}
         DEPENDS ${DEVICES_DEMO_EXEC_NAME}
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     )
@@ -415,7 +416,9 @@ if (EV3DEVKIT_BUILD_DEMO)
     target_link_libraries (${UI_DEMO_EXEC_NAME} ${EXEC_LIBRARY_DEPENDS})
 
     add_custom_target (run-${UI_DEMO_EXEC_NAME}
-        COMMAND ${UI_DEMO_EXEC_NAME}
+        COMMAND
+            XDG_DATA_DIRS=${XDG_DATA_DIR}:/usr/local/share:/usr/share
+            ${UI_DEMO_EXEC_NAME}
         DEPENDS ${UI_DEMO_EXEC_NAME}
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     )
@@ -446,7 +449,9 @@ if (EV3DEVKIT_BUILD_DEMO)
         target_link_libraries (${UI_DESKTOP_DEMO_EXEC_NAME} ${DESKTOP_EXEC_LIBRARY_DEPENDS})
 
         add_custom_target (run-${UI_DESKTOP_DEMO_EXEC_NAME}
-            COMMAND ${UI_DESKTOP_DEMO_EXEC_NAME}
+            COMMAND
+                XDG_DATA_DIRS=${XDG_DATA_DIR}:/usr/local/share:/usr/share
+                ${UI_DESKTOP_DEMO_EXEC_NAME}
             DEPENDS ${UI_DESKTOP_DEMO_EXEC_NAME}
             WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
         )
@@ -455,6 +460,7 @@ if (EV3DEVKIT_BUILD_DEMO)
 
         add_custom_target (run-python-ui-desktop-demo
             COMMAND
+                XDG_DATA_DIRS=${XDG_DATA_DIR}:/usr/local/share:/usr/share
                 LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}
                 GI_TYPELIB_PATH=${CMAKE_CURRENT_BINARY_DIR}
                 ${CMAKE_CURRENT_SOURCE_DIR}/demo/python/ui_desktop_demo.py

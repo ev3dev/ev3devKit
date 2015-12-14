@@ -113,7 +113,7 @@ namespace Ev3devKit.Ui {
          * if there was a problem loading the data from the file.
          */
         public Icon.from_stock (StockIcon stock_icon) throws IOError {
-            this.from_png (stock_icon.to_file_name ());
+            this.from_png (Path.build_filename (DATA_DIR, stock_icon.to_file_name ()));
         }
 
         /**
@@ -147,18 +147,18 @@ namespace Ev3devKit.Ui {
             if (file_map.contains (file)) {
                 return (Context)(void*)file_map[file];
             }
-            // First, check current working diectory for file (if it is not an
-            // absolute file name already) then check PKGDATADIR.
             var full_path = file.dup ();
-            if (FileUtils.test (full_path, FileTest.EXISTS)) {
-                if (!Path.is_absolute (full_path))
-                    full_path = Path.build_filename (Environment.get_current_dir (), full_path);
-            } else {
-                if (Path.is_absolute (full_path)
-                        || !FileUtils.test ((full_path = Path.build_filename (PKGDATADIR, full_path)), FileTest.EXISTS))
-                {
-                    throw new IOError.NOT_FOUND ("Could not find '%s'", full_path);
+            if (!Path.is_absolute (full_path)) {
+                foreach (var base_path in Environment.get_system_data_dirs ()) {
+                    var new_path = Path.build_filename (base_path, full_path);
+                    if (FileUtils.test (new_path, FileTest.EXISTS)) {
+                        full_path = new_path;
+                        break;
+                    }
                 }
+            }
+            if (!FileUtils.test (full_path, FileTest.EXISTS)) {
+                throw new IOError.NOT_FOUND ("Could not find '%s'", full_path);
             }
             int width, height;
             if (query_png (full_path, out width, out height) == Result.ERROR)
