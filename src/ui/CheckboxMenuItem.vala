@@ -57,6 +57,7 @@ namespace Ev3devKit.Ui {
             }, label: new Label (text),
             checkbox: new CheckButton.checkbox () {
                 padding = 0,
+                margin_top = 1,
                 can_focus = false
             });
         }

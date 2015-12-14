@@ -58,6 +58,7 @@ namespace Ev3devKit.Ui {
             }, label: new Label (text),
             radio: new CheckButton.radio (group) {
                 padding = 0,
+                margin_top = 1,
                 can_focus = false
             });
         }
