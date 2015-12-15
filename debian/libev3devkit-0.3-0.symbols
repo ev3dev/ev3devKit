@@ -2,24 +2,36 @@ libev3devkit-0.3.so.0 libev3devkit-0.3-0 #MINVER#
 * Build-Depends-Package: libev3devkit-dev
  (optional)ev3dev_kit_console_app_HandleSIGTERM@Base 0.3.0
  (optional)ev3dev_kit_console_app_console_app_error_quark@Base 0.3.0
+ ev3dev_kit_console_app_get_tty_num@Base 0.3.0
  (optional)ev3dev_kit_console_app_ignore_next_ch@Base 0.3.0
  ev3dev_kit_console_app_ignore_next_key_press@Base 0.3.0
  ev3dev_kit_console_app_init@Base 0.3.0
+ ev3dev_kit_console_app_is_active@Base 0.3.0
  ev3dev_kit_console_app_main_loop@Base 0.3.0
  ev3dev_kit_console_app_quit@Base 0.3.0
  (optional)ev3dev_kit_console_app_read_input@Base 0.3.0
  (optional)ev3dev_kit_console_app_release_console@Base 0.3.0
  ev3dev_kit_console_app_run@Base 0.3.0
  (optional)ev3dev_kit_console_app_term@Base 0.3.0
- (optional)ev3dev_kit_console_app_vtIn@Base 0.3.0
- (optional)ev3dev_kit_console_app_vtOut@Base 0.3.0
+ (optional)ev3dev_kit_console_app_tty_in@Base 0.3.0
+ (optional)ev3dev_kit_console_app_tty_num@Base 0.3.0
+ (optional)ev3dev_kit_console_app_tty_out@Base 0.3.0
+ (optional)ev3dev_kit_devices_cpu__hardware@Base 0.3.0
+ (optional)ev3dev_kit_devices_cpu__model@Base 0.3.0
+ (optional)ev3dev_kit_devices_cpu__revision@Base 0.3.0
+ (optional)ev3dev_kit_devices_cpu__serial_number@Base 0.3.0
+ ev3dev_kit_devices_cpu_get_model@Base 0.3.0
+ ev3dev_kit_devices_cpu_get_revision@Base 0.3.0
+ ev3dev_kit_devices_cpu_get_serial_number@Base 0.3.0
+ (optional)ev3dev_kit_devices_cpu_set_cpuinfo@Base 0.3.0
+ (optional)ev3dev_kit_devices_cpu_set_model@Base 0.3.0
  ev3dev_kit_devices_dc_motor_construct@Base 0.3.0
+ ev3dev_kit_devices_dc_motor_get_address@Base 0.3.0
  ev3dev_kit_devices_dc_motor_get_commands@Base 0.3.0
  ev3dev_kit_devices_dc_motor_get_driver_name@Base 0.3.0
  ev3dev_kit_devices_dc_motor_get_duty_cycle@Base 0.3.0
  ev3dev_kit_devices_dc_motor_get_duty_cycle_sp@Base 0.3.0
  ev3dev_kit_devices_dc_motor_get_polarity@Base 0.3.0
- ev3dev_kit_devices_dc_motor_get_port_name@Base 0.3.0
  ev3dev_kit_devices_dc_motor_get_ramp_down_sp@Base 0.3.0
  ev3dev_kit_devices_dc_motor_get_ramp_up_sp@Base 0.3.0
  ev3dev_kit_devices_dc_motor_get_state@Base 0.3.0
@@ -51,6 +63,7 @@ libev3devkit-0.3.so.0 libev3devkit-0.3-0 #MINVER#
  ev3dev_kit_devices_device_manager_get_power_supplies@Base 0.3.0
  ev3dev_kit_devices_device_manager_get_sensors@Base 0.3.0
  ev3dev_kit_devices_device_manager_get_servo_motors@Base 0.3.0
+ ev3dev_kit_devices_device_manager_get_system_power_supply@Base 0.3.0
  ev3dev_kit_devices_device_manager_get_tacho_motors@Base 0.3.0
  ev3dev_kit_devices_device_manager_get_type@Base 0.3.0
  ev3dev_kit_devices_device_manager_new@Base 0.3.0
@@ -81,6 +94,7 @@ libev3devkit-0.3.so.0 libev3devkit-0.3-0 #MINVER#
  ev3dev_kit_devices_input_new@Base 0.3.0
  ev3dev_kit_devices_led_construct@Base 0.3.0
  ev3dev_kit_devices_led_get_brightness@Base 0.3.0
+ ev3dev_kit_devices_led_get_color@Base 0.3.0
  ev3dev_kit_devices_led_get_max_brightness@Base 0.3.0
  ev3dev_kit_devices_led_get_name@Base 0.3.0
  ev3dev_kit_devices_led_get_trigger@Base 0.3.0
@@ -96,28 +110,44 @@ libev3devkit-0.3.so.0 libev3devkit-0.3-0 #MINVER#
  ev3dev_kit_devices_motor_state_flags_from_strv@Base 0.3.0
  ev3dev_kit_devices_motor_state_flags_get_type@Base 0.3.0
  ev3dev_kit_devices_port_construct@Base 0.3.0
+ ev3dev_kit_devices_port_get_address@Base 0.3.0
  ev3dev_kit_devices_port_get_driver_name@Base 0.3.0
  ev3dev_kit_devices_port_get_mode@Base 0.3.0
  ev3dev_kit_devices_port_get_modes@Base 0.3.0
- ev3dev_kit_devices_port_get_port_name@Base 0.3.0
  ev3dev_kit_devices_port_get_status@Base 0.3.0
  ev3dev_kit_devices_port_get_type@Base 0.3.0
  ev3dev_kit_devices_port_new@Base 0.3.0
  ev3dev_kit_devices_port_set_device@Base 0.3.0
  ev3dev_kit_devices_port_set_mode@Base 0.3.0
+ ev3dev_kit_devices_power_supply_capacity_level_from_string@Base 0.3.0
+ ev3dev_kit_devices_power_supply_capacity_level_get_type@Base 0.3.0
+ ev3dev_kit_devices_power_supply_capacity_level_to_string@Base 0.3.0
  ev3dev_kit_devices_power_supply_construct@Base 0.3.0
  ev3dev_kit_devices_power_supply_get_capacity_level@Base 0.3.0
  ev3dev_kit_devices_power_supply_get_current@Base 0.3.0
+ ev3dev_kit_devices_power_supply_get_has_current@Base 0.3.0
+ ev3dev_kit_devices_power_supply_get_has_power@Base 0.3.0
+ ev3dev_kit_devices_power_supply_get_has_voltage@Base 0.3.0
  ev3dev_kit_devices_power_supply_get_power@Base 0.3.0
  ev3dev_kit_devices_power_supply_get_scope@Base 0.3.0
  ev3dev_kit_devices_power_supply_get_supply_type@Base 0.3.0
  ev3dev_kit_devices_power_supply_get_technology@Base 0.3.0
  ev3dev_kit_devices_power_supply_get_type@Base 0.3.0
  ev3dev_kit_devices_power_supply_get_voltage@Base 0.3.0
- ev3dev_kit_devices_power_supply_get_voltage_max_design@Base 0.3.0
- ev3dev_kit_devices_power_supply_get_voltage_min_design@Base 0.3.0
+ ev3dev_kit_devices_power_supply_get_voltage_max@Base 0.3.0
+ ev3dev_kit_devices_power_supply_get_voltage_min@Base 0.3.0
  ev3dev_kit_devices_power_supply_new@Base 0.3.0
+ ev3dev_kit_devices_power_supply_scope_from_string@Base 0.3.0
+ ev3dev_kit_devices_power_supply_scope_get_type@Base 0.3.0
+ ev3dev_kit_devices_power_supply_scope_to_string@Base 0.3.0
+ ev3dev_kit_devices_power_supply_supply_type_from_string@Base 0.3.0
+ ev3dev_kit_devices_power_supply_supply_type_get_type@Base 0.3.0
+ ev3dev_kit_devices_power_supply_supply_type_to_string@Base 0.3.0
+ ev3dev_kit_devices_power_supply_technology_from_string@Base 0.3.0
+ ev3dev_kit_devices_power_supply_technology_get_type@Base 0.3.0
+ ev3dev_kit_devices_power_supply_technology_to_string@Base 0.3.0
  ev3dev_kit_devices_sensor_construct@Base 0.3.0
+ ev3dev_kit_devices_sensor_get_address@Base 0.3.0
  ev3dev_kit_devices_sensor_get_commands@Base 0.3.0
  ev3dev_kit_devices_sensor_get_decimals@Base 0.3.0
  ev3dev_kit_devices_sensor_get_driver_name@Base 0.3.0
@@ -127,7 +157,6 @@ libev3devkit-0.3.so.0 libev3devkit-0.3-0 #MINVER#
  ev3dev_kit_devices_sensor_get_modes@Base 0.3.0
  ev3dev_kit_devices_sensor_get_num_values@Base 0.3.0
  ev3dev_kit_devices_sensor_get_poll_ms@Base 0.3.0
- ev3dev_kit_devices_sensor_get_port_name@Base 0.3.0
  ev3dev_kit_devices_sensor_get_type@Base 0.3.0
  ev3dev_kit_devices_sensor_get_units@Base 0.3.0
  ev3dev_kit_devices_sensor_get_value@Base 0.3.0
@@ -136,13 +165,13 @@ libev3devkit-0.3.so.0 libev3devkit-0.3-0 #MINVER#
  ev3dev_kit_devices_sensor_set_mode@Base 0.3.0
  ev3dev_kit_devices_sensor_set_poll_ms@Base 0.3.0
  ev3dev_kit_devices_servo_motor_construct@Base 0.3.0
+ ev3dev_kit_devices_servo_motor_get_address@Base 0.3.0
  ev3dev_kit_devices_servo_motor_get_commands@Base 0.3.0
  ev3dev_kit_devices_servo_motor_get_driver_name@Base 0.3.0
  ev3dev_kit_devices_servo_motor_get_max_pulse_sp@Base 0.3.0
  ev3dev_kit_devices_servo_motor_get_mid_pulse_sp@Base 0.3.0
  ev3dev_kit_devices_servo_motor_get_min_pulse_sp@Base 0.3.0
  ev3dev_kit_devices_servo_motor_get_polarity@Base 0.3.0
- ev3dev_kit_devices_servo_motor_get_port_name@Base 0.3.0
  ev3dev_kit_devices_servo_motor_get_position_sp@Base 0.3.0
  ev3dev_kit_devices_servo_motor_get_rate_sp@Base 0.3.0
  ev3dev_kit_devices_servo_motor_get_state@Base 0.3.0
@@ -157,6 +186,7 @@ libev3devkit-0.3.so.0 libev3devkit-0.3-0 #MINVER#
  ev3dev_kit_devices_servo_motor_set_rate_sp@Base 0.3.0
  ev3dev_kit_devices_sound_capability_get_type@Base 0.3.0
  ev3dev_kit_devices_tacho_motor_construct@Base 0.3.0
+ ev3dev_kit_devices_tacho_motor_get_address@Base 0.3.0
  ev3dev_kit_devices_tacho_motor_get_commands@Base 0.3.0
  ev3dev_kit_devices_tacho_motor_get_count_per_rot@Base 0.3.0
  ev3dev_kit_devices_tacho_motor_get_driver_name@Base 0.3.0
@@ -167,7 +197,6 @@ libev3devkit-0.3.so.0 libev3devkit-0.3-0 #MINVER#
  ev3dev_kit_devices_tacho_motor_get_hold_position_i@Base 0.3.0
  ev3dev_kit_devices_tacho_motor_get_hold_position_p@Base 0.3.0
  ev3dev_kit_devices_tacho_motor_get_polarity@Base 0.3.0
- ev3dev_kit_devices_tacho_motor_get_port_name@Base 0.3.0
  ev3dev_kit_devices_tacho_motor_get_position@Base 0.3.0
  ev3dev_kit_devices_tacho_motor_get_position_sp@Base 0.3.0
  ev3dev_kit_devices_tacho_motor_get_ramp_down_sp@Base 0.3.0
@@ -257,6 +286,13 @@ libev3devkit-0.3.so.0 libev3devkit-0.3-0 #MINVER#
  ev3dev_kit_ui_dialog_get_type@Base 0.3.0
  ev3dev_kit_ui_dialog_new@Base 0.3.0
  ev3dev_kit_ui_focus_direction_get_type@Base 0.3.0
+ ev3dev_kit_ui_fonts__default_font@Base 0.3.0
+ ev3dev_kit_ui_fonts__small_font@Base 0.3.0
+ ev3dev_kit_ui_fonts_default_font@Base 0.3.0
+ ev3dev_kit_ui_fonts_get_big@Base 0.3.0
+ ev3dev_kit_ui_fonts_get_default@Base 0.3.0
+ ev3dev_kit_ui_fonts_get_small@Base 0.3.0
+ ev3dev_kit_ui_fonts_small_font@Base 0.3.0
  ev3dev_kit_ui_grid_add_at@Base 0.3.0
  ev3dev_kit_ui_grid_construct@Base 0.3.0
  ev3dev_kit_ui_grid_get_border_column@Base 0.3.0
@@ -280,10 +316,12 @@ libev3devkit-0.3.so.0 libev3devkit-0.3-0 #MINVER#
  ev3dev_kit_ui_icon_new_from_context@Base 0.3.0
  ev3dev_kit_ui_icon_new_from_png@Base 0.3.0
  ev3dev_kit_ui_icon_new_from_stock@Base 0.3.0
+ ev3dev_kit_ui_input_dialog_construct@Base 0.3.0
+ ev3dev_kit_ui_input_dialog_get_text_value@Base 0.3.0
+ ev3dev_kit_ui_input_dialog_get_type@Base 0.3.0
+ ev3dev_kit_ui_input_dialog_new@Base 0.3.0
  ev3dev_kit_ui_keyboard_get_type@Base 0.3.0
- ev3dev_kit_ui_label__default_font@Base 0.3.0
  ev3dev_kit_ui_label_construct@Base 0.3.0
- ev3dev_kit_ui_label_default_font@Base 0.3.0
  ev3dev_kit_ui_label_get_font@Base 0.3.0
  ev3dev_kit_ui_label_get_text@Base 0.3.0
  ev3dev_kit_ui_label_get_text_horizontal_align@Base 0.3.0
@@ -332,8 +370,10 @@ libev3devkit-0.3.so.0 libev3devkit-0.3-0 #MINVER#
  ev3dev_kit_ui_menu_value_set_menu_item_iterator@Base 0.3.0
  ev3dev_kit_ui_menu_value_take_menu_item_iterator@Base 0.3.0
  ev3dev_kit_ui_message_dialog_construct@Base 0.3.0
+ ev3dev_kit_ui_message_dialog_construct_with_content@Base 0.3.0
  ev3dev_kit_ui_message_dialog_get_type@Base 0.3.0
  ev3dev_kit_ui_message_dialog_new@Base 0.3.0
+ ev3dev_kit_ui_message_dialog_new_with_content@Base 0.3.0
  ev3dev_kit_ui_on_screen_keyboard_construct@Base 0.3.0
  ev3dev_kit_ui_on_screen_keyboard_get_text@Base 0.3.0
  ev3dev_kit_ui_on_screen_keyboard_get_type@Base 0.3.0
@@ -398,6 +438,11 @@ libev3devkit-0.3.so.0 libev3devkit-0.3-0 #MINVER#
  ev3dev_kit_ui_spacer_construct@Base 0.3.0
  ev3dev_kit_ui_spacer_get_type@Base 0.3.0
  ev3dev_kit_ui_spacer_new@Base 0.3.0
+ ev3dev_kit_ui_stack_construct@Base 0.3.0
+ ev3dev_kit_ui_stack_get_active_child@Base 0.3.0
+ ev3dev_kit_ui_stack_get_type@Base 0.3.0
+ ev3dev_kit_ui_stack_new@Base 0.3.0
+ ev3dev_kit_ui_stack_set_active_child@Base 0.3.0
  ev3dev_kit_ui_status_bar_add_left@Base 0.3.0
  ev3dev_kit_ui_status_bar_add_right@Base 0.3.0
  ev3dev_kit_ui_status_bar_align_get_type@Base 0.3.0
