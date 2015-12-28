@@ -165,10 +165,11 @@ namespace Ev3devKit.Ui {
                 throw new IOError.FAILED ("Error querying '%s'", full_path);
             Context new_context;
             // in desktop app, core fame mode is undefined so we have to specify a frame mode.
-            if (core_frame_mode () == FrameMode.UNDEFINED)
-                new_context = Context.create_with_mode (FrameMode.RAM24, width, height);
-            else
+            if (core_frame_mode () == FrameMode.UNDEFINED) {
+                new_context = Context.create_with_mode (screen_frame_mode (), width, height);
+            } else {
                 new_context = Context.create (width, height);
+            }
             if (new_context == null)
                 throw new IOError.FAILED ("Error allocating context.");
             if (new_context.load_from_png (full_path) == Result.ERROR)
