@@ -1,3 +1,10 @@
+ev3devkit (0.3.1) stable; urgency=medium
+
+  * Fix icons not working on desktop.
+  * Hack to make buttons look better with default font.
+
+ -- David Lechner <david@lechnology.com>  Tue, 29 Dec 2015 21:35:47 -0600
+
 ev3devkit (0.3.0) stable; urgency=medium
 
   * Use XDG_DATA_DIRS to find data files.
