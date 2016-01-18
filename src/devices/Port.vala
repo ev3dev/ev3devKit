@@ -80,7 +80,7 @@ namespace Ev3devKit.Devices {
          */
         public string address {
             owned get {
-                return udev_device.get_property ("LEGO_address");
+                return udev_device.get_property ("LEGO_ADDRESS");
             }
         }
 
