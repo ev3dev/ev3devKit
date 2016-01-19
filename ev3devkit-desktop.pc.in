@@ -1,5 +1,13 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+datarootdir=${prefix}/share
+datadir=${datarootdir}/@CMAKE_PROJECT_NAME@
+
 Name: ev3devKit Desktop
 Description: Programming toolkit for ev3dev
 Version: @VERSION@
 Requires: @DESKTOP_PKGCONFIG_DEPS@
-Libs: -l@DESKTOP_LIBRARY_NAME@
+Cflags: -I${includedir}
+Libs: -L${libdir} -l@DESKTOP_LIBRARY_NAME@
