@@ -32,6 +32,12 @@ if (PARENT_DIR)
     set (${PROJECT_NAME}_DESKTOP_VAPI ${EV3DEVKIT_DESKTOP_PACKAGE}.vapi PARENT_SCOPE)
 endif (PARENT_DIR)
 
+if (CMAKE_CROSSCOMPILING)
+    # In CMake 3.x you can use CMAKE_SYSROOT in CMAKE_TOOLCHAIN_FILE instead of
+    # this line
+    set(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} --sysroot=${SYSROOT_PATH}")
+endif(CMAKE_CROSSCOMPILING)
+
 add_subdirectory (data)
 set (XDG_DATA_DIR data)
 
@@ -144,17 +150,11 @@ find_package (PkgConfig REQUIRED)
 
 pkg_check_modules (DEPS REQUIRED ${COMMON_MODULES})
 add_definitions (${DEPS_CFLAGS})
-link_libraries (${DEPS_LIBRARIES})
-link_directories (${DEPS_LIBRARY_DIRS})
 
 if (EV3DEVKIT_DESKTOP)
     pkg_check_modules (DESKTOP_DEPS REQUIRED ${DESKTOP_MODULES})
     add_definitions (${DESKTOP_DEPS_CFLAGS})
-    link_libraries (${DESKTOP_DEPS_LIBRARIES})
-    link_directories (${DESKTOP_DEPS_LIBRARY_DIRS})
 endif (EV3DEVKIT_DESKTOP)
-
-link_libraries (m)
 
 find_package (Vala REQUIRED)
 include (ValaVersion)
@@ -191,7 +191,7 @@ add_custom_command (
     COMMAND
         "${CMAKE_CURRENT_SOURCE_DIR}/fix-gir.sh"
     ARGS
-        "$<TARGET_SONAME_FILE_NAME:${LIBRARY_NAME}>"
+        "$<TARGET_SONAME_FILE_NAME:${LIBRARY_NAME}-shared>"
         "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}-buggy-${GIR_VERSION}.gir"
         "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}-${GIR_VERSION}.gir"
     DEPENDS
@@ -208,11 +208,11 @@ add_custom_command (
         ${G_IR_COMPILER_EXECUTABLE}
     ARGS
         "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}-${GIR_VERSION}.gir"
-        "--shared-library=$<TARGET_SONAME_FILE_NAME:${LIBRARY_NAME}>"
+        "--shared-library=$<TARGET_SONAME_FILE_NAME:${LIBRARY_NAME}-shared>"
         "--output=${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}-${GIR_VERSION}.typelib"
         "--includedir=${CMAKE_CURRENT_BINARY_DIR}"
     DEPENDS
-        "${LIBRARY_NAME}"
+        "${LIBRARY_NAME}-shared"
         "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}-${GIR_VERSION}.gir"
     COMMENT
         "Genterating typelib."
@@ -226,15 +226,20 @@ add_custom_target ("${LIBRARY_NAME}-typelib"
 
 # end of workaround
 
-add_library(${LIBRARY_NAME} SHARED ${LIBRARY_VALA_C})
-set_target_properties(${LIBRARY_NAME} PROPERTIES
+add_library(${LIBRARY_NAME} OBJECT ${LIBRARY_VALA_C})
+set_target_properties(${LIBRARY_NAME} PROPERTIES POSITION_INDEPENDENT_CODE 1)
+add_library(${LIBRARY_NAME}-shared SHARED $<TARGET_OBJECTS:${LIBRARY_NAME}>)
+target_link_libraries(${LIBRARY_NAME}-shared ${DEPS_LIBRARIES})
+set_target_properties(${LIBRARY_NAME}-shared PROPERTIES
     VERSION "${VERSION}"
-    SOVERSION "${SOVERSION}")
-add_library(${LIBRARY_NAME}-static STATIC ${LIBRARY_VALA_C})
+    SOVERSION "${SOVERSION}"
+    OUTPUT_NAME ${LIBRARY_NAME})
+add_library(${LIBRARY_NAME}-static STATIC $<TARGET_OBJECTS:${LIBRARY_NAME}>)
+target_link_libraries(${LIBRARY_NAME}-static ${DEPS_LIBRARIES})
 set_target_properties(${LIBRARY_NAME}-static PROPERTIES
     OUTPUT_NAME ${LIBRARY_NAME})
 add_dependencies(${LIBRARY_NAME} ev3devkit_data)
-install (TARGETS ${LIBRARY_NAME} LIBRARY DESTINATION lib)
+install (TARGETS ${LIBRARY_NAME}-shared LIBRARY DESTINATION lib)
 install (TARGETS ${LIBRARY_NAME}-static ARCHIVE DESTINATION lib)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${EV3DEVKIT_PACKAGE}.h DESTINATION include/)
@@ -263,7 +268,7 @@ COMMENT
 # apparently add_custom_command is ignored if nothing depends on its output.
 set (FIX_VAPI_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${EV3DEVKIT_PACKAGE}.vapi)
 add_custom_target (fix-vapi DEPENDS ${FIX_VAPI_DEPENDS})
-add_dependencies (${LIBRARY_NAME} fix-vapi)
+add_dependencies (${LIBRARY_NAME}-shared fix-vapi)
 
 if (EV3DEVKIT_DESKTOP)
     vala_precompile (DESKTOP_LIBRARY_VALA_C ${DESKTOP_LIBRARY_NAME}
@@ -317,11 +322,11 @@ if (EV3DEVKIT_DESKTOP)
             ${G_IR_COMPILER_EXECUTABLE}
         ARGS
             "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${GIR_VERSION}.gir"
-            "--shared-library=$<TARGET_SONAME_FILE_NAME:${DESKTOP_LIBRARY_NAME}>"
+            "--shared-library=$<TARGET_SONAME_FILE_NAME:${DESKTOP_LIBRARY_NAME}-shared>"
             "--output=${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${GIR_VERSION}.typelib"
             "--includedir=${CMAKE_CURRENT_BINARY_DIR}"
         DEPENDS
-            "${DESKTOP_LIBRARY_NAME}"
+            "${DESKTOP_LIBRARY_NAME}-shared"
             "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${GIR_VERSION}.gir"
         COMMENT
             "Genterating typelib."
@@ -335,16 +340,21 @@ if (EV3DEVKIT_DESKTOP)
 
     # end of workaround
 
-    add_library (${DESKTOP_LIBRARY_NAME} SHARED ${DESKTOP_LIBRARY_VALA_C})
+    add_library (${DESKTOP_LIBRARY_NAME} OBJECT ${DESKTOP_LIBRARY_VALA_C})
     set_target_properties(${DESKTOP_LIBRARY_NAME} PROPERTIES
+        POSITION_INDEPENDENT_CODE 1)
+    add_dependencies (${DESKTOP_LIBRARY_NAME} ${LIBRARY_NAME})
+    add_library (${DESKTOP_LIBRARY_NAME}-shared SHARED $<TARGET_OBJECTS:${DESKTOP_LIBRARY_NAME}>)
+    set_target_properties(${DESKTOP_LIBRARY_NAME}-shared PROPERTIES
+        OUTPUT_NAME ${DESKTOP_LIBRARY_NAME}
         VERSION "${VERSION}"
         SOVERSION "${SOVERSION}")
-    target_link_libraries (${DESKTOP_LIBRARY_NAME} ${LIBRARY_NAME})
-    add_dependencies (${DESKTOP_LIBRARY_NAME} ${LIBRARY_NAME})
-    install (TARGETS ${DESKTOP_LIBRARY_NAME} LIBRARY DESTINATION lib)
-    add_library (${DESKTOP_LIBRARY_NAME}-static STATIC ${DESKTOP_LIBRARY_VALA_C})
+    target_link_libraries (${DESKTOP_LIBRARY_NAME}-shared ${DESKTOP_DEPS_LIBRARIES} ${LIBRARY_NAME}-shared)
+    install (TARGETS ${DESKTOP_LIBRARY_NAME}-shared LIBRARY DESTINATION lib)
+    add_library (${DESKTOP_LIBRARY_NAME}-static STATIC $<TARGET_OBJECTS:${DESKTOP_LIBRARY_NAME}>)
     set_target_properties(${DESKTOP_LIBRARY_NAME}-static PROPERTIES
         OUTPUT_NAME ${DESKTOP_LIBRARY_NAME})
+    target_link_libraries (${DESKTOP_LIBRARY_NAME}-static ${DESKTOP_DEPS_LIBRARIES} ${LIBRARY_NAME}-static)
     install (TARGETS ${DESKTOP_LIBRARY_NAME}-static ARCHIVE DESTINATION lib)
     add_custom_command (
         OUTPUT
@@ -369,7 +379,7 @@ endif (EV3DEVKIT_DESKTOP)
 
 if (EV3DEVKIT_BUILD_DEMO)
     set (EXEC_PACKAGES ${COMMON_PACKAGES} ${EV3DEVKIT_PACKAGE})
-    set (EXEC_LIBRARY_DEPENDS ${LIBRARY_NAME})
+    set (EXEC_LIBRARY_DEPENDS ${LIBRARY_NAME}-shared)
 
     # Device driver demo program
 
@@ -429,7 +439,7 @@ if (EV3DEVKIT_BUILD_DEMO)
         set (DESKTOP_EXEC_PACKAGES ${EXEC_PACKAGES})
         list (APPEND DESKTOP_EXEC_PACKAGES ${DESKTOP_PACKAGES} ${EV3DEVKIT_DESKTOP_PACKAGE})
         set (DESKTOP_EXEC_LIBRARY_DEPENDS ${EXEC_LIBRARY_DEPENDS})
-        list (APPEND DESKTOP_EXEC_LIBRARY_DEPENDS ${DESKTOP_LIBRARY_NAME})
+        list (APPEND DESKTOP_EXEC_LIBRARY_DEPENDS ${DESKTOP_LIBRARY_NAME}-shared)
 
         # User interface demo program
 
