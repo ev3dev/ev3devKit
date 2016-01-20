@@ -1,3 +1,11 @@
+ev3devkit (0.3.2) stable; urgency=medium
+
+  * Fix Devices.Port address property
+  * Add variables to package config files.
+  * Fix object files being compiled twice.
+
+ -- David Lechner <david@lechnology.com>  Tue, 19 Jan 2016 21:10:23 -0600
+
 ev3devkit (0.3.1) stable; urgency=medium
 
   * Fix icons not working on desktop.
