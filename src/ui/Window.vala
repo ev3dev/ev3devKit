@@ -35,6 +35,13 @@ namespace Ev3devKit.Ui {
      * and only that Window receives user input.
      */
     public class Window : Ev3devKit.Ui.Container {
+        /*
+         * A flag to defer emitting shown() after the window has been
+         * layouted and drawn. This ensure that one can e.g. setup focused
+         * widgets from a signal handler.
+         */
+        internal bool never_shown = true;
+
         /**
          * Gets the Screen that this Window is attached to.
          *
@@ -65,8 +72,18 @@ namespace Ev3devKit.Ui {
         }
 
         construct {
-            if (container_type != ContainerType.SINGLE)
+            if (container_type != ContainerType.SINGLE) {
                 critical ("Requires container_type == ContainerType.SINGLE.");
+            }
+            notify["on-screen"].connect (() => {
+                if (never_shown) {
+                    never_shown = false;
+                    Idle.add (() => {
+                        shown ();
+                        return Source.REMOVE;
+                    });
+                }
+            });
         }
 
         /**
