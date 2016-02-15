@@ -223,7 +223,6 @@ namespace Ev3devKit.Ui {
             window.screen = this;
             window_stack.push_head (window);
             dirty = true;
-            window.shown ();
         }
 
         /**
