@@ -1,4 +1,4 @@
-project ("ev3devkit")
+project ("ev3devkit" C)
 
 cmake_minimum_required (VERSION 2.6)
 
