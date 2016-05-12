@@ -1,3 +1,9 @@
+ev3devkit (0.4.0~1) stable; urgency=medium
+
+  * 
+
+ -- David Lechner <david@lechnology.com>  Thu, 12 May 2016 15:47:13 -0500
+
 ev3devkit (0.3.2) stable; urgency=medium
 
   * Fix Devices.Port address property

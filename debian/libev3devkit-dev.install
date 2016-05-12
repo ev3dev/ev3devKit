@@ -1,6 +1,6 @@
-usr/include/ev3devkit-0.3.h
-usr/lib/libev3devkit-0.3.so
-usr/lib/libev3devkit-0.3.a
-usr/lib/pkgconfig/ev3devkit-0.3.pc
-usr/share/gir-1.0/Ev3devKit-0.3.gir
-usr/share/vala/vapi/ev3devkit-0.3.vapi
+usr/include/ev3devkit-0.4.h
+usr/lib/libev3devkit-0.4.so
+usr/lib/libev3devkit-0.4.a
+usr/lib/pkgconfig/ev3devkit-0.4.pc
+usr/share/gir-1.0/Ev3devKit-0.4.gir
+usr/share/vala/vapi/ev3devkit-0.4.vapi
