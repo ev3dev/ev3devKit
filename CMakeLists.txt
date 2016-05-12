@@ -1,6 +1,12 @@
 project ("ev3devkit" C)
 
-cmake_minimum_required (VERSION 2.6)
+if (CMAKE_CROSSCOMPILING)
+    # we are depending on CMAKE_SYSROOT feature introduce in CMake 3.x
+    # and we only support cross compiling using Ubuntu 16.04
+    cmake_minimum_required (VERSION 3.5)
+else (CMAKE_CROSSCOMPILING)
+    cmake_minimum_required (VERSION 2.6)
+endif (CMAKE_CROSSCOMPILING)
 
 get_directory_property(PARENT_DIR PARENT_DIRECTORY)
 
@@ -31,12 +37,6 @@ if (PARENT_DIR)
     set (${PROJECT_NAME}_DESKTOP_PACKAGE ${EV3DEVKIT_DESKTOP_PACKAGE} PARENT_SCOPE)
     set (${PROJECT_NAME}_DESKTOP_VAPI ${EV3DEVKIT_DESKTOP_PACKAGE}.vapi PARENT_SCOPE)
 endif (PARENT_DIR)
-
-if (CMAKE_CROSSCOMPILING)
-    # In CMake 3.x you can use CMAKE_SYSROOT in CMAKE_TOOLCHAIN_FILE instead of
-    # this line
-    set(CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} --sysroot=${SYSROOT_PATH}")
-endif(CMAKE_CROSSCOMPILING)
 
 add_subdirectory (data)
 set (XDG_DATA_DIR data)
@@ -397,6 +397,10 @@ if (EV3DEVKIT_BUILD_DEMO)
 
     add_executable (${DEVICES_DEMO_EXEC_NAME} ${DEVICES_DEMO_EXEC_VALA_C})
     target_link_libraries (${DEVICES_DEMO_EXEC_NAME} ${EXEC_LIBRARY_DEPENDS})
+    if (CMAKE_CROSSCOMPILING)
+        # These are not picked up automatically when cross compiling for some reason
+        target_link_libraries (${DEVICES_DEMO_EXEC_NAME} "-pthread" "-lresolv")
+    endif (CMAKE_CROSSCOMPILING)
 
     add_custom_target (run-${DEVICES_DEMO_EXEC_NAME}
         COMMAND
@@ -424,6 +428,10 @@ if (EV3DEVKIT_BUILD_DEMO)
 
     add_executable (${UI_DEMO_EXEC_NAME} ${UI_DEMO_EXEC_VALA_C})
     target_link_libraries (${UI_DEMO_EXEC_NAME} ${EXEC_LIBRARY_DEPENDS})
+    if (CMAKE_CROSSCOMPILING)
+        # These are not picked up automatically when cross compiling for some reason
+        target_link_libraries (${UI_DEMO_EXEC_NAME} "-pthread" "-lresolv")
+    endif (CMAKE_CROSSCOMPILING)
 
     add_custom_target (run-${UI_DEMO_EXEC_NAME}
         COMMAND
