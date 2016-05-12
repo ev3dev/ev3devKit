@@ -857,8 +857,6 @@ namespace Ev3devKit.Demo {
             command_line.print ("count_per_rot: %d\n", selected_tacho_motor.count_per_rot);
             command_line.print ("duty_cycle: %d\n", selected_tacho_motor.duty_cycle);
             command_line.print ("duty_cycle_sp: %d\n", selected_tacho_motor.duty_cycle_sp);
-            command_line.print ("encoder_polarity: %s\n", selected_tacho_motor.encoder_polarity == MotorPolarity.NORMAL
-                ? "normal" : "inverted");
             command_line.print ("hold_position_p: %d\n", selected_tacho_motor.hold_position_p);
             command_line.print ("hold_position_i: %d\n", selected_tacho_motor.hold_position_i);
             command_line.print ("hold_position_d: %d\n", selected_tacho_motor.hold_position_d);
@@ -870,8 +868,6 @@ namespace Ev3devKit.Demo {
             command_line.print ("speed_sp: %d\n", selected_tacho_motor.speed_sp);
             command_line.print ("ramp_down_sp: %d\n", selected_tacho_motor.ramp_down_sp);
             command_line.print ("ramp_up_sp: %d\n", selected_tacho_motor.ramp_up_sp);
-            command_line.print ("speed_regulation: %s\n", selected_tacho_motor.speed_regulation
-                ? "on" : "off");
             command_line.print ("speed_regulation_p: %d\n", selected_tacho_motor.speed_regulation_p);
             command_line.print ("speed_regulation_i: %d\n", selected_tacho_motor.speed_regulation_i);
             command_line.print ("speed_regulation_d: %d\n", selected_tacho_motor.speed_regulation_d);
@@ -883,8 +879,8 @@ namespace Ev3devKit.Demo {
                     ? "yes" : "no";
                 command_line.print ("\t%s:\t%s\n", flags_value.value_nick, yn);
             }
-            command_line.print ("stop_command: %s\n", selected_tacho_motor.stop_command);
-            command_line.print ("stop_commands: %s\n", string.joinv (", ", selected_tacho_motor.stop_commands));
+            command_line.print ("stop_action: %s\n", selected_tacho_motor.stop_action);
+            command_line.print ("stop_actions: %s\n", string.joinv (", ", selected_tacho_motor.stop_actions));
             command_line.print ("time_sp: %d\n", selected_tacho_motor.time_sp);
         }
 
@@ -978,7 +974,7 @@ namespace Ev3devKit.Demo {
                     ? "yes" : "no";
                 command_line.print ("\t%s:\t%s\n", flags_value.value_nick, yn);
             }
-            command_line.print ("stop_commands: %s\n", string.joinv (", ", selected_dc_motor.stop_commands));
+            command_line.print ("stop_actions: %s\n", string.joinv (", ", selected_dc_motor.stop_actions));
         }
 
         /**

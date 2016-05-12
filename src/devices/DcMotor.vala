@@ -117,9 +117,9 @@ namespace Ev3devKit.Devices {
             }
         }
 
-        public string[]? stop_commands {
+        public string[]? stop_actions {
             owned get {
-                return udev_device.get_sysfs_attr_as_strv ("stop_commands");
+                return udev_device.get_sysfs_attr_as_strv ("stop_actions");
             }
         }
 
@@ -165,18 +165,18 @@ namespace Ev3devKit.Devices {
         }
 
         /**
-         * Set the stop command for the motor.
+         * Set the stop action for the motor.
          *
-         * This command will be used when the motor is stopped. Check
-         * {@link stop_commands} to get a list of valid values. Changes to stop
-         * command will not take effect until a new command has been sent using
+         * This action will be used when the motor is stopped. Check
+         * {@link stop_actions} to get a list of valid values. Changes to stop
+         * action will not take effect until a new command has been sent using
          * {@link send_command}.
          *
-         * @param command The new stop command.
-         * @throws Error is command is not a valid command.
+         * @param action The new stop action.
+         * @throws Error is action is not a valid action.
          */
-        public void set_stop_command (string command) throws Error {
-            write_string ("stop_command", command);
+        public void set_stop_action (string action) throws Error {
+            write_string ("stop_action", action);
         }
     }
 }

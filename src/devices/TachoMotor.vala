@@ -2,7 +2,7 @@
  * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
  * Copyright 2014 WasabiFan
- * Copyright 2015 David Lechner <david@lechnology.com>
+ * Copyright 2015-2016 David Lechner <david@lechnology.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,27 +38,26 @@ namespace Ev3devKit.Devices {
          *
          * ``run-to-abs-pos`` -
          * Runs to an absolute position specified by {@link position_sp} and
-         * then stop using the command specified by {@link stop_command}.
+         * then stop using the command specified by {@link stop_action}.
          *
          * ``run-to-rel-pos`` -
          * Runs to a position relative to the current {@link position} value.
          * The new position will be the current {@link position} + {@link position_sp}.
          * When the new position is reached, the motor will stop using the command
-         * specified by {@link stop_command}.
+         * specified by {@link stop_action}.
          *
          * ``run-timed`` -
          * Runs the motor for the amount of time specified by {@link time_sp}
-         * and then stop the motor using the command specified by {@link stop_command}.
+         * and then stop the motor using the command specified by {@link stop_action}.
          *
          * ``run-direct`` -
          * Runs the motor at the duty cycle specified by {@link duty_cycle_sp}.
          * Unlike other run commands, changing {@link duty_cycle_sp} while
-         * running will take effect immediately. {@link speed_regulation} is
-         * ignored.
+         * running will take effect immediately.
          *
          * ``stop`` -
          * Stops any of the ``run-*`` commands before they are completed using
-         * the command specified by {@link stop_command}.
+         * the command specified by {@link stop_action}.
          *
          * ``reset`` -
          * Resets all of the motor parameter attributes to their default values.
@@ -109,9 +108,7 @@ namespace Ev3devKit.Devices {
         /**
          * Gets and sets the duty cycle setpoint.
          *
-         * The duty cycle setpoint is only used when {@link speed_regulation}
-         * is off (``false``). Changes do not take effect until a ``run-*``
-         * command is sent (except when using ``run-direct``).
+         * The duty cycle setpoint is only used with the ``run-direct`` command.
          */
         public int duty_cycle_sp {
             get {
@@ -119,22 +116,6 @@ namespace Ev3devKit.Devices {
             }
             set {
                 try_write_int ("duty_cycle_sp", value);
-            }
-        }
-
-        /**
-         * Gets and sets the shaft encoder polarity of the motor.
-         *
-         * This is used as a workaround for motors whose shaft encoder has
-         * inverted signals. Most likely you don't need this unless you are
-         * using an unsupported motor.
-         */
-        public MotorPolarity encoder_polarity {
-            get {
-                return MotorPolarity.from_string (try_read_string ("encoder_polarity"));
-            }
-            set {
-                try_write_string ("encoder_polarity", value.to_string ());
             }
         }
 
@@ -213,6 +194,17 @@ namespace Ev3devKit.Devices {
         }
 
         /**
+         * Gets the maximum speed of the motor in tachometer counts per second.
+         *
+         * Use {@link count_per_rot} to convert to other units.
+         */
+        public int max_speed {
+            get {
+                return (int)(try_read_int ("max_speed") ?? 0);
+            }
+        }
+
+        /**
          * Gets and sets the position of the motor.
          *
          * Units are in tachometer counts. Use {@link count_per_rot} to convert
@@ -259,8 +251,8 @@ namespace Ev3devKit.Devices {
         /**
          * Gets and sets the speed setpoint.
          *
-         * The speed setpoint is only used when {@link speed_regulation} is on
-         * (``true``). Units are in tachometer counts. Use {@link count_per_rot}
+         * The speed setpoint is used by all of the ``run-*`` commands except for
+         * ``run-direct``. Units are in tachometer counts. Use {@link count_per_rot}
          * to convert to/from other units.
          */
         public int speed_sp {
@@ -299,28 +291,6 @@ namespace Ev3devKit.Devices {
             }
             set {
                 try_write_int ("ramp_up_sp", value);
-            }
-        }
-
-        /**
-         * Gets and sets the speed regulation control state.
-         *
-         * Speed regulation uses a PID to ensure that the motor turns at a
-         * constant speed regardless of the load on the motor and the state
-         * of the batteries.
-         *
-         * Setting to ``true`` will turn speed regulation on. Setting to ``false``
-         * will turn speed regulation off.
-         *
-         * Changing this value will not have an effect until a new ``run-*``
-         * command is sent.
-         */
-        public bool speed_regulation {
-            get {
-                return (try_read_string ("speed_regulation") ?? "") == "on";
-            }
-            set {
-                try_write_string ("speed_regulation", value ? "on" : "off");
             }
         }
 
@@ -383,20 +353,20 @@ namespace Ev3devKit.Devices {
         }
 
         /**
-         * Gets the current stop command.
+         * Gets the current stop action.
          *
-         * The stop command tells the motor how it should stop when the ``stop``
+         * The stop action tells the motor how it should stop when the ``stop``
          * command is sent or a ``run-*`` command ends on its own. See
-         * {@link stop_commands} for a description of possible values.
+         * {@link stop_actions} for a description of possible values.
          */
-        public string stop_command {
+        public string stop_action {
             owned get {
-                return try_read_string ("stop_command") ?? "";
+                return try_read_string ("stop_action") ?? "";
             }
         }
 
         /**
-         * Gets a list of supported stop commands.
+         * Gets a list of supported stop actions.
          *
          * Possible values are:
          *
@@ -414,9 +384,9 @@ namespace Ev3devKit.Devices {
          * hold the motor at it's last position. The motor will not be able to
          * be turned manually.
          */
-        public string[]? stop_commands {
+        public string[]? stop_actions {
             owned get {
-                return udev_device.get_sysfs_attr_as_strv ("stop_commands");
+                return udev_device.get_sysfs_attr_as_strv ("stop_actions");
             }
         }
 
@@ -451,18 +421,18 @@ namespace Ev3devKit.Devices {
         }
 
         /**
-         * Set the stop command for the motor.
+         * Set the stop action for the motor.
          *
-         * This command will be used when the motor is stopped. Check
-         * {@link stop_commands} to get a list of valid values. Changes to stop
-         * command will not take effect until a new ``run-*`` command has been
+         * This action will be used when the motor is stopped. Check
+         * {@link stop_actions} to get a list of valid values. Changes to stop
+         * action will not take effect until a new ``run-*`` command has been
          * sent using {@link send_command}.
          *
-         * @param command The new stop command.
-         * @throws Error is command is not a valid command.
+         * @param command The new stop action.
+         * @throws Error is action is not a valid action.
          */
-        public void set_stop_command (string command) throws Error {
-            write_string ("stop_command", command);
+        public void set_stop_action (string action) throws Error {
+            write_string ("stop_action", action);
         }
     }
 }
