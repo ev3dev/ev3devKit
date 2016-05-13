@@ -60,13 +60,13 @@ namespace Ev3devKit.Devices {
 
         public string? driver_name {
             owned get {
-                return udev_device.get_sysfs_attr ("driver_name");
+                return udev_device.get_property ("LEGO_DRIVER_NAME");
             }
         }
 
         public string? address {
             owned get {
-                return udev_device.get_sysfs_attr ("address");
+                return udev_device.get_property ("LEGO_ADDRESS");
             }
         }
 
