@@ -1,7 +1,7 @@
 /*
  * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
- * Copyright (C) 2014 David Lechner <david@lechnology.com>
+ * Copyright (C) 2014,2016 David Lechner <david@lechnology.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ namespace Ev3devKit.Ui {
             value_entry.next_focus_widget_down = accept_button;
             // next_focus_widget_down holds a weak ref, so we need to unset it
             // before value_entry is finalized or we get a critical assertation
-            value_entry.weak_ref (() => value_entry.next_focus_widget_down = null);
+            value_entry.weak_ref (release_next_focus_widget_down);
 
             cancel_button = new Button.with_label ("Cancel");
             cancel_button.pressed.connect (on_cancel_button_pressed);
@@ -66,9 +66,17 @@ namespace Ev3devKit.Ui {
             add (content_vbox);
         }
 
+        ~InputDialog () {
+            value_entry.weak_unref (release_next_focus_widget_down);
+        }
+
         public InputDialog (string message, string inital_value = "") {
             message_label.text = message;
             value_entry.text = inital_value;
+        }
+
+        void release_next_focus_widget_down () {
+            value_entry.next_focus_widget_down = null;
         }
 
         void on_accept_button_pressed () {
