@@ -412,44 +412,14 @@ if (EV3DEVKIT_BUILD_DEMO)
 
     install (TARGETS ${DEVICES_DEMO_EXEC_NAME} RUNTIME DESTINATION bin)
 
+
     # User interface demo program
-
-    vala_precompile(UI_DEMO_EXEC_VALA_C ${UI_DEMO_EXEC_NAME}
-        ${UI_DEMO_SOURCE_FILES}
-    PACKAGES
-        ${EXEC_PACKAGES}
-    CUSTOM_VAPIS
-        bindings/*.vapi
-    OPTIONS
-        --target-glib=${TARGET_GLIB}
-        --thread
-        --vapidir=${CMAKE_CURRENT_BINARY_DIR}
-    )
-
-    add_executable (${UI_DEMO_EXEC_NAME} ${UI_DEMO_EXEC_VALA_C})
-    target_link_libraries (${UI_DEMO_EXEC_NAME} ${EXEC_LIBRARY_DEPENDS})
-    if (CMAKE_CROSSCOMPILING)
-        # These are not picked up automatically when cross compiling for some reason
-        target_link_libraries (${UI_DEMO_EXEC_NAME} "-pthread" "-lresolv")
-    endif (CMAKE_CROSSCOMPILING)
-
-    add_custom_target (run-${UI_DEMO_EXEC_NAME}
-        COMMAND
-            XDG_DATA_DIRS=${XDG_DATA_DIR}:/usr/local/share:/usr/share
-            ${UI_DEMO_EXEC_NAME}
-        DEPENDS ${UI_DEMO_EXEC_NAME}
-        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-    )
-
-    install (TARGETS ${UI_DEMO_EXEC_NAME} RUNTIME DESTINATION bin)
 
     if (EV3DEVKIT_DESKTOP)
         set (DESKTOP_EXEC_PACKAGES ${EXEC_PACKAGES})
         list (APPEND DESKTOP_EXEC_PACKAGES ${DESKTOP_PACKAGES} ${EV3DEVKIT_DESKTOP_PACKAGE})
         set (DESKTOP_EXEC_LIBRARY_DEPENDS ${EXEC_LIBRARY_DEPENDS})
         list (APPEND DESKTOP_EXEC_LIBRARY_DEPENDS ${DESKTOP_LIBRARY_NAME}-shared)
-
-        # User interface demo program
 
         vala_precompile(UI_DESKTOP_DEMO_EXEC_VALA_C ${UI_DESKTOP_DEMO_EXEC_NAME}
             ${UI_DESKTOP_DEMO_SOURCE_FILES}
@@ -468,6 +438,7 @@ if (EV3DEVKIT_BUILD_DEMO)
 
         add_custom_target (run-${UI_DESKTOP_DEMO_EXEC_NAME}
             COMMAND
+                LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}
                 XDG_DATA_DIRS=${XDG_DATA_DIR}:/usr/local/share:/usr/share
                 ${UI_DESKTOP_DEMO_EXEC_NAME}
             DEPENDS ${UI_DESKTOP_DEMO_EXEC_NAME}
@@ -490,6 +461,38 @@ if (EV3DEVKIT_BUILD_DEMO)
             WORKING_DIRECTORY
                 ${CMAKE_BINARY_DIR}
         )
+
+    else (EV3DEVKIT_DESKTOP)
+
+        vala_precompile(UI_DEMO_EXEC_VALA_C ${UI_DEMO_EXEC_NAME}
+            ${UI_DEMO_SOURCE_FILES}
+        PACKAGES
+            ${EXEC_PACKAGES}
+        CUSTOM_VAPIS
+            bindings/*.vapi
+        OPTIONS
+            --target-glib=${TARGET_GLIB}
+            --thread
+            --vapidir=${CMAKE_CURRENT_BINARY_DIR}
+        )
+
+        add_executable (${UI_DEMO_EXEC_NAME} ${UI_DEMO_EXEC_VALA_C})
+        target_link_libraries (${UI_DEMO_EXEC_NAME} ${EXEC_LIBRARY_DEPENDS})
+        if (CMAKE_CROSSCOMPILING)
+            # These are not picked up automatically when cross compiling for some reason
+            target_link_libraries (${UI_DEMO_EXEC_NAME} "-pthread" "-lresolv")
+        endif (CMAKE_CROSSCOMPILING)
+
+        add_custom_target (run-${UI_DEMO_EXEC_NAME}
+            COMMAND
+                XDG_DATA_DIRS=${XDG_DATA_DIR}:/usr/local/share:/usr/share
+                ${UI_DEMO_EXEC_NAME}
+            DEPENDS ${UI_DEMO_EXEC_NAME}
+            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        )
+
+        install (TARGETS ${UI_DEMO_EXEC_NAME} RUNTIME DESTINATION bin)
+
     endif (EV3DEVKIT_DESKTOP)
 
 endif (EV3DEVKIT_BUILD_DEMO)
