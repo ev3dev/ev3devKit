@@ -1,7 +1,7 @@
 /*
  * ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
  *
- * Copyright 2014 David Lechner <david@lechnology.com>
+ * Copyright 2014,2016 David Lechner <david@lechnology.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,9 +35,9 @@ namespace Ev3devKit.Ui {
     public class Dialog : Ev3devKit.Ui.Window {
 
         construct {
-            margin = 20;
             border = 1;
             border_radius = 10;
+            notify["screen"].connect (set_margin);
         }
 
         /**
@@ -63,6 +63,13 @@ namespace Ev3devKit.Ui {
             var color = screen.bg_color;
             filled_rounded_box (border_bounds.x1, border_bounds.y1,
                 border_bounds.x2, border_bounds.y2, border_radius, color);
+        }
+
+        void set_margin () {
+            if (screen == null) {
+                    return;
+                }
+                margin = int.min (screen.width, screen.height) / 15;
         }
     }
 }
