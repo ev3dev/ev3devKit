@@ -91,15 +91,15 @@ namespace Ev3devKit.Ui {
          * {@inheritDoc}
          */
         protected override int get_preferred_width () ensures (result > 0) {
-            return int.max(1, font.vala_string_width (text ?? ""))
-                + get_margin_border_padding_width ();
+            return int.max(1, font.vala_string_width (text ?? "")
+                + get_margin_border_padding_width ());
         }
 
         /**
          * {@inheritDoc}
          */
         protected override int get_preferred_height () ensures (result > 0) {
-            return int.max(1, (int)font.height) + get_margin_border_padding_height ();
+            return int.max(1, (int)font.height + get_margin_border_padding_height ());
         }
 
         /**
@@ -119,8 +119,8 @@ namespace Ev3devKit.Ui {
             requires (width > 0) ensures (result > 0)
         {
             unowned SList<string> lines = get_lines_for_width (width);
-            return int.max(1, (int)font.height * (int)lines.length ())
-                + get_margin_border_padding_height ();
+            return int.max(1, (int)font.height * (int)lines.length ()
+                + get_margin_border_padding_height ());
         }
 
         unowned SList<string> get_lines_for_width (int width) requires (width > 0) {
