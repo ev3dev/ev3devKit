@@ -282,12 +282,13 @@ namespace Ev3devKit.Ui {
                     top_window.on_screen = true;
                     top_window.draw ();
                 }
+                if (_status_bar.visible) {
+                    _status_bar.draw ();
+                }
                 if (top_dialog != null) {
                     top_dialog.on_screen = true;
                     top_dialog.draw ();
                 }
-                if (_status_bar.visible)
-                    _status_bar.draw ();
                 dirty = false;
                 refresh ();
             }
