@@ -405,7 +405,7 @@ if (EV3DEVKIT_BUILD_DEMO)
     add_custom_target (run-${DEVICES_DEMO_EXEC_NAME}
         COMMAND
             XDG_DATA_DIRS=${XDG_DATA_DIR}:/usr/local/share:/usr/share
-            ${DEVICES_DEMO_EXEC_NAME}
+            ./${DEVICES_DEMO_EXEC_NAME}
         DEPENDS ${DEVICES_DEMO_EXEC_NAME}
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     )
@@ -440,7 +440,7 @@ if (EV3DEVKIT_BUILD_DEMO)
             COMMAND
                 LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}
                 XDG_DATA_DIRS=${XDG_DATA_DIR}:/usr/local/share:/usr/share
-                ${UI_DESKTOP_DEMO_EXEC_NAME}
+                ./${UI_DESKTOP_DEMO_EXEC_NAME}
             DEPENDS ${UI_DESKTOP_DEMO_EXEC_NAME}
             WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
         )
@@ -452,7 +452,7 @@ if (EV3DEVKIT_BUILD_DEMO)
                 XDG_DATA_DIRS=${XDG_DATA_DIR}:/usr/local/share:/usr/share
                 LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}
                 GI_TYPELIB_PATH=${CMAKE_CURRENT_BINARY_DIR}
-                ${CMAKE_CURRENT_SOURCE_DIR}/demo/python/ui_desktop_demo.py
+                ./${CMAKE_CURRENT_SOURCE_DIR}/demo/python/ui_desktop_demo.py
             DEPENDS
                 ${LIBRARY_NAME}-typelib
                 ${DESKTOP_LIBRARY_NAME}-typelib
@@ -486,7 +486,7 @@ if (EV3DEVKIT_BUILD_DEMO)
         add_custom_target (run-${UI_DEMO_EXEC_NAME}
             COMMAND
                 XDG_DATA_DIRS=${XDG_DATA_DIR}:/usr/local/share:/usr/share
-                ${UI_DEMO_EXEC_NAME}
+                ./${UI_DEMO_EXEC_NAME}
             DEPENDS ${UI_DEMO_EXEC_NAME}
             WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
         )
