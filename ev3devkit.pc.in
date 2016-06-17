@@ -5,7 +5,7 @@ includedir=${prefix}/include
 datarootdir=${prefix}/share
 datadir=${datarootdir}/@CMAKE_PROJECT_NAME@
 
-Name: ev3devKit
+Name: @EV3DEVKIT_PACKAGE@
 Description: Programming toolkit for ev3dev
 Version: @VERSION@
 Requires: @PKGCONFIG_DEPS@
