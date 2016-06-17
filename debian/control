@@ -42,7 +42,7 @@ Description: Programming toolkit for ev3dev
  This package contains the development files for ev3devKit.
 
 Package: ev3devkit-demo
-Architecture: any
+Architecture: armel armhf
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Programming toolkit for ev3dev
  This package includes several demo programs that use ev3devKit.
