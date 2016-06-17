@@ -1,8 +1,19 @@
-ev3devkit (0.4.0~1) stable; urgency=medium
+ev3devkit (0.4.0) stable; urgency=medium
 
-  * 
+  [ Stefan Sauer ]
+  * Use a high prio idle handler for keyboard inputs.
+  * window: defer the shown() signal until the window is on the screen
 
- -- David Lechner <david@lechnology.com>  Thu, 12 May 2016 15:47:13 -0500
+  [ David Lechner ]
+  * Motors: update for kernel release cycle 10 changes
+  * Bump GIR/package version
+  * Use udev properties for driver_name and address
+  * Ui: Make dialog size proportional to window size
+  * Fix critical message on InputDialog
+  * Draw dialogs in front of status bar
+  * Fix label preferred width/height in cases where there is negative margin
+
+ -- David Lechner <david@lechnology.com>  Fri, 17 Jun 2016 14:22:36 -0500
 
 ev3devkit (0.3.2) stable; urgency=medium
 
