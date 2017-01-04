@@ -31,6 +31,8 @@ namespace Ev3devKit.Ui.Fonts {
     unowned Font default_font;
     Font _small_font;
     unowned Font small_font;
+    Font _big_font;
+    unowned Font big_font;
 
     /**
      * Gets the default font.
@@ -58,10 +60,10 @@ namespace Ev3devKit.Ui.Fonts {
      * Gets the big font.
      */
     public unowned Font get_big () {
-        if (small_font == null) {
-            _small_font = Font.load ("lucs21");
-            small_font = _small_font ?? Font.pc8x14;
+        if (big_font == null) {
+            _big_font = Font.load ("lucs21");
+            big_font = _big_font ?? Font.pc8x14;
         }
-        return small_font;
+        return big_font;
     }
 }
