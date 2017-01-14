@@ -1,3 +1,13 @@
+ev3devkit (0.4.3) stable; urgency=medium
+
+  [ Stefan Sauer ]
+  * fix big font is using small font 
+
+  [ David Lechner ]
+  * Fix inverted key_up/key_down events
+
+ -- David Lechner <david@lechnology.com>  Fri, 13 Jan 2017 19:12:02 -0600
+
 ev3devkit (0.4.2) stable; urgency=medium
 
   * Revert "Fix ev3devkit pkg-config name"
