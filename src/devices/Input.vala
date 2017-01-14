@@ -381,10 +381,11 @@ namespace Ev3devKit.Devices {
                     }
                     break;
                 case EV_KEY:
-                    if (event.value == 0)
+                    if (event.value == 1) {
                         key_down (event.code);
-                    else
+                    } else {
                         key_up (event.code);
+                    }
                     break;
                 // TODO: handle more types of events.
                 }
