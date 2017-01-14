@@ -283,8 +283,10 @@ libev3devkit-0.4.so.0 libev3devkit-0.4-0 #MINVER#
  ev3dev_kit_ui_dialog_get_type@Base 0.4.0
  ev3dev_kit_ui_dialog_new@Base 0.4.0
  ev3dev_kit_ui_focus_direction_get_type@Base 0.4.0
+ ev3dev_kit_ui_fonts__big_font@Base 0.4.3
  ev3dev_kit_ui_fonts__default_font@Base 0.4.0
  ev3dev_kit_ui_fonts__small_font@Base 0.4.0
+ ev3dev_kit_ui_fonts_big_font@Base 0.4.3
  ev3dev_kit_ui_fonts_default_font@Base 0.4.0
  ev3dev_kit_ui_fonts_get_big@Base 0.4.0
  ev3dev_kit_ui_fonts_get_default@Base 0.4.0
