@@ -22,30 +22,43 @@ Besides dependencies included in trusty, we need vala >= 0.24, which you can get
 from the [vala-team PPA](https://launchpad.net/~vala-team/+archive/ubuntu/ppa),
 and libgrx which is part of the ev3dev package repository.
 
-## Compiling
 
-To get something usable on the EV3 brick, you should compile using [brickstrap].
+## Get the code
+
+This project uses git and git submodules.
+
+    git clone --recursive git://github.com/ev3dev/ev3devKit
+
+
+## Cross-compiling for the EV3
+
+This requires that you have [Docker](https://www.docker.com) installed.
+
+    cd ev3devKit
+    ./docker/setup.sh $BUILD_DIR $ARCH
+    docker exec --tty ev3devkit_$ARCH make install
+
+Substitute any directory you like for `$BUILD_DIR` this is where the compiled
+files will be stored. The directory will be created if it does not exist.
+Substitute `$ARCH` with `armel` for the EV3 or `armhf` for RPi/BeagleBone.
+When the build is completed, copy the files from `$BUILD_DIR/dist` to your EV3.
+
+
+## Compiling for desktop
 
     # include install build depends
     $ sudo apt-get install cmake valac libgirepository1.0-dev \
-    libgudev-1.0-dev libncurses5-dev libgrx-dev
-    # if you are building for desktop (see below) you also need
-    $ sudo apt-get install libgtk-3-dev
-    # clone the git repo
-    $ git clone --recursive git://github.com/ev3dev/ev3devKit
+    libgudev-1.0-dev libncurses5-dev libgrx-dev libgtk-3-dev
     # create a build directory (not in cloned ev3devKit directory).
     $ mkdir build
     $ cd build
-    $ cmake ../ev3devKit
+    $ cmake ../ev3devKit -DCMAKE_BUILD_TYPE=string:Debug -DEV3DEVKIT_DESKTOP=bool:Yes
     $ make
     
 You can add additional build option to the `cmake` command. Note: you need to
 delete *everything* in the build directory when changing `cmake` options to
-ensure that they take effect (you can use `nuke.sh` to do this).
+ensure that they take effect.
 
-* Enable debugging: `-DCMAKE_BUILD_TYPE=string:Debug`
-* Build additional library for running on a desktop: `-DEV3DEVKIT_DESKTOP=bool:Yes`
-* Do not build the demo programs: `-EV3DEVKIT_BUILD_DEMO=bool:No`
 
 ## Running
 
