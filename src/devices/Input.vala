@@ -381,10 +381,16 @@ namespace Ev3devKit.Devices {
                     }
                     break;
                 case EV_KEY:
-                    if (event.value == 1) {
-                        key_down (event.code);
-                    } else {
+                    switch (event.value) {
+                    case 0:
                         key_up (event.code);
+                        break;
+                    case 1:
+                        key_down (event.code);
+                        break;
+                    case 2:
+                        // TODO: do we want a repeat event?
+                        break;
                     }
                     break;
                 // TODO: handle more types of events.
