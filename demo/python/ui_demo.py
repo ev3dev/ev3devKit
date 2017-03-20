@@ -20,7 +20,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA 02110-1301, USA.
 
-# ui_desktop_demo.py - main function for running UI demo on desktop
+# ui_demo.py - main function for running UI demo
 
 import sys
 import time

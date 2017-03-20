@@ -11,7 +11,6 @@ endif (CMAKE_CROSSCOMPILING)
 get_directory_property(PARENT_DIR PARENT_DIRECTORY)
 
 if (NOT PARENT_DIR)
-    option (EV3DEVKIT_DESKTOP "Build desktop library")
     option (EV3DEVKIT_BUILD_DEMO "Build the demo programs" Yes)
 endif (NOT PARENT_DIR)
 
@@ -19,23 +18,18 @@ list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 set (DEVICES_DEMO_EXEC_NAME "ev3devKit-devices-demo")
 set (UI_DEMO_EXEC_NAME "ev3devKit-ui-demo")
-set (UI_DESKTOP_DEMO_EXEC_NAME "ev3devKit-ui-desktop-demo")
 set (SOVERSION 0)
 set (VERSION "0.4.3")
 set (GIR_NAME "Ev3devKit")
 set (GIR_VERSION "0.4")
 set (EV3DEVKIT_PACKAGE ${PROJECT_NAME}-${GIR_VERSION})
-set (EV3DEVKIT_DESKTOP_PACKAGE ${PROJECT_NAME}-desktop-${GIR_VERSION})
 set (LIBRARY_NAME "${EV3DEVKIT_PACKAGE}")
-set (DESKTOP_LIBRARY_NAME "${EV3DEVKIT_DESKTOP_PACKAGE}")
 set (TARGET_GLIB "2.40")
 
 if (PARENT_DIR)
     # If this is included by a parent project, export some variables back to the parent
     set (${PROJECT_NAME}_PACKAGE ${EV3DEVKIT_PACKAGE} PARENT_SCOPE)
     set (${PROJECT_NAME}_VAPI ${EV3DEVKIT_PACKAGE}.vapi PARENT_SCOPE)
-    set (${PROJECT_NAME}_DESKTOP_PACKAGE ${EV3DEVKIT_DESKTOP_PACKAGE} PARENT_SCOPE)
-    set (${PROJECT_NAME}_DESKTOP_VAPI ${EV3DEVKIT_DESKTOP_PACKAGE}.vapi PARENT_SCOPE)
 endif (PARENT_DIR)
 
 add_subdirectory (data)
@@ -45,37 +39,30 @@ set (XDG_DATA_DIR data)
 add_definitions (-w)
 
 set (COMMON_PACKAGES
-    glib-2.0
-    gobject-2.0
-    gmodule-2.0
     gio-2.0
     gio-unix-2.0
-    grx20
+    glib-2.0
+    gmodule-2.0
+    gobject-2.0
+    grx-3.0
     gudev-1.0
-    curses
-    posix
     linux
+    posix
 )
 set (COMMON_MODULES
-    glib-2.0
-    gobject-2.0
-    gmodule-2.0
     gio-2.0
     gio-unix-2.0
-    grx20
+    glib-2.0
+    gmodule-2.0
+    gobject-2.0
+    grx-3.0
     gudev-1.0
-    ncurses
 )
-set (DESKTOP_MODULES gtk+-3.0)
-set (DESKTOP_PACKAGES gtk+-3.0)
 
 configure_file (src/Version.vala.in Version.vala)
 # convert CMake list to space separated string for pkgconfig file
 string(REPLACE ";" " " PKGCONFIG_DEPS "${COMMON_MODULES}")
 configure_file (${PROJECT_NAME}.pc.in ${PROJECT_NAME}-${GIR_VERSION}.pc @ONLY)
-# convert CMake list to space separated string for pkgconfig file
-string(REPLACE ";" " " DESKTOP_PKGCONFIG_DEPS "${PROJECT_NAME}-${GIR_VERSION};${DESKTOP_MODULES}")
-configure_file (${PROJECT_NAME}-desktop.pc.in ${PROJECT_NAME}-desktop-${GIR_VERSION}.pc @ONLY)
 
 set (LIBRARY_SOURCE_FILES
     src/devices/Cpu.vala
@@ -121,13 +108,6 @@ set (LIBRARY_SOURCE_FILES
     ${CMAKE_CURRENT_BINARY_DIR}/Version.vala
 )
 
-set (DESKTOP_LIBRARY_SOURCE_FILES
-    src/desktop/GtkApp.vala
-    src/desktop/GtkFramebuffer.vala
-    src/desktop/GtkScreen.vala
-    ${CMAKE_CURRENT_BINARY_DIR}/main_window_glade.vala
-)
-
 set (DEVICES_DEMO_SOURCE_FILES
     demo/devices_demo.vala
 )
@@ -141,20 +121,10 @@ set (UI_DEMO_SOURCE_FILES
     ${UI_DEMO_COMMON_SOURCE_FILES}
 )
 
-set (UI_DESKTOP_DEMO_SOURCE_FILES
-    demo/ui_desktop_demo.vala
-    ${UI_DEMO_COMMON_SOURCE_FILES}
-)
-
 find_package (PkgConfig REQUIRED)
 
 pkg_check_modules (DEPS REQUIRED ${COMMON_MODULES})
 add_definitions (${DEPS_CFLAGS})
-
-if (EV3DEVKIT_DESKTOP)
-    pkg_check_modules (DESKTOP_DEPS REQUIRED ${DESKTOP_MODULES})
-    add_definitions (${DESKTOP_DEPS_CFLAGS})
-endif (EV3DEVKIT_DESKTOP)
 
 find_package (Vala REQUIRED)
 include (ValaVersion)
@@ -270,113 +240,6 @@ set (FIX_VAPI_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${EV3DEVKIT_PACKAGE}.vapi)
 add_custom_target (fix-vapi DEPENDS ${FIX_VAPI_DEPENDS})
 add_dependencies (${LIBRARY_NAME}-shared fix-vapi)
 
-if (EV3DEVKIT_DESKTOP)
-    vala_precompile (DESKTOP_LIBRARY_VALA_C ${DESKTOP_LIBRARY_NAME}
-    LIBRARY
-        ${DESKTOP_LIBRARY_SOURCE_FILES}
-    PACKAGES
-        ${COMMON_PACKAGES}
-        ${DESKTOP_PACKAGES}
-    CUSTOM_VAPIS
-        bindings/*.vapi
-        ${CMAKE_CURRENT_BINARY_DIR}/${EV3DEVKIT_PACKAGE}.vapi
-    OPTIONS
-        --target-glib=${TARGET_GLIB}
-        --thread
-    GENERATE_VAPI
-        ${EV3DEVKIT_DESKTOP_PACKAGE}
-    GENERATE_HEADER
-        ${DESKTOP_LIBRARY_NAME}
-    GENERATE_GIR
-       ${GIR_NAME}Desktop-buggy-${GIR_VERSION}
-    )
-
-    # Work around bug in valac where .gir is not correctly generated with nested
-    # namespaces. The Ev3devKit .gir is only correctly generated if we leave out
-    # the gir_namespace and gir_version CCode attributes. However, this causes
-    # the EV3DevKitDesktop .gir to not add an include line for Ev3devKit. So,
-    # this workaround just adds that line.
-
-    add_custom_command (
-        OUTPUT
-            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${GIR_VERSION}.gir"
-        COMMAND
-            "${CMAKE_CURRENT_SOURCE_DIR}/fix-desktop-gir.sh"
-        ARGS
-            ${GIR_NAME}
-            ${GIR_VERSION}
-            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-buggy-${GIR_VERSION}.gir"
-            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${GIR_VERSION}.gir"
-        DEPENDS
-            "${CMAKE_CURRENT_SOURCE_DIR}/fix-desktop-gir.sh"
-            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}-${GIR_VERSION}.gir"
-            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-buggy-${GIR_VERSION}.gir"
-        COMMENT
-            "Fixing ${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-buggy-${GIR_VERSION}.gir"
-    )
-
-    add_custom_command (
-        OUTPUT
-            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${GIR_VERSION}.typelib"
-        COMMAND
-            ${G_IR_COMPILER_EXECUTABLE}
-        ARGS
-            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${GIR_VERSION}.gir"
-            "--shared-library=$<TARGET_SONAME_FILE_NAME:${DESKTOP_LIBRARY_NAME}-shared>"
-            "--output=${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${GIR_VERSION}.typelib"
-            "--includedir=${CMAKE_CURRENT_BINARY_DIR}"
-        DEPENDS
-            "${DESKTOP_LIBRARY_NAME}-shared"
-            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${GIR_VERSION}.gir"
-        COMMENT
-            "Genterating typelib."
-    )
-
-    add_custom_target ("${DESKTOP_LIBRARY_NAME}-typelib"
-        ALL
-        DEPENDS
-            "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${GIR_VERSION}.typelib"
-    )
-
-    # end of workaround
-
-    add_library (${DESKTOP_LIBRARY_NAME} OBJECT ${DESKTOP_LIBRARY_VALA_C})
-    set_target_properties(${DESKTOP_LIBRARY_NAME} PROPERTIES
-        POSITION_INDEPENDENT_CODE 1)
-    add_dependencies (${DESKTOP_LIBRARY_NAME} ${LIBRARY_NAME})
-    add_library (${DESKTOP_LIBRARY_NAME}-shared SHARED $<TARGET_OBJECTS:${DESKTOP_LIBRARY_NAME}>)
-    set_target_properties(${DESKTOP_LIBRARY_NAME}-shared PROPERTIES
-        OUTPUT_NAME ${DESKTOP_LIBRARY_NAME}
-        VERSION "${VERSION}"
-        SOVERSION "${SOVERSION}")
-    target_link_libraries (${DESKTOP_LIBRARY_NAME}-shared ${DESKTOP_DEPS_LIBRARIES} ${LIBRARY_NAME}-shared)
-    install (TARGETS ${DESKTOP_LIBRARY_NAME}-shared LIBRARY DESTINATION lib)
-    add_library (${DESKTOP_LIBRARY_NAME}-static STATIC $<TARGET_OBJECTS:${DESKTOP_LIBRARY_NAME}>)
-    set_target_properties(${DESKTOP_LIBRARY_NAME}-static PROPERTIES
-        OUTPUT_NAME ${DESKTOP_LIBRARY_NAME})
-    target_link_libraries (${DESKTOP_LIBRARY_NAME}-static ${DESKTOP_DEPS_LIBRARIES} ${LIBRARY_NAME}-static)
-    install (TARGETS ${DESKTOP_LIBRARY_NAME}-static ARCHIVE DESTINATION lib)
-    add_custom_command (
-        OUTPUT
-            ${CMAKE_BINARY_DIR}/main_window_glade.vala
-        DEPENDS
-            ${CMAKE_CURRENT_SOURCE_DIR}/src/desktop/main_window.glade
-            ${CMAKE_CURRENT_SOURCE_DIR}/src/desktop/main_window_glade.vala.in
-            ${CMAKE_CURRENT_SOURCE_DIR}/main_window_glade.cmake
-        COMMAND
-            ${CMAKE_COMMAND}
-        ARGS
-            -D SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}
-            -D BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}
-            -P ${CMAKE_CURRENT_SOURCE_DIR}/main_window_glade.cmake
-    )
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${EV3DEVKIT_DESKTOP_PACKAGE}.h DESTINATION include/)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-desktop-${GIR_VERSION}.pc DESTINATION lib/pkgconfig/)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${EV3DEVKIT_DESKTOP_PACKAGE}.vapi DESTINATION share/vala/vapi/)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${GIR_VERSION}.gir DESTINATION share/gir-1.0/)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}Desktop-${GIR_VERSION}.typelib DESTINATION lib/girepository-1.0/)
-endif (EV3DEVKIT_DESKTOP)
-
 if (EV3DEVKIT_BUILD_DEMO)
     set (EXEC_PACKAGES ${COMMON_PACKAGES} ${EV3DEVKIT_PACKAGE})
     set (EXEC_LIBRARY_DEPENDS ${LIBRARY_NAME}-shared)
@@ -415,85 +278,34 @@ if (EV3DEVKIT_BUILD_DEMO)
 
     # User interface demo program
 
-    if (EV3DEVKIT_DESKTOP)
-        set (DESKTOP_EXEC_PACKAGES ${EXEC_PACKAGES})
-        list (APPEND DESKTOP_EXEC_PACKAGES ${DESKTOP_PACKAGES} ${EV3DEVKIT_DESKTOP_PACKAGE})
-        set (DESKTOP_EXEC_LIBRARY_DEPENDS ${EXEC_LIBRARY_DEPENDS})
-        list (APPEND DESKTOP_EXEC_LIBRARY_DEPENDS ${DESKTOP_LIBRARY_NAME}-shared)
+    vala_precompile(UI_DEMO_EXEC_VALA_C ${UI_DEMO_EXEC_NAME}
+        ${UI_DEMO_SOURCE_FILES}
+    PACKAGES
+        ${EXEC_PACKAGES}
+    CUSTOM_VAPIS
+        bindings/*.vapi
+    OPTIONS
+        --target-glib=${TARGET_GLIB}
+        --thread
+        --vapidir=${CMAKE_CURRENT_BINARY_DIR}
+    )
 
-        vala_precompile(UI_DESKTOP_DEMO_EXEC_VALA_C ${UI_DESKTOP_DEMO_EXEC_NAME}
-            ${UI_DESKTOP_DEMO_SOURCE_FILES}
-        PACKAGES
-            ${DESKTOP_EXEC_PACKAGES}
-        CUSTOM_VAPIS
-            bindings/*.vapi
-        OPTIONS
-            --target-glib=${TARGET_GLIB}
-            --thread
-            --vapidir=${CMAKE_CURRENT_BINARY_DIR}
-        )
+    add_executable (${UI_DEMO_EXEC_NAME} ${UI_DEMO_EXEC_VALA_C})
+    target_link_libraries (${UI_DEMO_EXEC_NAME} ${EXEC_LIBRARY_DEPENDS})
+    if (CMAKE_CROSSCOMPILING)
+        # These are not picked up automatically when cross compiling for some reason
+        target_link_libraries (${UI_DEMO_EXEC_NAME} "-pthread" "-lresolv")
+    endif (CMAKE_CROSSCOMPILING)
 
-        add_executable (${UI_DESKTOP_DEMO_EXEC_NAME} ${UI_DESKTOP_DEMO_EXEC_VALA_C})
-        target_link_libraries (${UI_DESKTOP_DEMO_EXEC_NAME} ${DESKTOP_EXEC_LIBRARY_DEPENDS})
+    add_custom_target (run-${UI_DEMO_EXEC_NAME}
+        COMMAND
+            XDG_DATA_DIRS=${XDG_DATA_DIR}:/usr/local/share:/usr/share
+            ./${UI_DEMO_EXEC_NAME}
+        DEPENDS ${UI_DEMO_EXEC_NAME}
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    )
 
-        add_custom_target (run-${UI_DESKTOP_DEMO_EXEC_NAME}
-            COMMAND
-                LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}
-                XDG_DATA_DIRS=${XDG_DATA_DIR}:/usr/local/share:/usr/share
-                ./${UI_DESKTOP_DEMO_EXEC_NAME}
-            DEPENDS ${UI_DESKTOP_DEMO_EXEC_NAME}
-            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-        )
-
-        install (TARGETS ${UI_DESKTOP_DEMO_EXEC_NAME} RUNTIME DESTINATION bin)
-
-        add_custom_target (run-python-ui-desktop-demo
-            COMMAND
-                XDG_DATA_DIRS=${XDG_DATA_DIR}:/usr/local/share:/usr/share
-                LD_LIBRARY_PATH=${CMAKE_CURRENT_BINARY_DIR}
-                GI_TYPELIB_PATH=${CMAKE_CURRENT_BINARY_DIR}
-                ./${CMAKE_CURRENT_SOURCE_DIR}/demo/python/ui_desktop_demo.py
-            DEPENDS
-                ${LIBRARY_NAME}-typelib
-                ${DESKTOP_LIBRARY_NAME}-typelib
-                ${CMAKE_CURRENT_SOURCE_DIR}/demo/python/ui_demo_window.py
-                ${CMAKE_CURRENT_SOURCE_DIR}/demo/python/ui_desktop_demo.py
-            WORKING_DIRECTORY
-                ${CMAKE_BINARY_DIR}
-        )
-
-    else (EV3DEVKIT_DESKTOP)
-
-        vala_precompile(UI_DEMO_EXEC_VALA_C ${UI_DEMO_EXEC_NAME}
-            ${UI_DEMO_SOURCE_FILES}
-        PACKAGES
-            ${EXEC_PACKAGES}
-        CUSTOM_VAPIS
-            bindings/*.vapi
-        OPTIONS
-            --target-glib=${TARGET_GLIB}
-            --thread
-            --vapidir=${CMAKE_CURRENT_BINARY_DIR}
-        )
-
-        add_executable (${UI_DEMO_EXEC_NAME} ${UI_DEMO_EXEC_VALA_C})
-        target_link_libraries (${UI_DEMO_EXEC_NAME} ${EXEC_LIBRARY_DEPENDS})
-        if (CMAKE_CROSSCOMPILING)
-            # These are not picked up automatically when cross compiling for some reason
-            target_link_libraries (${UI_DEMO_EXEC_NAME} "-pthread" "-lresolv")
-        endif (CMAKE_CROSSCOMPILING)
-
-        add_custom_target (run-${UI_DEMO_EXEC_NAME}
-            COMMAND
-                XDG_DATA_DIRS=${XDG_DATA_DIR}:/usr/local/share:/usr/share
-                ./${UI_DEMO_EXEC_NAME}
-            DEPENDS ${UI_DEMO_EXEC_NAME}
-            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-        )
-
-        install (TARGETS ${UI_DEMO_EXEC_NAME} RUNTIME DESTINATION bin)
-
-    endif (EV3DEVKIT_DESKTOP)
+    install (TARGETS ${UI_DEMO_EXEC_NAME} RUNTIME DESTINATION bin)
 
 endif (EV3DEVKIT_BUILD_DEMO)
 
@@ -502,7 +314,6 @@ if (VALADOC_FOUND)
     include (ValadocGenerate)
     generate_valadoc (
         ${LIBRARY_SOURCE_FILES}
-        ${DESKTOP_LIBRARY_SOURCE_FILES}
         bindings/*.vapi
     PACKAGE_NAME
         ${PROJECT_NAME}
@@ -512,6 +323,5 @@ if (VALADOC_FOUND)
         --target-glib=${TARGET_GLIB}
     PACKAGES
         ${COMMON_PACKAGES}
-        ${DESKTOP_PACKAGES}
     )
 endif (VALADOC_FOUND)

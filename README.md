@@ -52,7 +52,7 @@ When the build is completed, copy the files from `$BUILD_DIR/dist` to your EV3.
     # create a build directory (not in cloned ev3devKit directory).
     $ mkdir build
     $ cd build
-    $ cmake ../ev3devKit -DCMAKE_BUILD_TYPE=string:Debug -DEV3DEVKIT_DESKTOP=bool:Yes
+    $ cmake ../ev3devKit -DCMAKE_BUILD_TYPE=string:Debug
     $ make
     
 You can add additional build option to the `cmake` command. Note: you need to
