@@ -21,6 +21,7 @@
 
 /* Version.vala - Version info from CMakeLists.txt (automatically generated) */
 
+[CCode (gir_namespace = "@GIR_NAME@", gir_version = "@GIR_VERSION@")]
 namespace Ev3devKit {
     const string VERSION = "@VERSION@";
 
