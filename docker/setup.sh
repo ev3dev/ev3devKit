@@ -37,7 +37,7 @@ mkdir -p $build_dir
 
 docker rm --force $container_name >/dev/null 2>&1 || true
 docker run \
-    --volume "$build_dir:/build" \
+    --volume "$(readlink -f $build_dir):/build" \
     --volume "$(pwd):/src" \
     --workdir /build \
     --name $container_name \
@@ -48,6 +48,6 @@ docker run \
     $image_name tail
 
 docker exec --tty $container_name cmake /src -DCMAKE_BUILD_TYPE=Debug \
-    -DCMAKE_TOOLCHAIN_FILE=/opt/gcc-linaro-arm-linux-gnueabihf-4.8-2014.04_linux/toolchain.cmake
+    -DCMAKE_TOOLCHAIN_FILE=/opt/gcc-linaro-5.3-2016.02-x86_64_arm-linux-gnueabihf/toolchain.cmake
 
 echo "Done. You can now compile by running 'docker exec --tty $container_name make'"
