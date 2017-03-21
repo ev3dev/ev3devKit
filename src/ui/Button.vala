@@ -21,7 +21,6 @@
 
 /* Button.vala - Widget that represents a selectable button */
 
-using Curses;
 using Grx;
 
 namespace Ev3devKit.Ui {
@@ -91,7 +90,7 @@ namespace Ev3devKit.Ui {
         protected override void draw_background () {
             if (draw_children_as_focused) {
                 var color = window.screen.mid_color;
-                filled_rounded_box (border_bounds.x1, border_bounds.y1,
+                draw_filled_rounded_box (border_bounds.x1, border_bounds.y1,
                     border_bounds.x2, border_bounds.y2, border_radius, color);
             }
         }
@@ -100,7 +99,7 @@ namespace Ev3devKit.Ui {
          * Default handler for the key_pressed signal.
          */
         internal override bool key_pressed (uint key_code) {
-            if (key_code == '\n') {
+            if (key_code == Key.Return) {
                 pressed ();
                 Signal.stop_emission_by_name (this, "key-pressed");
                 return true;

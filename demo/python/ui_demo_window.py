@@ -5,7 +5,7 @@
 # This program is free software you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation either version 2 of the License, or
-#(at your option) any later version.
+# (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY without even the implied warranty of
@@ -19,18 +19,22 @@
 
 # ui_demo_window.py - Main window for widget demos
 
-import curses
+import gi
 
+gi.require_version('Ev3devKit', '0.5')
 from gi.repository import Ev3devKit
+gi.require_version('Grx', '3.0')
+from gi.repository import Grx
+gi.require_version('GObject', '2.0')
 from gi.repository import GObject
-from gi.repository import GLib
+
 
 class UiDemoWindow(Ev3devKit.UiWindow):
     """Used to demonstrate most of the UI components in ev3devKit."""
 
     __gsignals__ = {
         # Emitted when the use selects the Quit menu item.
-        'quit':(GObject.SIGNAL_RUN_LAST, None,())
+        'quit': (GObject.SIGNAL_RUN_LAST, None, ())
     }
 
     def __init__(self):
@@ -76,7 +80,7 @@ class UiDemoWindow(Ev3devKit.UiWindow):
 
     def do_key_pressed(self, window, key_code):
         # ignore the backspace key press
-        if key_code == curses.KEY_BACKSPACE:
+        if key_code == Grx.KEY_BackSpace:
             GObject.signal_stop_emission_by_name(self, 'key-pressed')
             return True
         return False
@@ -156,9 +160,9 @@ class UiDemoWindow(Ev3devKit.UiWindow):
         child3_box.add(child3_message)
 
         def child1_key_pressed_handler(widget, key_code):
-            if key_code == curses.KEY_LEFT:
+            if key_code == Grx.KEY_Left:
                 stack.set_active_child(child3_box)
-            elif key_code == curses.KEY_RIGHT:
+            elif key_code == Grx.KEY_Right:
                 stack.set_active_child(child2_box)
             else:
                 return False
@@ -171,9 +175,9 @@ class UiDemoWindow(Ev3devKit.UiWindow):
             child1_key_pressed_handler)
 
         def child2_key_pressed_handler(widget, key_code):
-            if key_code == curses.KEY_LEFT:
+            if key_code == Grx.KEY_Left:
                 stack.set_active_child(child1_box)
-            elif key_code == curses.KEY_RIGHT:
+            elif key_code == Grx.KEY_Right:
                 stack.set_active_child(child3_box)
             else:
                 return False
@@ -186,9 +190,9 @@ class UiDemoWindow(Ev3devKit.UiWindow):
             child2_key_pressed_handler)
 
         def child3_key_pressed_handler(widget, key_code):
-            if key_code == curses.KEY_LEFT:
+            if key_code == Grx.KEY_Left:
                 stack.set_active_child(child2_box)
-            elif key_code == curses.KEY_RIGHT:
+            elif key_code == Grx.KEY_Right:
                 stack.set_active_child(child1_box)
             else:
                 return False

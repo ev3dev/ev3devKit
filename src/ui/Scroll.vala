@@ -21,7 +21,6 @@
 
 /* Scroll.vala - Container that can scroll */
 
-using Curses;
 using Grx;
 
 namespace Ev3devKit.Ui {
@@ -246,11 +245,11 @@ namespace Ev3devKit.Ui {
          */
         internal override bool key_pressed (uint key_code) {
             if (has_focus) {
-                if ((direction == ScrollDirection.VERTICAL && key_code == Key.UP)
-                    || (direction == ScrollDirection.HORIZONTAL && key_code == Key.LEFT))
+                if ((direction == ScrollDirection.VERTICAL && key_code == Key.Up)
+                    || (direction == ScrollDirection.HORIZONTAL && key_code == Key.Left))
                     scroll_offset -= _scroll_amount;
-                else if ((direction == ScrollDirection.VERTICAL && key_code == Key.DOWN)
-                    || (direction == ScrollDirection.HORIZONTAL && key_code == Key.RIGHT))
+                else if ((direction == ScrollDirection.VERTICAL && key_code == Key.Down)
+                    || (direction == ScrollDirection.HORIZONTAL && key_code == Key.Right))
                     scroll_offset += _scroll_amount;
                 else
                     return base.key_pressed (key_code);
@@ -345,26 +344,26 @@ namespace Ev3devKit.Ui {
             var x = content_bounds.x2;
             if (direction == ScrollDirection.VERTICAL && draw_scrollbar) {
                 x -= SCROLLBAR_SIZE;
-                box (x, content_bounds.y1, content_bounds.x2,
+                draw_box (x, content_bounds.y1, content_bounds.x2,
                     content_bounds.y2, color);
-                filled_rounded_box (x + 2, content_bounds.y1 + scroll_indicator_offset + 2,
+                draw_filled_rounded_box (x + 2, content_bounds.y1 + scroll_indicator_offset + 2,
                     content_bounds.x2 - 2, content_bounds.y1 + scroll_indicator_offset 
                         + scroll_indicator_size - 1, 2, color);
                 if (has_focus)
-                    filled_box (x + 3, content_bounds.y1 + scroll_indicator_offset + 3,
+                    draw_filled_box (x + 3, content_bounds.y1 + scroll_indicator_offset + 3,
                         content_bounds.x2 - 3, content_bounds.y1 + scroll_indicator_offset 
                             + scroll_indicator_size - 2, window.screen.bg_color);
             }
             var y = content_bounds.y2;
             if (direction == ScrollDirection.HORIZONTAL && draw_scrollbar) {
                 y -= SCROLLBAR_SIZE;
-                box (content_bounds.x1, y, content_bounds.x2,
+                draw_box (content_bounds.x1, y, content_bounds.x2,
                     content_bounds.y2, color);
-                filled_rounded_box (content_bounds.x1  + scroll_indicator_offset + 2,
+                draw_filled_rounded_box (content_bounds.x1  + scroll_indicator_offset + 2,
                     y + 2, content_bounds.x1 + scroll_indicator_offset 
                         + scroll_indicator_size - 1, content_bounds.y2 - 2, 2, color);
                 if (has_focus)
-                    filled_box (content_bounds.x1  + scroll_indicator_offset + 3,
+                    draw_filled_box (content_bounds.x1  + scroll_indicator_offset + 3,
                         y + 3, content_bounds.x1 + scroll_indicator_offset 
                             + scroll_indicator_size - 2, content_bounds.y2 - 3, window.screen.bg_color);
             }

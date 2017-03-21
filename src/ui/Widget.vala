@@ -21,7 +21,6 @@
 
 /* Widget.vala - Base class for all widgets */
 
-using Curses;
 using Grx;
 
 /**
@@ -841,32 +840,32 @@ namespace Ev3devKit.Ui {
          */
         protected virtual void draw_border (Grx.Color color = window.screen.fg_color) {
             if (border_top != 0)
-                filled_box (border_bounds.x1 + border_radius, border_bounds.y1,
+                draw_filled_box (border_bounds.x1 + border_radius, border_bounds.y1,
                     border_bounds.x2 - border_radius,
                     border_bounds.y1 + border_top - 1, color);
             if (border_bottom != 0)
-                filled_box (border_bounds.x1 + border_radius,
+                draw_filled_box (border_bounds.x1 + border_radius,
                     border_bounds.y2 - border_bottom + 1,
                     border_bounds.x2 - border_radius, border_bounds.y2, color);
             if (border_left != 0)
-                filled_box (border_bounds.x1, border_bounds.y1 + border_radius,
+                draw_filled_box (border_bounds.x1, border_bounds.y1 + border_radius,
                     border_bounds.x1 + border_left- 1,
                     border_bounds.y2 - border_radius, color);
             if (border_right != 0)
-                filled_box (border_bounds.x2 - border_left + 1,
+                draw_filled_box (border_bounds.x2 - border_left + 1,
                     border_bounds.y1 + border_radius, border_bounds.x2,
                     border_bounds.y2 - border_radius, color);
             if (border_radius != 0) {
-                circle_arc (border_bounds.x2 - border_radius,
+                draw_circle_arc (border_bounds.x2 - border_radius,
                     border_bounds.y1 + border_radius, border_radius, 0, 900,
                     ArcStyle.OPEN, color);
-                circle_arc (border_bounds.x1 + border_radius,
+                draw_circle_arc (border_bounds.x1 + border_radius,
                     border_bounds.y1 + border_radius, border_radius, 900, 1800,
                     ArcStyle.OPEN, color);
-                circle_arc (border_bounds.x1 + border_radius,
+                draw_circle_arc (border_bounds.x1 + border_radius,
                     border_bounds.y2 - border_radius, border_radius, 1800, 2700,
                     ArcStyle.OPEN, color);
-                circle_arc (border_bounds.x2 - border_radius,
+                draw_circle_arc (border_bounds.x2 - border_radius,
                     border_bounds.y2 - border_radius, border_radius, 2700, 3600,
                     ArcStyle.OPEN, color);
             }
@@ -906,16 +905,16 @@ namespace Ev3devKit.Ui {
             if (can_focus && visible) {
                 FocusDirection direction;
                 switch (key_code) {
-                case Key.UP:
+                case Key.Up:
                     direction = FocusDirection.UP;
                     break;
-                case Key.DOWN:
+                case Key.Down:
                     direction = FocusDirection.DOWN;
                     break;
-                case Key.LEFT:
+                case Key.Left:
                     direction = FocusDirection.LEFT;
                     break;
-                case Key.RIGHT:
+                case Key.Right:
                     direction = FocusDirection.RIGHT;
                     break;
                 default:

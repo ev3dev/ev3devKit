@@ -21,7 +21,6 @@
 
 /* Window.vala - Top level widget */
 
-using Curses;
 using Grx;
 
 namespace Ev3devKit.Ui {
@@ -98,13 +97,13 @@ namespace Ev3devKit.Ui {
          */
         internal override bool key_pressed (uint key_code) {
             switch (key_code) {
-            case Key.UP:
-            case Key.DOWN:
-            case Key.LEFT:
-            case Key.RIGHT:
+            case Key.Up:
+            case Key.Down:
+            case Key.Left:
+            case Key.Right:
                 focus_first ();
                 break;
-            case Key.BACKSPACE:
+            case Key.BackSpace:
                 // screen.close_window () can release the reference to this,
                 // so don't do anything that references this after here.
                 screen.close_window (this);
@@ -121,7 +120,7 @@ namespace Ev3devKit.Ui {
          * the active screen.
          */
         public void show () {
-            show_on_screen (Screen.get_active_screen ());
+            show_on_screen (Screen.active_screen);
         }
 
         /**
@@ -173,7 +172,7 @@ namespace Ev3devKit.Ui {
          */
         protected override void draw_background () {
             var color = screen.bg_color;
-            filled_box (border_bounds.x1, border_bounds.y1, border_bounds.x2,
+            draw_filled_box (border_bounds.x1, border_bounds.y1, border_bounds.x2,
                 border_bounds.y2, color);
         }
 

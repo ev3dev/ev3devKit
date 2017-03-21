@@ -31,7 +31,7 @@ namespace Ev3devKit.Ui {
      * wide enough to fit the entire text value.
      */
     public class Label : Ev3devKit.Ui.Widget {
-        TextOption text_option;
+        TextOptions text_option;
         SList<string>? cached_lines;
         int last_width = 0;
 
@@ -44,34 +44,34 @@ namespace Ev3devKit.Ui {
          * Gets and sets the Font.
          */
         public unowned Font font {
-            get {return text_option.font; }
+            get { return text_option.font; }
             set { text_option.font = value; }
         }
 
         /**
          * Gets and sets the horizontal text alignment.
          */
-        public TextHorizAlign text_horizontal_align {
-            get { return text_option.x_align; }
-            set { text_option.x_align = value; }
+        public TextHAlign text_horizontal_align {
+            get { return text_option.h_align; }
+            set { text_option.h_align = value; }
         }
 
         /**
          * Gets and sets the vertical text alignment.
          */
-        public TextVertAlign text_vertical_align {
-            get { return text_option.y_align; }
-            set { text_option.y_align = value; }
+        public TextVAlign text_vertical_align {
+            get { return text_option.v_align; }
+            set { text_option.v_align = value; }
         }
 
         construct {
-            text_option = new TextOption () {
-                font = Fonts.get_default (),
-                direction = TextDirection.RIGHT,
-                chr_type = ChrType.BYTE,
-                x_align = TextHorizAlign.CENTER,
-                y_align = TextVertAlign.MIDDLE
-            };
+            text_option = new TextOptions (
+                Fonts.get_default (),
+                Color.BLACK,
+                Color.NONE,
+                TextHAlign.CENTER,
+                TextVAlign.MIDDLE
+            );
             notify["text"].connect (redraw);
             notify["font"].connect (redraw);
             notify["text-horizontal-align"].connect (redraw);
@@ -91,7 +91,7 @@ namespace Ev3devKit.Ui {
          * {@inheritDoc}
          */
         protected override int get_preferred_width () ensures (result > 0) {
-            return int.max(1, font.vala_string_width (text ?? "")
+            return int.max(1, font.get_text_width (text ?? "")
                 + get_margin_border_padding_width ());
         }
 
@@ -139,7 +139,7 @@ namespace Ev3devKit.Ui {
         SList<string> get_substring_lines_for_width (string substring, int width) {
             var lines = new SList<string> ();
             // if everything fits on one line...
-            if (font.vala_string_width (substring) <= width) {
+            if (font.get_text_width (substring) <= width) {
                 lines.append (substring);
                 return lines;
             }
@@ -147,12 +147,12 @@ namespace Ev3devKit.Ui {
             var builder = new StringBuilder ();
             int i = 0;
             while (i < substring.length) {
-                while (font.vala_string_width (builder.str) < width) {
+                while (font.get_text_width (builder.str) < width) {
                     if (i == substring.length)
                         break;
                     builder.append_c (substring[i++]);
                 }
-                if (i < substring.length || font.vala_string_width (builder.str) > width) {
+                if (i < substring.length || font.get_text_width (builder.str) > width) {
                     var last_space_index = builder.str.last_index_of (" ");
                     if (last_space_index >= 0) {
                         i -= (int)builder.len;
@@ -184,38 +184,37 @@ namespace Ev3devKit.Ui {
             if (_text == null)
                 return;
             if (parent.draw_children_as_focused)
-                text_option.fg_color = (TextColor)window.screen.bg_color;
+                text_option.fg_color = window.screen.bg_color;
             else
-                text_option.fg_color = (TextColor)window.screen.fg_color;
-            text_option.bg_color = (TextColor)Grx.Color.no_color;
+                text_option.fg_color = window.screen.fg_color;
             int x = 0;
             switch (text_horizontal_align) {
-            case TextHorizAlign.LEFT:
+            case TextHAlign.LEFT:
                 x = content_bounds.x1;
                 break;
-            case TextHorizAlign.CENTER:
+            case TextHAlign.CENTER:
                 x = content_bounds.x1 + content_bounds.width / 2;
                 break;
-            case TextHorizAlign.RIGHT:
+            case TextHAlign.RIGHT:
                 x = content_bounds.x2;
                 break;
             }
             unowned SList<string> lines = get_lines_for_width (content_bounds.width);
             int y = 0;
             switch (text_vertical_align) {
-            case TextVertAlign.TOP:
+            case TextVAlign.TOP:
                 y = content_bounds.y1;
                 break;
-            case TextVertAlign.MIDDLE:
+            case TextVAlign.MIDDLE:
                 y = content_bounds.y1 + (content_bounds.height + 1) / 2
                     - (int)font.height * ((int)lines.length () - 1) / 2;
                 break;
-            case TextVertAlign.BOTTOM:
+            case TextVAlign.BOTTOM:
                 y = content_bounds.y2;
                 break;
             }
             foreach (var item in lines) {
-                draw_vala_string (item, x, y, text_option);
+                draw_text (item, x, y, text_option);
                 y += (int)font.height;
             }
         }

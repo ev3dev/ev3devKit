@@ -21,7 +21,6 @@
 
 /* UiDemoWindow.vala - Main window for widget demos */
 
-using Curses;
 using Ev3devKit.Ui;
 using Grx;
 
@@ -88,7 +87,7 @@ namespace Ev3devKit.Demo {
 
         internal override bool key_pressed (uint key_code) {
             // ignore back button otherwise we end up with no windows in the stack
-            if (key_code == Key.BACKSPACE)
+            if (key_code == Key.BackSpace)
                 return false;
             return base.key_pressed (key_code);
         }
@@ -104,7 +103,7 @@ namespace Ev3devKit.Demo {
                 try {
                     var icon = new Ui.Icon.from_stock ((StockIcon)val.@value);
                     vbox.add (icon);
-                } catch (Error err) {
+                } catch (GLib.Error err) {
                     critical ("%s", err.message);
                 }
             }
@@ -165,9 +164,9 @@ namespace Ev3devKit.Demo {
             child3_box.add (child3_message);
 
             var child1_handler_id = child1_box.key_pressed.connect ((key_code) => {
-                if (key_code == Key.LEFT) {
+                if (key_code == Key.Left) {
                     stack.active_child = child3_box;
-                } else if (key_code == Key.RIGHT) {
+                } else if (key_code == Key.Right) {
                     stack.active_child = child2_box;
                 } else {
                     return false;
@@ -177,9 +176,9 @@ namespace Ev3devKit.Demo {
                 return true;
             });
             var child2_handler_id = child2_box.key_pressed.connect ((key_code) => {
-                if (key_code == Key.LEFT) {
+                if (key_code == Key.Left) {
                     stack.active_child = child1_box;
-                } else if (key_code == Key.RIGHT) {
+                } else if (key_code == Key.Right) {
                     stack.active_child = child3_box;
                 } else {
                     return false;
@@ -189,9 +188,9 @@ namespace Ev3devKit.Demo {
                 return true;
             });
             var child3_handler_id = child3_box.key_pressed.connect ((key_code) => {
-                if (key_code == Key.LEFT) {
+                if (key_code == Key.Left) {
                     stack.active_child = child2_box;
-                } else if (key_code == Key.RIGHT) {
+                } else if (key_code == Key.Right) {
                     stack.active_child = child1_box;
                 } else {
                     return false;
@@ -373,9 +372,9 @@ namespace Ev3devKit.Demo {
                 + " It can be used when you have too much stuff to fit on the screen"
                 + " at one time. It is best to not have anything else that can_focus"
                 + " on the same screen, because it makes navigation weird. For"
-                + " example, pressing right or left moves to the scroll box below.")
+                + " example, pressing right or left moves to the scroll draw_box below.")
             {
-                text_horizontal_align = TextHorizAlign.LEFT
+                text_horizontal_align = TextHAlign.LEFT
             };
             vscroll.add (vscroll_content);
             vbox.add (vscroll);
@@ -489,7 +488,6 @@ namespace Ev3devKit.Demo {
             window.show ();
         }
 
-        Font[] font_storage;
         void on_fonts_menu_item_button_pressed () {
             const string font_dir_path = "/usr/share/grx/fonts";
 
@@ -508,21 +506,19 @@ namespace Ev3devKit.Demo {
                 while ((file_name = font_dir.read_name ()) != null) {
                     font_list.insert_sorted (file_name, (a,b) => strcmp (a,b));
                 }
-                font_storage = new Font[font_list.get_length ()];
-                var index = 0;
                 font_list.foreach ((font_name) => {
-                    var font = Font.load (font_name);
-                    if (font == null) {
-                        return; // continue foreach
+                    try {
+                        var font = Font.load (font_name);
+                        var label = new Label (font.family) {
+                            font = (owned)font
+                        };
+                        vbox.add (label);
+                    } catch {
+                        // ignore bad fonts
                     }
-                    var label = new Label (font.name.replace (".fnt", "")) {
-                        font = font
-                    };
-                    vbox.add (label);
-                    font_storage[index++] = (owned)font;
                 });
                 window.show ();
-            } catch (Error err) {
+            } catch (GLib.Error err) {
                 var dialog = new Dialog ();
                 var vbox = new Box.vertical ();
                 dialog.add (vbox);

@@ -112,7 +112,7 @@ namespace Ev3devKit.Ui {
          * @throws IOError.NOT_FOUND if the file does not exist or IOError.FAILED
          * if there was a problem loading the data from the file.
          */
-        public Icon.from_stock (StockIcon stock_icon) throws IOError {
+        public Icon.from_stock (StockIcon stock_icon) throws GLib.Error {
             this.from_png (Path.build_filename (DATA_DIR, stock_icon.to_file_name ()));
         }
 
@@ -123,7 +123,7 @@ namespace Ev3devKit.Ui {
          * @throws IOError.NOT_FOUND if the file does not exist or IOError.FAILED
          * if there was a problem loading the data from the file.
          */
-        public Icon.from_png (string file) throws IOError {
+        public Icon.from_png (string file) throws GLib.Error {
             context = create_context_from_png (file);
         }
 
@@ -141,7 +141,7 @@ namespace Ev3devKit.Ui {
          * if there was a problem loading the data from the file.
          */
 
-        public static unowned Context create_context_from_png (string file) throws IOError {
+        public static unowned Context create_context_from_png (string file) throws GLib.Error {
             ensure_file_map ();
             // see if we have this file already cached.
             if (file_map.contains (file)) {
@@ -161,19 +161,19 @@ namespace Ev3devKit.Ui {
                 throw new IOError.NOT_FOUND ("Could not find '%s'", full_path);
             }
             int width, height;
-            if (query_png (full_path, out width, out height) == Result.ERROR)
+            if (!query_png_file (full_path, out width, out height)) {
                 throw new IOError.FAILED ("Error querying '%s'", full_path);
+            }
             Context new_context;
             // in desktop app, core fame mode is undefined so we have to specify a frame mode.
-            if (core_frame_mode () == FrameMode.UNDEFINED) {
-                new_context = Context.create_with_mode (screen_frame_mode (), width, height);
+            if (FrameMode.get_screen_core () == FrameMode.UNDEFINED) {
+                new_context = Context.new_full (FrameMode.get_screen (), width, height);
             } else {
-                new_context = Context.create (width, height);
+                new_context = Context.new (width, height);
             }
             if (new_context == null)
                 throw new IOError.FAILED ("Error allocating context.");
-            if (new_context.load_from_png (full_path) == Result.ERROR)
-                throw new IOError.FAILED ("Error loading '%s'", full_path);
+            new_context.load_from_png (full_path);
             unowned Context unowned_context = new_context;
             file_map[file] = (owned)new_context;
             return unowned_context;
@@ -183,14 +183,14 @@ namespace Ev3devKit.Ui {
          * {@inheritDoc}
          */
         protected override int get_preferred_width () ensures (result > 0) {
-            return context.x_max + 1 + get_margin_border_padding_width ();
+            return context.width + get_margin_border_padding_width ();
         }
 
         /**
          * {@inheritDoc}
          */
         protected override int get_preferred_height () ensures (result > 0) {
-            return context.y_max + 1 + get_margin_border_padding_height ();
+            return context.height + get_margin_border_padding_height ();
         }
 
         /**
@@ -199,14 +199,14 @@ namespace Ev3devKit.Ui {
         protected override void draw_content () {
             if (parent.draw_children_as_focused) {
                 // invert the colors in the icon
-                context.clear (Color.white.to_xor_mode ());
-                bit_blt (Context.current, content_bounds.x1, content_bounds.y1,
-                    context, 0, 0, context.x_max, context.y_max, Color.black.to_image_mode ());
+                context.clear (Color.WHITE.to_xor_mode ());
+                bit_blt (content_bounds.x1, content_bounds.y1, context, 0, 0,
+                    context.max_x, context.max_y, Color.BLACK.to_image_mode ());
                 // restore the colors in the icon
-                context.clear (Color.white.to_xor_mode ());
+                context.clear (Color.WHITE.to_xor_mode ());
             } else {
-                bit_blt (Context.current, content_bounds.x1, content_bounds.y1,
-                    context, 0, 0, context.x_max, context.y_max, Color.white.to_image_mode ());
+                bit_blt (content_bounds.x1, content_bounds.y1, context, 0, 0,
+                    context.max_x, context.max_y, Color.WHITE.to_image_mode ());
             }
         }
 

@@ -139,8 +139,8 @@ namespace Ev3devKit.Ui {
             };
             status_bar.screen = this;
 
-            fg_color = Color.black;
-            bg_color = Color.white;
+            fg_color = Color.BLACK;
+            bg_color = Color.WHITE;
             mid_color = Color.alloc (0, 0, 255); // blue
 
             Timeout.add (50, draw);
@@ -150,7 +150,7 @@ namespace Ev3devKit.Ui {
          * Creates a new screen using the current GRX screen information.
          */
         public Screen () {
-            this.custom (screen_x (), screen_y ());
+            this.custom (get_screen_width (), get_screen_height ());
         }
 
         /**
@@ -163,18 +163,18 @@ namespace Ev3devKit.Ui {
          */
         public Screen.custom (int width, int height, char *context_mem_addr = null) {
             Object (width: width, height: height);
-            FrameMode mode = core_frame_mode ();
+            FrameMode mode = FrameMode.get_screen_core ();
             if (mode == FrameMode.UNDEFINED)
-                mode = screen_frame_mode ();
+                mode = FrameMode.get_screen ();
             if (context_mem_addr == null)
-                context = Context.create_with_mode (mode, width, height);
+                context = Context.new_full (mode, width, height);
             else {
                 char* addr[4];
                 addr[0] = context_mem_addr;
-                context = Context.create_with_mode (mode, width, height, addr);
+                context = Context.new_full (mode, width, height, addr);
             }
-            if (context.driver.bits_per_pixel == 1)
-                mid_color = Color.black;
+            if (mode.get_bpp () == 1)
+                mid_color = Color.BLACK;
         }
 
         /**
@@ -191,7 +191,7 @@ namespace Ev3devKit.Ui {
          * copies this to the actual screen so that it is displayed to the user.
          */
         protected virtual void refresh () {
-            bit_blt (Context.screen, 0, 0, context, 0, 0, screen_x () - 1, screen_y () - 1);
+            Context.screen.bit_blt (0, 0, context, 0, 0, get_screen_width () - 1, get_screen_height () - 1);
         }
 
         void handle_input () {
@@ -256,7 +256,7 @@ namespace Ev3devKit.Ui {
         protected bool draw () {
             handle_input ();
             if (dirty) {
-                context.set ();
+                Context.current = context;
                 Window? top_window = null;
                 Window? top_dialog = null;
                 unowned List<Window> iter = window_stack.tail;

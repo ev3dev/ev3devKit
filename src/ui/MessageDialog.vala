@@ -21,7 +21,6 @@
 
 /* MessageDialog.vala - Dialog that displays message to user */
 
-using Curses;
 using Grx;
 
 namespace Ev3devKit.Ui {
@@ -77,14 +76,14 @@ namespace Ev3devKit.Ui {
          */
         public override bool key_pressed (uint key_code) {
             switch (key_code) {
-            case Key.UP:
+            case Key.Up:
                 vscroll.scroll_backward ();
                 break;
-            case Key.DOWN:
+            case Key.Down:
                 vscroll.scroll_forward ();
                 break;
-            case '\n':
-                return base.key_pressed (Key.BACKSPACE);
+            case Key.Return:
+                return base.key_pressed (Key.BackSpace);
             default:
                 return base.key_pressed (key_code);
             }

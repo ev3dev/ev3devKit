@@ -21,7 +21,6 @@
 
 /* Dialog.vala - Top level widget */
 
-using Curses;
 using Grx;
 
 namespace Ev3devKit.Ui {
@@ -61,7 +60,7 @@ namespace Ev3devKit.Ui {
          */
         protected override void draw_background () {
             var color = screen.bg_color;
-            filled_rounded_box (border_bounds.x1, border_bounds.y1,
+            draw_filled_rounded_box (border_bounds.x1, border_bounds.y1,
                 border_bounds.x2, border_bounds.y2, border_radius, color);
         }
 

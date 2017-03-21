@@ -61,7 +61,7 @@ namespace Ev3devKit.Ui {
         }
 
         internal void draw () {
-            filled_box (0, 0, screen.width - 1, HEIGHT - 1, screen.bg_color);
+            draw_filled_box (0, 0, screen.width - 1, HEIGHT - 1, screen.bg_color);
             var x = 0;
             foreach (var item in left_items) {
                 if (item.visible)
@@ -72,7 +72,7 @@ namespace Ev3devKit.Ui {
                 if (item.visible)
                     x -= item.draw (x, Align.RIGHT) + PADDING;
             }
-            line (0, HEIGHT - 1, screen.width - 1, HEIGHT - 1, screen.fg_color);
+            draw_line (0, HEIGHT - 1, screen.width - 1, HEIGHT - 1, screen.fg_color);
         }
 
         /**

@@ -21,7 +21,6 @@
 
 /* CheckButton.vala - Widget that represents a checkbox or radio button */
 
-using Curses;
 using Grx;
 
 namespace Ev3devKit.Ui {
@@ -169,16 +168,16 @@ namespace Ev3devKit.Ui {
             unowned Grx.Color color;
             if (has_focus || parent.draw_children_as_focused) {
                 color = window.screen.mid_color;
-                filled_box (border_bounds.x1, border_bounds.y1, border_bounds.x2,
+                draw_filled_box (border_bounds.x1, border_bounds.y1, border_bounds.x2,
                     border_bounds.y2, color);
                 color = window.screen.bg_color;
             } else
                 color = window.screen.fg_color;
             if (check_button_type == CheckButtonType.CHECKBOX)
-                box (content_bounds.x1, content_bounds.y1, content_bounds.x2,
+                draw_box (content_bounds.x1, content_bounds.y1, content_bounds.x2,
                     content_bounds.y2, color);
             else
-                circle (content_bounds.x1 + outer_size / 2,
+                draw_circle (content_bounds.x1 + outer_size / 2,
                     content_bounds.y1 + outer_size / 2, outer_size / 2, color);
             if (checked) {
                 if (check_button_type == CheckButtonType.CHECKBOX) {
@@ -186,9 +185,9 @@ namespace Ev3devKit.Ui {
                     var y1 = content_bounds.y1 + (outer_size - inner_size) / 2;
                     var x2 = content_bounds.x2 - (outer_size - inner_size) / 2;
                     var y2 = content_bounds.y2 - (outer_size - inner_size) / 2;
-                    filled_box (x1, y1, x2, y2, color);
+                    draw_filled_box (x1, y1, x2, y2, color);
                 } else
-                    filled_circle (content_bounds.x1 + outer_size / 2,
+                    draw_filled_circle (content_bounds.x1 + outer_size / 2,
                         content_bounds.y1 + outer_size / 2, inner_size / 2, color);
             }
         }
@@ -197,7 +196,7 @@ namespace Ev3devKit.Ui {
          * Default handler for the key_pressed signal.
          */
         internal override bool key_pressed (uint key_code) {
-            if (key_code == '\n') {
+            if (key_code == Key.Return) {
                 if (check_button_type == CheckButtonType.CHECKBOX)
                     checked = !checked;
                 else

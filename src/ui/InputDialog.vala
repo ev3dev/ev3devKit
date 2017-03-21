@@ -23,7 +23,6 @@
  * Dialog for getting user input (text).
  */
 
-using Curses;
 using Grx;
 
 namespace Ev3devKit.Ui {
@@ -93,7 +92,7 @@ namespace Ev3devKit.Ui {
          * Default handler for the key_pressed signal.
          */
         protected override bool key_pressed (uint key_code) {
-            if (key_code == Curses.Key.BACKSPACE) {
+            if (key_code == Grx.Key.BackSpace) {
                 Signal.stop_emission_by_name (this, "key-pressed");
                 on_cancel_button_pressed ();
                 return true;

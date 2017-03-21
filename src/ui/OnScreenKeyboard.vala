@@ -21,7 +21,6 @@
 
 /* OnScreenKeyboard.vala - Window that provides an on-screen keyboard for user intput. */
 
-using Curses;
 using Grx;
 
 namespace Ev3devKit.Ui {
@@ -108,13 +107,13 @@ namespace Ev3devKit.Ui {
                 }
             });
             text_entry.key_pressed.connect ((key_code) => {
-                if (key_code == Key.UP)
+                if (key_code == Key.Up)
                     text_entry.focus_next (FocusDirection.UP);
-                else if (key_code == Key.DOWN)
+                else if (key_code == Key.Down)
                     text_entry.focus_next (FocusDirection.DOWN);
-                else if (key_code == Key.BACKSPACE)
+                else if (key_code == Key.BackSpace)
                     text_entry.delete_char (true);
-                else if (key_code != '\n')
+                else if (key_code != Key.Return)
                     return false;
                 Signal.stop_emission_by_name (text_entry, "key-pressed");
                 return true;
@@ -372,9 +371,9 @@ namespace Ev3devKit.Ui {
          * Default handler for the key_pressed signal.
          */
         internal override bool key_pressed (uint key_code) {
-            if (key_code == Key.BACKSPACE)
+            if (key_code == Key.BackSpace)
                 text_entry.delete_char (true);
-            else if (key_code == Key.DC) // DELETE
+            else if (key_code == Key.Delete)
                 text_entry.delete_char ();
             else if (key_code >= 32 && key_code < 127)
                 set_char ((char)key_code);

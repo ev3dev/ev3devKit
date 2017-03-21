@@ -21,7 +21,6 @@
 
 /* Grid.vala - Container for laying out widgets in a grid */
 
-using Curses;
 using Grx;
 
 namespace Ev3devKit.Ui {
@@ -333,7 +332,7 @@ namespace Ev3devKit.Ui {
                         } else {
                             cell = cells[row,col];
                         }
-                        filled_box (cell.x2 + 1, cell.y1, cell.x2 + border_column, cell.y2 + border_row, color);
+                        draw_filled_box (cell.x2 + 1, cell.y1, cell.x2 + border_column, cell.y2 + border_row, color);
                     }
                 }
             }
@@ -352,7 +351,7 @@ namespace Ev3devKit.Ui {
                         } else {
                             cell = cells[row,col];
                         }
-                        filled_box (cell.x1, cell.y2 + 1, cell.x2 + border_column, cell.y2 + border_row, color);
+                        draw_filled_box (cell.x1, cell.y2 + 1, cell.x2 + border_column, cell.y2 + border_row, color);
                     }
                 }
             }

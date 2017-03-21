@@ -21,7 +21,6 @@
 
 /* Stack.vala - Container that only displays one child at a time. */
 
-using Curses;
 using Grx;
 
 namespace Ev3devKit.Ui {

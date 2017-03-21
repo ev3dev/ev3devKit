@@ -42,7 +42,7 @@ namespace Ev3devKit.Ui {
     /**
      * Container for laying out widgets horizontally or vertically.
      *
-     * A horizontal box with 3 children might look like this:
+     * A horizontal draw_box with 3 children might look like this:
      *
      * {{{
      * +-----+-----+----------------+
@@ -61,7 +61,7 @@ namespace Ev3devKit.Ui {
      * child widgets vertically. {@link WidgetAlign.START} will align the widget
      * to the top of the Box, {@link WidgetAlign.CENTER} will align it in the
      * middle of the Box, {@link WidgetAlign.END} will align it to the bottom of
-     * the box and {@link WidgetAlign.FILL} will use the entire height of the box.
+     * the draw_box and {@link WidgetAlign.FILL} will use the entire height of the draw_box.
      *
      * Vertical boxes work similarly except the vertical and horizontal properties
      * are swapped.
@@ -76,7 +76,7 @@ namespace Ev3devKit.Ui {
         public BoxDirection direction { get; construct; }
 
         /**
-         * Gets and sets the spacing in pixels between the widgets in the box.
+         * Gets and sets the spacing in pixels between the widgets in the draw_box.
          *
          * Default value is 2 pixels.
          */

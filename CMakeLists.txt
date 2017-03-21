@@ -19,9 +19,9 @@ list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 set (DEVICES_DEMO_EXEC_NAME "ev3devKit-devices-demo")
 set (UI_DEMO_EXEC_NAME "ev3devKit-ui-demo")
 set (SOVERSION 0)
-set (VERSION "0.4.3")
+set (VERSION "0.4.99")
 set (GIR_NAME "Ev3devKit")
-set (GIR_VERSION "0.4")
+set (GIR_VERSION "0.5")
 set (EV3DEVKIT_PACKAGE ${PROJECT_NAME}-${GIR_VERSION})
 set (LIBRARY_NAME "${EV3DEVKIT_PACKAGE}")
 set (TARGET_GLIB "2.40")
@@ -144,7 +144,7 @@ OPTIONS
     --target-glib=${TARGET_GLIB}
     --thread
 GENERATE_VAPI
-    ${EV3DEVKIT_PACKAGE}.buggy
+    ${EV3DEVKIT_PACKAGE}
 GENERATE_HEADER
     ${EV3DEVKIT_PACKAGE}
 GENERATE_GIR
@@ -217,28 +217,6 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-${GIR_VERSION}.pc DEST
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${EV3DEVKIT_PACKAGE}.vapi DESTINATION share/vala/vapi/)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}-${GIR_VERSION}.gir DESTINATION share/gir-1.0/)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}-${GIR_VERSION}.typelib DESTINATION lib/girepository-1.0/)
-
-# There is a bug in valac that causes an unowned compact class to lose
-# the "unowned" qualifier when generating a vapi. So, we are calling a
-# script we wrote to fix it.
-add_custom_command (OUTPUT
-    ${CMAKE_CURRENT_BINARY_DIR}/${EV3DEVKIT_PACKAGE}.vapi
-COMMAND
-    ${CMAKE_CURRENT_SOURCE_DIR}/fix-vapi.sh
-    ${CMAKE_CURRENT_BINARY_DIR}/${EV3DEVKIT_PACKAGE}.buggy.vapi
-    ${CMAKE_CURRENT_BINARY_DIR}/${EV3DEVKIT_PACKAGE}.vapi
-DEPENDS
-    ${CMAKE_CURRENT_SOURCE_DIR}/fix-vapi.sh
-    ${CMAKE_CURRENT_BINARY_DIR}/${EV3DEVKIT_PACKAGE}.buggy.vapi
-COMMENT
-    Fixing ${CMAKE_CURRENT_BINARY_DIR}/${EV3DEVKIT_PACKAGE}.buggy.vapi
-)
-
-# Workaround to make CMake 2.8 generate ev3devKit.vapi
-# apparently add_custom_command is ignored if nothing depends on its output.
-set (FIX_VAPI_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${EV3DEVKIT_PACKAGE}.vapi)
-add_custom_target (fix-vapi DEPENDS ${FIX_VAPI_DEPENDS})
-add_dependencies (${LIBRARY_NAME}-shared fix-vapi)
 
 if (EV3DEVKIT_BUILD_DEMO)
     set (EXEC_PACKAGES ${COMMON_PACKAGES} ${EV3DEVKIT_PACKAGE})

@@ -21,7 +21,6 @@
 
 /* TextEntry.vala - Widget for getting text from user */
 
-using Curses;
 using Grx;
 
 namespace Ev3devKit.Ui {
@@ -133,8 +132,8 @@ namespace Ev3devKit.Ui {
 
         construct {
             label = new Label () {
-                text_horizontal_align = TextHorizAlign.LEFT,
-                text_vertical_align = TextVertAlign.TOP,
+                text_horizontal_align = TextHAlign.LEFT,
+                text_vertical_align = TextVAlign.TOP,
                 font = Fonts.get_default ()
             };
             can_focus = true;
@@ -215,7 +214,7 @@ namespace Ev3devKit.Ui {
          * {@inheritDoc}
          */
         protected override int get_preferred_width () {
-            return int.max (min_width, font.vala_string_width (text ?? "")
+            return int.max (min_width, font.get_text_width (text ?? "")
                 + get_margin_border_padding_width ());
         }
 
@@ -288,19 +287,19 @@ namespace Ev3devKit.Ui {
          */
         internal override bool key_pressed (uint key_code) {
             if (_editing) {
-                if (key_code == Key.UP)
+                if (key_code == Key.Up)
                     inc_char ();
-                else if (key_code == Key.DOWN)
+                else if (key_code == Key.Down)
                     inc_char (true);
-                else if (key_code == Key.RIGHT) {
+                else if (key_code == Key.Right) {
                     cursor_offset ++;
                     if (should_inc_text_offset_with_cursor)
                         text_offset++;
-                } else if (key_code == Key.LEFT)
+                } else if (key_code == Key.Left)
                     cursor_offset--;
-                else if (key_code == '\n')
+                else if (key_code == Key.Return)
                     commit_editing ();
-                else if (key_code == Key.BACKSPACE)
+                else if (key_code == Key.BackSpace)
                     cancel_editing ();
                 else if (key_code >= 32 && key_code < 127)
                     set_char ((char)key_code, true);
@@ -310,11 +309,11 @@ namespace Ev3devKit.Ui {
                 Signal.stop_emission_by_name (this, "key-pressed");
                 return true;
             } else {
-                if (key_code == Key.RIGHT)
+                if (key_code == Key.Right)
                     text_offset ++;
-                else if (key_code == Key.LEFT)
+                else if (key_code == Key.Left)
                     text_offset--;
-                else if (_can_edit && key_code == '\n')
+                else if (_can_edit && key_code == Key.Return)
                     start_editing ();
                 else
                     return base.key_pressed (key_code);
@@ -330,7 +329,7 @@ namespace Ev3devKit.Ui {
             should_inc_text_offset_with_cursor = false;
 
             // don't need to do fancy calculations if we are not out of bounds.
-            if (font.vala_string_width (text ?? "") <= content_bounds.width) {
+            if (font.get_text_width (text ?? "") <= content_bounds.width) {
                 label.text = text;
                 text_offset = 0;
             } else {
@@ -343,7 +342,7 @@ namespace Ev3devKit.Ui {
                 builder.append (CONTINUE_LEFT);
                 var max_text_offset = text.length - 1;
                 while (max_text_offset > 0
-                    && font.vala_string_width (builder.str) < content_bounds.width)
+                    && font.get_text_width (builder.str) < content_bounds.width)
                     builder.append_c (text[max_text_offset--]);
                 max_text_offset += CONTINUE_LEFT.length + 1;
                 text_offset = int.min (text_offset, max_text_offset);
@@ -358,13 +357,13 @@ namespace Ev3devKit.Ui {
                     continuation_offset = CONTINUE_LEFT.length;
                     var index = text_offset;
                     while (index < text.length
-                            && font.vala_string_width (builder.str) < content_bounds.width)
+                            && font.get_text_width (builder.str) < content_bounds.width)
                         builder.append_c (text[index++]);
                     if (index < text.length
-                        || font.vala_string_width (builder.str) > content_bounds.width)
+                        || font.get_text_width (builder.str) > content_bounds.width)
                     {
                         while (index > 0
-                            && font.vala_string_width (builder.str + CONTINUE_RIGHT)
+                            && font.get_text_width (builder.str + CONTINUE_RIGHT)
                                 > content_bounds.width)
                         {
                             builder.truncate (builder.len - 1);
@@ -384,7 +383,7 @@ namespace Ev3devKit.Ui {
             cursor_offset = int.min (cursor_offset, text.length - 1);
             cursor_x = content_bounds.x1;
             if (text.length > 0)
-                cursor_x += font.vala_string_width (
+                cursor_x += font.get_text_width (
                     label.text[0:continuation_offset + cursor_offset - text_offset]);
         }
 
@@ -413,12 +412,11 @@ namespace Ev3devKit.Ui {
             var color = has_focus ? window.screen.mid_color : window.screen.fg_color;
             label.draw ();
             if (editing) {
-                horiz_line (cursor_x,
-                    cursor_x + font.char_width (label.text[cursor_offset]),
-                    content_bounds.y2 + 1, color);
+                draw_hline (cursor_x,
+                    cursor_x + font.width, content_bounds.y2 + 1, color);
             }
             if (has_focus && !editing) {
-                box (border_bounds.x1 + 1, border_bounds.y1 + 1,
+                draw_box (border_bounds.x1 + 1, border_bounds.y1 + 1,
                     border_bounds.x2 - 1, border_bounds.y2 -1, color);
             }
         }

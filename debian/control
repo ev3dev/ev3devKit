@@ -2,16 +2,21 @@ Source: ev3devkit
 Section: embedded
 Priority: standard
 Maintainer: David Lechner <david@lechnology.com>
-Build-Depends: debhelper (>= 9), cmake, valac (>= 0.24), gobject-introspection,
-               libgirepository1.0-dev, libgudev-1.0-dev,
-               libncurses5-dev, libgrx-dev (>= 2.4.9-0ev3dev7), netpbm,
-               libgtk-3-dev [i386 amd64]
-Standards-Version: 3.9.5
+Build-Depends: debhelper (>= 9),
+    cmake,
+    gobject-introspection,
+    libgirepository1.0-dev,
+    libgrx-3.0-dev,
+    libgtk-3-dev [i386 amd64],
+    libgudev-1.0-dev,
+    netpbm,
+    valac (>= 0.24)
+Standards-Version: 3.9.7
 Homepage: https://www.ev3dev.org
-Vcs-Git: git://github.com/ev3dev/ev3devKit.git
+Vcs-Git: https://github.com/ev3dev/ev3devKit.git
 Vcs-Browser: https://github.com/ev3dev/ev3devKit
 
-Package: libev3devkit-0.4-0
+Package: libev3devkit-0.5-0
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, ev3devkit-data (= ${source:Version})
 Description: Programming toolkit for ev3dev
@@ -20,7 +25,7 @@ Description: Programming toolkit for ev3dev
  It is written in vala, but since it uses GObjects, it can be used with many
  languages via GObjectIntrospection.
 
-Package: gir1.2-ev3devkit-0.4
+Package: gir1.2-ev3devkit-0.5
 Section: introspection
 Architecture: any
 Depends: ${gir:Depends}, ${misc:Depends}
@@ -36,7 +41,7 @@ Description: Programming toolkit for ev3dev
 Package: libev3devkit-dev
 Architecture: any
 Section: libdevel
-Depends: ${misc:Depends}, libev3devkit-0.4-0 (= ${binary:Version}),
+Depends: ${misc:Depends}, libev3devkit-0.5-0 (= ${binary:Version}),
          gir1.2-ev3devkit-0.4 (= ${binary:Version}), libgrx-dev
 Description: Programming toolkit for ev3dev
  This package contains the development files for ev3devKit.

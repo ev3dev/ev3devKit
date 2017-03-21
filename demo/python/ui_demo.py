@@ -2,7 +2,7 @@
 
 # ev3devKit - ev3dev toolkit for LEGO MINDSTORMS EV3
 #
-# Copyright 2015 David Lechner <david@lechnology.com>
+# Copyright 2015,2017 David Lechner <david@lechnology.com>
 #           2015 Stefan Sauer <ensonic@google.com>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -22,23 +22,27 @@
 
 # ui_demo.py - main function for running UI demo
 
-import sys
-import time
+import gi
 
+gi.require_version('Ev3devKit', '0.5')
 from gi.repository import Ev3devKit
+
 from ui_demo_window import UiDemoWindow
 
-def quit(window):
-    Ev3devKit.console_app_quit()
 
-def main():
-    Ev3devKit.console_app_init()
-
+def do_activate(app):
     demo_window = UiDemoWindow()
-    demo_window.connect("quit", quit)
+    demo_window.connect('quit', lambda _: app.quit())
     demo_window.show()
 
-    Ev3devKit.console_app_run()
+
+def main():
+    app = Ev3devKit.ConsoleApp.new()
+
+    activate_id = app.connect('activate', do_activate)
+
+    app.run()
+    app.disconnect(activate_id)
 
 if __name__ == "__main__":
     main()

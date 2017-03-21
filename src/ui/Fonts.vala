@@ -27,20 +27,20 @@ using Grx;
  * Namespace for getting common fonts.
  */
 namespace Ev3devKit.Ui.Fonts {
-    Font _default_font;
-    unowned Font default_font;
-    Font _small_font;
-    unowned Font small_font;
-    Font _big_font;
-    unowned Font big_font;
+    Font default_font;
+    Font small_font;
+    Font big_font;
 
     /**
      * Gets the default font.
      */
     public unowned Font get_default () {
         if (default_font == null) {
-            _default_font = Font.load ("lucs15");
-            default_font = _default_font ?? Font.pc8x14;
+            try {
+                default_font = Font.load ("lucida", 8);
+            } catch (GLib.Error err) {
+                critical ("%s", err.message);
+            }
         }
         return default_font;
     }
@@ -50,8 +50,11 @@ namespace Ev3devKit.Ui.Fonts {
      */
     public unowned Font get_small () {
         if (small_font == null) {
-            _small_font = Font.load ("lucs12");
-            small_font = _small_font ?? Font.pc6x8;
+            try {
+                small_font = Font.load ("lucida", 6);
+            } catch (GLib.Error err) {
+                critical ("%s", err.message);
+            }
         }
         return small_font;
     }
@@ -61,8 +64,11 @@ namespace Ev3devKit.Ui.Fonts {
      */
     public unowned Font get_big () {
         if (big_font == null) {
-            _big_font = Font.load ("lucs21");
-            big_font = _big_font ?? Font.pc8x14;
+            try {
+                big_font = Font.load ("lucida", 10);
+            } catch (GLib.Error err) {
+                critical ("%s", err.message);
+            }
         }
         return big_font;
     }
