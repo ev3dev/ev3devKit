@@ -1,3 +1,11 @@
+ev3devkit (0.5.0) stable; urgency=medium
+
+  * Remove separate desktop library
+  * Update for GRX3
+  * Ignore key repeat events
+
+ -- David Lechner <david@lechnology.com>  Thu, 23 Mar 2017 18:49:54 -0500
+
 ev3devkit (0.4.3) stable; urgency=medium
 
   [ Stefan Sauer ]
