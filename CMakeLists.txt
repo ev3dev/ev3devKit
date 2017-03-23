@@ -302,4 +302,5 @@ if (VALADOC_FOUND)
     PACKAGES
         ${COMMON_PACKAGES}
     )
+    add_custom_target (doc ALL DEPENDS valadoc)
 endif (VALADOC_FOUND)
