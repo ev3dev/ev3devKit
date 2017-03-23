@@ -6,6 +6,7 @@ set -e
 
 GIT_REMOTE_URL=git@github.com:ev3dev/ev3devKit
 DOC_DIR=valadoc
+LANG=vala
 
 RTD_VERSION=$1
 RTD_VERSION2=$2
@@ -23,13 +24,13 @@ mkdir git
 cd git
 git init
 git remote add origin $GIT_REMOTE_URL
-git checkout -b c-api-docs/$RTD_VERSION
+git checkout -b $LANG-api-docs/$RTD_VERSION
 cp -R ../$DOC_DIR/* .
 git add .
 git commit -m "documentation"
-git push --force origin c-api-docs/$RTD_VERSION
+git push --force origin $LANG-api-docs/$RTD_VERSION
 if [ -n "$RTD_VERSION2" ]; then
-    git push --force origin HEAD:c-api-docs/$RTD_VERSION2
+    git push --force origin HEAD:$LANG-api-docs/$RTD_VERSION2
 fi
 cd ../..
 rm -rf build-doc
