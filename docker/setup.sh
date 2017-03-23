@@ -48,6 +48,6 @@ docker run \
     $image_name tail
 
 docker exec --tty $container_name cmake /src -DCMAKE_BUILD_TYPE=Debug \
-    -DCMAKE_TOOLCHAIN_FILE=/opt/gcc-linaro-5.3-2016.02-x86_64_arm-linux-gnueabihf/toolchain.cmake
+    -DCMAKE_TOOLCHAIN_FILE=/home/compiler/toolchain.cmake
 
 echo "Done. You can now compile by running 'docker exec --tty $container_name make'"
