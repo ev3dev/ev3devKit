@@ -10,7 +10,7 @@ Build-Depends: debhelper (>= 9),
     libgudev-1.0-dev,
     netpbm,
     valac (>= 0.24)
-Standards-Version: 3.9.7
+Standards-Version: 3.9.8
 Homepage: https://www.ev3dev.org
 Vcs-Git: https://github.com/ev3dev/ev3devKit.git
 Vcs-Browser: https://github.com/ev3dev/ev3devKit
