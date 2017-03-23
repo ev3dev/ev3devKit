@@ -37,7 +37,7 @@ namespace Ev3devKit.Ui.Fonts {
     public unowned Font get_default () {
         if (default_font == null) {
             try {
-                default_font = Font.load ("lucida", 8);
+                default_font = Font.load ("fixed sans", 8);
             } catch (GLib.Error err) {
                 critical ("%s", err.message);
             }
@@ -51,7 +51,7 @@ namespace Ev3devKit.Ui.Fonts {
     public unowned Font get_small () {
         if (small_font == null) {
             try {
-                small_font = Font.load ("lucida", 6);
+                small_font = Font.load ("fixed sans", 6);
             } catch (GLib.Error err) {
                 critical ("%s", err.message);
             }
@@ -65,7 +65,7 @@ namespace Ev3devKit.Ui.Fonts {
     public unowned Font get_big () {
         if (big_font == null) {
             try {
-                big_font = Font.load ("lucida", 10);
+                big_font = Font.load ("fixed sans", 10);
             } catch (GLib.Error err) {
                 critical ("%s", err.message);
             }
