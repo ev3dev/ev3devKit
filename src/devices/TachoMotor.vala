@@ -428,7 +428,7 @@ namespace Ev3devKit.Devices {
          * action will not take effect until a new ``run-*`` command has been
          * sent using {@link send_command}.
          *
-         * @param command The new stop action.
+         * @param action The new stop action.
          * @throws Error is action is not a valid action.
          */
         public void set_stop_action (string action) throws Error {

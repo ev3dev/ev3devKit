@@ -109,7 +109,7 @@ namespace Ev3devKit.Ui {
          * Creates a new instance of a Icon widget using a stock icon.
          *
          * @param stock_icon The stock icon to use.
-         * @throws IOError.NOT_FOUND if the file does not exist or IOError.FAILED
+         * @throws GLib.IOError.NOT_FOUND if the file does not exist or IOError.FAILED
          * if there was a problem loading the data from the file.
          */
         public Icon.from_stock (StockIcon stock_icon) throws GLib.Error {
@@ -120,7 +120,7 @@ namespace Ev3devKit.Ui {
          * Creates a new instance of a Icon widget from a PNG file.
          *
          * @param file The name of the file where the icon is stored.
-         * @throws IOError.NOT_FOUND if the file does not exist or IOError.FAILED
+         * @throws GLib.IOError.NOT_FOUND if the file does not exist or IOError.FAILED
          * if there was a problem loading the data from the file.
          */
         public Icon.from_png (string file) throws GLib.Error {
@@ -137,7 +137,7 @@ namespace Ev3devKit.Ui {
          * need a Widget.
          *
          * @param file The name of the file where the icon is stored.
-         * @throws IOError.NOT_FOUND if the file does not exist or IOError.FAILED
+         * @throws GLib.IOError.NOT_FOUND if the file does not exist or IOError.FAILED
          * if there was a problem loading the data from the file.
          */
 
