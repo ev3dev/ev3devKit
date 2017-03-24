@@ -1,3 +1,9 @@
+ev3devkit (0.5.1) testing; urgency=medium
+
+  * Fix -dev package depends on libgrx-3.0-dev
+
+ -- David Lechner <david@lechnology.com>  Thu, 23 Mar 2017 23:36:21 -0500
+
 ev3devkit (0.5.0) testing; urgency=medium
 
   * Remove separate desktop library
