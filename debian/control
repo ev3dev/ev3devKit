@@ -41,7 +41,7 @@ Package: libev3devkit-dev
 Architecture: any
 Section: libdevel
 Depends: ${misc:Depends}, libev3devkit-0.5-0 (= ${binary:Version}),
-         gir1.2-ev3devkit-0.5 (= ${binary:Version}), libgrx-dev
+         gir1.2-ev3devkit-0.5 (= ${binary:Version}), libgrx-3.0-dev
 Description: Programming toolkit for ev3dev
  This package contains the development files for ev3devKit.
 
