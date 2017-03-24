@@ -1,4 +1,4 @@
-ev3devkit (0.5.0) stable; urgency=medium
+ev3devkit (0.5.0) testing; urgency=medium
 
   * Remove separate desktop library
   * Update for GRX3
