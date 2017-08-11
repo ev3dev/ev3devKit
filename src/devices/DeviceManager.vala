@@ -171,7 +171,7 @@ namespace Ev3devKit.Devices {
                     return led;
                 }
             }
-            throw new DeviceError.NOT_FOUND ("Could not find Led '%s:%s:ev3dev'",
+            throw new DeviceError.NOT_FOUND ("Could not find Led '%s:%s:brick-status'",
                 name, color);
         }
 
@@ -329,8 +329,8 @@ namespace Ev3devKit.Devices {
                     sensor_added (sensor);
                     break;
                 case LEDS_CLASS:
-                    // only handle ":ev3dev" LEDs
-                    if (!udev_device.get_name ().has_suffix (":ev3dev")) {
+                    // only handle ":brick-status" LEDs
+                    if (!udev_device.get_name ().has_suffix (":brick-status")) {
                         break;
                     }
                     var led = new Led (udev_device);

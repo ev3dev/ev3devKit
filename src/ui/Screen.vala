@@ -141,7 +141,8 @@ namespace Ev3devKit.Ui {
 
             fg_color = Color.BLACK;
             bg_color = Color.WHITE;
-            mid_color = Color.alloc (0, 0, 255); // blue
+            mid_color = Color.alloc (0x55, 0x55, 0xff); // bright blue
+            // translates to dark gray in 2bpp and black in 1bpp
 
             Timeout.add (50, draw);
         }
@@ -173,8 +174,6 @@ namespace Ev3devKit.Ui {
                 addr[0] = context_mem_addr;
                 context = Context.new_full (mode, width, height, addr);
             }
-            if (mode.get_bpp () == 1)
-                mid_color = Color.BLACK;
         }
 
         /**

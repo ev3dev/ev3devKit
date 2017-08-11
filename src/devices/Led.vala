@@ -43,7 +43,7 @@ namespace Ev3devKit.Devices {
             get {
                 if (_name == null) {
                     _name = udev_device.get_name ();
-                    // strip off the ":ev3dev" suffix
+                    // strip off the ":brick-status" suffix
                     _name = _name[0:_name.last_index_of (":")];
                     // strip off the color
                     _name = _name[0:_name.last_index_of (":")];
@@ -62,7 +62,7 @@ namespace Ev3devKit.Devices {
             get {
                 if (_color == null) {
                     _color = udev_device.get_name ();
-                    // strip off the ":ev3dev" suffix
+                    // strip off the ":brick-status" suffix
                     _color = _color[0:_color.last_index_of (":")];
                     // strip off the name
                     _color = _color.substring (_color.last_index_of (":") + 1);
