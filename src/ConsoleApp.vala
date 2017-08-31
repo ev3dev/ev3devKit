@@ -68,6 +68,9 @@ namespace Ev3devKit {
             Object ();
             init ();
             Ui.Screen.active_screen = new Ui.Screen ();
+            notify["is-active"].connect ((s, p) => {
+                Ui.Screen.can_draw = is_active;
+            });
         }
 
         public override bool event (Grx.Event event) {

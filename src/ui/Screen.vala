@@ -38,6 +38,11 @@ namespace Ev3devKit.Ui {
         Context context;
 
         /**
+         * Hack to prevent drawing during console switching.
+         */
+        internal static bool can_draw { get; set; default = true; }
+
+        /**
          * Gets and sets the foreground color.
          *
          * This color is used by widget drawing functions for things like text
@@ -254,7 +259,7 @@ namespace Ev3devKit.Ui {
          */
         protected bool draw () {
             handle_input ();
-            if (dirty) {
+            if (dirty && can_draw) {
                 set_current_context (context);
                 Window? top_window = null;
                 Window? top_dialog = null;
