@@ -28,12 +28,12 @@ namespace Ev3devKit.Devices {
         /**
          * Device name of the left LEDs on the EV3 brick.
          */
-        public const string EV3_LEFT = "ev3:left";
+        public const string EV3_LEFT = "led0";
 
         /**
          * Device name of the right LEDs on the EV3 brick.
          */
-        public const string EV3_RIGHT = "ev3:right";
+        public const string EV3_RIGHT = "led1";
 
         string _name;
         /**
