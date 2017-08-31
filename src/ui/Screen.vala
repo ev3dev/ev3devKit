@@ -146,8 +146,7 @@ namespace Ev3devKit.Ui {
 
             fg_color = Color.BLACK;
             bg_color = Color.WHITE;
-            mid_color = Color.get (0x55, 0x55, 0xff); // bright blue
-            // translates to dark gray in 2bpp and black in 1bpp
+            mid_color = Color.get (0x00, 0x00, 0xff); // blue
 
             Timeout.add (50, draw);
         }
