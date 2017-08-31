@@ -74,6 +74,9 @@ namespace Ev3devKit {
         }
 
         public override bool event (Grx.Event event) {
+            if (base.event (event)) {
+                return true;
+            }
             if (event.type == Grx.EventType.KEY_DOWN) {
                 Ui.Screen.active_screen.queue_key_code (event.key.keysym);
                 return true;
