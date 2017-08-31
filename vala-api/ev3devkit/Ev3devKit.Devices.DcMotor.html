@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <title>Ev3devKit.Devices.DcMotor &ndash; ev3devkit &ndash; Vala Binding Reference</title>
+    <link href="../style.css" rel="stylesheet" type="text/css"/><script src="../scripts.js" type="text/javascript">
+    </script>
+  </head>
+  <body>
+    <div class="site_header">Ev3devKit.Devices.DcMotor &ndash; ev3devkit Reference Manual</div>
+    <div class="site_body">
+      <div class="site_navigation">
+        <ul class="navi_main">
+          <li class="package_index"><a href="../index.html">Packages</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="package"><a href="index.htm">ev3devkit</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="namespace"><a href="Ev3devKit.html">Ev3devKit</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="namespace"><a href="Ev3devKit.Devices.html">Devices</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="class">DcMotor</li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="property"><a href="Ev3devKit.Devices.DcMotor.address.html">address</a></li>
+          <li class="property"><a href="Ev3devKit.Devices.DcMotor.commands.html">commands</a></li>
+          <li class="property"><a href="Ev3devKit.Devices.DcMotor.driver_name.html">driver_name</a></li>
+          <li class="property"><a href="Ev3devKit.Devices.DcMotor.duty_cycle.html">duty_cycle</a></li>
+          <li class="property"><a href="Ev3devKit.Devices.DcMotor.duty_cycle_sp.html">duty_cycle_sp</a></li>
+          <li class="property"><a href="Ev3devKit.Devices.DcMotor.polarity.html">polarity</a></li>
+          <li class="property"><a href="Ev3devKit.Devices.DcMotor.ramp_down_sp.html">ramp_down_sp</a></li>
+          <li class="property"><a href="Ev3devKit.Devices.DcMotor.ramp_up_sp.html">ramp_up_sp</a></li>
+          <li class="property"><a href="Ev3devKit.Devices.DcMotor.state.html">state</a></li>
+          <li class="property"><a href="Ev3devKit.Devices.DcMotor.stop_actions.html">stop_actions</a></li>
+          <li class="method"><a href="Ev3devKit.Devices.DcMotor.send_command.html">send_command</a></li>
+          <li class="method"><a href="Ev3devKit.Devices.DcMotor.set_duty_cycle_sp.html">set_duty_cycle_sp</a></li>
+          <li class="method"><a href="Ev3devKit.Devices.DcMotor.set_stop_action.html">set_stop_action</a></li>
+          <li class="method"><a href="Ev3devKit.Devices.DcMotor.set_time_sp.html">set_time_sp</a></li>
+        </ul>
+      </div>
+      <div class="site_content">
+        <h1 class="main_title">DcMotor</h1>
+        <hr class="main_hr"/>
+        <h2 class="main_title">Object Hierarchy:</h2>
+        <img class="main_diagram" usemap="#Ev3devKit.Devices.DcMotor" alt="Object hierarchy for DcMotor" src="img/Ev3devKit.Devices.DcMotor.png"/>
+
+      <map id="Ev3devKit.Devices.DcMotor" name="Ev3devKit.Devices.DcMotor">
+<area shape="rect" id="node1" href="Ev3devKit.Devices.DcMotor.html" title="Ev3devKit.Devices.DcMotor" alt="" coords="5,197,240,245"/>
+<area shape="rect" id="node2" href="Ev3devKit.Devices.Device.html" title="Ev3devKit.Devices.Device" alt="" coords="13,101,232,149"/>
+</map>
+
+        <h2 class="main_title">Description:</h2>
+        <div class="main_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">class</span> <b><span class="class">DcMotor</span></b> : <span class="main_type"><a href="Ev3devKit.Devices.Device.html" class="abstract_class">Device</a></span>
+        </div>
+        <div class="description">
+          <p>Represents a simple DC motor.</p>
+        </div><br/>
+        <div class="namespace_note"><b>Namespace:</b> <a href="Ev3devKit.Devices.html">Ev3devKit.Devices</a>
+        </div>
+        <div class="package_note"><b>Package:</b> <a href="index.htm">ev3devkit</a>
+        </div>
+        <h2 class="main_title">Content:</h2>
+        <h3 class="main_title">Properties:</h3>
+        <ul class="navi_inline">
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="class">string</span></span>[]? <b><a href="Ev3devKit.Devices.DcMotor.commands.html" class="property">commands</a></b> { <span class="main_keyword">owned</span> <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Get a list of supported commands.</span>
+            </div></li>
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="Ev3devKit.Devices.DcMotor.duty_cycle.html" class="property">duty_cycle</a></b> { <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Gets the current duty cycle of the motor.</span>
+            </div></li>
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="Ev3devKit.Devices.DcMotor.duty_cycle_sp.html" class="property">duty_cycle_sp</a></b> { <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Gets the current duty cycle setpoint of the motor.</span>
+            </div></li>
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="class">string</span></span>? <b><a href="Ev3devKit.Devices.DcMotor.driver_name.html" class="property">driver_name</a></b> { <span class="main_keyword">owned</span> <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description">
+            </div></li>
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="class">string</span></span>? <b><a href="Ev3devKit.Devices.DcMotor.address.html" class="property">address</a></b> { <span class="main_keyword">owned</span> <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description">
+            </div></li>
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="Ev3devKit.Devices.DcMotor.ramp_down_sp.html" class="property">ramp_down_sp</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description">
+            </div></li>
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">int</span></span> <b><a href="Ev3devKit.Devices.DcMotor.ramp_up_sp.html" class="property">ramp_up_sp</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description">
+            </div></li>
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="Ev3devKit.Devices.MotorPolarity.html" class="enum">MotorPolarity</a></span> <b><a href="Ev3devKit.Devices.DcMotor.polarity.html" class="property">polarity</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Gets and sets the polarity of the motor.</span>
+            </div></li>
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_type"><a href="Ev3devKit.Devices.MotorStateFlags.html" class="enum">MotorStateFlags</a></span> <b><a href="Ev3devKit.Devices.DcMotor.state.html" class="property">state</a></b> { <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Gets flags that indicate the state of the motor.</span>
+            </div></li>
+          <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="class">string</span></span>[]? <b><a href="Ev3devKit.Devices.DcMotor.stop_actions.html" class="property">stop_actions</a></b> { <span class="main_keyword">owned</span> <span class="main_keyword">get</span>; }
+            </span>
+            <div class="leaf_brief_description">
+            </div></li>
+        </ul>
+        <h3 class="main_title">Methods:</h3>
+        <ul class="navi_inline">
+          <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="Ev3devKit.Devices.DcMotor.send_command.html" class="method">send_command</a></b> (<span class="main_basic_type"><span class="class">string</span></span> command) <span class="main_keyword">throws</span> <span class="main_type"><span class="class">Error</span></span>
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Send a command to the motor controller.</span>
+            </div></li>
+          <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="Ev3devKit.Devices.DcMotor.set_duty_cycle_sp.html" class="method">set_duty_cycle_sp</a></b> (<span class="main_basic_type"><span class="struct">int</span></span> duty_cycle) <span class="main_keyword">throws</span> <span class="main_type"><span class="class">Error</span></span>
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Set the duty cycle setpoint for the motor.</span>
+            </div></li>
+          <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="Ev3devKit.Devices.DcMotor.set_time_sp.html" class="method">set_time_sp</a></b> (<span class="main_basic_type"><span class="struct">int</span></span> time) <span class="main_keyword">throws</span> <span class="main_type"><span class="class">Error</span></span>
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Set the time setpoint in milliseconds for the motor.</span>
+            </div></li>
+          <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="Ev3devKit.Devices.DcMotor.set_stop_action.html" class="method">set_stop_action</a></b> (<span class="main_basic_type"><span class="class">string</span></span> action) <span class="main_keyword">throws</span> <span class="main_type"><span class="class">Error</span></span>
+            </span>
+            <div class="leaf_brief_description"><span class="brief_description">Set the stop action for the motor.</span>
+            </div></li>
+        </ul>
+        <h3 class="main_title">Inherited Members:</h3>
+        <div class="box">
+          <div class="headline">
+            <div class="text">All known members inherited from class Ev3devKit.Devices.Device</div>
+            <div class="toggle">
+              <img onclick="toggle_box  (this, 'box-content-7')" src="../coll_open.png">&nbsp;</div>
+            </div>
+            <div class="content" id="box-content-7">
+              <div class="column">
+                <ul class="navi_inline">
+                  <li class="property"><a href="Ev3devKit.Devices.Device.connected.html">connected</a></li>
+                  <li class="property"><a href="Ev3devKit.Devices.Device.device_name.html">device_name</a></li>
+                  <li class="method"><a href="Ev3devKit.Devices.Device.assert_connected.html">assert_connected</a></li>
+                  <li class="method"><a href="Ev3devKit.Devices.Device.read_int.html">read_int</a></li>
+                </ul>
+              </div>
+              <div class="column">
+                <ul class="navi_inline">
+                  <li class="method"><a href="Ev3devKit.Devices.Device.try_read_int.html">try_read_int</a></li>
+                  <li class="method"><a href="Ev3devKit.Devices.Device.read_string.html">read_string</a></li>
+                  <li class="method"><a href="Ev3devKit.Devices.Device.try_read_string.html">try_read_string</a></li>
+                  <li class="method"><a href="Ev3devKit.Devices.Device.write_int.html">write_int</a></li>
+                </ul>
+              </div>
+              <div class="column">
+                <ul class="navi_inline">
+                  <li class="method"><a href="Ev3devKit.Devices.Device.try_write_int.html">try_write_int</a></li>
+                  <li class="method"><a href="Ev3devKit.Devices.Device.write_string.html">write_string</a></li>
+                  <li class="method"><a href="Ev3devKit.Devices.Device.try_write_string.html">try_write_string</a></li>
+                  <li class="field"><a href="Ev3devKit.Devices.Device.udev_device.html">udev_device</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="box">
+            <div class="headline">
+              <div class="text">All known members inherited from class GLib.Object</div>
+              <div class="toggle">
+                <img onclick="toggle_box  (this, 'box-content-8')" src="../coll_open.png">&nbsp;</div>
+              </div>
+              <div class="content" id="box-content-8">
+                <div class="column">
+                  <ul class="navi_inline">
+                    <li class="static_method">@new</li>
+                    <li class="static_method">newv</li>
+                    <li class="static_method">new_valist</li>
+                    <li class="method">get_type</li>
+                    <li class="method">get_class</li>
+                    <li class="method">@ref</li>
+                    <li class="method">unref</li>
+                    <li class="method">ref_sink</li>
+                    <li class="method">weak_ref</li>
+                    <li class="method">weak_unref</li>
+                    <li class="method">add_weak_pointer</li>
+                    <li class="method">remove_weak_pointer</li>
+                  </ul>
+                </div>
+                <div class="column">
+                  <ul class="navi_inline">
+                    <li class="method">@get</li>
+                    <li class="method">@set</li>
+                    <li class="method">get_property</li>
+                    <li class="method">set_property</li>
+                    <li class="method">get_data</li>
+                    <li class="method">set_data</li>
+                    <li class="method">set_data_full</li>
+                    <li class="method">steal_data</li>
+                    <li class="method">get_qdata</li>
+                    <li class="method">set_qdata</li>
+                    <li class="method">set_qdata_full</li>
+                    <li class="method">steal_qdata</li>
+                  </ul>
+                </div>
+                <div class="column">
+                  <ul class="navi_inline">
+                    <li class="method">freeze_notify</li>
+                    <li class="method">thaw_notify</li>
+                    <li class="virtual_method">dispose</li>
+                    <li class="virtual_method">constructed</li>
+                    <li class="method">notify_property</li>
+                    <li class="method">connect</li>
+                    <li class="method">disconnect</li>
+                    <li class="method">add_toggle_ref</li>
+                    <li class="method">remove_toggle_ref</li>
+                    <li class="method">bind_property</li>
+                    <li class="signal">notify</li>
+                    <li class="field">ref_count</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><br/>
+        <div class="site_footer">Generated by <a href="http://www.valadoc.org/">Valadoc</a>
+        </div>
+      </body>
+    </html>

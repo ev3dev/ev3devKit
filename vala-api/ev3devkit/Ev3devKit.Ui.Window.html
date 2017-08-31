@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <title>Ev3devKit.Ui.Window &ndash; ev3devkit &ndash; Vala Binding Reference</title>
+    <link href="../style.css" rel="stylesheet" type="text/css"/><script src="../scripts.js" type="text/javascript">
+    </script>
+  </head>
+  <body>
+    <div class="site_header">Ev3devKit.Ui.Window &ndash; ev3devkit Reference Manual</div>
+    <div class="site_body">
+      <div class="site_navigation">
+        <ul class="navi_main">
+          <li class="package_index"><a href="../index.html">Packages</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="package"><a href="index.htm">ev3devkit</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="namespace"><a href="Ev3devKit.html">Ev3devKit</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="namespace"><a href="Ev3devKit.Ui.html">Ui</a></li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="class">Window</li>
+        </ul>
+        <hr class="navi_hr"/>
+        <ul class="navi_main">
+          <li class="property"><a href="Ev3devKit.Ui.Window.on_screen.html">on_screen</a></li>
+          <li class="property"><a href="Ev3devKit.Ui.Window.screen.html">screen</a></li>
+          <li class="creation_method"><a href="Ev3devKit.Ui.Window.Window.html">Window</a></li>
+          <li class="method"><a href="Ev3devKit.Ui.Window.close.html">close</a></li>
+          <li class="virtual_method"><a href="Ev3devKit.Ui.Window.do_layout.html">do_layout</a></li>
+          <li class="virtual_method"><a href="Ev3devKit.Ui.Window.draw_background.html">draw_background</a></li>
+          <li class="virtual_method"><a href="Ev3devKit.Ui.Window.draw_content.html">draw_content</a></li>
+          <li class="virtual_method"><a href="Ev3devKit.Ui.Window.redraw.html">redraw</a></li>
+          <li class="method"><a href="Ev3devKit.Ui.Window.show.html">show</a></li>
+          <li class="method"><a href="Ev3devKit.Ui.Window.show_on_screen.html">show_on_screen</a></li>
+          <li class="signal"><a href="Ev3devKit.Ui.Window.closed.html">closed</a></li>
+          <li class="signal"><a href="Ev3devKit.Ui.Window.shown.html">shown</a></li>
+        </ul>
+      </div>
+      <div class="site_content">
+        <h1 class="main_title">Window</h1>
+        <hr class="main_hr"/>
+        <h2 class="main_title">Object Hierarchy:</h2>
+        <img class="main_diagram" usemap="#Ev3devKit.Ui.Window" alt="Object hierarchy for Window" src="img/Ev3devKit.Ui.Window.png"/>
+
+      <map id="Ev3devKit.Ui.Window" name="Ev3devKit.Ui.Window">
+<area shape="rect" id="node1" href="Ev3devKit.Ui.Window.html" title="Ev3devKit.Ui.Window" alt="" coords="11,293,202,341"/>
+<area shape="rect" id="node2" href="Ev3devKit.Ui.Container.html" title="Ev3devKit.Ui.Container" alt="" coords="5,197,208,245"/>
+<area shape="rect" id="node3" href="Ev3devKit.Ui.Widget.html" title="Ev3devKit.Ui.Widget" alt="" coords="16,101,197,149"/>
+</map>
+
+        <h2 class="main_title">Description:</h2>
+        <div class="main_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">class</span> <b><span class="class">Window</span></b> : <span class="main_type"><a href="Ev3devKit.Ui.Container.html" class="abstract_class">Container</a></span>
+        </div>
+        <div class="description">
+          <p>Top level widget for displaying other widgets on the <a href="Ev3devKit.Ui.Screen.html" class="class">Screen</a>.</p>
+          <p>All other widgets must be contained in a Window in order to be displayed on the <a href="Ev3devKit.Ui.Screen.html" class="class">Screen
+            </a>. Windows are displayed in a stack. A new Window is added to the stack by calling 
+            <a href="Ev3devKit.Ui.Window.show.html" class="method">show</a> and removed from the stack by calling 
+            <a href="Ev3devKit.Ui.Window.close.html" class="method">close</a>. Only the top-most Window is visible to the user and only that Window 
+            receives user input.</p>
+        </div>
+        <div class="box">
+          <div class="headline">
+            <div class="text">All known sub-classes:</div>
+            <div class="toggle">
+              <img onclick="toggle_box  (this, 'box-content-90')" src="../coll_open.png">&nbsp;</div>
+            </div>
+            <div class="content" id="box-content-90">
+              <div class="column">
+                <ul class="navi_inline">
+                  <li class="class"><a href="Ev3devKit.Ui.Dialog.html">Dialog</a></li>
+                  <li class="class"><a href="Ev3devKit.Ui.InputDialog.html">InputDialog</a></li>
+                </ul>
+              </div>
+              <div class="column">
+                <ul class="navi_inline">
+                  <li class="class"><a href="Ev3devKit.Ui.MessageDialog.html">MessageDialog</a></li>
+                </ul>
+              </div>
+              <div class="column">
+                <ul class="navi_inline">
+                  <li class="class"><a href="Ev3devKit.Ui.OnScreenKeyboard.html">OnScreenKeyboard</a></li>
+                </ul>
+              </div>
+            </div>
+          </div><br/>
+          <div class="namespace_note"><b>Namespace:</b> <a href="Ev3devKit.Ui.html">Ev3devKit.Ui</a>
+          </div>
+          <div class="package_note"><b>Package:</b> <a href="index.htm">ev3devkit</a>
+          </div>
+          <h2 class="main_title">Content:</h2>
+          <h3 class="main_title">Properties:</h3>
+          <ul class="navi_inline">
+            <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">weak</span> <span class="main_type"><a href="Ev3devKit.Ui.Screen.html" class="class">Screen</a></span>? <b><a href="Ev3devKit.Ui.Window.screen.html" class="property">screen</a></b> { <span class="main_keyword">get</span>; }
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Gets the Screen that this Window is attached to.</span>
+              </div></li>
+            <li class="property"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">bool</span></span> <b><a href="Ev3devKit.Ui.Window.on_screen.html" class="property">on_screen</a></b> { <span class="main_keyword">set</span>; <span class="main_keyword">get</span>; }
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Returns true if the Window is currently displayed on the Screen.
+                </span>
+              </div></li>
+          </ul>
+          <h3 class="main_title">Creation methods:</h3>
+          <ul class="navi_inline">
+            <li class="creation_method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <b><a href="Ev3devKit.Ui.Window.Window.html" class="creation_method">Window</a></b> ()
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Creates a new instance of a Window.</span>
+              </div></li>
+          </ul>
+          <h3 class="main_title">Methods:</h3>
+          <ul class="navi_inline">
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="Ev3devKit.Ui.Window.show.html" class="method">show</a></b> ()
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Make the window visible by putting it on top of the window stack of 
+                  the active screen.</span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">void</span> <b><a href="Ev3devKit.Ui.Window.show_on_screen.html" class="method">show_on_screen</a></b> (<span class="main_type"><a href="Ev3devKit.Ui.Screen.html" class="class">Screen</a></span> screen)
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Make the window visible by putting it on top of the window stack.
+                </span>
+              </div></li>
+            <li class="method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_basic_type"><span class="struct">bool</span></span> <b><a href="Ev3devKit.Ui.Window.close.html" class="method">close</a></b> ()
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Remove the window from the window stack.</span>
+              </div></li>
+            <li class="virtual_method"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">override</span> <span class="main_keyword">void</span> <b><a href="Ev3devKit.Ui.Window.redraw.html" class="virtual_method">redraw</a></b> ()
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Notifies that this widget has changed and needs to be redrawn.
+                </span>
+              </div></li>
+            <li class="virtual_method"><span class="leaf_code_definition"><span class="main_keyword">protected</span> <span class="main_keyword">override</span> <span class="main_keyword">void</span> <b><a href="Ev3devKit.Ui.Window.do_layout.html" class="virtual_method">do_layout</a></b> ()
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Implementations should override this method if they need to handle 
+                  laying out its contents.</span>
+              </div></li>
+            <li class="virtual_method"><span class="leaf_code_definition"><span class="main_keyword">protected</span> <span class="main_keyword">override</span> <span class="main_keyword">void</span> <b><a href="Ev3devKit.Ui.Window.draw_background.html" class="virtual_method">draw_background</a></b> ()
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Implementations can override this method if they need to have a a 
+                  background.</span>
+              </div></li>
+            <li class="virtual_method"><span class="leaf_code_definition"><span class="main_keyword">protected</span> <span class="main_keyword">override</span> <span class="main_keyword">void</span> <b><a href="Ev3devKit.Ui.Window.draw_content.html" class="virtual_method">draw_content</a></b> ()
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Implementations should override this method.</span>
+              </div></li>
+          </ul>
+          <h3 class="main_title">Signals:</h3>
+          <ul class="navi_inline">
+            <li class="signal"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">virtual</span> <span class="main_keyword">signal</span> <span class="main_keyword">void</span> <b><a href="Ev3devKit.Ui.Window.shown.html" class="signal">shown</a></b> ()
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Emitted the first time this Window is shown on a Screen.</span>
+              </div></li>
+            <li class="signal"><span class="leaf_code_definition"><span class="main_keyword">public</span> <span class="main_keyword">virtual</span> <span class="main_keyword">signal</span> <span class="main_keyword">void</span> <b><a href="Ev3devKit.Ui.Window.closed.html" class="signal">closed</a></b> ()
+              </span>
+              <div class="leaf_brief_description"><span class="brief_description">Emitted when this window is closed (removed from the window stack).
+                </span>
+              </div></li>
+          </ul>
+          <h3 class="main_title">Inherited Members:</h3>
+          <div class="box">
+            <div class="headline">
+              <div class="text">All known members inherited from class Ev3devKit.Ui.Container</div>
+              <div class="toggle">
+                <img onclick="toggle_box  (this, 'box-content-91')" src="../coll_open.png">&nbsp;</div>
+              </div>
+              <div class="content" id="box-content-91">
+                <div class="column">
+                  <ul class="navi_inline">
+                    <li class="property"><a href="Ev3devKit.Ui.Container.child.html">child</a></li>
+                    <li class="property"><a href="Ev3devKit.Ui.Container.children.html">children</a></li>
+                    <li class="property"><a href="Ev3devKit.Ui.Container.descendant_has_focus.html">descendant_has_focus</a></li>
+                    <li class="virtual_property"><a href="Ev3devKit.Ui.Container.draw_children_as_focused.html">draw_children_as_focused</a></li>
+                    <li class="property"><a href="Ev3devKit.Ui.Container.container_type.html">container_type</a></li>
+                    <li class="virtual_method"><a href="Ev3devKit.Ui.Container.get_preferred_width.html">get_preferred_width</a></li>
+                    <li class="virtual_method"><a href="Ev3devKit.Ui.Container.get_preferred_height.html">get_preferred_height</a></li>
+                  </ul>
+                </div>
+                <div class="column">
+                  <ul class="navi_inline">
+                    <li class="virtual_method"><a href="Ev3devKit.Ui.Container.get_preferred_width_for_height.html">get_preferred_width_for_height</a>
+                    </li>
+                    <li class="virtual_method"><a href="Ev3devKit.Ui.Container.get_preferred_height_for_width.html">get_preferred_height_for_width</a>
+                    </li>
+                    <li class="method"><a href="Ev3devKit.Ui.Container.add.html">add</a></li>
+                    <li class="method"><a href="Ev3devKit.Ui.Container.insert_before.html">insert_before</a></li>
+                    <li class="method"><a href="Ev3devKit.Ui.Container.remove.html">remove</a></li>
+                    <li class="method"><a href="Ev3devKit.Ui.Container.sort.html">sort</a></li>
+                    <li class="method"><a href="Ev3devKit.Ui.Container.focus_first.html">focus_first</a></li>
+                  </ul>
+                </div>
+                <div class="column">
+                  <ul class="navi_inline">
+                    <li class="method"><a href="Ev3devKit.Ui.Container.set_child_bounds.html">set_child_bounds</a></li>
+                    <li class="virtual_method"><a href="Ev3devKit.Ui.Container.do_layout.html">do_layout</a></li>
+                    <li class="virtual_method"><a href="Ev3devKit.Ui.Container.draw_content.html">draw_content</a></li>
+                    <li class="signal"><a href="Ev3devKit.Ui.Container.child_added.html">child_added</a></li>
+                    <li class="signal"><a href="Ev3devKit.Ui.Container.child_removed.html">child_removed</a></li>
+                    <li class="field"><a href="Ev3devKit.Ui.Container._children.html">_children</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="box">
+              <div class="headline">
+                <div class="text">All known members inherited from class Ev3devKit.Ui.Widget</div>
+                <div class="toggle">
+                  <img onclick="toggle_box  (this, 'box-content-92')" src="../coll_open.png">&nbsp;</div>
+                </div>
+                <div class="content" id="box-content-92">
+                  <div class="column">
+                    <ul class="navi_inline">
+                      <li class="property"><a href="Ev3devKit.Ui.Widget.margin_top.html">margin_top</a></li>
+                      <li class="property"><a href="Ev3devKit.Ui.Widget.margin_bottom.html">margin_bottom</a></li>
+                      <li class="property"><a href="Ev3devKit.Ui.Widget.margin_left.html">margin_left</a></li>
+                      <li class="property"><a href="Ev3devKit.Ui.Widget.margin_right.html">margin_right</a></li>
+                      <li class="property"><a href="Ev3devKit.Ui.Widget.margin.html">margin</a></li>
+                      <li class="property"><a href="Ev3devKit.Ui.Widget.border_top.html">border_top</a></li>
+                      <li class="property"><a href="Ev3devKit.Ui.Widget.border_bottom.html">border_bottom</a></li>
+                      <li class="property"><a href="Ev3devKit.Ui.Widget.border_left.html">border_left</a></li>
+                      <li class="property"><a href="Ev3devKit.Ui.Widget.border_right.html">border_right</a></li>
+                      <li class="property"><a href="Ev3devKit.Ui.Widget.border.html">border</a></li>
+                      <li class="property"><a href="Ev3devKit.Ui.Widget.border_radius.html">border_radius</a></li>
+                      <li class="property"><a href="Ev3devKit.Ui.Widget.padding_top.html">padding_top</a></li>
+                      <li class="property"><a href="Ev3devKit.Ui.Widget.padding_bottom.html">padding_bottom</a></li>
+                      <li class="property"><a href="Ev3devKit.Ui.Widget.padding_left.html">padding_left</a></li>
+                      <li class="property"><a href="Ev3devKit.Ui.Widget.padding_right.html">padding_right</a></li>
+                      <li class="property"><a href="Ev3devKit.Ui.Widget.padding.html">padding</a></li>
+                      <li class="property"><a href="Ev3devKit.Ui.Widget.horizontal_align.html">horizontal_align</a></li>
+                    </ul>
+                  </div>
+                  <div class="column">
+                    <ul class="navi_inline">
+                      <li class="property"><a href="Ev3devKit.Ui.Widget.vertical_align.html">vertical_align</a></li>
+                      <li class="property"><a href="Ev3devKit.Ui.Widget.can_focus.html">can_focus</a></li>
+                      <li class="property"><a href="Ev3devKit.Ui.Widget.has_focus.html">has_focus</a></li>
+                      <li class="property"><a href="Ev3devKit.Ui.Widget.next_focus_widget_up.html">next_focus_widget_up</a></li>
+                      <li class="property"><a href="Ev3devKit.Ui.Widget.next_focus_widget_down.html">next_focus_widget_down</a></li>
+                      <li class="property"><a href="Ev3devKit.Ui.Widget.next_focus_widget_left.html">next_focus_widget_left</a></li>
+                      <li class="property"><a href="Ev3devKit.Ui.Widget.next_focus_widget_right.html">next_focus_widget_right</a></li>
+                      <li class="property"><a href="Ev3devKit.Ui.Widget.parent.html">parent</a></li>
+                      <li class="property"><a href="Ev3devKit.Ui.Widget.window.html">window</a></li>
+                      <li class="property"><a href="Ev3devKit.Ui.Widget.visible.html">visible</a></li>
+                      <li class="property"><a href="Ev3devKit.Ui.Widget.weak_represented_object.html">weak_represented_object</a></li>
+                      <li class="property"><a href="Ev3devKit.Ui.Widget.represented_object.html">represented_object</a></li>
+                      <li class="method"><a href="Ev3devKit.Ui.Widget.get_margin_border_padding_width.html">get_margin_border_padding_width</a></li>
+                      <li class="method"><a href="Ev3devKit.Ui.Widget.get_margin_border_padding_height.html">get_margin_border_padding_height</a></li>
+                      <li class="virtual_method"><a href="Ev3devKit.Ui.Widget.get_preferred_width.html">get_preferred_width</a></li>
+                      <li class="virtual_method"><a href="Ev3devKit.Ui.Widget.get_preferred_height.html">get_preferred_height</a></li>
+                      <li class="virtual_method"><a href="Ev3devKit.Ui.Widget.get_preferred_width_for_height.html">get_preferred_width_for_height</a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="column">
+                    <ul class="navi_inline">
+                      <li class="virtual_method"><a href="Ev3devKit.Ui.Widget.get_preferred_height_for_width.html">get_preferred_height_for_width</a>
+                      </li>
+                      <li class="method"><a href="Ev3devKit.Ui.Widget.set_bounds.html">set_bounds</a></li>
+                      <li class="method"><a href="Ev3devKit.Ui.Widget.focus.html">focus</a></li>
+                      <li class="method"><a href="Ev3devKit.Ui.Widget.focus_next.html">focus_next</a></li>
+                      <li class="method"><a href="Ev3devKit.Ui.Widget.get_focused_child.html">get_focused_child</a></li>
+                      <li class="method"><a href="Ev3devKit.Ui.Widget.do_recursive_children.html">do_recursive_children</a></li>
+                      <li class="method"><a href="Ev3devKit.Ui.Widget.do_recursive_parent.html">do_recursive_parent</a></li>
+                      <li class="virtual_method"><a href="Ev3devKit.Ui.Widget.redraw.html">redraw</a></li>
+                      <li class="virtual_method"><a href="Ev3devKit.Ui.Widget.do_layout.html">do_layout</a></li>
+                      <li class="virtual_method"><a href="Ev3devKit.Ui.Widget.draw_background.html">draw_background</a></li>
+                      <li class="virtual_method"><a href="Ev3devKit.Ui.Widget.draw_content.html">draw_content</a></li>
+                      <li class="virtual_method"><a href="Ev3devKit.Ui.Widget.draw_border.html">draw_border</a></li>
+                      <li class="signal"><a href="Ev3devKit.Ui.Widget.key_pressed.html">key_pressed</a></li>
+                      <li class="field"><a href="Ev3devKit.Ui.Widget.bounds.html">bounds</a></li>
+                      <li class="field"><a href="Ev3devKit.Ui.Widget.border_bounds.html">border_bounds</a></li>
+                      <li class="field"><a href="Ev3devKit.Ui.Widget.content_bounds.html">content_bounds</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="box">
+                <div class="headline">
+                  <div class="text">All known members inherited from class GLib.Object</div>
+                  <div class="toggle">
+                    <img onclick="toggle_box  (this, 'box-content-93')" src="../coll_open.png">&nbsp;</div>
+                  </div>
+                  <div class="content" id="box-content-93">
+                    <div class="column">
+                      <ul class="navi_inline">
+                        <li class="static_method">@new</li>
+                        <li class="static_method">newv</li>
+                        <li class="static_method">new_valist</li>
+                        <li class="method">get_type</li>
+                        <li class="method">get_class</li>
+                        <li class="method">@ref</li>
+                        <li class="method">unref</li>
+                        <li class="method">ref_sink</li>
+                        <li class="method">weak_ref</li>
+                        <li class="method">weak_unref</li>
+                        <li class="method">add_weak_pointer</li>
+                        <li class="method">remove_weak_pointer</li>
+                      </ul>
+                    </div>
+                    <div class="column">
+                      <ul class="navi_inline">
+                        <li class="method">@get</li>
+                        <li class="method">@set</li>
+                        <li class="method">get_property</li>
+                        <li class="method">set_property</li>
+                        <li class="method">get_data</li>
+                        <li class="method">set_data</li>
+                        <li class="method">set_data_full</li>
+                        <li class="method">steal_data</li>
+                        <li class="method">get_qdata</li>
+                        <li class="method">set_qdata</li>
+                        <li class="method">set_qdata_full</li>
+                        <li class="method">steal_qdata</li>
+                      </ul>
+                    </div>
+                    <div class="column">
+                      <ul class="navi_inline">
+                        <li class="method">freeze_notify</li>
+                        <li class="method">thaw_notify</li>
+                        <li class="virtual_method">dispose</li>
+                        <li class="virtual_method">constructed</li>
+                        <li class="method">notify_property</li>
+                        <li class="method">connect</li>
+                        <li class="method">disconnect</li>
+                        <li class="method">add_toggle_ref</li>
+                        <li class="method">remove_toggle_ref</li>
+                        <li class="method">bind_property</li>
+                        <li class="signal">notify</li>
+                        <li class="field">ref_count</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div><br/>
+            <div class="site_footer">Generated by <a href="http://www.valadoc.org/">Valadoc</a>
+            </div>
+          </body>
+        </html>
