@@ -287,19 +287,19 @@ namespace Ev3devKit.Ui {
          */
         internal override bool key_pressed (uint key_code) {
             if (_editing) {
-                if (key_code == Key.Up)
+                if (key_code == Key.UP)
                     inc_char ();
-                else if (key_code == Key.Down)
+                else if (key_code == Key.DOWN)
                     inc_char (true);
-                else if (key_code == Key.Right) {
+                else if (key_code == Key.RIGHT) {
                     cursor_offset ++;
                     if (should_inc_text_offset_with_cursor)
                         text_offset++;
-                } else if (key_code == Key.Left)
+                } else if (key_code == Key.LEFT)
                     cursor_offset--;
-                else if (key_code == Key.Return)
+                else if (key_code == Key.RETURN)
                     commit_editing ();
-                else if (key_code == Key.BackSpace)
+                else if (key_code == Key.BACK_SPACE)
                     cancel_editing ();
                 else if (key_code >= 32 && key_code < 127)
                     set_char ((char)key_code, true);
@@ -309,11 +309,11 @@ namespace Ev3devKit.Ui {
                 Signal.stop_emission_by_name (this, "key-pressed");
                 return true;
             } else {
-                if (key_code == Key.Right)
+                if (key_code == Key.RIGHT)
                     text_offset ++;
-                else if (key_code == Key.Left)
+                else if (key_code == Key.LEFT)
                     text_offset--;
-                else if (_can_edit && key_code == Key.Return)
+                else if (_can_edit && key_code == Key.RETURN)
                     start_editing ();
                 else
                     return base.key_pressed (key_code);

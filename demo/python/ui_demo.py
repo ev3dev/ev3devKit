@@ -31,6 +31,7 @@ from ui_demo_window import UiDemoWindow
 
 
 def do_activate(app):
+    app.hold()
     demo_window = UiDemoWindow()
     demo_window.connect('quit', lambda _: app.quit())
     demo_window.show()

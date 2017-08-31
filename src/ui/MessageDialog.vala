@@ -76,14 +76,14 @@ namespace Ev3devKit.Ui {
          */
         public override bool key_pressed (uint key_code) {
             switch (key_code) {
-            case Key.Up:
+            case Key.UP:
                 vscroll.scroll_backward ();
                 break;
-            case Key.Down:
+            case Key.DOWN:
                 vscroll.scroll_forward ();
                 break;
-            case Key.Return:
-                return base.key_pressed (Key.BackSpace);
+            case Key.RETURN:
+                return base.key_pressed (Key.BACK_SPACE);
             default:
                 return base.key_pressed (key_code);
             }

@@ -99,7 +99,7 @@ namespace Ev3devKit.Ui {
          * Default handler for the key_pressed signal.
          */
         internal override bool key_pressed (uint key_code) {
-            if (key_code == Key.Return) {
+            if (key_code == Key.RETURN) {
                 pressed ();
                 Signal.stop_emission_by_name (this, "key-pressed");
                 return true;

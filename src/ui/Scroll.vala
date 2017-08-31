@@ -245,11 +245,11 @@ namespace Ev3devKit.Ui {
          */
         internal override bool key_pressed (uint key_code) {
             if (has_focus) {
-                if ((direction == ScrollDirection.VERTICAL && key_code == Key.Up)
-                    || (direction == ScrollDirection.HORIZONTAL && key_code == Key.Left))
+                if ((direction == ScrollDirection.VERTICAL && key_code == Key.UP)
+                    || (direction == ScrollDirection.HORIZONTAL && key_code == Key.LEFT))
                     scroll_offset -= _scroll_amount;
-                else if ((direction == ScrollDirection.VERTICAL && key_code == Key.Down)
-                    || (direction == ScrollDirection.HORIZONTAL && key_code == Key.Right))
+                else if ((direction == ScrollDirection.VERTICAL && key_code == Key.DOWN)
+                    || (direction == ScrollDirection.HORIZONTAL && key_code == Key.RIGHT))
                     scroll_offset += _scroll_amount;
                 else
                     return base.key_pressed (key_code);

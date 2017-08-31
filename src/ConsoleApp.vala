@@ -70,10 +70,12 @@ namespace Ev3devKit {
             Ui.Screen.active_screen = new Ui.Screen ();
         }
 
-        public override void input_event (Grx.Event event) {
+        public override bool event (Grx.Event event) {
             if (event.type == Grx.EventType.KEY_DOWN) {
                 Ui.Screen.active_screen.queue_key_code (event.key.keysym);
+                return true;
             }
+            return false;
         }
     }
 }

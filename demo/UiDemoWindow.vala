@@ -87,7 +87,7 @@ namespace Ev3devKit.Demo {
 
         internal override bool key_pressed (uint key_code) {
             // ignore back button otherwise we end up with no windows in the stack
-            if (key_code == Key.BackSpace)
+            if (key_code == Key.BACK_SPACE)
                 return false;
             return base.key_pressed (key_code);
         }
@@ -164,9 +164,9 @@ namespace Ev3devKit.Demo {
             child3_box.add (child3_message);
 
             var child1_handler_id = child1_box.key_pressed.connect ((key_code) => {
-                if (key_code == Key.Left) {
+                if (key_code == Key.LEFT) {
                     stack.active_child = child3_box;
-                } else if (key_code == Key.Right) {
+                } else if (key_code == Key.RIGHT) {
                     stack.active_child = child2_box;
                 } else {
                     return false;
@@ -176,9 +176,9 @@ namespace Ev3devKit.Demo {
                 return true;
             });
             var child2_handler_id = child2_box.key_pressed.connect ((key_code) => {
-                if (key_code == Key.Left) {
+                if (key_code == Key.LEFT) {
                     stack.active_child = child1_box;
-                } else if (key_code == Key.Right) {
+                } else if (key_code == Key.RIGHT) {
                     stack.active_child = child3_box;
                 } else {
                     return false;
@@ -188,9 +188,9 @@ namespace Ev3devKit.Demo {
                 return true;
             });
             var child3_handler_id = child3_box.key_pressed.connect ((key_code) => {
-                if (key_code == Key.Left) {
+                if (key_code == Key.LEFT) {
                     stack.active_child = child2_box;
-                } else if (key_code == Key.Right) {
+                } else if (key_code == Key.RIGHT) {
                     stack.active_child = child1_box;
                 } else {
                     return false;

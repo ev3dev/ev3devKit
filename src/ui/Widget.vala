@@ -905,16 +905,16 @@ namespace Ev3devKit.Ui {
             if (can_focus && visible) {
                 FocusDirection direction;
                 switch (key_code) {
-                case Key.Up:
+                case Key.UP:
                     direction = FocusDirection.UP;
                     break;
-                case Key.Down:
+                case Key.DOWN:
                     direction = FocusDirection.DOWN;
                     break;
-                case Key.Left:
+                case Key.LEFT:
                     direction = FocusDirection.LEFT;
                     break;
-                case Key.Right:
+                case Key.RIGHT:
                     direction = FocusDirection.RIGHT;
                     break;
                 default:

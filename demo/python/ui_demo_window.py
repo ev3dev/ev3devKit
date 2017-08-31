@@ -80,7 +80,7 @@ class UiDemoWindow(Ev3devKit.UiWindow):
 
     def do_key_pressed(self, window, key_code):
         # ignore the backspace key press
-        if key_code == Grx.KEY_BackSpace:
+        if key_code == Grx.Key.BACK_SPACE:
             GObject.signal_stop_emission_by_name(self, 'key-pressed')
             return True
         return False
@@ -160,9 +160,9 @@ class UiDemoWindow(Ev3devKit.UiWindow):
         child3_box.add(child3_message)
 
         def child1_key_pressed_handler(widget, key_code):
-            if key_code == Grx.KEY_Left:
+            if key_code == Grx.Key.LEFT:
                 stack.set_active_child(child3_box)
-            elif key_code == Grx.KEY_Right:
+            elif key_code == Grx.Key.RIGHT:
                 stack.set_active_child(child2_box)
             else:
                 return False
@@ -175,9 +175,9 @@ class UiDemoWindow(Ev3devKit.UiWindow):
             child1_key_pressed_handler)
 
         def child2_key_pressed_handler(widget, key_code):
-            if key_code == Grx.KEY_Left:
+            if key_code == Grx.Key.LEFT:
                 stack.set_active_child(child1_box)
-            elif key_code == Grx.KEY_Right:
+            elif key_code == Grx.Key.RIGHT:
                 stack.set_active_child(child3_box)
             else:
                 return False
@@ -190,9 +190,9 @@ class UiDemoWindow(Ev3devKit.UiWindow):
             child2_key_pressed_handler)
 
         def child3_key_pressed_handler(widget, key_code):
-            if key_code == Grx.KEY_Left:
+            if key_code == Grx.Key.LEFT:
                 stack.set_active_child(child2_box)
-            elif key_code == Grx.KEY_Right:
+            elif key_code == Grx.Key.RIGHT:
                 stack.set_active_child(child1_box)
             else:
                 return False

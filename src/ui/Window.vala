@@ -97,13 +97,13 @@ namespace Ev3devKit.Ui {
          */
         internal override bool key_pressed (uint key_code) {
             switch (key_code) {
-            case Key.Up:
-            case Key.Down:
-            case Key.Left:
-            case Key.Right:
+            case Key.UP:
+            case Key.DOWN:
+            case Key.LEFT:
+            case Key.RIGHT:
                 focus_first ();
                 break;
-            case Key.BackSpace:
+            case Key.BACK_SPACE:
                 // screen.close_window () can release the reference to this,
                 // so don't do anything that references this after here.
                 screen.close_window (this);

@@ -107,13 +107,13 @@ namespace Ev3devKit.Ui {
                 }
             });
             text_entry.key_pressed.connect ((key_code) => {
-                if (key_code == Key.Up)
+                if (key_code == Key.UP)
                     text_entry.focus_next (FocusDirection.UP);
-                else if (key_code == Key.Down)
+                else if (key_code == Key.DOWN)
                     text_entry.focus_next (FocusDirection.DOWN);
-                else if (key_code == Key.BackSpace)
+                else if (key_code == Key.BACK_SPACE)
                     text_entry.delete_char (true);
-                else if (key_code != Key.Return)
+                else if (key_code != Key.RETURN)
                     return false;
                 Signal.stop_emission_by_name (text_entry, "key-pressed");
                 return true;
@@ -371,9 +371,9 @@ namespace Ev3devKit.Ui {
          * Default handler for the key_pressed signal.
          */
         internal override bool key_pressed (uint key_code) {
-            if (key_code == Key.BackSpace)
+            if (key_code == Key.BACK_SPACE)
                 text_entry.delete_char (true);
-            else if (key_code == Key.Delete)
+            else if (key_code == Key.DELETE)
                 text_entry.delete_char ();
             else if (key_code >= 32 && key_code < 127)
                 set_char ((char)key_code);

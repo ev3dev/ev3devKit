@@ -141,7 +141,7 @@ namespace Ev3devKit.Ui {
 
             fg_color = Color.BLACK;
             bg_color = Color.WHITE;
-            mid_color = Color.alloc (0x55, 0x55, 0xff); // bright blue
+            mid_color = Color.get (0x55, 0x55, 0xff); // bright blue
             // translates to dark gray in 2bpp and black in 1bpp
 
             Timeout.add (50, draw);
@@ -170,7 +170,7 @@ namespace Ev3devKit.Ui {
             if (context_mem_addr == null)
                 context = Context.new_full (mode, width, height);
             else {
-                char* addr[4];
+                uint8* addr[4];
                 addr[0] = context_mem_addr;
                 context = Context.new_full (mode, width, height, addr);
             }
@@ -190,7 +190,7 @@ namespace Ev3devKit.Ui {
          * copies this to the actual screen so that it is displayed to the user.
          */
         protected virtual void refresh () {
-            Context.screen.bit_blt (0, 0, context, 0, 0, get_screen_width () - 1, get_screen_height () - 1);
+            get_screen_context ().bit_blt (0, 0, context, 0, 0, get_screen_width () - 1, get_screen_height () - 1);
         }
 
         void handle_input () {
@@ -255,7 +255,7 @@ namespace Ev3devKit.Ui {
         protected bool draw () {
             handle_input ();
             if (dirty) {
-                Context.current = context;
+                set_current_context (context);
                 Window? top_window = null;
                 Window? top_dialog = null;
                 unowned List<Window> iter = window_stack.tail;

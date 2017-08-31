@@ -30,6 +30,7 @@ namespace Ev3devKit.Demo {
             var app = new ConsoleApp ();
 
             var activate_id = app.activate.connect (() => {
+                app.hold ();
                 var demo_window = new UiDemoWindow ();
                 demo_window.quit.connect (app.quit);
                 demo_window.show ();
