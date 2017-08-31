@@ -25,6 +25,25 @@
                     "ignoreFailures": true
                 }
             ]
+        },
+        {
+            "name": "Python UI Demo",
+            "type": "python",
+            "request": "launch",
+            "stopOnEntry": false,
+            "pythonPath": "python3",
+            "preLaunchTask": "ev3devkit-0.5-typelib",
+            "program": "${workspaceRoot}/demo/python/ui_demo.py",
+            "cwd": "${workspaceRoot}",
+            "env": {
+                "LD_LIBRARY_PATH": "${workspaceRoot}/build",
+                "GI_TYPELIB_PATH": "${workspaceRoot}/build"
+            },
+            "debugOptions": [
+                "WaitOnAbnormalExit",
+                "WaitOnNormalExit",
+                "RedirectOutput"
+            ]
         }
     ]
 }

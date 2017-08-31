@@ -27,6 +27,12 @@
             "problemMatcher": [
                 "$valac"
             ]
+        },
+        {
+            "taskName": "ev3devkit-0.5-typelib",
+            "problemMatcher": [
+                "$valac"
+            ]
         }
     ]
 }
