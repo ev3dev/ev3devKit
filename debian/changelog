@@ -1,3 +1,13 @@
+ev3devkit (0.5.2) testing; urgency=medium
+
+  * Change LED suffix to "brick-status"
+  * Update to GRX 3.0.0
+  * Fix writing to framebuffer after console switch
+  * Fix handling application events and ignoring events when application is not
+    active
+
+ -- David Lechner <david@lechnology.com>  Thu, 31 Aug 2017 11:28:04 -0500
+
 ev3devkit (0.5.1) testing; urgency=medium
 
   * Fix -dev package depends on libgrx-3.0-dev
