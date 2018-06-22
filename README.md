@@ -68,7 +68,7 @@ or sshfs with the EV3. When copying them to /home/user, the demos are runable
 from the file-browser.
 
 ## Documentation
-API docs are at http://www.ev3dev.org/ev3devKit/ev3devkit/index.htm
+API docs are at http://docs.ev3dev.org/projects/ev3devkit/en/ev3dev-stretch/
 
 [GLib]: https://developer.gnome.org/glib/stable/index.html
 [GObject]: https://developer.gnome.org/gobject/stable/index.html
