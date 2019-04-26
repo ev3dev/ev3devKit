@@ -48,7 +48,7 @@ When the build is completed, copy the files from `$BUILD_DIR/dist` to your EV3.
 
     # include install build depends
     $ sudo apt-get install cmake valac libgirepository1.0-dev \
-    libgudev-1.0-dev libgrx-3.0-dev libgtk-3-dev
+    libgudev-1.0-dev libgrx-3.0-dev libgtk-3-dev valadoc
     # create a build directory (not in cloned ev3devKit directory).
     $ mkdir build
     $ cd build
