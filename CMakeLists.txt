@@ -1,12 +1,6 @@
 project ("ev3devkit" C)
 
-if (CMAKE_CROSSCOMPILING)
-    # we are depending on CMAKE_SYSROOT feature introduce in CMake 3.x
-    # and we only support cross compiling using Ubuntu 16.04
-    cmake_minimum_required (VERSION 3.5)
-else (CMAKE_CROSSCOMPILING)
-    cmake_minimum_required (VERSION 2.6)
-endif (CMAKE_CROSSCOMPILING)
+cmake_minimum_required (VERSION 3.10)
 
 get_directory_property(PARENT_DIR PARENT_DIRECTORY)
 
