@@ -13,14 +13,7 @@ For an example of how it is used, checkout [brickman].
 
 ## Status
 
-This is currently in the development stages and is unstable. The device driver
-interfaces require the latest ev3dev kernel (currently v3.16.7-ckt4-ev3dev1).
-
-## Dependencies
-
-Besides dependencies included in trusty, we need vala >= 0.24, which you can get
-from the [vala-team PPA](https://launchpad.net/~vala-team/+archive/ubuntu/ppa),
-and libgrx which is part of the ev3dev package repository.
+This is currently in the development stages and is unstable.
 
 
 ## Get the code
@@ -32,16 +25,15 @@ This project uses git and git submodules.
 
 ## Cross-compiling for the EV3
 
-This requires that you have [Docker](https://www.docker.com) installed.
+This requires that you have [Docker](https://www.docker.com) installed. (On
+Linux, you will also need to install the `qemu-user-static` package.)
 
     cd ev3devKit
-    ./docker/setup.sh $BUILD_DIR $ARCH
+    ./docker/setup.sh $ARCH
     docker exec --tty ev3devkit_$ARCH make install
 
-Substitute any directory you like for `$BUILD_DIR` this is where the compiled
-files will be stored. The directory will be created if it does not exist.
 Substitute `$ARCH` with `armel` for the EV3 or `armhf` for RPi/BeagleBone.
-When the build is completed, copy the files from `$BUILD_DIR/dist` to your EV3.
+When the build is completed, copy the files from `build-$ARCH/dist` to your EV3.
 
 
 ## Compiling for desktop
@@ -49,20 +41,13 @@ When the build is completed, copy the files from `$BUILD_DIR/dist` to your EV3.
     # include install build depends
     $ sudo apt-get install cmake valac libgirepository1.0-dev \
     libgudev-1.0-dev libgrx-3.0-dev libgtk-3-dev
-    # create a build directory (not in cloned ev3devKit directory).
-    $ mkdir build
-    $ cd build
-    $ cmake ../ev3devKit -DCMAKE_BUILD_TYPE=string:Debug
-    $ make
-    
-You can add additional build option to the `cmake` command. Note: you need to
-delete *everything* in the build directory when changing `cmake` options to
-ensure that they take effect.
+    $ cmake -P setup.cmake
+    $ make -C build
 
 
 ## Running
 
-When building for the desktop, one can run the demos using `make run<tab>`. In
+When building for the desktop, one can run the demos using `make -C build run<tab>`. In
 order to run them on the device, copy the demos over or share the folder via NFS
 or sshfs with the EV3. When copying them to /home/user, the demos are runable
 from the file-browser.
