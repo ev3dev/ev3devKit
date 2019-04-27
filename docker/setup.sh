@@ -44,7 +44,6 @@ docker run \
     --detach \
     $image_name tail
 
-docker exec --tty $container_name cmake /src -DCMAKE_BUILD_TYPE=Debug \
-    -DCMAKE_TOOLCHAIN_FILE=/home/compiler/toolchain.cmake
+docker exec --tty $container_name cmake /src -DCMAKE_BUILD_TYPE=Debug
 
 echo "Done. You can now compile by running 'docker exec --tty $container_name make'"
