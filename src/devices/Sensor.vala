@@ -159,7 +159,7 @@ namespace Ev3devKit.Devices {
          */
         public double get_float_value (int index) throws Error {
             var value = (double)get_value (index);
-            double decimal_factor = Math.pow10 ((double)decimals);
+            double decimal_factor = Math.pow (10, (double)decimals);
             return value / decimal_factor;
         }
 
