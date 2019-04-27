@@ -21,11 +21,8 @@ set (EV3DEVKIT_PACKAGE ${PROJECT_NAME}-${GIR_VERSION})
 set (LIBRARY_NAME "${EV3DEVKIT_PACKAGE}")
 set (TARGET_GLIB "2.40")
 
-if (PARENT_DIR)
-    # If this is included by a parent project, export some variables back to the parent
-    set (${PROJECT_NAME}_PACKAGE ${EV3DEVKIT_PACKAGE} PARENT_SCOPE)
-    set (${PROJECT_NAME}_VAPI ${EV3DEVKIT_PACKAGE}.vapi PARENT_SCOPE)
-endif (PARENT_DIR)
+# see if we have a local copy of grx-3.0 that was exported by cmake
+find_package (grx-3.0 QUIET)
 
 add_subdirectory (data)
 set (XDG_DATA_DIR data)
@@ -50,9 +47,21 @@ set (COMMON_MODULES
     glib-2.0
     gmodule-2.0
     gobject-2.0
-    grx-3.0
     gudev-1.0
 )
+
+# if we have a local build of grx-3.0, use it, otherwise use pkg-config to find it
+if (grx-3.0_FOUND)
+    set(GRX3_INCLUDEDIR ${grx-3.0_INCLUDEDIR})
+    set(GRX3_SHARED_LIB grx-3.0-shared)
+    set(GRX3_STATIC_LIB grx-3.0-static)
+    set(GRX3_VAPIDIR_OPTION "--vapidir=${grx-3.0_VAPIDIR}")
+    set(GRX3_GIRDIR_OPTION "--girdir=${grx-3.0_GIRDIR}")
+    set(GRX3_INCLUDEDIR_OPTION "--includedir=${grx-3.0_GIRDIR}")
+    set(GRX3_PLUGINDIR_ENV "GRX_PLUGIN_PATH=${grx-3.0_PLUGINDIR}")
+else (grx-3.0_FOUND)
+    list(APPEND COMMON_MODULES grx-3.0)
+endif (grx-3.0_FOUND)
 
 configure_file (src/Version.vala.in Version.vala)
 # convert CMake list to space separated string for pkgconfig file
@@ -137,6 +146,8 @@ CUSTOM_VAPIS
     bindings/*.vapi
 OPTIONS
     --target-glib=${TARGET_GLIB}
+    ${GRX3_VAPIDIR_OPTION}
+    ${GRX3_GIRDIR_OPTION}
 GENERATE_VAPI
     ${EV3DEVKIT_PACKAGE}
 GENERATE_HEADER
@@ -175,6 +186,7 @@ add_custom_command (
         "--shared-library=$<TARGET_SONAME_FILE_NAME:${LIBRARY_NAME}-shared>"
         "--output=${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}-${GIR_VERSION}.typelib"
         "--includedir=${CMAKE_CURRENT_BINARY_DIR}"
+        ${GRX3_INCLUDEDIR_OPTION}
     DEPENDS
         "${LIBRARY_NAME}-shared"
         "${CMAKE_CURRENT_BINARY_DIR}/${GIR_NAME}-${GIR_VERSION}.gir"
@@ -191,15 +203,16 @@ add_custom_target ("${LIBRARY_NAME}-typelib"
 # end of workaround
 
 add_library(${LIBRARY_NAME} OBJECT ${LIBRARY_VALA_C})
+target_include_directories(${LIBRARY_NAME} PRIVATE ${GRX3_INCLUDEDIR})
 set_target_properties(${LIBRARY_NAME} PROPERTIES POSITION_INDEPENDENT_CODE 1)
 add_library(${LIBRARY_NAME}-shared SHARED $<TARGET_OBJECTS:${LIBRARY_NAME}>)
-target_link_libraries(${LIBRARY_NAME}-shared ${DEPS_LIBRARIES})
+target_link_libraries(${LIBRARY_NAME}-shared ${DEPS_LIBRARIES} ${GRX3_SHARED_LIB})
 set_target_properties(${LIBRARY_NAME}-shared PROPERTIES
     VERSION "${VERSION}"
     SOVERSION "${SOVERSION}"
     OUTPUT_NAME ${LIBRARY_NAME})
 add_library(${LIBRARY_NAME}-static STATIC $<TARGET_OBJECTS:${LIBRARY_NAME}>)
-target_link_libraries(${LIBRARY_NAME}-static ${DEPS_LIBRARIES})
+target_link_libraries(${LIBRARY_NAME}-static ${DEPS_LIBRARIES} ${GRX3_STATIC_LIB})
 set_target_properties(${LIBRARY_NAME}-static PROPERTIES
     OUTPUT_NAME ${LIBRARY_NAME})
 add_dependencies(${LIBRARY_NAME} ev3devkit_data)
@@ -227,9 +240,12 @@ if (EV3DEVKIT_BUILD_DEMO)
     OPTIONS
         --target-glib=${TARGET_GLIB}
         --vapidir=${CMAKE_CURRENT_BINARY_DIR}
+        ${GRX3_VAPIDIR_OPTION}
+        ${GRX3_GIRDIR_OPTION}
     )
 
     add_executable (${DEVICES_DEMO_EXEC_NAME} ${DEVICES_DEMO_EXEC_VALA_C})
+    target_include_directories (${DEVICES_DEMO_EXEC_NAME} PRIVATE ${GRX3_INCLUDEDIR})
     target_link_libraries (${DEVICES_DEMO_EXEC_NAME} ${EXEC_LIBRARY_DEPENDS})
     if (CMAKE_CROSSCOMPILING)
         # These are not picked up automatically when cross compiling for some reason
@@ -258,9 +274,12 @@ if (EV3DEVKIT_BUILD_DEMO)
     OPTIONS
         --target-glib=${TARGET_GLIB}
         --vapidir=${CMAKE_CURRENT_BINARY_DIR}
+        ${GRX3_VAPIDIR_OPTION}
+        ${GRX3_GIRDIR_OPTION}
     )
 
     add_executable (${UI_DEMO_EXEC_NAME} ${UI_DEMO_EXEC_VALA_C})
+    target_include_directories (${UI_DEMO_EXEC_NAME} PRIVATE ${GRX3_INCLUDEDIR})
     target_link_libraries (${UI_DEMO_EXEC_NAME} ${EXEC_LIBRARY_DEPENDS})
     if (CMAKE_CROSSCOMPILING)
         # These are not picked up automatically when cross compiling for some reason
@@ -270,6 +289,7 @@ if (EV3DEVKIT_BUILD_DEMO)
     add_custom_target (run-${UI_DEMO_EXEC_NAME}
         COMMAND
             XDG_DATA_DIRS=${XDG_DATA_DIR}:/usr/local/share:/usr/share
+            ${GRX3_PLUGINDIR_ENV}
             ./${UI_DEMO_EXEC_NAME}
         DEPENDS ${UI_DEMO_EXEC_NAME}
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
@@ -291,6 +311,7 @@ if (VALADOC_FOUND)
         ${GIR_VERSION}
     OPTIONS
         --target-glib=${TARGET_GLIB}
+        ${GRX3_VAPIDIR_OPTION}
     PACKAGES
         ${COMMON_PACKAGES}
     )
