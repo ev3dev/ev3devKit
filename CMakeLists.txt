@@ -142,7 +142,6 @@ CUSTOM_VAPIS
     bindings/*.vapi
 OPTIONS
     --target-glib=${TARGET_GLIB}
-    --thread
 GENERATE_VAPI
     ${EV3DEVKIT_PACKAGE}
 GENERATE_HEADER
@@ -232,7 +231,6 @@ if (EV3DEVKIT_BUILD_DEMO)
         bindings/*.vapi
     OPTIONS
         --target-glib=${TARGET_GLIB}
-        --thread
         --vapidir=${CMAKE_CURRENT_BINARY_DIR}
     )
 
@@ -264,7 +262,6 @@ if (EV3DEVKIT_BUILD_DEMO)
         bindings/*.vapi
     OPTIONS
         --target-glib=${TARGET_GLIB}
-        --thread
         --vapidir=${CMAKE_CURRENT_BINARY_DIR}
     )
 
