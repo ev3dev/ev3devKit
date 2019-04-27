@@ -98,7 +98,6 @@ namespace Ev3devKit.Devices {
          *
          * @return ``null``
          */
-        [Deprecated]
         public Event? do_not_call_this_method () { return null; }
     }
 
