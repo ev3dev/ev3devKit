@@ -1,6 +1,6 @@
 Source: ev3devkit
 Section: embedded
-Priority: standard
+Priority: optional
 Maintainer: David Lechner <david@lechnology.com>
 Build-Depends: debhelper (>= 9),
     cmake,
