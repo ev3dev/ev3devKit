@@ -16,6 +16,7 @@ Vcs-Git: https://github.com/ev3dev/ev3devKit.git
 Vcs-Browser: https://github.com/ev3dev/ev3devKit
 
 Package: libev3devkit-0.5-0
+Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, ev3devkit-data (= ${source:Version})
 Description: Programming toolkit for ev3dev
