@@ -1,3 +1,9 @@
+ev3devkit (0.5.3) stable; urgency=medium
+
+  * Fix EV3 left/right LED names
+
+ -- David Lechner <david@lechnology.com>  Mon, 06 May 2019 16:42:07 -0500
+
 ev3devkit (0.5.2) testing; urgency=medium
 
   * Change LED suffix to "brick-status"
