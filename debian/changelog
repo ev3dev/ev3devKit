@@ -1,3 +1,9 @@
+ev3devkit (0.5.3.1) stable; urgency=medium
+
+  * debian: add dependency on libgrx-3.0-X-plugin-linuxfb
+
+ -- David Lechner <david@lechnology.com>  Sun, 26 May 2019 14:24:00 -0500
+
 ev3devkit (0.5.3) stable; urgency=medium
 
   * Fix EV3 left/right LED names
