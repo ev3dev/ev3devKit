@@ -18,7 +18,8 @@ Vcs-Browser: https://github.com/ev3dev/ev3devKit
 Package: libev3devkit-0.5-0
 Section: libs
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, ev3devkit-data (= ${source:Version})
+Depends: ${shlibs:Depends}, ${misc:Depends}, ev3devkit-data (= ${source:Version}),
+    libgrx-3.0-${grx-so-version}-plugin-linuxfb
 Description: Programming toolkit for ev3dev
  Provides a GLib/GObject based library that provides a number of programming
  interfaces for ev3dev, including user interface and device driver interface.

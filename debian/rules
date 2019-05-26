@@ -4,8 +4,13 @@
 # Uncomment this to turn on verbose mode.
 export DH_VERBOSE=1
 
+GRX_SO_VERSION = $(shell dpkg -s libgrx-3.0-dev  | grep -o -P 'libgrx-3.0-\d+\s' | cut -d "-" -f 3)
+
 %:
 	dh $@ --with gir
 
 override_dh_install:
 	dh_install --list-missing
+
+override_dh_gencontrol:
+	dh_gencontrol -- -Vgrx-so-version=$(GRX_SO_VERSION)
