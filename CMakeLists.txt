@@ -1,6 +1,6 @@
+cmake_minimum_required(VERSION 3.10)
 project ("ev3devkit" C)
 
-cmake_minimum_required (VERSION 3.10)
 include(GNUInstallDirs)
 
 get_directory_property(PARENT_DIR PARENT_DIRECTORY)
