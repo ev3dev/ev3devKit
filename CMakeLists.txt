@@ -319,3 +319,10 @@ if (VALADOC_FOUND)
     )
     add_custom_target (doc ALL DEPENDS valadoc)
 endif (VALADOC_FOUND)
+
+# exports for locally including this proejct in another cmake project
+
+configure_file (${PROJECT_NAME}Config.cmake.in ${PROJECT_NAME}-${GIR_VERSION}Config.cmake @ONLY)
+export (TARGETS ${LIBRARY_NAME}-static ${LIBRARY_NAME}-shared
+    APPEND FILE ${PROJECT_NAME}-${GIR_VERSION}Config.cmake)
+export (PACKAGE ${PROJECT_NAME}-${GIR_VERSION})
