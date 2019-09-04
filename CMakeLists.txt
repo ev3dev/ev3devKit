@@ -59,6 +59,7 @@ if (grx-3.0_FOUND)
     set(GRX3_GIRDIR_OPTION "--girdir=${grx-3.0_GIRDIR}")
     set(GRX3_INCLUDEDIR_OPTION "--includedir=${grx-3.0_GIRDIR}")
     set(GRX3_PLUGINDIR_ENV "GRX_PLUGIN_PATH=${grx-3.0_PLUGINDIR}")
+    set(GRX3_FONTCONFIG_PATH_ENV "FONTCONFIG_PATH=${grx-3.0_FONTCONFIG_PATH}")
 else (grx-3.0_FOUND)
     list(APPEND COMMON_MODULES grx-3.0)
 endif (grx-3.0_FOUND)
@@ -290,6 +291,7 @@ if (EV3DEVKIT_BUILD_DEMO)
         COMMAND
             XDG_DATA_DIRS=${XDG_DATA_DIR}:/usr/local/share:/usr/share
             ${GRX3_PLUGINDIR_ENV}
+            ${GRX3_FONTCONFIG_PATH_ENV}
             ./${UI_DEMO_EXEC_NAME}
         DEPENDS ${UI_DEMO_EXEC_NAME}
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
