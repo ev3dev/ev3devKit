@@ -69,9 +69,9 @@ namespace Ev3devKit.Ui {
             value_entry.weak_unref (release_next_focus_widget_down);
         }
 
-        public InputDialog (string message, string inital_value = "") {
+        public InputDialog (string message, string initial_value = "") {
             message_label.text = message;
-            value_entry.text = inital_value;
+            value_entry.text = initial_value;
         }
 
         void release_next_focus_widget_down () {

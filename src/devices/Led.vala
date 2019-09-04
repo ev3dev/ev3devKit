@@ -127,7 +127,7 @@ namespace Ev3devKit.Devices {
         /**
          * Sets the brightness.
          *
-         * @param brightness Brighness level between 0 and max_brightness.
+         * @param brightness Brightness level between 0 and max_brightness.
          * @throws Error if setting the brightness failed or the device was
          * removed.
          */

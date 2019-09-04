@@ -40,7 +40,7 @@ namespace Ev3devKit.Ui {
         /**
          * Gets the screen the status bar is assigned to.
          *
-         * Returns ``null`` if the status bar is not assined to a screen.
+         * Returns ``null`` if the status bar is not assigned to a screen.
          */
         public weak Screen? screen { get; internal set; }
 

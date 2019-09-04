@@ -45,7 +45,7 @@ namespace Ev3devKit.Ui {
         public Button button { get; construct; default = new Button (); }
 
         /**
-         * Gets the Lable for the menu item.
+         * Gets the Label for the menu item.
          */
         public Label label { get; construct; default = new Label (); }
 

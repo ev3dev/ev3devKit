@@ -36,7 +36,7 @@ namespace Ev3devKit.Ui {
     public class Window : Ev3devKit.Ui.Container {
         /*
          * A flag to defer emitting shown() after the window has been
-         * layouted and drawn. This ensure that one can e.g. setup focused
+         * laid out and drawn. This ensure that one can e.g. setup focused
          * widgets from a signal handler.
          */
         internal bool never_shown = true;
