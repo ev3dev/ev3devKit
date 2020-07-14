@@ -9,8 +9,8 @@ GRX_SO_VERSION = $(shell dpkg -s libgrx-3.0-dev  | grep -o -P 'libgrx-3.0-\d+\s'
 %:
 	dh $@ --with gir
 
-override_dh_install:
-	dh_install --list-missing
+override_dh_missing:
+	dh_missing --fail-missing
 
 override_dh_gencontrol:
 	dh_gencontrol -- -Vgrx-so-version=$(GRX_SO_VERSION)
