@@ -1,3 +1,10 @@
+ev3devkit (0.6.0) bullseye; urgency=medium
+  * Fix EV3 left/right LED names
+  * Input: remove use of [Deprecated] attribute
+  * debian: add dependency on libgrx-3.0-X-plugin-linuxfb
+
+ -- David Lechner <david@lechnology.com>  Tue, 14 Jul 2020 17:29:21 -0500
+
 ev3devkit (0.5.2) testing; urgency=medium
 
   * Change LED suffix to "brick-status"
